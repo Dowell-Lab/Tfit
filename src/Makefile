@@ -15,7 +15,7 @@ CPP_FLAGS_64  	= -D64_BIT
 GCCVERSION 	= $(shell ${CXX} -dumpversion)
 NU_FIT: main.o load.o split.o model.o across_segments.o template_matching.o \
 	read_in_parameters.o model_selection.o error_stdo_logging.o \
-	MPI_comm.o  density_profiler.o bootstrap.o bidir_main.o model_main.o select_main.o FDR.o BIC.o
+	MPI_comm.o  density_profiler.o bootstrap.o bidir_main.o model_main.o select_main.o FDR.o BIC.o ParamWrapper.o
 	@printf "linking           : "
 	@${CXX} ${CXXFLAGS}  ${PWD}/main.o ${PWD}/load.o ${PWD}/model_selection.o \
 	${PWD}/split.o ${PWD}/model.o ${PWD}/across_segments.o  \
@@ -114,6 +114,11 @@ FDR.o:
 	@${CXX} -c ${CXXFLAGS} ${PWD}/FDR.cpp
 	@printf "done\n"
 
+ParamWrapper.o:
+	@printf "ParamWrapper : "
+	@${CXX} -c ${CXXFLAGS} ${PWD}/ParamWrapper.cpp 
+	@printf "done\n"
+	
 clean:
 	@rm -f *.o
 	@rm -f EMGU
