@@ -263,3 +263,83 @@ slice_ratio get_slice(vector<segment *> segments, int N, double CC, params * P){
   SC.set(pval_threshold);
   return SC;
 }
+
+slice_ratio get_slice_pwrapper(vector<segment *> segments, int N, double CC, ParamWrapper *pw){
+  double sigma, lambda, fp, pi, w, window, pval_threshold,ns;
+ 
+  window        = pw->pad, ns=pw->ns;
+  sigma         = pw->sigma/ns , lambda= ns/pw->lambda;
+  fp            = pw->footPrint/ns , pi=pw->pi, w=pw->w;
+  pval_threshold= pw->llrthresh;
+  int CN     = segments.size();
+  double min_x  = -1 , max_x = -1, n = 0;
+  random_device rd;
+  mt19937 mt(rd());
+  default_random_engine generator;
+  uniform_real_distribution<double> distribution(0,1);
+  vector<double> XY(N);
+  vector<double> CovN(N);
+  for (int i = 0 ; i < XY.size(); i++){
+    XY[i]=0.0, CovN[i]=0.0;
+  }
+  #pragma omp parallel for
+  for (int n = 0 ; n < N ; n++){
+    double U       = distribution(mt);
+    double U2      = distribution(mt);
+    int NN         = int(U*(CN-1));
+    segment * data = segments[NN];
+    int c          = U2*int(data->XN);
+    int j = c,  k  = c;
+    double N_pos = 0 , N_neg =0 ;
+    while (j > 0 and (data->X[0][c] - data->X[0][j] )< window){
+      N_pos+=data->X[1][j];
+      N_neg+=data->X[2][j];
+      j--;
+    }
+    while (k < data->XN and (data->X[0][k] - data->X[0][c] )< window  ){
+      N_pos+=data->X[1][k];
+      N_neg+=data->X[2][k];
+      k++;
+    }
+    CovN[n] = N_pos + N_neg;
+    if (N_pos + N_neg > CC and (data->X[0][k] - data->X[0][j]) > 1.75*window  ){
+      
+      double val =  BIC3(data->X,  j,  k,  c, N_pos,  N_neg, sigma , lambda, fp , pi, w);
+      if (val >0 ){
+        XY[n]=val,CovN[n]=N_pos+N_neg;
+      }
+    }
+  }
+  string job_name    = pw->jobName;
+  string log_out_dir = pw->logDir;
+  ofstream FHW;
+  FHW.open(log_out_dir+job_name+"_random_BIC_ratios.csv");
+  FHW<<"ratio,N\n";
+  for (int i = 0 ; i < XY.size();i++){
+    FHW<<to_string(XY[i])+","+to_string(CovN[i]) <<endl;
+  }
+  FHW.close();
+  
+  
+
+
+  //---------------
+  for (int n = 0 ; n < XY.size(); n++){
+    if (min_x < 0 or XY[n] < min_x ){
+      min_x = XY[n];
+    }
+    if (max_x < 0 or XY[n] > max_x ){
+      max_x = XY[n];
+    }
+  }
+  //-------------
+  slice_ratio SC(min_x,max_x,400);
+  for (int n = 0 ; n < XY.size();n++){
+
+    if (XY[n] > 0.0){
+      SC.insert(XY[n] );
+    }
+  }
+  SC.set(pval_threshold);
+  return SC;
+}

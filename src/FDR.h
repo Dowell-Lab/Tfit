@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include "read_in_parameters.h"
+#include "ParamWrapper.hpp"
 using namespace std;
 class normal{
  public:
@@ -58,5 +59,6 @@ class slice_ratio{
   int get_closest(double);
 };
 slice_ratio get_slice(vector<segment *> , int,double,params * P );
+slice_ratio get_slice_pwrapper(vector<segment *>, int, double, ParamWrapper *);
 
 #endif

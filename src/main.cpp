@@ -30,8 +30,19 @@ int main(int argc, char* argv[]){
   MPI_Comm_rank(MPI_COMM_WORLD, &rank); 
   MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
   
+  
   int threads  	= omp_get_max_threads();
 
+  //Todo: consider adding a rank parameter, since it appears to change how error messages are generated.
+  ParamWrapper pw(argc, argv);
+  
+  if(pw.exit)
+  {
+      MPI_Finalize();
+      return 0;
+  }
+  
+  /*
   params * P 	= new params();
   read_in_parameters(argv, P, rank );
   if (P->EXIT){
@@ -41,14 +52,15 @@ int main(int argc, char* argv[]){
     delete P;
     MPI_Finalize();
     return 0;
-  }
-  int job_ID 		=  MPI_comm::get_job_ID(P->p["-log_out"], P->p["-N"], rank, nprocs);
+  }*/
+  int job_ID 		=  MPI_comm::get_job_ID(pw.logDir, pw.jobName, rank, nprocs); //P->p["-log_out"], P->p["-N"], rank, nprocs);
   
-  int verbose 	= stoi(P->p["-v"]);
-  Log_File * LG 	= new  Log_File(rank, job_ID, P->p["-N"], P->p["-log_out"]);
+  int verbose 	= pw.verbose; //stoi(//P->p["-v"]);
+  Log_File * LG 	= new Log_File(rank, job_ID, pw.jobName, pw.logDir); //new  Log_File(rank, job_ID, P->p["-N"], P->p["-log_out"]);
   if (verbose and rank==0){
-    P->display(nprocs,threads);
-    LG->write(P->get_header(1),0);
+      pw.display(nprocs, threads);
+    //P->display(nprocs,threads);
+    LG->write(pw.get_header(1), 0);
   }
   if (P->bidir){
     bidir_run(P, rank, nprocs, job_ID,LG);
