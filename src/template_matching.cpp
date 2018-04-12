@@ -186,6 +186,74 @@ double run_global_template_matching(vector<segment*> segments,
    return 1.0;
 }
 
+double run_global_template_matching_pwrapper(vector<segment*> segments,
+                                    string out_dir, ParamWrapper *pw, slice_ratio SC) {
+
+   double CTT                    = 5; //filters for low coverage regions
+
+   double ns                     = pw->ns;
+   double window                 = pw->pad / ns;
+   double sigma, lambda, foot_print, pi, w;
+   double ct                     = pw->llrthresh;
+   sigma   = pw->sigma / ns , lambda = ns / pw->lambda;
+   foot_print = pw->footPrint / ns , pi = pw->pi, w = pw->w;
+
+   bool SCORES= pw->scores!="";//not P->p["-scores"].empty();
+
+   ofstream FHW_scores;
+
+   if (SCORES) {
+      FHW_scores.open(pw->scores);
+   }
+   string annotation;
+   int prev, prev_start, stop;
+   int N;
+   int start, center;
+
+   for (int i = 0; i < segments.size(); i++) {
+      double * BIC_values   = new double[int(segments[i]->XN)];
+      double * densities    = new double[int(segments[i]->XN)];
+      double * densities_r  = new double[int(segments[i]->XN)];
+
+      double l    =  segments[i]->maxX - segments[i]->minX;
+      double ef     = segments[i]->fN * ( 2 * (window * ns) * 0.05  / (l * ns ));
+      double er     = segments[i]->rN * ( 2 * (window * ns) * 0.05 / (l * ns ));
+      double stdf   = sqrt(ef * (1 - (  2 * (window * ns) * 0.05 / (l * ns )  ) )  );
+      double stdr   = sqrt(er * (1 - (  2 * (window * ns) * 0.05 / (l * ns ) ) )  );
+      BIC_template(segments[i],  BIC_values, densities, densities_r, window, sigma, lambda, foot_print, pi, w);
+      double start = -1, rN = 0.0 , rF = 0.0, rR = 0.0, rB = 0.0;
+      vector<vector<double>> HITS;
+      for (int j = 1; j < segments[i]->XN - 1; j++) {
+         bool HIT = check_hit(BIC_values[j], densities[j], 
+            densities_r[j], SC.threshold, ef + CTT * stdf, er + CTT * stdr  );
+         if (SCORES) {
+            double vl   = BIC_values[j];
+            if (std::isnan(double(vl)) or std::isinf(double(vl))) {
+               vl    = 0;
+            }
+            int DENS    = densities[j] + densities_r[j] ;
+            FHW_scores << segments[i]->chrom << "\t" << to_string(int(segments[i]->X[0][j - 1]*ns + segments[i]->start)) << "\t";
+            FHW_scores << to_string(int(segments[i]->X[0][j]*ns + segments[i]->start )) << "\t" << to_string(vl) + "\t" + to_string(densities[j]) + "\t" + to_string(densities_r[j]) + "\t" +  to_string(int(HIT)) << endl;
+         }
+         if ( HIT ) {
+            if (start < 0) {
+               start = segments[i]->X[0][j - 1] * ns + segments[i]->start;
+            }
+            start += 1, rN += 1 , rF += densities[j], rR += densities_r[j], rB += log10( SC.pvalue(BIC_values[j]) + pow(10, -20)) ;
+         }
+         if (not HIT and start > 0 ) {
+            vector<double> row = {start , segments[i]->X[0][j - 1]*ns + segments[i]->start, rB / rN , rF / rN, rR / rN  };
+            HITS.push_back(row);
+            start = -1, rN = 0.0 , rF = 0.0, rR = 0.0, rB = 0.0;
+         }
+      }
+      for (int j = 0; j < HITS.size(); j++) {
+         segments[i]->bidirectional_bounds.push_back(HITS[j]);
+      }
+      segments[i]->bidirectional_bounds   = merge(segments[i]->bidirectional_bounds, window * 0.5);
+   }
+   return 1.0;
+}
 
 
 

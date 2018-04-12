@@ -165,7 +165,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 
 
 	int verbose 	= pw->verbose;
-	pw->merge 	= "1";
+	//pw->merge 	= "1";
 	
 	LG->write("\ninitializing bidir module...............................done\n", verbose);
 	int threads 	= omp_get_max_threads();//number of OpenMP threads that are available for use
@@ -197,8 +197,8 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 		vector<segment *> FSI;
 		LG->write("loading TSS intervals...................................",verbose);
 		map<int, string> IDS;
-		vector<segment *> tss_intervals 	= load::load_intervals_of_interest(tss_file, 
-			IDS, P, 1 );
+		vector<segment *> tss_intervals 	= load::load_intervals_of_interest_pwrapper(tss_file, 
+			IDS, pw, 1 );
 		map<string, vector<segment *>> GG 	= MPI_comm::convert_segment_vector(tss_intervals);
 		LG->write("done\n", verbose);
 		
@@ -212,7 +212,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 		LG->write("done\n", verbose);
 		
 		LG->write("Computing Average Model.................................",verbose);
-		parameters  	= compute_average_model(integrated_segments, P);
+		parameters  	= compute_average_model_pwrapper(integrated_segments, pw);
 		//these values are on the genome scale (non normalize to ns)
 		LG->write("done\n", verbose);
 		LG->write("\nAverage Model Parameters\n", verbose);
@@ -224,6 +224,11 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	}
 	parameters 				= MPI_comm::send_out_parameters( parameters, rank, nprocs);
     //Todo: consider the implications of this:
+    pw->sigma=parameters[0];
+    pw->lambda=parameters[1];
+    pw->footPrint=parameters[2];
+    pw->pi=parameters[3];
+    pw->w=parameters[4];
 	//P->p["-sigma"] 	       = to_string(parameters[0]);
 	//P->p["-lambda"]        = to_string(parameters[1]);
 	//P->p["-foot_print"]    = to_string(parameters[2]);
@@ -257,7 +262,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	}
 	else{
 	  SC.mean = 0.6, SC.std = 0.001; //this dependent on -w 0.9 !!!
-	  SC.set_2(stod(P->p["-bct"]));
+	  SC.set_2(pw->llrthresh);
 	}
 
 	//================================================
@@ -277,15 +282,15 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	//(3a) now going to run the template matching algorithm based on pseudo-
 	//moment estimator and compute BIC ratio (basically penalized LLR)
 	LG->write("running template matching algorithm.....................", verbose);
-	double threshold 	= run_global_template_matching(segments, out_file_dir, P, SC);	
+	double threshold 	= run_global_template_matching_pwrapper(segments, out_file_dir, pw, SC);	
 	//(3b) now need to send out, gather and write bidirectional intervals 
 	LG->write("done\n", verbose);
 	
 
 
 	LG->write("scattering predictions to other MPI processes...........", verbose);
-	int total =  MPI_comm::gather_all_bidir_predicitions(all_segments, 
-							     segments , rank, nprocs, out_file_dir, job_name, job_ID,P,0);
+	int total =  MPI_comm::gather_all_bidir_predicitions_pwrapper(all_segments, 
+							     segments , rank, nprocs, out_file_dir, job_name, job_ID, pw, 0);
 	MPI_Barrier(MPI_COMM_WORLD); //make sure everybody is caught up!
 
 	LG->write("done\n", verbose);
@@ -301,9 +306,9 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	//===========================================================================
 	//(4) if MLE option was provided than need to run the model_main::run()
 	//
-	if (stoi(P->p["-MLE"])){
-		P->p["-k"] 	= P->p["-o"]+ job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
-		model_run(P, rank, nprocs,0, job_ID, LG);
+	if (pw->mle){
+		pw->regionsOfInterest 	= pw->outputDir+ job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
+		model_run_pwrapper(pw, rank, nprocs,0, job_ID, LG);
 		
 	}
 	LG->write("exiting bidir module....................................done\n\n", verbose);

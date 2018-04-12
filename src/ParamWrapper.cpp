@@ -26,6 +26,10 @@ void ParamWrapper::printUsage()
     printf("\t-sigma\tThis is the variance parameter for the EMG density function. default=10bp\n");
     printf("\t-pi\tThis is the strand bias parameter for the EMG density function. default=0.5\n");
     printf("\t-w\tThis is the pausing probability parameter for the EMG denisty function. default=0.5\n");
+    printf("\t-scores\tSome form of score output file. This parameter is presently undocumented.\n");
+    printf("\t-r_mu\tSome classification parameter. Default=0. This parameter is presently undocumented.\n");
+    printf("\t-ms_pen\tPenalty term for model selection. Default=1.\n");
+    printf("\t-max_noise\tMaximum noise threshold. Default=0.05. This parameter is presently undocumented.\n");
     
     printf("\n\nWhere [arguments] is one or more of the following for the model module:\n");
     printf("\t-i\tForward bedgraph file\n");
@@ -95,9 +99,9 @@ ParamWrapper::ParamWrapper()
 ParamWrapper::ParamWrapper(int argc, char **argv)
 {
     int i;
-    map<string, string> paramMap;
+    std::map<std::string, std::string> paramMap;
     char *prevCmd;
-    map<string, string>::iterator it;
+    std::map<std::string, std::string>::iterator it;
     
     this->exit=false;
     this->verbose=false;
@@ -135,6 +139,10 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     this->pad=2000;
     this->footPrint=86;
     this->fdr=0; //This is an undocumented parameter.
+    this->scores=""; //This is another undocumented parameter.
+    this->r_mu=0; //yet another undocumented parameter.
+    this->penalty=1; //There's documentation, but only in read_in_parameters.
+    this->maxNoise=0.05; //This seems to only be used in across_segments.
     
     if(argc==1)
     {
@@ -151,7 +159,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
         return;
     }
     
-    this->module=string(argv[1]);
+    this->module=std::string(argv[1]);
     
     if(this->module!="bidir" && this->module!="select" && this->module!="model")
     {
@@ -185,7 +193,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
         
         else
         {
-            paramMap.insert(pair<string, string>(prevCmd, argv[i]));
+            paramMap.insert(std::pair<std::string, std::string>(prevCmd, argv[i]));
             prevCmd=NULL;
         }
     }
@@ -232,6 +240,11 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
             this->logDir=it->second;
         }
         
+        else if(it->first=="-ms_pen")
+        {
+            this->penalty=atof(it->second.c_str());
+        }
+        
         else if(it->first=="-tss")
         {
             this->promoterTSS=it->second;
@@ -247,9 +260,19 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
             this->llrthresh=atoi(it->second.c_str());
         }
         
+        else if(it->first=="-max_noise")
+        {
+            this->maxNoise=atof(it->second.c_str());
+        }
+        
         else if(it->first=="-lambda")
         {
             this->lambda=atof(it->second.c_str());
+        }
+        
+        else if(it->first=="-scores")
+        {
+            this->scores=it->second;
         }
         
         else if(it->first=="-sigma")
@@ -347,9 +370,20 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
         {
             this->elon=atoi(it->second.c_str());
         }
+        
+        else if(it->first=="-k")
+        {
+            this->regionsOfInterest=it->second;
+        }
+        
+        //yet another undocumented parameter!
+        else if(it->first=="-r_mu")
+        {
+            this->r_mu=atoi(it->second.c_str());
+        }
     }
     
-    if((i=="" || j=="") && ij=="")
+    if((this->forwardStrand=="" || this->reverseStrand=="") && this->mergedStrand=="")
     {
         printf("Either i or j empty. Please specify i or j.\n");
         this->exit=true;
@@ -363,7 +397,7 @@ void ParamWrapper::display(int nodes, int cores){
 	//We have no analogs, since these parameters aren't in the repo documentation:
     //bool MLE 	= stoi(p["-MLE"]);
 	//bool SELECT = stoi(p["-select"]);
-	string header 	= "";
+	std::string header 	= "";
 	header+="----------------------------------------------------------------\n";
 	header+="             transcriptional inference (tINF)                   \n";
 	if (bidir){
@@ -382,7 +416,7 @@ void ParamWrapper::display(int nodes, int cores){
 	}
 	printf("%s\n",header.c_str() );
 	printf("-N         : %s\n", this->jobName.c_str());
-	if (not p["-ij"].empty()){
+	if (this->mergedStrand!=""){
 		printf("-ij        : %s\n", this->mergedStrand.c_str());
 	}else{
 		printf("-i         : %s\n", this->forwardStrand.c_str());
@@ -403,9 +437,9 @@ void ParamWrapper::display(int nodes, int cores){
 	if (this->elon){
 		printf("-elon      : %d\n", this->elon);
 	}
-	printf("-pad       : %d\n", this->pad);
+	printf("-pad       : %lf\n", this->pad);
 	if (!model){
-	printf("-bct       : %s\n", this->llrthresh.c_str());
+	printf("-bct       : %d\n", this->llrthresh);
 	}
 	if (model){
 		printf("-minK      : %d\n", this->mink);
@@ -419,48 +453,60 @@ void ParamWrapper::display(int nodes, int cores){
 	
 }
 
-string ParamWrapper::get_header(int ID){
-	string header = "";
-	header+="#----------------------------------------------------\n";
-	header+="#Date Time    : "+currentDateTime()+"\n";
-	header+="#-N           : "+this->jobName+"\n";
-	if (p["-ij"].empty()){
-		header+="#-i           : "+this->forwardStrand+"\n";
-		header+="#-j           : "+this->reverseStrand+"\n";
+const std::string cdt() {
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+    // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
+    // for more information about date/time format
+    strftime(buf, sizeof(buf), "%m/%d/%Y %X", &tstruct);
+
+    return buf;
+}
+
+std::string ParamWrapper::getHeader(int ID){
+    std::ostringstream os;
+	os<<"#----------------------------------------------------\n";
+	os<<"#Date Time    : "<<cdt()<<"\n";
+	os<<"#-N           : "<<this->jobName<<"\n";
+	if (this->mergedStrand==""){
+		os<<"#-i           : "<<this->forwardStrand<<"\n";
+		os<<"#-j           : "<<this->reverseStrand<<"\n";
 	}else{
-		header+="#-ij          : "+this->mergedStrand+"\n";
+		os<<"#-ij          : "<<this->mergedStrand<<"\n";
 	}
 	if (ID!=1){
-		header+="#-k           : "+this->regionsOfInterest+"\n";
+		os<<"#-k           : "<<this->regionsOfInterest<<"\n";
 	}
-	header+="#-o           : "+this->outputDir+"\n";
-	header+="#-br          : "+this->br+"\n";
+	os<<"#-o           : "<<this->outputDir<<"\n";
+	os<<"#-br          : "<<this->br<<"\n";
 	if (ID==1){
-		header+="#-bct         : "+this->llrthresh+"\n";
-		header+="#-pad         : "+this->pad+"\n";
+		os<<"#-bct         : "<<this->llrthresh<<"\n";
+        os<<"#-pad         : "<<this->pad<<"\n";
 	}
 	if (ID!=1){
-		header+="#-elon        : "+this->elon+"\n";
-		header+="#-minK        : "+this->mink+"\n";
-		header+="#-maxK        : "+this->maxk+"\n";
-		header+="#-mi          : "+this->mi+"\n";
-		header+="#-ct          : "+this->ct+"\n";
-		header+="#-rounds      : "+this->rounds+"\n";
+		os<<"#-elon        : "<<this->elon<<"\n";
+		os<<"#-minK        : "<<this->mink<<"\n";
+		os<<"#-maxK        : "<<this->maxk<<"\n";
+		os<<"#-mi          : "<<this->mi<<"\n";
+		os<<"#-ct          : "<<this->ct<<"\n";
+		os<<"#-rounds      : "<<this->rounds<<"\n";
 	}
 	if (ID!=1){
-		header+="#-ALPHA_0     : "+this->alpha0+"\n";	
-		header+="#-BETA_0      : "+this->beta0+"\n";	
-		header+="#-BETA_1      : "+this->beta1+"\n";	
-		header+="#-ALPHA_2     : "+this->alpha2+"\n";	
-		header+="#-ALPHA_3     : "+this->alpha3+"\n";	
+		os<<"#-ALPHA_0     : "<<this->alpha0<<"\n";	
+		os<<"#-BETA_0      : "<<this->beta0<<"\n";	
+		os<<"#-BETA_1      : "<<this->beta1<<"\n";	
+		os<<"#-ALPHA_2     : "<<this->alpha2<<"\n";	
+		os<<"#-ALPHA_3     : "<<this->alpha3<<"\n";	
 	}
 	if (ID==1){
-		header+="#-sigma       : "+ this->sigma +"\n";
-		header+="#-lambda      : "+ this->lambda+"\n";
-		header+="#-foot_print  : "+ this->footPrint+"\n";
-		header+="#-pi          : "+ this->pi+"\n";
-		header+="#-w           : "+ this->w+"\n";
+		os<<"#-sigma       : "<< this->sigma <<"\n";
+		os<<"#-lambda      : "<< this->lambda<<"\n";
+		os<<"#-foot_print  : "<< this->footPrint<<"\n";
+		os<<"#-pi          : "<< this->pi<<"\n";
+		os<<"#-w           : "<< this->w<<"\n";
 	}
-	header+="#----------------------------------------------------\n";
-	return header;
+	os<<"#----------------------------------------------------\n";
+	return os.str();
 }

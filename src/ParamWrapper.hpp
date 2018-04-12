@@ -7,7 +7,9 @@
 #include <map>
 #include <vector>
 
-using namespace std;
+#include <sstream>
+
+//using namespace std;
 
 /* This class is similar to the ParamWrapper used by FStitch. It sgoal is to make it easier to
  * change, add, and replace command line options in Tfit. 
@@ -26,24 +28,24 @@ public:
     bool model;
     
     //Set of parameters:
-    string module;
-    string forwardStrand;
-    string reverseStrand;
-    string mergedStrand;
+    std::string module;
+    std::string forwardStrand;
+    std::string reverseStrand;
+    std::string mergedStrand;
     
-    string jobName;
-    string outputDir;
-    string logDir;
+    std::string jobName;
+    std::string outputDir;
+    std::string logDir;
     
-    string regionsOfInterest;
+    std::string regionsOfInterest;
     
     //Set of bidir parameters with specific default settings:
     bool mle;
     int br; //This is undocumented in read_in_parameters;
     bool elon;
     double pad; //This is likely padding for ... something.
-    string promoterTSS;
-    string chromosome; //Default=all.
+    std::string promoterTSS;
+    std::string chromosome; //Default=all.
     int llrthresh; //LLR threshold specified by -bct default=1
     int ns;
     int fdr;
@@ -61,6 +63,7 @@ public:
     int rounds; //default=5
     double ct; //default=0.0001
     int mi; //default=2000
+    int r_mu; //Default=0; undocumented.
     
     //Additional bleeding edge parameters for the model module:
     bool experimentalValsSpecified;
@@ -71,12 +74,17 @@ public:
     double alpha2; //symmetric prior on mixing weights (higher values=more thorough attempt to ... "components of equal mixing weights". default=100
     double alpha3; //symmetric prior on the strand bias (higher value=more thorough attempt to find bidirectional events with equal strand bias. default=100
     
+    //Additional parameters that came up when modifying existing code to support ParamWrappers:
+    std::string scores;
+    int penalty;
+    double maxNoise;
+    
     //Methods:
     ParamWrapper();
     ParamWrapper(int argc, char **argv);
     void printUsage();
     
     void display(int nodes, int cores);
-    string getHeader(int id);
+    std::string getHeader(int id);
 };
 #endif 

@@ -23,7 +23,7 @@ NU_FIT: main.o load.o split.o model.o across_segments.o template_matching.o \
 	${PWD}/MPI_comm.o   \
 	${PWD}/bootstrap.o ${PWD}/density_profiler.o \
 	${PWD}/bidir_main.o ${PWD}/model_main.o ${PWD}/BIC.o ${PWD}/FDR.o  \
-	${PWD}/select_main.o  ${PWD}/error_stdo_logging.o -o ${EXEC} -lmpi
+	${PWD}/select_main.o  ${PWD}/error_stdo_logging.o ${PWD}/ParamWrapper.o -o ${EXEC} -lmpi
 	@cp ${PWD}/Tfit ${PWD}/EMGU
 	@printf "done\n"
 	@echo "========================================="

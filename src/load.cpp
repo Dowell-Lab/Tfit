@@ -624,6 +624,91 @@ vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&
    return G;
 }
 
+vector<segment*> load::load_intervals_of_interest_pwrapper(string FILE, map<int, string>&  IDS,
+      ParamWrapper *pw, int center) {
+   ifstream FH(FILE);
+
+   string spec_chrom   = pw->chromosome;
+   int pad           = pw->pad + 1;
+
+   vector<segment *> G;
+   int ct  = 1;
+   map<string, vector<segment * > > GS;
+   map<int, string> IDS_first;
+   int T   = 0;
+   int EXIT    = 0;
+   if (FH) {
+      string line, chrom;
+      int start, stop;
+      int   i = 0;
+      vector<string> lineArray;
+      string strand;
+      int PASSED  = 1;
+
+      while (getline(FH, line)) {
+         //lineArray=splitter(line, "\t");
+         lineArray = string_split(line, '\t');
+         if (lineArray[0].substr(0, 1) != "#" and lineArray.size() > 2) {
+            if (lineArray.size() > 3) {
+               if (not check_ID_name(lineArray[3]) and PASSED ) {
+                  PASSED      = 0;
+                  printf("\ninterval id in line: %s, contains a | symbol changing to :: -> %s\n", line.c_str(), lineArray[3].c_str() );
+                  printf("Will continue to change other occurrences....\n");
+
+               }
+               IDS_first[i]    = lineArray[3];
+            } else {
+               IDS_first[i]    = "Entry_" + to_string(i + 1);
+            }
+            if (lineArray.size() > 4) {
+               strand    = lineArray[4];
+            } else {
+               strand    = ".";
+            }
+            try {
+               if (not center) {
+                  chrom = lineArray[0], start = max(stoi(lineArray[1]) - pad, 0), stop = stoi(lineArray[2]) + pad;
+               } else {
+                  int x   =   ((stoi(lineArray[1]) + stoi(lineArray[2]))) / 2.;
+                  start     = max(x - pad, 0) , stop  = x + pad;
+                  chrom = lineArray[0];
+               }
+            }
+            catch (exception& e) {
+               printf("\n\nIssue with file %s at line %d\nPlease consult manual on file format\n\n", FILE.c_str(), i );
+               EXIT = 1;
+               GS.clear();
+               break;
+            }
+            if (start < stop) {
+               if (spec_chrom == "all" or spec_chrom == chrom) {
+                  segment * S   = new segment(chrom, start, stop, i, strand);
+                  GS[S->chrom].push_back(S);
+               }
+               i++;
+            }
+         }
+      }
+   } else {
+      printf("couldn't open %s for reading\n", FILE.c_str() );
+      EXIT  = 1;
+   }
+   if (not EXIT) {
+      typedef map<string, vector<segment * > >::iterator it_type;
+      IDS   = IDS_first;
+      for (it_type c  = GS.begin(); c != GS.end(); c++) {
+         vector<segment *> m_segs;
+         m_segs  = c->second;
+         for (int i = 0 ; i < m_segs.size(); i++) {
+            G.push_back(m_segs[i]);
+         }
+      }
+   } else {
+      G.clear();
+   }
+   return G;
+}
+
 vector<segment* > load::insert_bedgraph_to_segment_joint(map<string, vector<segment *> > A ,
       string forward, string reverse, string joint, int rank ) {
 
@@ -791,6 +876,25 @@ void load::write_out_bidirs(map<string , vector<vector<double> > > G, string out
    FHW.close();
 }
 
+void load::write_out_bidirs_pwrapper(map<string , vector<vector<double> > > G, string out_dir,
+                            string job_name, int job_ID, ParamWrapper *pw, int noise) {
+   typedef map<string , vector<vector<double> > >::iterator it_type;
+   ofstream FHW;
+   FHW.open(out_dir + job_name + "-" + to_string(job_ID) + "_prelim_bidir_hits.bed");
+   FHW << pw->getHeader(1);
+   int ID  = 0;
+   for (it_type c = G.begin(); c != G.end(); c++) {
+      vector<vector<double>> data_intervals   =  bubble_sort_alg(c->second);
+
+      for (int i = 0; i < data_intervals.size(); i++) {
+         FHW << c->first << "\t" << to_string(int(data_intervals[i][0])) << "\t" << to_string(int(data_intervals[i][1])) << "\tME_" << to_string(ID) << "\t";
+         FHW << to_string(data_intervals[i][2] ) + "," + to_string(int(data_intervals[i][3] )) + "," + to_string(int(data_intervals[i][4]) ) << endl;
+         ID++;
+      }
+   }
+   FHW.close();
+}
+
 
 void load::write_out_models_from_free_mode(map<int, map<int, vector<simple_c_free_mode>  > > G,
       params * P, int job_ID, map<int, string> IDS, int noise, string & file_name) {
@@ -890,11 +994,123 @@ void load::write_out_models_from_free_mode(map<int, map<int, vector<simple_c_fre
    }
    FHW.flush();
 }
+
+void load::write_out_models_from_free_mode_pwrapper(map<int, map<int, vector<simple_c_free_mode>  > > G,
+      ParamWrapper *pw, int job_ID, map<int, string> IDS, int noise, string & file_name) {
+
+   //========================================================================================
+   //write out each model parameter estimates
+   double scale  = pw->ns;
+   double penality = pw->penalty;
+   string out_dir  = pw->outputDir;
+   ofstream FHW;
+   file_name   = out_dir + pw->jobName + "-" + to_string(job_ID) +  "_K_models_MLE.tsv";
+   FHW.open(file_name);
+   FHW << pw->getHeader(2);
+
+   typedef map<int, map<int, vector<simple_c_free_mode>  > >::iterator it_type_1;
+   typedef map<int, vector<simple_c_free_mode>  > ::iterator it_type_2;
+   typedef vector<simple_c_free_mode>::iterator it_type_3;
+
+   typedef map<int, string>::iterator it_type_IDS;
+   int IN = 0;
+   string mus = "", sis = "", ls = "", wEMs = "", wPIs = "", forward_bs = "", forward_ws = "", forward_PIs = "", reverse_as = "", reverse_ws = "", reverse_PIs = "";
+   double w_thresh   = 0.;
+   double ALPHA_2  = pw->alpha2;
+   string mu, sigma, lambda, pos, neg, ll, pi, w, ra, fb, rw, fw, fp;
+   int start;
+   string chrom;
+
+   string INFO   = "";
+
+   FHW << "#ID|chromosome:start-stop|forward strand coverage, reverse strand coverage" << endl;
+   FHW << "#model complexity,log-likelihood" << endl;
+   FHW << "#mu_k\tsigma_k\tlambda_k\tpi_k\tfp_k\tw_[p,k],w_[f,k],w_[r,k]\tb_[f,k]\ta_[r,k]" << endl;
+
+   for (it_type_1 s = G.begin(); s != G.end(); s++) { //iterate over each segment
+      FHW << ">" + IDS[s->first] + "|";
+      for (it_type_2 k  = s->second.begin(); k != s->second.end(); k++) { //iterate over each model_complexity
+         for (it_type_3 c = k->second.begin(); c != k->second.end(); c++) {
+            chrom     = (*c).chrom;
+            INFO    = chrom + ":" + to_string((*c).ID[1]) + "-" + to_string((*c).ID[2]);
+            pos     = to_string((*c).SS[1]);
+            neg     = to_string((*c).SS[2]);
+
+         }
+      }
+      FHW << INFO << "|" << pos + "," + neg << endl;
+
+
+      for (it_type_2 k  = s->second.begin(); k != s->second.end(); k++) { //iterate over each model_complexity
+         string mus    = "", sigmas = "", lambdas = "", pis = "", ws = ""  , fbs = "", ras = "", fws = "", rws = "", fps = "";
+         string pos    = "", neg = "";
+         string k_header = "~" + to_string(k->first) + ",";
+         int NN      = k->second.size();
+         int ii      = 0;
+         for (it_type_3 c = k->second.begin(); c != k->second.end(); c++) {
+            chrom     = (*c).chrom;
+            start     = (*c).ID[1];
+            mu      = to_string((*c).ps[0] * scale + (*c).ID[1] );
+            sigma     = to_string((*c).ps[1] * scale);
+            lambda    = to_string(scale / (*c).ps[2]);
+            pi      = to_string( (*c).ps[4]);
+            w       = to_string( (*c).ps[3]);
+            fw      = to_string( (*c).ps[6]);
+            rw      = to_string( (*c).ps[9]);
+            ra      = to_string( scale * (*c).ps[8]   + (*c).ID[1] );
+            fb      = to_string( scale * (*c).ps[5]  + (*c).ID[1]);
+            fp      = to_string( scale * (*c).ps[11]  );
+            ll      = to_string((*c).SS[0]);
+            if (ii + 1 < NN) {
+               mus += mu + ",";
+               sigmas += sigma + ",";
+               lambdas += lambda + ",";
+               pis += pi + ",";
+               ws += w + "," + fw + "," + rw + "|";
+               ras += ra + ",";
+               fbs += fb + ",";
+               fps += fp + ",";
+            } else {
+               mus += mu ;
+               sigmas += sigma ;
+               lambdas += lambda ;
+               pis += pi ;
+               ws += w + "," + fw + "," + rw ;
+               fbs += fb;
+               ras += ra;
+               fps += fp ;
+            }
+            ii++;
+         }
+         k_header    += ll + "\t";
+         FHW << k_header;
+
+         if (k->first > 0) {
+            FHW << mus + "\t" + sigmas + "\t" + lambdas + "\t" + pis + "\t" + fps + "\t" + ws + "\t" + fbs + "\t" + ras ;
+         }
+         FHW << endl;
+      }
+   }
+   FHW.flush();
+}
+
 void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params * P, int job_ID, int noise ) {
    ofstream FHW;
    FHW.open(P->p["-o"] +  P->p["-N"] + "-" + to_string(job_ID) +  "_bidir_predictions.bed");
    FHW << P->get_header(2);
    double penality   = stod(P->p["-ms_pen"]);
+   for (int i = 0; i < fits.size(); i++) {
+      fits[i]->get_model(penality);
+      FHW << fits[i]->write();
+   }
+   FHW.flush();
+}
+
+void load::write_out_bidirectionals_ms_pen_pwrapper(vector<segment_fits*> fits, ParamWrapper * pw, int job_ID, int noise ) {
+   ofstream FHW;
+   FHW.open(pw->outputDir + pw->jobName + "-" + to_string(job_ID) +  "_bidir_predictions.bed");
+   FHW << pw->getHeader(2);
+   double penality   = pw->penalty;
    for (int i = 0; i < fits.size(); i++) {
       fits[i]->get_model(penality);
       FHW << fits[i]->write();

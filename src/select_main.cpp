@@ -104,3 +104,7 @@ int select_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 
 	
 }
+
+int select_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_File * LG){
+    //Was the entire body of this function really supposed to be commented out?
+}

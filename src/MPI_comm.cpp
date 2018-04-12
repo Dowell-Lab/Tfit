@@ -37,6 +37,7 @@ struct bounds{
 public:
   double lower_upper[5];
 };
+
 int MPI_comm::gather_all_bidir_predicitions(vector<segment *> all, 
 					    vector<segment *> segments , 
 					    int rank, int nprocs, string out_file_dir, string job_name, int job_ID, params * P, int noise){
@@ -138,7 +139,106 @@ int MPI_comm::gather_all_bidir_predicitions(vector<segment *> all,
   return NN;
 }
 
+int MPI_comm::gather_all_bidir_predicitions_pwrapper(vector<segment *> all, 
+					    vector<segment *> segments , 
+					    int rank, int nprocs, string out_file_dir, string job_name, int job_ID, ParamWrapper *pw, int noise){
+  
+  map<string , vector<vector<double> > > G;
+  map<string , vector<vector<double> > > A;
+  //insert data from root
+  int N 	= all.size();
+  int S;
+  int count 	= N/ nprocs;
+  
+  if (count==0){
+    count 	= 1;
+  }
+  bounds B;
+  MPI_Datatype mystruct;
+  
+  int blocklens[1]={5};
+  MPI_Datatype old_types[1] = {MPI_DOUBLE}; 
+  MPI_Aint displacements[1];
+  displacements[0] 	= offsetof(bounds, lower_upper);
+  MPI_Type_create_struct( 1, blocklens, displacements, old_types, &mystruct );
 
+  
+  MPI_Type_commit( &mystruct );
+  int NN = 0;
+  
+  if (rank == 0){
+    
+    for (int i = 0 ; i < segments.size(); i++){
+      for (int j = 0; j < segments[i]->bidirectional_bounds.size();j++){
+	NN+=1;
+       
+	G[segments[i]->chrom].push_back(segments[i]->bidirectional_bounds[j]);
+      }
+    }
+    
+    
+    for (int j =1; j < nprocs; j++){
+      
+      int start 	= j * count;
+      int stop 	= min(start + count, int(N ));	
+      
+      if (j==nprocs-1){
+	stop 	= N;
+      }
+      if (start >= stop){
+	start 	= stop;
+      }
+      
+      
+      
+      for (int i = 0; i < (stop-start) ; i++){
+	MPI_Recv(&S, 1, MPI_INT, j, i, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+	NN+=S;	
+       
+	G[all[ start+i ]->chrom] 	= vector<vector<double> >(S);
+	for (int u = 0; u < S; u++ ){
+	  MPI_Recv(&B, 1, mystruct, j, u, MPI_COMM_WORLD,MPI_STATUS_IGNORE);				  
+	  for (int l = 0 ; l < 5;l++){
+	    G[all[ start+i ]->chrom][u].push_back(B.lower_upper[l]);
+	  }
+	}
+      }
+      
+      
+    }
+    
+    
+  }else  {
+   
+    int IS = segments.size();
+    for (int i = 0;  i < segments.size();i++ ){
+      int S 	= segments[i]->bidirectional_bounds.size();
+      
+      MPI_Ssend(&S, 1, MPI_INT, 0,i,MPI_COMM_WORLD );
+      
+      for (int u=0; u < segments[i]->bidirectional_bounds.size(); u++){				
+	bounds B;
+	
+	for (int l = 0 ; l < 5; l++){
+	  B.lower_upper[l] = segments[i]->bidirectional_bounds[u][l];
+	}
+	
+	
+	MPI_Send(&B, 1, mystruct, 0, u, MPI_COMM_WORLD);
+	
+      }
+      
+    }
+    
+    
+  }
+  cout<<"-------------------------"<<endl;
+  if (rank==0 and not out_file_dir.empty()){
+    load::write_out_bidirs_pwrapper(G, out_file_dir, job_name, job_ID, pw, noise);
+  }
+  
+  return NN;
+}
 
 struct simple_seg_struct{
 	char chrom[6];

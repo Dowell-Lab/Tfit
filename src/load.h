@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include "read_in_parameters.h"
+#include "ParamWrapper.hpp"
 using namespace std;
 class simple_c_free_mode;
 
@@ -91,8 +92,10 @@ namespace load{
 
 
 	void write_out_bidirs(map<string , vector<vector<double> > >, string, string, int ,params *, int);
+    void write_out_bidirs_pwrapper(map<string, vector<vector<double> > >, string, string, int, ParamWrapper *, int);
 
 	vector<segment *> load_intervals_of_interest(string,map<int, string>&, params *, int);
+    vector<segment *> load_intervals_of_interest_pwrapper(string, map<int, string>&, ParamWrapper *, int);
 
 
 	void collect_all_tmp_files(string , string, int, int );
@@ -101,11 +104,13 @@ namespace load{
 
 	void write_out_models_from_free_mode(map<int, map<int, vector<simple_c_free_mode>  > >,
 		params *,int,map<int, string>, int, string &);
+    void write_out_models_from_free_mode_pwrapper(map<int, map<int, vector<simple_c_free_mode>  > >,
+		ParamWrapper *,int,map<int, string>, int, string &);
 	void clear_segments(vector<segment *> );
 
 	vector<segment_fits *> load_K_models_out(string);
 	void write_out_bidirectionals_ms_pen(vector<segment_fits*> , params * , int, int );
-
+    void write_out_bidirectionals_ms_pen_pwrapper(vector<segment_fits *>, ParamWrapper *, int, int);
 }
 
 #endif

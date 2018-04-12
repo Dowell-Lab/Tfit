@@ -35,6 +35,7 @@ int main(int argc, char* argv[]){
 
   //Todo: consider adding a rank parameter, since it appears to change how error messages are generated.
   ParamWrapper pw(argc, argv);
+  rank=1;
   
   if(pw.exit)
   {
@@ -60,18 +61,21 @@ int main(int argc, char* argv[]){
   if (verbose and rank==0){
       pw.display(nprocs, threads);
     //P->display(nprocs,threads);
-    LG->write(pw.get_header(1), 0);
+    LG->write(pw.getHeader(1), 0);
   }
-  if (P->bidir){
-    bidir_run(P, rank, nprocs, job_ID,LG);
+  if (pw.bidir){
+    //bidir_run(P, rank, nprocs, job_ID,LG);
+    bidir_run_pwrapper(&pw, rank, nprocs, job_ID, LG);
   }
-  else if (P->model){
-    model_run(P, rank, nprocs,0,job_ID,LG);
-  }else if (P->select){
-    select_run(P, rank, nprocs, job_ID,LG);	
+  else if (pw.model){
+    //model_run(P, rank, nprocs,0,job_ID,LG);
+    model_run_pwrapper(&pw, rank, nprocs, 0, job_ID, LG);
+  }else if (pw.select){
+    //select_run(P, rank, nprocs, job_ID,LG);	
+    select_run_pwrapper(&pw, rank, nprocs, job_ID, LG);
   }
   if (rank == 0){
-    load::collect_all_tmp_files(P->p["-log_out"], P->p["-N"], nprocs, job_ID);
+    load::collect_all_tmp_files(pw.logDir, pw.jobName, nprocs, job_ID);
   }
   
   MPI_Finalize();

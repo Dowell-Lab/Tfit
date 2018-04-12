@@ -8,6 +8,7 @@
 
 #include <map>
 #include "read_in_parameters.h"
+#include "ParamWrapper.hpp"
 namespace MPI_comm {
 
  
@@ -16,6 +17,7 @@ vector<segment *> slice_segments(vector<segment *>, int , int );
 int gather_all_bidir_predicitions(vector<segment *> ,
 vector<segment *>, int, int,string, string, int, params *, int );
 
+int gather_all_bidir_predicitions_pwrapper(vector<segment *> all, vector<segment *> segments , int rank, int nprocs, string out_file_dir, string job_name, int job_ID, ParamWrapper *pw, int noise);
 
 map<string, vector<segment *> > send_out_single_fit_assignments(vector<segment *> , int, int);
 
