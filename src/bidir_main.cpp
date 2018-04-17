@@ -12,7 +12,6 @@
 using namespace std;
 int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 
-
 	int verbose 	= stoi(P->p["-v"]);
 	P->p["-merge"] 	= "1";
 	

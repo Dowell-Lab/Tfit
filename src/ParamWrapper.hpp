@@ -27,6 +27,8 @@ public:
     bool bidir;
     bool model;
     
+    int cores;
+    
     //Set of parameters:
     std::string module;
     std::string forwardStrand;

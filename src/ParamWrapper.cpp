@@ -381,6 +381,11 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
         {
             this->r_mu=atoi(it->second.c_str());
         }
+        
+        else if(it->first=="-threads")
+        {
+            this->cores=atoi(it->second.c_str());
+        }
     }
     
     if((this->forwardStrand=="" || this->reverseStrand=="") && this->mergedStrand=="")

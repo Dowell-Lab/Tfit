@@ -63,16 +63,25 @@ int main(int argc, char* argv[]){
     //P->display(nprocs,threads);
     LG->write(pw.getHeader(1), 0);
   }
+  //The code seems to be breaking riiiight here.
   if (pw.bidir){
+      printf("About to launch bidir module.\n");
     //bidir_run(P, rank, nprocs, job_ID,LG);
     bidir_run_pwrapper(&pw, rank, nprocs, job_ID, LG);
   }
   else if (pw.model){
+      printf("About to launch model module.\n");
     //model_run(P, rank, nprocs,0,job_ID,LG);
     model_run_pwrapper(&pw, rank, nprocs, 0, job_ID, LG);
   }else if (pw.select){
     //select_run(P, rank, nprocs, job_ID,LG);	
+      printf("About to launch select module.\n");
     select_run_pwrapper(&pw, rank, nprocs, job_ID, LG);
+  }
+  
+  else
+  {
+      printf("Something exceptionally bad just happened!\n");
   }
   if (rank == 0){
     load::collect_all_tmp_files(pw.logDir, pw.jobName, nprocs, job_ID);
