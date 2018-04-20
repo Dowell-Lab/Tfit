@@ -394,6 +394,14 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
         this->exit=true;
     }
     
+    if(this->outputDir!="")
+    {
+        if(this->outputDir[this->outputDir.length()-2]!='/')
+        {
+            this->outputDir=this->outputDir+"/";
+        }
+    }
+    
     //Todo: add more sanity checks.
 }
 

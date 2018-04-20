@@ -306,7 +306,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	//(4) if MLE option was provided than need to run the model_main::run()
 	//
 	if (pw->mle){
-		pw->regionsOfInterest 	= pw->outputDir+"/"+job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
+		pw->regionsOfInterest 	= pw->outputDir+job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
         printf("Regions of interest file..............................%s\n", pw->regionsOfInterest.c_str());
 		model_run_pwrapper(pw, rank, nprocs,0, job_ID, LG);
 		
