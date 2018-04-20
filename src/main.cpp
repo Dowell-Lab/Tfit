@@ -35,10 +35,14 @@ int main(int argc, char* argv[]){
 
   //Todo: consider adding a rank parameter, since it appears to change how error messages are generated.
   ParamWrapper pw(argc, argv);
-  rank=1;
+  rank=0;
   
   if(pw.exit)
   {
+      if(rank==0)
+      {
+          printf("Exiting...\n");
+      }
       MPI_Finalize();
       return 0;
   }
