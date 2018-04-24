@@ -117,10 +117,11 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     this->promoterTSS="";
     this->chromosome="";
     this->llrthresh=1;
-    this->lambda=200;
-    this->sigma=10;
+    //These parameters were modified given the behavior of stock Tfit:
+    this->lambda=2000;
+    this->sigma=123;
     this->pi=0.5;
-    this->w=0.5;
+    this->w=0.9;
     this->mink=1;
     this->maxk=1;
     this->rounds=5;
@@ -373,6 +374,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
         
         else if(it->first=="-k")
         {
+            printf("Setting regions of interest to %s\n", it->second.c_str());
             this->regionsOfInterest=it->second;
         }
         

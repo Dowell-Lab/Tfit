@@ -135,7 +135,7 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 
 	LG->write("scattering predictions to other MPI processes...........", verbose);
 	int total =  MPI_comm::gather_all_bidir_predicitions(all_segments, 
-							     segments , rank, nprocs, out_file_dir, job_name, job_ID,P,0);
+							     segments , 1, nprocs, out_file_dir, job_name, job_ID,P,0);
 	MPI_Barrier(MPI_COMM_WORLD); //make sure everybody is caught up!
 
 	LG->write("done\n", verbose);
@@ -192,7 +192,9 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	map<int, string> ID_to_chrom;
        
 	vector<double> parameters 	= {sigma, lambda, foot_print,pi, w};
-	if (not tss_file.empty() and rank == 0){
+    printf("Value of not tss_file.empty: %d\n", !tss_file.empty());
+    printf("Tss filename: %s\n", tss_file.c_str());
+	if (tss_file!="" and rank == 0){
 		vector<segment *> FSI;
 		LG->write("loading TSS intervals...................................",verbose);
 		map<int, string> IDS;
@@ -308,6 +310,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	if (pw->mle){
 		pw->regionsOfInterest 	= pw->outputDir+job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
         printf("Regions of interest file..............................%s\n", pw->regionsOfInterest.c_str());
+        
 		model_run_pwrapper(pw, rank, nprocs,0, job_ID, LG);
 		
 	}

@@ -35,7 +35,7 @@ int main(int argc, char* argv[]){
 
   //Todo: consider adding a rank parameter, since it appears to change how error messages are generated.
   ParamWrapper pw(argc, argv);
-  rank=0;
+  //rank=0;
   
   if(pw.exit)
   {
@@ -71,7 +71,7 @@ int main(int argc, char* argv[]){
   if (pw.bidir){
       printf("About to launch bidir module.\n");
     //bidir_run(P, rank, nprocs, job_ID,LG);
-    bidir_run_pwrapper(&pw, rank, nprocs, job_ID, LG);
+    bidir_run_pwrapper(&pw, 0, nprocs, job_ID, LG);
   }
   else if (pw.model){
       printf("About to launch model module.\n");
