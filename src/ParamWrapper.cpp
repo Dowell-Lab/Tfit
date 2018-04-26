@@ -103,28 +103,29 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     char *prevCmd;
     std::map<std::string, std::string>::iterator it;
     
+    //NOTE: Parameters were changed to the defaults seen in read_in_parameters.cpp, rather than the documented defaults.
     this->exit=false;
-    this->verbose=false;
+    this->verbose=true;//false;
     this->module="";
     //This constructor sets blank or default values.
     this->forwardStrand="";
     this->reverseStrand="";
     this->mergedStrand="";
-    this->jobName="";
+    this->jobName="EMG"; //"";
     this->outputDir="";
     this->logDir="";
     this->regionsOfInterest="";
     this->promoterTSS="";
-    this->chromosome="";
-    this->llrthresh=1;
+    this->chromosome="all";//"";
+    this->llrthresh=0.95;//1;
     //These parameters were modified given the behavior of stock Tfit:
     this->lambda=2000;
     this->sigma=123;
     this->pi=0.5;
     this->w=0.9;
     this->mink=1;
-    this->maxk=1;
-    this->rounds=5;
+    this->maxk=3;//1;
+    this->rounds=10;//5;
     this->ct=0.0001;
     this->mi=2000;
     this->experimentalValsSpecified=false;
@@ -132,18 +133,24 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     this->beta0=1;
     this->ns=100;
     //There are no default values for this parameter.
+    this->alpha0=1;
+    this->beta0=1;
     this->alpha1=1;
     this->beta1=1;
-    this->alpha2=100;
-    this->alpha3=100;
+    this->alpha2=1;//100;
+    this->alpha3=1;//100;
     this->br=25;
     this->pad=2000;
     this->footPrint=86;
-    this->fdr=0; //This is an undocumented parameter.
+    this->fdr=0; //This parameter appears to change how this software computes prior distributions in the bidir module. 
+                 //When set to 0, Tfit will use a shortcut and/or precomputed model. 
     this->scores=""; //This is another undocumented parameter.
     this->r_mu=0; //yet another undocumented parameter.
     this->penalty=1; //There's documentation, but only in read_in_parameters.
     this->maxNoise=0.05; //This seems to only be used in across_segments.
+    this->mle=0; //This parameter runs the model module after bidir, IIRC.
+    this->elon=0;
+    
     
     if(argc==1)
     {
