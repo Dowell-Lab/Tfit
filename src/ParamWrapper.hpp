@@ -25,6 +25,7 @@ public:
     //Use a set of booleans like read_in_parameters to represent modules for ease of porting:
     bool select;
     bool bidir;
+    bool bidirOld; //This will run a quick hackjob of the old bidirectional codebase.
     bool model;
     
     int cores;

@@ -177,6 +177,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     }
     
     this->bidir=this->module=="bidir";
+    this->bidirOld=this->module=="bidir_old";
     this->model=this->module=="model";
     this->select=this->module=="select";
     
@@ -369,7 +370,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
             this->alpha3=atof(it->second.c_str());
         }
         
-        else if(it->first=="-MLE")
+        else if(it->first=="-mle")
         {
             this->mle=atoi(it->second.c_str());
         }

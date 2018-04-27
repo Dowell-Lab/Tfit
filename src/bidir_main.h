@@ -6,6 +6,7 @@
 
 int bidir_run(params *, int, int,int, Log_File *);
 int bidir_run_pwrapper(ParamWrapper *, int, int, int, Log_File *);
+int bidir_old_run_pwrapper(ParamWrapper * pw, int rank, int nprocs, int job_ID, Log_File * LG);
 
 
 #endif

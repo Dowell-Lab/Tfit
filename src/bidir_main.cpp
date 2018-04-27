@@ -9,6 +9,7 @@
 #include "error_stdo_logging.h"
 #include "FDR.h"
 #include "BIC.h"
+#include "old_template_matching.hpp"
 using namespace std;
 int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 
@@ -318,3 +319,85 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	return 1;
 }
 
+int bidir_old_run_pwrapper(ParamWrapper * pw, int rank, int nprocs, int job_ID, Log_File * LG){
+	int verbose 	= pw->verbose;
+	//P->p["-merge"] 	= "1";
+	LG->write("\ninitializing bidir module...............................done\n", verbose);
+	int threads 	= omp_get_max_threads();//number of openMP threads that are available for use
+	
+	//===========================================================================
+	//get job_ID and open file handle for log files
+	string job_name = pw->jobName; //P->p["-N"];
+	
+	//===========================================================================
+	//input files and output directories
+	string forward_bedgraph 	= pw->forwardStrand;//P->p["-i"]; //forward strand bedgraph file
+	string reverse_bedgraph 	= pw->reverseStrand; //reverse strand beddgraph file
+	string combined_bedgraph    = pw->mergedStrand;
+	string out_file_dir 		= pw->outputDir;//out file directory
+	//TODO: copy bedgraph splitting code from Fstitch to accomodate this function.
+	
+	//(2a) read in bedgraph files 
+	map<string, int> chrom_to_ID;
+	map<int, string> ID_to_chrom;
+	LG->write("loading bedgraph files..................................", verbose);
+      
+	vector<segment *> 	segments 	= load::load_bedgraphs_total(forward_bedgraph, reverse_bedgraph, combined_bedgraph,
+		pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom );
+	LG->write("done\n", verbose);
+	//(2b) so segments is indexed by inidividual chromosomes, want to broadcast 
+	//to sub-processes and have each MPI call run on a subset of segments
+	vector<segment*> all_segments  	= segments;
+	LG->write("slicing segments........................................", verbose);
+	segments 						= MPI_comm::slice_segments(segments, rank, nprocs);	
+	LG->write("done\n", verbose);
+	//===========================================================================
+	//(3a) now going to run the template matching algorithm based on pseudo-
+	//moment estimator and compute BIC ratio (basically penalized LLR)
+
+	LG->write("running moment estimator algorithm......................", verbose);
+	run_global_template_matching_old(segments, out_file_dir, 4, 
+			0.,pw->ns,pw->llrthresh, threads,0. ,0 );	
+	//(3b) now need to send out, gather and write bidirectional intervals 
+	LG->write("done\n", verbose);
+	LG->write("scattering predictions to other MPI processes...........", verbose);
+	int total =  MPI_comm::gather_all_bidir_predicitions_pwrapper(all_segments, 
+			segments , rank, nprocs, out_file_dir, job_name, job_ID,pw,0);
+	LG->write("done\n", verbose);
+	if (rank==0){
+		LG->write("\nThere were " +to_string(total) + " prelimary bidirectional predictions\n\n", verbose);
+	}
+	
+	//===========================================================================
+	//this should conclude it all
+	LG->write("clearing allocated segment memory.......................", verbose);	
+	load::clear_segments(all_segments);
+	LG->write("done\n", verbose);
+	//===========================================================================
+	//(4) if MLE option was provided than need to run the model_main::run()
+	//
+    /*
+	if (pw->mle){
+		string k = pw->outputDir + job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
+		model_run(P, rank, nprocs,0, job_ID, LG);
+		if (stoi(P->p["-select"])){
+			string bidir_ms_file 	= P->p["-o"]+  P->p["-N"] + "-" + to_string(job_ID)+  "_divergent_classifications.bed";
+			string file_name 		= P->p["-o"]+  P->p["-N"] + "-" + to_string(job_ID)+  "_K_models_MLE.tsv";
+			remove( bidir_ms_file.c_str() );
+			//query out_dir +  P->p["-N"] + "-" + to_string(job_ID)+  "_K_models_MLE.tsv"
+			P->p["-q"] 	= P->p["-o"] +  P->p["-N"] + "-" + to_string(job_ID)+  "_K_models_MLE.tsv";
+			select_run(P, rank, nprocs, job_ID, LG);
+			LG->write("loading results (MLE)...................................",verbose);
+			vector<segment_fits *> fits 		= load::load_K_models_out(file_name);
+			LG->write("done\n",verbose);		
+			
+			LG->write("writing out results (model selection)...................",verbose);
+			load::write_out_bidirectionals_ms_pen(fits, P,job_ID, 0 );
+			LG->write("done\n",verbose);
+	
+
+		}
+	}*/
+	LG->write("exiting bidir module....................................done\n\n", verbose);
+	return 1;
+}

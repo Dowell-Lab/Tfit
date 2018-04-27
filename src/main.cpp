@@ -73,6 +73,11 @@ int main(int argc, char* argv[]){
     //bidir_run(P, rank, nprocs, job_ID,LG);
     bidir_run_pwrapper(&pw, 0, nprocs, job_ID, LG);
   }
+  else if(pw.bidirOld)
+  {
+      printf("About to launch bidir module with older behavior.\n");
+      bidir_old_run_pwrapper(&pw, rank, nprocs, job_ID, LG);
+  }
   else if (pw.model){
       printf("About to launch model module.\n");
     //model_run(P, rank, nprocs,0,job_ID,LG);
