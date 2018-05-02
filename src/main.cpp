@@ -76,7 +76,8 @@ int main(int argc, char* argv[]){
   else if(pw.bidirOld)
   {
       printf("About to launch bidir module with older behavior.\n");
-      bidir_old_run_pwrapper(&pw, rank, nprocs, job_ID, LG);
+      //bidir_old_run_pwrapper(&pw, rank, nprocs, job_ID, LG);
+      bidir_run_old_long_pwrapper(&pw, rank, nprocs, job_ID, LG);
   }
   else if (pw.model){
       printf("About to launch model module.\n");
