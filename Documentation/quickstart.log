@@ -1,0 +1,300 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2018.4.25)  21 MAY 2018 13:50
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**quickstart.tex
+(./quickstart.tex
+LaTeX2e <2017/01/01> patch level 3
+Babel <3.10> and hyphenation patterns for 3 language(s) loaded.
+(/usr/share/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/share/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (./quickstart.aux)
+\openout1 = `quickstart.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 3.
+LaTeX Font Info:    ... okay on input line 3.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 3.
+LaTeX Font Info:    ... okay on input line 3.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 3.
+LaTeX Font Info:    ... okay on input line 3.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 3.
+LaTeX Font Info:    ... okay on input line 3.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 3.
+LaTeX Font Info:    ... okay on input line 3.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 3.
+LaTeX Font Info:    ... okay on input line 3.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <14.4> on input line 8.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 8.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 17.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 17.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 17.
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+Overfull \hbox (191.24872pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 bidir - This module searches the genome for area
+s resembling bidirectional transcription[] 
+ []
+
+
+Overfull \hbox (265.98166pt too wide) in paragraph at lines 98--98
+ []                \OT1/cmtt/m/n/10.95 by comparing a fixed template mixture mo
+del to a noise model by a log-likelihood ratio score.[] 
+ []
+
+
+Overfull \hbox (248.7356pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 bidir_old - This module implements the functiona
+lity seen in versions of Tfit used in publications[] 
+ []
+
+
+Overfull \hbox (191.24872pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 model - This module attempts to generate an opti
+mal set of parameters per region instead[] 
+ []
+
+
+Overfull \hbox (53.28021pt too wide) in paragraph at lines 98--98
+ []                \OT1/cmtt/m/n/10.95 of using a fixed set of parameters for t
+he entire genome[] 
+ []
+
+
+Overfull \hbox (47.53152pt too wide) in paragraph at lines 98--98
+ []\OT1/cmtt/m/n/10.95 Where [arguments] is one or more of the following for th
+e bidir module:[] 
+ []
+
+
+Overfull \hbox (438.44229pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -ij     Both forward and reverse bedgraph file. 
+This parameter may be used in place of -i and -j if reads are in one bedgraph f
+ile.[] 
+ []
+
+
+Overfull \hbox (70.52628pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -o      Output directory. If it does not exist, 
+it will be created.[] 
+ []
+
+
+Overfull \hbox (168.25397pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -log_out        Log file output directory. If it
+ does not exist, it will be created.[] 
+ []
+
+
+Overfull \hbox (357.96066pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -tss    Transcription model path. Models are pro
+vided for hg19 and mm10 in the annotations directory of this project.[] 
+ []
+
+
+Overfull \hbox (151.0079pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -chr    Run bidir only on the specified chromoso
+me by name. The default is, "all"[] 
+ []
+
+
+Overfull \hbox (340.7146pt too wide) in paragraph at lines 98--98
+ []\OT1/cmtt/m/n/10.95 If -tss is not specified, the values normally specified 
+by the model file can be specified explicitly using the following:[] 
+ []
+
+
+Overfull \hbox (185.50003pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -lambda This is the entry length parameter for t
+he EMG density function. default=200 bp[] 
+ []
+
+
+Overfull \hbox (151.0079pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -sigma  This is the variance parameter for the E
+MG density function. default=10bp[] 
+ []
+
+
+Overfull \hbox (162.50528pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -pi     This is the strand bias parameter for th
+e EMG density function. default=0.5[] 
+ []
+
+
+Overfull \hbox (208.49478pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -w      This is the pausing probability paramete
+r for the EMG denisty function. default=0.5[] 
+ []
+
+
+Overfull \hbox (151.0079pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -scores Some form of score output file. This par
+ameter is presently undocumented.[] 
+ []
+
+
+Overfull \hbox (208.49478pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -r_mu   Some classification parameter. Default=0
+. This parameter is presently undocumented.[] 
+ []
+
+
+Overfull \hbox (237.23822pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -max_noise      Maximum noise threshold. Default
+=0.05. This parameter is presently undocumented.[] 
+ []
+
+
+Overfull \hbox (47.53152pt too wide) in paragraph at lines 98--98
+ []\OT1/cmtt/m/n/10.95 Where [arguments] is one or more of the following for th
+e model module:[] 
+ []
+
+[2]
+Overfull \hbox (438.44229pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -ij     Both forward and reverse bedgraph file. 
+This parameter may be used in place of -i and -j if reads are in one bedgraph f
+ile.[] 
+ []
+
+
+Overfull \hbox (41.78284pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -k      Bedgraph file containing a set of region
+s of interest.[] 
+ []
+
+
+Overfull \hbox (70.52628pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -o      Output directory. If it does not exist, 
+it will be created.[] 
+ []
+
+
+Overfull \hbox (168.25397pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -log_out        Log file output directory. If it
+ does not exist, it will be created.[] 
+ []
+
+
+Overfull \hbox (53.28021pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -mink   Minimum number of finite mixtures to con
+sider. default=1[] 
+ []
+
+
+Overfull \hbox (53.28021pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -maxk   Maximum number of finite mixtures to con
+sider. default=1[] 
+ []
+
+
+Overfull \hbox (36.03415pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -rounds Number of random seeds to use in the mod
+el. default=5[] 
+ []
+
+
+Overfull \hbox (110.76709pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -ct     Convergence threshold after which proces
+sing stops. default=0.0001[] 
+ []
+
+
+Overfull \hbox (174.00266pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -mi     Maximum number of model iterations after
+ which processing stops. default=2000[] 
+ []
+
+
+Overfull \hbox (300.47379pt too wide) in paragraph at lines 98--98
+ []\OT1/cmtt/m/n/10.95 The model module currently has experimental support for 
+parameter inference. Ie. it can attempt to estimate lambda,[] 
+ []
+
+
+Overfull \hbox (196.9974pt too wide) in paragraph at lines 98--98
+ []\OT1/cmtt/m/n/10.95 sigma, pi, and w via conjugate priors. These values are 
+specified using the following parameters:[] 
+ []
+
+
+Overfull \hbox (53.28021pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -ALPHA_0        Prior parameter 1 for sigma. Rec
+ommended value=1[] 
+ []
+
+
+Overfull \hbox (7.29071pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -BETA_0 Prior parameter 2 for sigma. Recommended
+ value=1[] 
+ []
+
+
+Overfull \hbox (403.95016pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -ALPHA_2        Symmetric prior on mixing weight
+s. Higher values=stronger attempt to find components of equal mixing weights.[]
+ 
+ []
+
+
+Overfull \hbox (461.43704pt too wide) in paragraph at lines 98--98
+ []        \OT1/cmtt/m/n/10.95 -ALPHA_3        Symmetric prior on the strand bi
+as. Higher values=stronger attempt to find bidirectional events with equal stra
+nd bias.[] 
+ []
+
+
+Overfull \hbox (105.0184pt too wide) in paragraph at lines 98--98
+ []\OT1/cmtt/m/n/10.95 -elon     : (boolean integer) adjust support of elongati
+on component, (default=0)[] 
+ []
+
+
+Overfull \hbox (110.76709pt too wide) in paragraph at lines 98--98
+ []              \OT1/cmtt/m/n/10.95 useful only when fitting to FStitch[1] or 
+groHMM[2] output intervals[] 
+ []
+
+[3] [4] [5] (./quickstart.aux) ) 
+Here is how much of TeX's memory you used:
+ 242 strings out of 494939
+ 2671 string characters out of 6179320
+ 54951 words of memory out of 5000000
+ 3614 multiletter control sequences out of 15000+600000
+ 9624 words of font info for 34 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 22i,6n,19p,373b,255s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.
+pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr17.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mti10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on quickstart.pdf (5 pages, 106796 bytes).
+PDF statistics:
+ 52 PDF objects out of 1000 (max. 8388607)
+ 36 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+
