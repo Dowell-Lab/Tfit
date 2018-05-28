@@ -1,4 +1,4 @@
 \contentsline {section}{\numberline {1}Building and Invoking Tfit-revisions}{1}
 \contentsline {section}{\numberline {2}The bidir\_old module}{1}
 \contentsline {section}{\numberline {3}The bidir module}{2}
-\contentsline {section}{\numberline {4}The model module}{2}
+\contentsline {section}{\numberline {4}The model module}{3}

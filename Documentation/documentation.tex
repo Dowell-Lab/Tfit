@@ -29,7 +29,16 @@ It appears that bidir\_old, when passed the same parameters as the current bidir
 \end{enumerate}
 
 \section{The bidir module}
+The bidir module implements bidirectional scanning from the most recent Tfit code pushed to Github. As such, it tends to perform fairly well at choosing good bidirectional reference points, though it may tend to underfit the data provided. This is likely due to two of its changes relative to older versions of the codebase:
+
+\begin{enumerate}
+\item The new bidir module computes an average score distribution to potentially filter out ``bad'' calls, or those with low scores relative to the rest.
+\item The new bidir module makes use of a modified backend to achieve the first point.
+\end{enumerate}
+
+Unfortunately, little investigation into the exact backend changes made to achieve these changes has been conducted. As such, this is a topic of significant further review.
 
 \section{The model module}
+
 
 \end{document}
