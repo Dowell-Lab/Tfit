@@ -1,4 +1,7 @@
 \documentclass[12pt,letterpaper]{article}
+\usepackage{listings}
+
+\lstset{breaklines=true, columns=flexible, basicstyle=\small\ttfamily}
 
 \begin{document}
 
@@ -33,7 +36,7 @@ On a personal machine, these requirements can be satisfied through appropriate p
 Tfit has several modes of operation. Each mode is referred to as a module in all documentation, though they all share a number of input parameters. 
 
 Invoking Tfit without any parameters will result in the following:
-\begin{verbatim}
+\begin{lstlisting}
 Usage: TFit modulename [arguments]
 Where modulename is one of the following:
         bidir - This module searches the genome for areas resembling bidirectional transcription
@@ -95,7 +98,7 @@ sigma, pi, and w via conjugate priors. These values are specified using the foll
 -elon     : (boolean integer) adjust support of elongation component, (default=0)
               useful only when fitting to FStitch[1] or groHMM[2] output intervals
 Exiting...
-\end{verbatim}
+\end{lstlisting}
 
 The above is Tfit's \textit{usage statement}. This presents a quick overview of all of Tfit's modules and their parameters. From it, we can determine that there are presently three available modules:
 \begin{enumerate}
@@ -125,10 +128,10 @@ While it is possible to run Tfit with only the minimum number of parameters (tec
 Input bedgraphs are specified with the -i, -j, and -ij parameters. -i specifies a bedgraph with only forward strand data, while -j specifies a bedgraph with only reverse strand data. -ij can be used in place of -i or -j, as it specifies a bedgraph file with both forward and reverse strand data.
 
 Given the above information, it is possible to construct an example Tfit invocation:
-\begin{verbatim}
+\begin{lstlisting}
 Tfit bidir -ij /path/to/my.bed -o /path/to/outdir -N myjob 
      -tss hg19.tss -chr chr1 -mle 1
-\end{verbatim}
+\end{lstlisting}
 
 \subsection{Invoking the Model Module}
 The model module requires, at minimum, the following information to run:
@@ -151,9 +154,9 @@ There exist several other parameters, the behaviors of which have not been explo
 It further appears that the `-k' parameter may be able to use the results from an invocation of the bidir module, though further testing is n3ecessary to confirm that this is the case.
 
 Based on the above listings, it is possible to construct an example Tfit invocation:
-\begin{verbatim}
+\begin{lstlisting}
 Tfit model -ij /path/to/my.bed -k /path/to/regions.bed 
      -o outdir -N myjob
-\end{verbatim}
+\end{lstlisting}
 
 \end{document}
