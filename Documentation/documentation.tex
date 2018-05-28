@@ -1,0 +1,35 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{listings}
+
+\lstset{breaklines=true, columns=flexible, basicstyle=\small\ttfamily}
+
+\begin{document}
+
+\title{Documentation for Tfit}
+\author{Michael Gohde}
+\date{May 28, 2018}
+\maketitle
+
+\abstract{Tfit is a tool that attempts to find useful parameters in sequencing datasets. This document describes the usage of Tfit in more detail than the quick start guide based on observed behavior.}
+
+\tableofcontents
+
+\section{Building and Invoking Tfit-revisions}
+Please see the quick start guide for documentation on building and invoking Tfit. This guide exists to detail various module behaviors discussed in the quick start guide.
+
+\section{The bidir\_old module}
+During the course of Tfit's development history, several changes were made to how the bidir module operates. While some of these changes in behavior were desirable to the overall function of Tfit, others tended to lessen its utility in a broad context. As such, the bidir\_old module was introduced to implement behavior from a known good version of Tfit such that users could choose whether they wished for Tfit to behave more like it did on publication while retaining the user interface and other backend improvements made more recently. 
+
+It appears that bidir\_old, when passed the same parameters as the current bidir module, will tend to generate a substantially higher number of calls in exchange for low overall confidence. As such, it seems that this module behaves more as a filter for the remainder of Tfit. This change in behavior is explained by the following list of changes:
+
+\begin{enumerate}
+\item The old code sets the values of various passed parameters to those obtained from its computed average model if and only if it is passed a training file. Otherwise, it retains the values passed. This should not affect how bedgraphs are loaded later in the module, as neither the \textit{br} nor \textit{ns} parameters are altered.
+\item The old code does not have behavior to honor the \textit{fdr} parameter. As such, it does not compute a likelihood score distribution. It appears that the new codebase alters the behavior of its template matching algorithm based on the results of the \textit{fdr} parameter. 
+\item As noted in the previous item, the old code base does not have a means of computing a likelihood score distribution. As such, instead of doing so, it \textit{should} simply use any parameters passed to Tfit. Further analysis is necessary.
+\end{enumerate}
+
+\section{The bidir module}
+
+\section{The model module}
+
+\end{document}
