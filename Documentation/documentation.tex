@@ -32,11 +32,40 @@ It appears that bidir\_old, when passed the same parameters as the current bidir
 The bidir module implements bidirectional scanning from the most recent Tfit code pushed to Github. As such, it tends to perform fairly well at choosing good bidirectional reference points, though it may tend to underfit the data provided. This is likely due to two of its changes relative to older versions of the codebase:
 
 \begin{enumerate}
-\item The new bidir module computes an average score distribution to potentially filter out ``bad'' calls, or those with low scores relative to the rest.
+\item The new bidir module computes a likelihood score distribution to potentially filter out ``bad'' calls, or those with low scores relative to the rest.
 \item The new bidir module makes use of a modified backend to achieve the first point.
 \end{enumerate}
 
-Unfortunately, little investigation into the exact backend changes made to achieve these changes has been conducted. As such, this is a topic of significant further review.
+Unfortunately, little investigation into the exact backend changes made to achieve these changes has been conducted. As such, this is a topic of significant further review. Instead of a detailed discussion of the inner workings of the present bidir module, the workings of that which was changed relative to bidir\_old will be discussed here.
+
+\subsection{Computing the average score distribution}
+In order to compute the likelihood score distribution, the new bidir module calls the ``get\_slice'' function. This function performs the following:
+
+\begin{enumerate}
+\item Sets various internal parameters based on the values passed to Tfit. These include the ``-pad'', ``-ns'', ``-sigma'', ``-lambda'' (internally, lambda is set to the value of ``-ns'' divided by the value of ``-lambda''), ``-foot\_print'' (internally, fp is set to the value of ``-foot\_print'' divided by the value of ``-ns''), ``-pi'', ``-w'', and ``-bct''.
+\item Sets up a random number generator that produces results along a uniform distribution.
+\item Sets up empty lists XY and CovN. These will be used later.
+\item Iterates through all the segments in the input bedgraph while altering the distribution to better fit those segments. This process follows the following steps:
+    \begin{enumerate}
+        \item Draws two random values from the uniform distribution.
+        \item Draws a segment element in proportion to the first value picked from the uniform distribution.
+        \item Scales the XN parameter of that segment by the second random value. XN should be the number of bins (defined as $(maxk - mink) / \delta$ within a given segment. This value will be used as a loop counter for the next two steps.
+        \item Sums the positive strand and negative strand data (for all?) elements in the segment.
+        \item Performs the prior step, but with a reversed second parameter. This may be because the first pass featured gaps.
+        \item Sets coverage equal to the sum of the positive and negative strand coverages obtained in the previous few steps. 
+        \item If the coverage meets some criteria (this is likely a filter to see whether or not this is statistically meaningful), then the BIC3 function is called. The outputs of this step are pushed into a vector.
+    \end{enumerate}
+    
+    The set of coverages found in this process is then dumped to a file ending in ``\_random\_BIC\_ratios.csv'', which provides opportunities for further investigation into what is done during the average score distribution computation. Once the above process is complete, the function finds various relevant values within the BIC3 output vector. These values, in turn, form the basis for the average score distribution. 
+
+\end{enumerate}
+
+\subsection{The BIC3 function}
+It appears that, over the course of development history, the BIC3 function has been altered on occasion. It appears to play some role in computing relevant statistics for the current bidir module. As such, it will be examined in depth here.
+
+BIC3 appears to compute a log likelihood for a given set of statistics. After considering how BIC3 is used elsewhere in the codebase, it may be used to estimate the likelihood that a given segment or element within that segment belongs to a set of segments. 
+
+
 
 \section{The model module}
 
