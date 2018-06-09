@@ -38,7 +38,7 @@ void compute_true_and_false_positive_rates(double penality, vector<segment_fits 
 double ROC(vector<segment_fits *> noise_fits, vector<segment_fits *> query_fits, 
 	double& AUC , double& TP, double& FP, double& TP_at_fp, double& FP_at_tp, double& optimal_penality ){
 	double res 	= 500;
-	printf("%d\n", noise_fits.size(), query_fits.size());
+	printf("%ld, %ld\n", noise_fits.size(), query_fits.size());
 	double penality_a 	= -1000; //everything is model
 	double penality_b 	= 1000; //everthing is noise
 	double delta 		= (penality_b - penality_a)/ res;

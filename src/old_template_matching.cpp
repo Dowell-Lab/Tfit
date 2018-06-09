@@ -253,7 +253,7 @@ void run_global_template_matching_old(vector<segment*> segments,
 				}
 			}
 			if (arg_bic.empty()){
-				printf("%d\n",intervals.size() );
+				printf("%ld\n",intervals.size() );
 				printf("WHAT?\n");
 			}
 			return arg_bic;
@@ -498,7 +498,7 @@ void run_global_template_matching_old_long(vector<segment*> segments,
 				}
 			}
 			if (arg_bic.empty()){
-				printf("%d\n",intervals.size() );
+				printf("%ld\n",intervals.size() );
 				printf("WHAT?\n");
 			}
 			return arg_bic;

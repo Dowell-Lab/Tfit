@@ -31,7 +31,7 @@ void ParamWrapper::printUsage()
     printf("\t-r_mu\tSome classification parameter. Default=0. This parameter is presently undocumented.\n");
     printf("\t-ms_pen\tPenalty term for model selection. Default=1.\n");
     printf("\t-max_noise\tMaximum noise threshold. Default=0.05. This parameter is presently undocumented.\n");
-    printf("\t-FDR\tGenerate a likelihood score distribution on the input data. This parameter has yet to be fully documented and tested.\n");
+    printf("\t-fdr\tGenerate a likelihood score distribution on the input data. This parameter has yet to be fully documented and tested.\n");
     
     printf("\n\nWhere [arguments] is one or more of the following for the model module:\n");
     printf("\t-i\tForward bedgraph file\n");
@@ -238,17 +238,43 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
         
         else if(it->first=="-o")
         {
-            this->outputDir=it->second;
+            if(it->second.back()!='/')
+            {
+                if(this->verbose)
+                {
+                    printf("Appending slash to end of output path.\n");
+                }
+                
+                this->outputDir=it->second+"\n";
+            }
+            
+            else
+            {
+                this->outputDir=it->second;
+            }
         }
         
-        else if(it->first=="-fdr")
+        else if(it->first=="-fdr" || it->first=="-FDR")
         {
             this->fdr=atoi(it->second.c_str());
         }
         
         else if(it->first=="-log_out")
         {
-            this->logDir=it->second;
+            if(it->second.back()!='/')
+            {
+                if(this->verbose)
+                {
+                    printf("Appending slash to end of log output path.\n");
+                }
+                
+                this->logDir=it->second+"\n";
+            }
+            
+            else
+            {
+                this->logDir=it->second;
+            }
         }
         
         else if(it->first=="-ms_pen")
@@ -406,13 +432,14 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
         this->exit=true;
     }
     
+    /* This has now been taken care of earlier:
     if(this->outputDir!="")
     {
         if(this->outputDir[this->outputDir.length()-2]!='/')
         {
             this->outputDir=this->outputDir+"/";
         }
-    }
+    }*/
     
     //Todo: add more sanity checks.
 }
