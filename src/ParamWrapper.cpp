@@ -31,6 +31,7 @@ void ParamWrapper::printUsage()
     printf("\t-r_mu\tSome classification parameter. Default=0. This parameter is presently undocumented.\n");
     printf("\t-ms_pen\tPenalty term for model selection. Default=1.\n");
     printf("\t-max_noise\tMaximum noise threshold. Default=0.05. This parameter is presently undocumented.\n");
+    printf("\t-FDR\tGenerate a likelihood score distribution on the input data. This parameter has yet to be fully documented and tested.\n");
     
     printf("\n\nWhere [arguments] is one or more of the following for the model module:\n");
     printf("\t-i\tForward bedgraph file\n");
