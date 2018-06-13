@@ -382,6 +382,8 @@ vector<double> compute_average_model_pwrapper(vector<segment *> segments, ParamW
 
 	parameters[0]=	best_clf.components[0].bidir.si*ns;
 	parameters[1]=	ns/best_clf.components[0].bidir.l;
+    printf("Ns value in across_segments: %f\n", ns);
+    printf("int ns value: %d\n", ns);
 	parameters[2]=	best_clf.components[0].bidir.foot_print*ns;
 	parameters[3]=	best_clf.components[0].bidir.pi;
 	parameters[4]=	best_clf.components[0].bidir.w;

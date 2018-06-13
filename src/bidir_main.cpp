@@ -11,6 +11,16 @@
 #include "BIC.h"
 #include "old_template_matching.hpp"
 using namespace std;
+
+/** Performs bidirectional predictions given an old style parameter structure; use bidir_run_pwrapper instead.
+ * @depreciated
+ * @param P params struct containing parsed command line arguments.
+ * @param rank MPI rank parameter. This is used to determine the level of output a given instance of this function will generate.
+ * @param nprocs Number of processors available. This should, in practice, be an MPI runtime parameter.
+ * @param job_ID Current job identifier. This should, in practice, be an MPI runtime parameter.
+ * @param LG Log_File object pointing to a valid output log file.
+ * @return An output status code. 0 indicates no errors during operation. Any other value indicates errors.
+ */
 int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 
 	int verbose 	= stoi(P->p["-v"]);
@@ -161,6 +171,14 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	return 1;
 }
 
+/** Performs bidirectional predictions given newer style ParamWrapper inputs.
+ * @param pw ParamWrapper containing parsed command line arguments.
+ * @param rank MPI rank parameter. This is used to determine the level of output a given instance of this function will generate.
+ * @param nprocs Number of processors available. This should, in practice, be an MPI runtime parameter.
+ * @param job_ID Current job identifier. This should, in practice, be an MPI runtime parameter.
+ * @param LG Log_File object pointing to a valid output log file.
+ * @return An output status code. 0 indicates no errors during operation. Any other value indicates errors.
+ */
 int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_File * LG){
 
 
@@ -191,6 +209,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	//(2a) read in bedgraph files 
 	map<string, int> chrom_to_ID;
 	map<int, string> ID_to_chrom;
+    printf("Start footprint: %f\n", pw->footPrint);
        
 	vector<double> parameters 	= {sigma, lambda, foot_print,pi, w};
     printf("Value of not tss_file.empty: %d\n", !tss_file.empty());
@@ -231,6 +250,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
     pw->footPrint=parameters[2];
     pw->pi=parameters[3];
     pw->w=parameters[4];
+    printf("Stop footprint: %f\n", pw->footPrint);
 	//P->p["-sigma"] 	       = to_string(parameters[0]);
 	//P->p["-lambda"]        = to_string(parameters[1]);
 	//P->p["-foot_print"]    = to_string(parameters[2]);
@@ -319,6 +339,17 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	return 1;
 }
 
+/** Performs bidirectional predictions given a ParamWrapper utilizing an older algorithm.
+ * During its development history, tfit's bidir module and backend were changed multiple times. This
+ * function exists to emulate the functionality present in an older instance of the module, since some of the
+ * changes in behavior since have been undesirable for various tasks.
+ * @param pw ParamWrapper containing parsed command line arguments.
+ * @param rank MPI rank parameter. This is used to determine the level of output a given instance of this function will generate.
+ * @param nprocs Number of processors available. This should, in practice, be an MPI runtime parameter.
+ * @param job_ID Current job identifier. This should, in practice, be an MPI runtime parameter.
+ * @param LG Log_File object pointing to a valid output log file.
+ * @return An output status code. 0 indicates no errors during operation. Any other value indicates errors.
+ */
 int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_File * LG){
 
 
@@ -456,6 +487,20 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
 	return 1;
 }
 
+/** Performs bidirectional predictions given a ParamWrapper utilizing an older algorithm.
+ * During its development history, tfit's bidir module and backend were changed multiple times. This
+ * function exists to emulate the functionality present in an older instance of the module, since some of the
+ * changes in behavior since have been undesirable for various tasks.
+ * 
+ * Please note that this is an even older and potentially incomplete representation of the bidir algorithm.
+ * As such, it should not be used until extensive testing is conducted.
+ * @param pw ParamWrapper containing parsed command line arguments.
+ * @param rank MPI rank parameter. This is used to determine the level of output a given instance of this function will generate.
+ * @param nprocs Number of processors available. This should, in practice, be an MPI runtime parameter.
+ * @param job_ID Current job identifier. This should, in practice, be an MPI runtime parameter.
+ * @param LG Log_File object pointing to a valid output log file.
+ * @return An output status code. 0 indicates no errors during operation. Any other value indicates errors.
+ */
 int bidir_old_run_pwrapper(ParamWrapper * pw, int rank, int nprocs, int job_ID, Log_File * LG){
 	int verbose 	= pw->verbose;
 	//P->p["-merge"] 	= "1";

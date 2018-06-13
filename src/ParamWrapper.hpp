@@ -1,5 +1,15 @@
 #ifndef PARAMWRAPPER_HPP
 #define PARAMWRAPPER_HPP
+
+/** \brief ParamWrapper parses and preprocesses command line arguments.
+ * 
+ * The ParamWrapper class was implemented to enable a greater degree of abstraction within tfit
+ * with respect to how command line arguments are passed and parsed. Under the previous model,
+ * each function that made use of values gathered from the command line would search through a dictionary
+ * of argument-value pairs. This meant that any changes to the command line specification of Tfit would
+ * require functions throughout the codebase to be revised.
+ */
+
 #include <cstdio>
 #include <string>
 #include <cstring>
@@ -58,7 +68,9 @@ public:
     double pi; //default=0.5
     double w; //default=0.5
     
-    int footPrint; //default=86
+    //int footPrint; //default=86
+    //It appears that having an integer footprint may cause internal problems.
+    double footPrint;
     
     //Set of model parameters with specific default settings:
     int mink; //default=1

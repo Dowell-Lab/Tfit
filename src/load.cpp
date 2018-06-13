@@ -28,6 +28,16 @@ using namespace std;
 //========================================================================
 //The very very important segment class
 
+/** Minimal constructor consisting only of position and chromosome information.
+ * Sets all values not corresponding to the given parameters to either 0 or:
+ * "." (indicating both positive and negative coverage) for strand
+ * 1 for counts.
+ * 
+ * NOTE: minX and maxX are set to st and sp in addition to start and stop!
+ * @param chr Chromosome in the form chrN
+ * @param st Starting position in base pairs
+ * @param sp Stop position in base pairs.
+ */
 segment::segment(string chr, int st, int sp) {
    chrom = chr;
    start = st;
@@ -43,6 +53,14 @@ segment::segment(string chr, int st, int sp) {
    chrom_ID = 0;
 
 }
+
+/** Slightly less minimal constructor that includes an ID parameter (i).
+ * 
+ * @param chr Chromosome in the form chrN
+ * @param st Starting position in base pairs
+ * @param sp Stop position in base pairs.
+ * @param i ID for this segment.
+ */
 segment::segment(string chr, int st, int sp, int i) {
    chrom = chr;
    start = st;
@@ -59,6 +77,14 @@ segment::segment(string chr, int st, int sp, int i) {
 
 }
 
+/** Full segment constructor that includes an ID parameter in addition to a strand parameter.
+ * 
+ * @param chr Chromosome in the form chrN
+ * @param st Starting position in base pairs
+ * @param sp Stop position in base pairs
+ * @param i ID for this segment
+ * @param STR strand parameter for this segment (in the form +, -, or .)
+ */
 segment::segment(string chr, int st, int sp, int i, string STR) {
    chrom = chr;
    start = st;
@@ -75,6 +101,10 @@ segment::segment(string chr, int st, int sp, int i, string STR) {
 
 }
 
+/** Default constructor that sets all values to 0 except for the following:
+ * counts is set to 1
+ * strand is set to "."
+ */
 segment::segment() {
    N     = 0;
    fN    = 0;
@@ -86,13 +116,21 @@ segment::segment() {
    chrom_ID = 0;
 }
 
+/** Returns the segment as a string.
+ * @return the segment as a string in the form "#chrom:start-stop,N\n"
+ */
 string segment::write_out() {
    string text   = ("#" + chrom + ":" + to_string(start) + "-"
                     + to_string(stop) + "," + to_string(int(N)) + "\n");
    return text;
 }
 
-
+/** Pushes the specified vector into the forward or reverse strand vector.
+ * This function should also account for the minX and maxX parameters in addition to starting and stopping parameters.
+ * @param strand +1 for positive strand, -1 for negative strand. All other values are invalid.
+ * @param x The first value of the vector to insert. This is additionally used to alter the min/maxX values.
+ * @param y The second value of the vector to insert.
+ */
 void segment::add2(int strand, double x, double y) {
    vector<double> v2(2);
    v2[0]   = x;
@@ -116,6 +154,13 @@ void segment::add2(int strand, double x, double y) {
       reverse.push_back(v2);
    }
 }
+
+/** Sorts the vector passed by the second element of every sub-vector?
+ * TODO: look into the arguments of the sort function itself to determine how this is supposed to behave.
+ * Original description: "sort vector of vectors by second"
+ * @param The vector to be sorted.
+ * @return Sorted vector (actually the first parameter)
+ */
 vector<vector<double>> bubble_sort_by_1(vector<vector<double>> vec) { //sort vector of vectors by second
     sort(vec.begin(), vec.end(),
              [](const  vector<double>& a, const  vector<double>& b) {
@@ -124,7 +169,12 @@ vector<vector<double>> bubble_sort_by_1(vector<vector<double>> vec) { //sort vec
    return vec;
 }
 
-
+/** Places data into bins based on various parameters.
+ * 
+ * @parameter delta
+ * @parameter scale
+ * @parameter erase
+ */
 void segment::bin(double delta, double scale, int erase) {
    X         = new double*[3];
    SCALE       = scale;
@@ -259,8 +309,16 @@ void segment::bin(double delta, double scale, int erase) {
 //================================================================================================
 //interval tree code
 
+/** Default constructor for a node; it does nothing.
+ */
 node::node() {};
 
+/** Constructor for a node that accepts a vector of segments.
+ * Internally, this constructor automatically recursively generates a binary tree
+ * based on the segments passed.
+ * 
+ * @param segments vector of segment pointers.
+ */
 node::node(vector<segment * > segments ) {
    center  = (double(segments[0]->start)  + double(segments[segments.size() - 1]->stop)) / 2.;
    vector<segment * > Left;
@@ -284,6 +342,15 @@ node::node(vector<segment * > segments ) {
       right   = new node(Right);
    }
 }
+
+/** Inserts coverage data into the node.
+ * This process involves pushing all data from a given set of (reads?) into this object's 
+ * forward and reverse strand vectors, then automatically passing the data along to its child nodes.
+ * This should effectively ensure that all coverage can still be broken down in a binary fashion.
+ * 
+ * @param x vector of reads
+ * @param s Strand in which to insert the vector of reads. +1 for positive strand; -1 for negative strand.
+ */
 void node::insert_coverage(vector<double> x, int s) {
    for (int i = 0 ; i < current.size(); i++) {
       if (x[0] > current[i]->start and  x[0] < current[i]->stop  ) {
@@ -302,6 +369,13 @@ void node::insert_coverage(vector<double> x, int s) {
       left->insert_coverage(x,  s);
    }
 }
+
+/** Performs a binary search over the tree in order to find any nodes that fit within the specified start and stop values. Based on the output values involved (namely adding unit to the vector of finds), it can be used to find the distance to a given interval.
+ * 
+ * @param start Start position (base pairs).
+ * @param stop Stop position (base pairs).
+ * @param finds Vector into which to insert found intervals.
+ */
 void node::searchInterval(int start, int stop, vector<int>& finds ) {
    for (int i = 0 ; i < current.size(); i++) {
       if (stop > current[i]->start and  start < current[i]->stop  ) {
@@ -316,6 +390,9 @@ void node::searchInterval(int start, int stop, vector<int>& finds ) {
    }
 }
 
+/** This returns the set of all segments in order.
+ * @param saves Vector into which to insert segment pointers.
+ */
 void node::retrieve_nodes(vector<segment*> & saves) {
    for (int i = 0; i < current.size(); i++) {
       saves.push_back(current[i]);
@@ -330,8 +407,19 @@ void node::retrieve_nodes(vector<segment*> & saves) {
 
 //================================================================================================
 //a class from loading the K_models formmated file
+/** Default constructor for segment_fits. Does nothing.
+ */
 segment_fits::segment_fits() {
 } //empty con
+/** Full segment_fits constuctor that sets all parameters except for TSS and BIC_ratio.
+ * 
+ * @param c Chromosome in the form chrN
+ * @param st Starting position (base pairs)
+ * @param sp Stop position (base pairs)
+ * @param n_pos Number of positive elements in the given segment?
+ * @param n_neg Number of negative element sin the given segment?
+ * @param id Some form of string identifier for the object.
+ */
 segment_fits::segment_fits(string c, int st, int sp,
                            double n_pos, double n_neg, string id) {
 
@@ -340,6 +428,11 @@ segment_fits::segment_fits(string c, int st, int sp,
    ID  = id;
    BIC_ratio   = 0;
 }
+
+/** This function iterates over M (a map from integers to doubles) and appears to either score or get log likelihoods for the segment_fits.
+ * 
+ * @param ms_pen 
+ */ 
 void segment_fits::get_model(double ms_pen) {
    typedef map<int, double>::iterator it_type;
    int arg;
@@ -360,8 +453,14 @@ void segment_fits::get_model(double ms_pen) {
          BIC_ratio   = null_score / score;
       }
    }
-   model   = arg;
+ 
+ model   = arg;
 }
+
+/** Represents the data within the object as a string.
+ * 
+ * @return The segment_fits as a string.
+ */
 string segment_fits::write () {
    string line         = "";
    if (model > 0) {
@@ -387,7 +486,13 @@ string segment_fits::write () {
 }
 
 //================================================================================================
-//merge segments from loading_intervals
+/**merge segments from loading_intervals
+ * @param segments vector of segments to merge
+ * @param IDS_first map from ints to strings of IDs where the ID value is presumably first.
+ * @param IDS map from ints to strings in which to place revised ID mappings.
+ * @param T int representing the index of the last element in IDS.
+ * @return vector of merged segment pointers.
+ */
 vector<segment *> merge_segments(vector<segment *> segments, map<int, string>  IDS_first, map<int, string> & IDS, int & T) {
    vector<segment *> new_segments;
    //bubble sort
@@ -423,6 +528,11 @@ vector<segment *> merge_segments(vector<segment *> segments, map<int, string>  I
 
    return new_segments;
 }
+/** Checks to determine whether or not a given input string matches various rules. This is likely used
+ * when reading segments from disk.
+ * @param INFO Input string that gets transformed into a different representation?
+ * @return whether or not the check passed.
+ */
 int check_ID_name(string & INFO) {
    int PASSED  = 1;
    string change   = "::";

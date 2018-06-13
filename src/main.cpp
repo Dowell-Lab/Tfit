@@ -24,6 +24,8 @@
 #include "select_main.h"
 using namespace std;
 
+/** Main function for tfit-revisions.
+ */
 int main(int argc, char* argv[]){
   int rank, nprocs;
   MPI_Init(&argc, &argv);

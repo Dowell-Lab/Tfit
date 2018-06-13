@@ -1,0 +1,1705 @@
+across_segments.cpp:	int min_k 		= stoi(P->p["-minK"]);
+across_segments.cpp:	int max_k 		= stoi(P->p["-maxK"]);
+across_segments.cpp:	int rounds 		= stoi(P->p["-rounds"]);
+across_segments.cpp:	int BDS 		= int(data->centers.size());
+across_segments.cpp:	double noise   	= abs(data->stop - data->start)*stod(P->p["-max_noise"])/(data->fN + data->rN); //expection of binomal(0.05, n) where 0.05 probability mapping noise
+across_segments.cpp:	A[0].push_back( classifier(0, stod(P->p["-ct"]), stoi(P->p["-mi"]), noise, 
+across_segments.cpp:			stod(P->p["-r_mu"]), stod(P->p["-ALPHA_0"]), stod(P->p["-BETA_0"]), stod(P->p["-ALPHA_1"]), 
+across_segments.cpp:			stod(P->p["-BETA_1"]), stod(P->p["-ALPHA_2"]) , stod(P->p["-ALPHA_3"]),0 ));
+across_segments.cpp:	double scale 	= stod(P->p["-ns"]);
+across_segments.cpp:	if(P->bidir){
+across_segments.cpp:		min_k 	= data->counts;
+across_segments.cpp:		max_k 	= data->counts;
+across_segments.cpp:			A[k].push_back(classifier(k, stod(P->p["-ct"]), stoi(P->p["-mi"]), stod(P->p["-max_noise"]), 
+across_segments.cpp:			stod(P->p["-r_mu"]), stod(P->p["-ALPHA_0"]), stod(P->p["-BETA_0"]), stod(P->p["-ALPHA_1"]), 
+across_segments.cpp:			stod(P->p["-BETA_1"]), stod(P->p["-ALPHA_2"]) , stod(P->p["-ALPHA_3"]),0 ));
+across_segments.cpp:	int min_k 		= pw->mink;
+across_segments.cpp:	int max_k 		= pw->maxk;
+across_segments.cpp:	int rounds 		= pw->rounds;
+across_segments.cpp:	int BDS 		= int(data->centers.size());
+across_segments.cpp:	double noise   	= abs(data->stop - data->start)*pw->maxNoise/(data->fN + data->rN); //expection of binomal(0.05, n) where 0.05 probability mapping noise
+across_segments.cpp:	A[0].push_back( classifier(0, pw->ct, pw->mi, noise, 
+across_segments.cpp:			pw->r_mu, pw->alpha0, pw->beta0, pw->alpha1, 
+across_segments.cpp:			pw->beta1, pw->alpha2, pw->alpha3, 0));
+across_segments.cpp:	double scale 	= pw->ns;
+across_segments.cpp:	if(pw->bidir){
+across_segments.cpp:		min_k 	= data->counts;
+across_segments.cpp:		max_k 	= data->counts;
+across_segments.cpp:			A[k].push_back(classifier(k, pw->ct, pw->mi, noise, pw->r_mu, pw->alpha0, pw->beta0, pw->alpha1, pw->beta1, pw->alpha2, pw->alpha3, 0));
+across_segments.cpp:	ID[0]=data->ID, ID[1]=data->start, ID[2]=data->stop, ID[3]=K;
+across_segments.cpp:		if (c < data->chrom.size()){
+across_segments.cpp:			chrom[c]=data->chrom[c];
+across_segments.cpp:	for (int i  = 0 ; i < data->XN;i++){
+across_segments.cpp:		forward_N+=data->X[1][i];
+across_segments.cpp:		reverse_N+=data->X[2][i];
+across_segments.cpp:		for (int r = 0; r < a->second.size(); r++){
+across_segments.cpp:			if (A[a->first][r].ll > best_ll){
+across_segments.cpp:				best_ll 			= A[a->first][r].ll;
+across_segments.cpp:				best_components 	= A[a->first][r].components;
+across_segments.cpp:				best_k 				= A[a->first][r].K;
+across_segments.cpp:		BEST[a->first] 	= transform_free_mode(FOUND, best_ll, best_components, a->first, data, i, forward_N, reverse_N);
+across_segments.cpp:	double scale 	= stof(P->p["-ns"]);
+across_segments.cpp:	int verbose 	= stoi(P->p["-v"]);
+across_segments.cpp:	LG->write("(EM) running model across provided intervals...........\n", verbose);
+across_segments.cpp:	int elon_move 	= stoi(P->p["-elon"]);
+across_segments.cpp:			LG->write(to_string(int((i / N)*100))+"%,", verbose);
+across_segments.cpp:		//first need to populate data->centers
+across_segments.cpp:		for (int b = 0 ; b < FSI[i]->bidirectional_bounds.size(); b++){
+across_segments.cpp:			double center = FSI[i]->bidirectional_bounds[b][0] +  FSI[i]->bidirectional_bounds[b][1] ;
+across_segments.cpp:			center-=FSI[i]->start;
+across_segments.cpp:			FSI[i]->centers.push_back(center);
+across_segments.cpp:			int N 	=  k->second.size();
+across_segments.cpp:				A[k->first][r].fit2(data, data->centers,0,elon_move);
+across_segments.cpp:	LG->write("100% done\n", verbose);
+across_segments.cpp:	double scale 	= pw->ns;
+across_segments.cpp:	int verbose 	= pw->verbose;
+across_segments.cpp:	LG->write("(EM) running model across provided intervals...........\n", verbose);
+across_segments.cpp:	int elon_move 	= pw->elon;
+across_segments.cpp:			LG->write(to_string(int((i / N)*100))+"%,", verbose);
+across_segments.cpp:		//first need to populate data->centers
+across_segments.cpp:		for (int b = 0 ; b < FSI[i]->bidirectional_bounds.size(); b++){
+across_segments.cpp:			double center = FSI[i]->bidirectional_bounds[b][0] +  FSI[i]->bidirectional_bounds[b][1] ;
+across_segments.cpp:			center-=FSI[i]->start;
+across_segments.cpp:			FSI[i]->centers.push_back(center);
+across_segments.cpp:			int N 	=  k->second.size();
+across_segments.cpp:				A[k->first][r].fit2(data, data->centers,0,elon_move);
+across_segments.cpp:	LG->write("100% done\n", verbose);
+across_segments.cpp:	double br 		= stod(P->p["-br"]);
+across_segments.cpp:	double ns 		= stod(P->p["-ns"]);
+across_segments.cpp:		if (segments[s]->N){
+across_segments.cpp:			if (segments[s]->maxX > maxX){
+across_segments.cpp:				maxX 	= segments[s]->maxX; //this should only evaluate to true once
+across_segments.cpp:		if (segments[s]->rN > 1 and segments[s]->fN > 1){
+across_segments.cpp:			for (int i = 0 ; i < segments[s]->XN; i++){
+across_segments.cpp:				while (j < XN and X[0][j] < segments[s]->X[0][i]){
+across_segments.cpp:					X[1][j]+=(segments[s]->X[1][i]/segments[s]->fN);
+across_segments.cpp:					X[2][j]+=(segments[s]->X[2][i]/segments[s]->rN);
+across_segments.cpp:				N+=(segments[s]->X[1][i] + segments[s]->X[2][i] );
+across_segments.cpp:		classifier clf(1, 0.000001, stoi(P->p["-mi"]), 0.3, 
+across_segments.cpp:				stod(P->p["-r_mu"]), 10.0, 10.0, 1.0, 
+across_segments.cpp:				1.0*segments.size(), 2*segments.size() , stod(P->p["-ALPHA_3"]),0 );
+across_segments.cpp:		s->X 					= X;
+across_segments.cpp:		s->minX=minX, s->maxX =maxX;
+across_segments.cpp:		s->XN 					= XN;
+across_segments.cpp:		s->SCALE 				= stod(P->p["-ns"]);
+across_segments.cpp:	double br 		= pw->br;
+across_segments.cpp:	double ns 		= pw->ns;
+across_segments.cpp:		if (segments[s]->N){
+across_segments.cpp:			if (segments[s]->maxX > maxX){
+across_segments.cpp:				maxX 	= segments[s]->maxX; //this should only evaluate to true once
+across_segments.cpp:		if (segments[s]->rN > 1 and segments[s]->fN > 1){
+across_segments.cpp:			for (int i = 0 ; i < segments[s]->XN; i++){
+across_segments.cpp:				while (j < XN and X[0][j] < segments[s]->X[0][i]){
+across_segments.cpp:					X[1][j]+=(segments[s]->X[1][i]/segments[s]->fN);
+across_segments.cpp:					X[2][j]+=(segments[s]->X[2][i]/segments[s]->rN);
+across_segments.cpp:				N+=(segments[s]->X[1][i] + segments[s]->X[2][i] );
+across_segments.cpp:		classifier clf(1, 0.000001, pw->mi, 0.3, 
+across_segments.cpp:				pw->r_mu, 10.0, 10.0, 1.0, 
+across_segments.cpp:				1.0*segments.size(), 2*segments.size() , pw->alpha3,0 );
+across_segments.cpp:		s->X 					= X;
+across_segments.cpp:		s->minX=minX, s->maxX =maxX;
+across_segments.cpp:		s->XN 					= XN;
+across_segments.cpp:		s->SCALE 				= pw->ns;
+across_segments.h:	double SS[3];	//log-likelihood, N_forward, N_reverse
+Binary file across_segments.o matches
+BIC.cpp:   return (1.0/sqrt(2*sigma*M_PI ))*exp(-pow(x-mu,2)/(2*sigma));
+BIC.cpp:   double l        = X[0][k] - X[0][j];
+BIC.cpp:   double uni_ll   = log(pi2 /   l ) *  N_pos  + log((1 - pi2) /  l ) * N_neg ;
+BIC.cpp:         p2 = EMG_clf.pdf(X[0][iter] , -1) ;
+BIC.cpp:   double arg_bic =  (-2*uni_ll + log(N))/(-2*best_ll + log(N)*4)      ;
+BIC.cpp~:  double l     = X[0][k] - X[0][j];
+BIC.cpp~:  double uni_ll= LOG(pi/  (l))*N_pos + LOG((1-pi)/ (l))*N_neg;
+BIC.cpp~:    p1 = EMG_clf.pdf(X[0][i],1) + (1.0-w)*pi*(1.0/l) , p2 = EMG_clf.pdf(X[0][i],-1) + (1.0-w)*(1.0-pi)*(1.0/l) ;
+BIC.cpp~:  double emg_ratio        = (-2*uni_ll + LOG(N)) / (-2*emg_ll + 20*LOG(N))  ;
+Binary file BIC.o matches
+bidir_main.cpp:	int verbose 	= stoi(P->p["-v"]);
+bidir_main.cpp:	P->p["-merge"] 	= "1";
+bidir_main.cpp:	LG->write("\ninitializing bidir module...............................done\n", verbose);
+bidir_main.cpp:	string job_name = P->p["-N"];
+bidir_main.cpp:	string forward_bedgraph 	= P->p["-i"]; //forward strand bedgraph file
+bidir_main.cpp:	string reverse_bedgraph 	= P->p["-j"]; //reverse strand bedgraph file
+bidir_main.cpp:	string joint_bedgraph 		= P->p["-ij"]; //joint forward and reverse strand bedgraph file
+bidir_main.cpp:	string tss_file 		= P->p["-tss"];
+bidir_main.cpp:	string out_file_dir 		= P->p["-o"] ;//out file directory
+bidir_main.cpp:	double ns 	= stod(P->p["-ns"]);
+bidir_main.cpp:	sigma 		= stod(P->p["-sigma"]), lambda= stod(P->p["-lambda"]);
+bidir_main.cpp:	foot_print 	= stod(P->p["-foot_print"]), pi= stod(P->p["-pi"]), w= stod(P->p["-w"]);
+bidir_main.cpp:		LG->write("loading TSS intervals...................................",verbose);
+bidir_main.cpp:		LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("inserting coverage data.................................",verbose);
+bidir_main.cpp:		LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("Binning/Normalizing TSS intervals.......................",verbose);
+bidir_main.cpp:		load::BIN(integrated_segments, stod(P->p["-br"]), stod(P->p["-ns"]),true);	
+bidir_main.cpp:		LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("Computing Average Model.................................",verbose);
+bidir_main.cpp:		LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("\nAverage Model Parameters\n", verbose);
+bidir_main.cpp:		LG->write("-sigma      : " + to_string(parameters[0])+ "\n", verbose);
+bidir_main.cpp:		LG->write("-lambda     : " + to_string(parameters[1])+ "\n", verbose);
+bidir_main.cpp:		LG->write("-foot_print : " + to_string(parameters[2])+ "\n", verbose);
+bidir_main.cpp:		LG->write("-pi         : " + to_string(parameters[3])+ "\n", verbose);
+bidir_main.cpp:		LG->write("-w          : " + to_string(parameters[4])+ "\n\n", verbose);
+bidir_main.cpp:	P->p["-sigma"] 	       = to_string(parameters[0]);
+bidir_main.cpp:	P->p["-lambda"]        = to_string(parameters[1]);
+bidir_main.cpp:	P->p["-foot_print"]    = to_string(parameters[2]);
+bidir_main.cpp:	P->p["-pi"] 	       = to_string(parameters[3]);
+bidir_main.cpp:	P->p["-w"] 	       = to_string(parameters[4]);
+bidir_main.cpp:	LG->write("loading bedgraph files..................................", verbose);
+bidir_main.cpp:		stoi(P->p["-br"]), stof(P->p["-ns"]), P->p["-chr"], chrom_to_ID, ID_to_chrom );
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	if (stoi(P->p["-FDR"] ) ){
+bidir_main.cpp:	  LG->write("getting likelihood score distribution...................", verbose);
+bidir_main.cpp:	  LG->write("done\n\n", verbose);
+bidir_main.cpp:	    LG->write("converged            : False (restoring default values)\n"  ,verbose );
+bidir_main.cpp:	    LG->write("converged            : True\n" ,verbose );
+bidir_main.cpp:	  LG->write("score mean           : "+to_string(SC.mean) + "\n" ,verbose );
+bidir_main.cpp:	  LG->write("standard Deviation   : "+to_string(SC.std ) + "\n" ,verbose );
+bidir_main.cpp:	  LG->write("h                    : "+to_string(SC.w ) + "\n" ,verbose );
+bidir_main.cpp:	  LG->write("threshold            : "+to_string(SC.threshold) + "\n\n" ,verbose );
+bidir_main.cpp:	  SC.mean = 0.6, SC.std = 0.001; //this dependent on -w 0.9 !!!
+bidir_main.cpp:	  SC.set_2(stod(P->p["-bct"]));
+bidir_main.cpp:	//to sub-processes and have each MPI call run on a subset of segments
+bidir_main.cpp:	LG->write("slicing segments........................................", verbose);
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	//(3a) now going to run the template matching algorithm based on pseudo-
+bidir_main.cpp:	LG->write("running template matching algorithm.....................", verbose);
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	LG->write("scattering predictions to other MPI processes...........", verbose);
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	  LG->write("\nThere were " +to_string(total) + " prelimary bidirectional predictions\n\n", verbose);
+bidir_main.cpp:	LG->write("clearing allocated segment memory.......................", verbose);	
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	if (stoi(P->p["-MLE"])){
+bidir_main.cpp:		P->p["-k"] 	= P->p["-o"]+ job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
+bidir_main.cpp:	LG->write("exiting bidir module....................................done\n\n", verbose);
+bidir_main.cpp:	int verbose 	= pw->verbose;
+bidir_main.cpp:	//pw->merge 	= "1";
+bidir_main.cpp:	LG->write("\ninitializing bidir module...............................done\n", verbose);
+bidir_main.cpp:	string job_name = pw->jobName;
+bidir_main.cpp:	string forward_bedgraph 	= pw->forwardStrand; //forward strand bedgraph file
+bidir_main.cpp:	string reverse_bedgraph 	= pw->reverseStrand; //reverse strand bedgraph file
+bidir_main.cpp:	string joint_bedgraph 		= pw->mergedStrand; //joint forward and reverse strand bedgraph file
+bidir_main.cpp:	string tss_file 		= pw->promoterTSS;
+bidir_main.cpp:	string out_file_dir 		= pw->outputDir;//out file directory
+bidir_main.cpp:	double ns 	= pw->ns;
+bidir_main.cpp:	sigma 		= pw->sigma, lambda= pw->lambda;
+bidir_main.cpp:	foot_print 	= pw->footPrint, pi=pw->pi, w=pw->w;
+bidir_main.cpp:    printf("Start footprint: %f\n", pw->footPrint);
+bidir_main.cpp:		LG->write("loading TSS intervals...................................",verbose);
+bidir_main.cpp:		LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("inserting coverage data.................................",verbose);
+bidir_main.cpp:		LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("Binning/Normalizing TSS intervals.......................",verbose);
+bidir_main.cpp:		load::BIN(integrated_segments, pw->br, pw->ns,true);	
+bidir_main.cpp:		LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("Computing Average Model.................................",verbose);
+bidir_main.cpp:		LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("\nAverage Model Parameters\n", verbose);
+bidir_main.cpp:		LG->write("-sigma      : " + to_string(parameters[0])+ "\n", verbose);
+bidir_main.cpp:		LG->write("-lambda     : " + to_string(parameters[1])+ "\n", verbose);
+bidir_main.cpp:		LG->write("-foot_print : " + to_string(parameters[2])+ "\n", verbose);
+bidir_main.cpp:		LG->write("-pi         : " + to_string(parameters[3])+ "\n", verbose);
+bidir_main.cpp:		LG->write("-w          : " + to_string(parameters[4])+ "\n\n", verbose);
+bidir_main.cpp:    pw->sigma=parameters[0];
+bidir_main.cpp:    pw->lambda=parameters[1];
+bidir_main.cpp:    pw->footPrint=parameters[2];
+bidir_main.cpp:    pw->pi=parameters[3];
+bidir_main.cpp:    pw->w=parameters[4];
+bidir_main.cpp:    printf("Stop footprint: %f\n", pw->footPrint);
+bidir_main.cpp:	//P->p["-sigma"] 	       = to_string(parameters[0]);
+bidir_main.cpp:	//P->p["-lambda"]        = to_string(parameters[1]);
+bidir_main.cpp:	//P->p["-foot_print"]    = to_string(parameters[2]);
+bidir_main.cpp:	//P->p["-pi"] 	       = to_string(parameters[3]);
+bidir_main.cpp:	//P->p["-w"] 	       = to_string(parameters[4]);
+bidir_main.cpp:	LG->write("loading bedgraph files..................................", verbose);
+bidir_main.cpp:		pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom );
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	if (pw->fdr){
+bidir_main.cpp:	  LG->write("getting likelihood score distribution...................", verbose);
+bidir_main.cpp:	  LG->write("done\n\n", verbose);
+bidir_main.cpp:	    LG->write("converged            : False (restoring default values)\n"  ,verbose );
+bidir_main.cpp:	    LG->write("converged            : True\n" ,verbose );
+bidir_main.cpp:	  LG->write("score mean           : "+to_string(SC.mean) + "\n" ,verbose );
+bidir_main.cpp:	  LG->write("standard Deviation   : "+to_string(SC.std ) + "\n" ,verbose );
+bidir_main.cpp:	  LG->write("h                    : "+to_string(SC.w ) + "\n" ,verbose );
+bidir_main.cpp:	  LG->write("threshold            : "+to_string(SC.threshold) + "\n\n" ,verbose );
+bidir_main.cpp:	  SC.mean = 0.6, SC.std = 0.001; //this dependent on -w 0.9 !!!
+bidir_main.cpp:	  SC.set_2(pw->llrthresh);
+bidir_main.cpp:	//to sub-processes and have each MPI call run on a subset of segments
+bidir_main.cpp:	LG->write("slicing segments........................................", verbose);
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	//(3a) now going to run the template matching algorithm based on pseudo-
+bidir_main.cpp:	LG->write("running template matching algorithm.....................", verbose);
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	LG->write("scattering predictions to other MPI processes...........", verbose);
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	  LG->write("\nThere were " +to_string(total) + " prelimary bidirectional predictions\n\n", verbose);
+bidir_main.cpp:	LG->write("clearing allocated segment memory.......................", verbose);	
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	if (pw->mle){
+bidir_main.cpp:		pw->regionsOfInterest 	= pw->outputDir+job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
+bidir_main.cpp:        printf("Regions of interest file..............................%s\n", pw->regionsOfInterest.c_str());
+bidir_main.cpp:	LG->write("exiting bidir module....................................done\n\n", verbose);
+bidir_main.cpp:	int verbose 	= pw->verbose;
+bidir_main.cpp:	//P->p["-merge"] 	= "1";
+bidir_main.cpp:	LG->write("\ninitializing bidir module...............................done\n", verbose);
+bidir_main.cpp:	string job_name = pw->jobName;
+bidir_main.cpp:	string forward_bedgraph 	= pw->forwardStrand; //forward strand bedgraph file
+bidir_main.cpp:	string reverse_bedgraph 	= pw->reverseStrand; //reverse strand bedgraph file
+bidir_main.cpp:	string joint_bedgraph 		= pw->mergedStrand; //joint forward and reverse strand bedgraph file
+bidir_main.cpp:	string tss_file 		= pw->promoterTSS;
+bidir_main.cpp:	string out_file_dir 		= pw->outputDir;//out file directory
+bidir_main.cpp:	double ns 	= pw->ns;
+bidir_main.cpp:	sigma 		= pw->sigma, lambda=(double)pw->lambda;
+bidir_main.cpp:    printf("%lf, %lf", lambda, pw->lambda);
+bidir_main.cpp:	foot_print 	= pw->footPrint, pi=pw->pi, w=pw->w;
+bidir_main.cpp:		LG->write("loading TSS intervals...................................",verbose);
+bidir_main.cpp:		LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("Binning/Normalizing TSS intervals.......................",verbose);
+bidir_main.cpp:		load::BIN(integrated_segments, pw->br, pw->ns,true);	
+bidir_main.cpp:		LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("Computing Average Model.................................",verbose);
+bidir_main.cpp:		LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("\nAverage Model Parameters\n", verbose);
+bidir_main.cpp:		LG->write("-sigma      : " + to_string(sigma*ns)+ "\n", verbose);
+bidir_main.cpp:        LG->write("-ns         : " + to_string(ns)+"\n", verbose);
+bidir_main.cpp:        LG->write("-lambda (pw): " + to_string(lambda)+"\n", verbose);
+bidir_main.cpp:		LG->write("-lambda     : " + to_string(ns/lambda)+ "\n", verbose);
+bidir_main.cpp:		LG->write("-foot_print : " + to_string(foot_print*ns)+ "\n", verbose);
+bidir_main.cpp:		LG->write("-pi         : " + to_string(pi)+ "\n", verbose);
+bidir_main.cpp:		LG->write("-w          : " + to_string(w)+ "\n\n", verbose);
+bidir_main.cpp:        parameters.push_back(w);LG->write("-sigma      : " + to_string(sigma*ns)+ "\n", verbose);
+bidir_main.cpp:        LG->write("-ns         : " + to_string(ns)+"\n", verbose);
+bidir_main.cpp:        LG->write("-lambda (pw): " + to_string(lambda)+"\n", verbose);
+bidir_main.cpp:		LG->write("-lambda     : " + to_string(ns/lambda)+ "\n", verbose);
+bidir_main.cpp:		LG->write("-foot_print : " + to_string(foot_print*ns)+ "\n", verbose);
+bidir_main.cpp:		LG->write("-pi         : " + to_string(pi)+ "\n", verbose);
+bidir_main.cpp:		LG->write("-w          : " + to_string(w)+ "\n\n", verbose);
+bidir_main.cpp:	pw->sigma 			= sigma;
+bidir_main.cpp:	pw->lambda=lambda;
+bidir_main.cpp:	pw->footPrint=foot_print;
+bidir_main.cpp:	pw->pi=pi;
+bidir_main.cpp:	pw->w=w;
+bidir_main.cpp:	LG->write("loading bedgraph files..................................", verbose);
+bidir_main.cpp:		pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom );
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	//to sub-processes and have each MPI call run on a subset of segments
+bidir_main.cpp:	LG->write("slicing segments........................................", verbose);
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	//(3a) now going to run the template matching algorithm based on pseudo-
+bidir_main.cpp:	LG->write("running moment estimator algorithm......................", verbose);
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	LG->write("scattering predictions to other MPI processes...........", verbose);
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("\nThere were " +to_string(total) + " prelimary bidirectional predictions\n\n", verbose);
+bidir_main.cpp:	LG->write("clearing allocated segment memory.......................", verbose);	
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	if (pw->mle){
+bidir_main.cpp:		pw->regionsOfInterest 	= pw->outputDir+job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
+bidir_main.cpp:        printf("Regions of interest file..............................%s\n", pw->regionsOfInterest.c_str());
+bidir_main.cpp:	LG->write("exiting bidir module....................................done\n\n", verbose);
+bidir_main.cpp:	int verbose 	= pw->verbose;
+bidir_main.cpp:	//P->p["-merge"] 	= "1";
+bidir_main.cpp:	LG->write("\ninitializing bidir module...............................done\n", verbose);
+bidir_main.cpp:	string job_name = pw->jobName; //P->p["-N"];
+bidir_main.cpp:	string forward_bedgraph 	= pw->forwardStrand;//P->p["-i"]; //forward strand bedgraph file
+bidir_main.cpp:	string reverse_bedgraph 	= pw->reverseStrand; //reverse strand beddgraph file
+bidir_main.cpp:	string combined_bedgraph    = pw->mergedStrand;
+bidir_main.cpp:	string out_file_dir 		= pw->outputDir;//out file directory
+bidir_main.cpp:	LG->write("loading bedgraph files..................................", verbose);
+bidir_main.cpp:		pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom );
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	//to sub-processes and have each MPI call run on a subset of segments
+bidir_main.cpp:	LG->write("slicing segments........................................", verbose);
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	//(3a) now going to run the template matching algorithm based on pseudo-
+bidir_main.cpp:	LG->write("running moment estimator algorithm......................", verbose);
+bidir_main.cpp:    //NOTE as of 2018-05-02: This has been replaced with newer code in the run_global_template_matching_old_long
+bidir_main.cpp:    //function. This should implement the functionality seen in time for the 2017-2018 paper based on 
+bidir_main.cpp:	//		0.,pw->ns,pw->llrthresh, threads,0. ,0 );	
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	LG->write("scattering predictions to other MPI processes...........", verbose);
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:		LG->write("\nThere were " +to_string(total) + " prelimary bidirectional predictions\n\n", verbose);
+bidir_main.cpp:	LG->write("clearing allocated segment memory.......................", verbose);	
+bidir_main.cpp:	LG->write("done\n", verbose);
+bidir_main.cpp:	if (pw->mle){
+bidir_main.cpp:		string k = pw->outputDir + job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
+bidir_main.cpp:		if (stoi(P->p["-select"])){
+bidir_main.cpp:			string bidir_ms_file 	= P->p["-o"]+  P->p["-N"] + "-" + to_string(job_ID)+  "_divergent_classifications.bed";
+bidir_main.cpp:			string file_name 		= P->p["-o"]+  P->p["-N"] + "-" + to_string(job_ID)+  "_K_models_MLE.tsv";
+bidir_main.cpp:			//query out_dir +  P->p["-N"] + "-" + to_string(job_ID)+  "_K_models_MLE.tsv"
+bidir_main.cpp:			P->p["-q"] 	= P->p["-o"] +  P->p["-N"] + "-" + to_string(job_ID)+  "_K_models_MLE.tsv";
+bidir_main.cpp:			LG->write("loading results (MLE)...................................",verbose);
+bidir_main.cpp:			LG->write("done\n",verbose);		
+bidir_main.cpp:			LG->write("writing out results (model selection)...................",verbose);
+bidir_main.cpp:			LG->write("done\n",verbose);
+bidir_main.cpp:	LG->write("exiting bidir module....................................done\n\n", verbose);
+Binary file bidir_main.o matches
+bootstrap.cpp:		if (S->X[s][j] > 0){
+bootstrap.cpp:			NS->X[s][j]+=1.;
+bootstrap.cpp:	NS->X 			= new double*[3];
+bootstrap.cpp:	NS->minX = S->minX, NS->maxX = S->maxX;
+bootstrap.cpp:	NS->XN 			= S->XN;
+bootstrap.cpp:	NS->N 			= S->N;
+bootstrap.cpp:	NS->SCALE 		= S->SCALE;
+bootstrap.cpp:	int BINS 		= int(S->XN);
+bootstrap.cpp:		CDF[j]=new double[BINS], NS->X[j]=new double[BINS];
+bootstrap.cpp:	for (int i = 0 ; i< S->XN; i++){
+bootstrap.cpp:		CDF[0][i] 	= S->X[0][i], NS->X[0][i] = S->X[0][i];
+bootstrap.cpp:		NS->X[1][i] = 0,NS->X[2][i] = 0;		
+bootstrap.cpp:	for (int i = 0; i < S->XN; i++){
+bootstrap.cpp:		forward_sum+=S->X[1][i];
+bootstrap.cpp:		reverse_sum+=S->X[2][i];
+bootstrap.cpp:	for (int i = 0; i < S->XN; i++){
+bootstrap.cpp:		forward_sum+=S->X[1][i];
+bootstrap.cpp:		reverse_sum+=S->X[2][i];
+bootstrap.cpp:	sample( CDF, S->XN, S->N, NS , pi, S);
+bootstrap.cpp:	int rounds 	= stoi(P->p6["-rounds"]);
+bootstrap.cpp:	int brounds = stoi(P->p6["-brounds"]);
+bootstrap.cpp:	// NS->minX = S->minX, NS->maxX = S->maxX;
+bootstrap.cpp:	// NS->XN 			= S->XN;
+bootstrap.cpp:	// NS->N 			= S->N;
+bootstrap.cpp:	// NS->SCALE 		= S->SCALE;
+bootstrap.cpp:		segment * NS 	= new segment(S->chrom, S->start, S->stop);
+bootstrap.cpp:		NS->parameters 	= S->parameters;
+bootstrap.cpp:		for (int i = 0; i < X.size()-1; i++  )	{
+bootstrap.cpp:	int rounds 		= stoi(P->p6["-rounds"]);
+bootstrap.cpp:	double scale 	= stod(P->p6["-ns"]);
+bootstrap.cpp:	int res 	= stoi(P->p6["-foot_res"]);
+bootstrap.cpp:		delta 	= (upper-lower) / float(res);
+bootstrap.cpp:		int K 				= segments[i]->parameters.size();
+bootstrap.cpp:		segments[i]->parameters 	= sort_bootstrap_parameters(segments[i]->parameters);
+bootstrap.cpp:		for (int c = 0; c < segments[i]->parameters.size(); c++){
+bootstrap.cpp:			mu_seeds[c]=(segments[i]->parameters[c][0] - segments[i]->start) / scale;
+bootstrap.cpp:		if (segments[i]->N > 0){
+bootstrap.cpp:						classifier current_clf(K, stod(P->p6["-ct"]), stoi(P->p6["-mi"]), stod(P->p6["-max_noise"]), 
+bootstrap.cpp:							stod(P->p6["-r_mu"]), stod(P->p6["-ALPHA_0"]), stod(P->p6["-BETA_0"]), stod(P->p6["-ALPHA_1"]), 
+bootstrap.cpp:							stod(P->p6["-BETA_1"]), stod(P->p6["-ALPHA_2"]) , stod(P->p6["-ALPHA_3"]), false,foot_print );
+bootstrap.cpp:					double mu_o 	= (segments[i]->parameters[k][0] - segments[i]->start) / scale;
+bootstrap.cpp:					double si_o 	= segments[i]->parameters[k][1]/scale;
+bootstrap.cpp:					double l_o 		= scale / segments[i]->parameters[k][2];
+bootstrap.cpp:					double w_o 		= segments[i]->parameters[k][3];
+bootstrap.cpp:					double pi_o 	= segments[i]->parameters[k][4];
+bootstrap.cpp:					double fp_o 	= segments[i]->parameters[k][6]/scale;
+bootstrap.cpp:					variances[k][0].push_back(abs(mu_o - bootstrapped_parameters[k][0]));
+bootstrap.cpp:					variances[k][1].push_back(abs(si_o - bootstrapped_parameters[k][1]));
+bootstrap.cpp:					variances[k][2].push_back(abs(l_o - bootstrapped_parameters[k][2]));
+bootstrap.cpp:					variances[k][3].push_back(abs(w_o - bootstrapped_parameters[k][3]));
+bootstrap.cpp:					variances[k][4].push_back(abs(pi_o - bootstrapped_parameters[k][4]));
+bootstrap.cpp:					variances[k][5].push_back(abs(fp_o - bootstrapped_parameters[k][5]));
+bootstrap.cpp:				segments[i]->variances[k] 	= vector<double>(6);
+bootstrap.cpp:				segments[i]->variances[k][0] 	= get_mean(variances[k][0]);
+bootstrap.cpp:				segments[i]->variances[k][1] 	= get_mean(variances[k][1]);
+bootstrap.cpp:				segments[i]->variances[k][2] 	= get_mean(variances[k][2]);
+bootstrap.cpp:				segments[i]->variances[k][3] 	= get_mean(variances[k][3]);
+bootstrap.cpp:				segments[i]->variances[k][4] 	= get_mean(variances[k][4]);
+bootstrap.cpp:				segments[i]->variances[k][5] 	= get_mean(variances[k][5]);
+Binary file bootstrap.o matches
+config_file.txt:-N     	       	      	= testing #job name
+config_file.txt:-v     	       	      	= 1 #verbose output
+config_file.txt:-i			= /Users/joazofeifa/Lab/gro_seq_files/HCT116/bed_graph_files/test_DMSO2_3.pos.BedGraph
+config_file.txt:#-i			= /Users/joazofeifa/Lab/gro_seq_files/Gardini2014/bedgraph_files/test_SRR1342251.fastqbowtie2.sorted.pos.BedGraph
+config_file.txt:#-j			= /Users/joazofeifa/Lab/gro_seq_files/Gardini2014/bedgraph_files/test_SRR1342251.fastqbowtie2.sorted.neg.BedGraph
+config_file.txt:-j 	  		= /Users/joazofeifa/Lab/gro_seq_files/HCT116/bed_graph_files/test_DMSO2_3.nneg.BedGraph
+config_file.txt:#-ij			= /Users/joazofeifa/Lab/gro_seq_files/HCT116/bed_graph_files/test_SRR1105736.fastqbowtie2.sorted.BedGraph
+config_file.txt:-k 			= /Users/joazofeifa/Lab/Article_drafts/Alg_paper/files/intervals_for_elongation_ROC.bed
+config_file.txt:#-tss 			= /Users/joazofeifa/Lab/genome_files/hg19_TSS.bed
+config_file.txt:-o 	  		= /Users/joazofeifa/Desktop/
+config_file.txt:-log_out                = /Users/joazofeifa/Lab/EMG_logs/
+config_file.txt:#-scores			= /Users/joazofeifa/Desktop/prelim_scores.bedgraph
+config_file.txt:-chr 			= all  #specific chromosome, note chr[N] or all  
+config_file.txt:-br 			= 15 #binning resolution do not consider changing
+config_file.txt:-MLE			= 0 #get Maximum likelihood estimates
+config_file.txt:-pad 	  	        = 2000
+config_file.txt:-bct                    = 1.0 #confidence threshold
+config_file.txt:-lambda	  	   	= 2000 #base pairs
+config_file.txt:-sigma 			= 112.8  #base pairs
+config_file.txt:-pi 			= 0.5 #strand biase
+config_file.txt:-w 			= 0.333 #pausing probability
+config_file.txt:-foot_print		= 27.9 #base pairs
+config_file.txt:-minK 			= 1 #min model complexity to consider
+config_file.txt:-maxK 			= 1 #
+config_file.txt:-rounds                 = 4 #number of random EM initializations
+config_file.txt:-ct                     = 0.0001 #EM convergence threshold difference
+config_file.txt:-mi                     = 2000 #Number of EM iterations before it is aborted
+config_file.txt:-ALPHA_0 		= 10 #prior for sigma
+config_file.txt:-BETA_0 		= 10 #prior for sigma
+config_file.txt:-ALPHA_1 		= 50 #prior for lambda
+config_file.txt:-BETA_1 		= 100 #prior for lambda
+config_file.txt:-ALPHA_2 		= 1 #prior for weights
+config_file.txt:-ALPHA_3 		= 100 #prior for strand probs
+config_file.txt:-elon 			= 0 #optimize elongation termination site
+density_profiler.cpp:		for (int g = 0; g <c->second.size(); g++ ){
+density_profiler.cpp:			for (int i = 0 ; i < c->second[g].X.size(); i++ ){
+density_profiler.cpp:				current[0] 	= c->second[g].X[i], current[1]=c->second[g].Y[i];
+density_profiler.cpp:			double maxX = X[X.size()-1][0];
+density_profiler.cpp:			int BINS 	 = (maxX-minX)/bin_res;
+density_profiler.cpp:			double window_d = (window_b-window_a) / res;
+density_profiler.cpp:					while (j < BINS and (XX[j][0] - x) < -window  ){
+density_profiler.cpp:						S-=XX[j][1];
+density_profiler.cpp:					while (0<= k and k < BINS and (XX[k][0]-x) < window){
+density_profiler.cpp:		collect+=(w->second[0]/w->second[1]);
+Binary file density_profiler.o matches
+Binary file EMGU matches
+error_stdo_logging.cpp:   	string log_out 	= OUT + "tmp_" + JN+ "-"+ to_string(job_ID)+ "_" + to_string(rank) + ".log"  ;
+Binary file error_stdo_logging.o matches
+FDR.cpp:  double Z  =erf( (x-this->mean) / (this->std*c2));
+FDR.cpp:  return 1.0 / (sqrt(2*M_PI)*this->std  )*exp(-pow(x-this->mean,2)/(2*pow(this->std,2) ));  
+FDR.cpp:  this->mu = MU , this->lambda = LAMBDA;
+FDR.cpp:    return this->lambda*exp(-this->lambda*(x-mu) ); 
+FDR.cpp:  this->mu = MU , this->alpha=ALPHA;
+FDR.cpp:    return this->alpha*pow(this->mu,alpha) / pow(x, this->alpha+1);
+FDR.cpp:  double prevw = -0.1;
+FDR.cpp:      p1= (1-w)*N.pdf(x);
+FDR.cpp:	  EY += (log(x) - log(N.mean))*r2*y;
+FDR.cpp:	EX2 +=(r1*pow(x-N.mean,2))*y;
+FDR.cpp:    if (abs(w-prevw) < pow(10,-6)){
+FDR.cpp:  this->start = ST, this->stop = SP, this->bins=BINS;
+FDR.cpp:  double step = (stop - start)/double(this->bins);
+FDR.cpp:  for (double c = this->start; c < this->stop ; c+=step){
+FDR.cpp:    this->XY.push_back(row);
+FDR.cpp:  while (c < this->XY.size() and this->XY[c][0] < x ){
+FDR.cpp:    return c -1;
+FDR.cpp:  int c = this->get_closest(y);
+FDR.cpp:  this->XY[c][1]+=1;
+FDR.cpp:  this->mean=0.1, this->std=0.1, this->w=0.5, this->c=1.0;
+FDR.cpp:  this->converged = EM(this->XY, this->mean, this->std, this->w, this->c, 1);
+FDR.cpp:  this->norm_all  = normal(0.0, this->mean, this->std);
+FDR.cpp:  double z        = this->norm_all.mean - this->norm_all.std;
+FDR.cpp:  double pv       = this->norm_all.cdf(z);
+FDR.cpp:  while (pv < (1.0 - pval) and z < 100.0){
+FDR.cpp:    pv=this->norm_all.cdf(z);
+FDR.cpp:  this->norm_all  = normal(0.0, this->mean, this->std);
+FDR.cpp:  double z        = this->norm_all.mean - this->norm_all.std;
+FDR.cpp:  double pv       = this->norm_all.cdf(z);
+FDR.cpp:  while (pv < (1.0 - pval) and z < 100.0){
+FDR.cpp:    pv=this->norm_all.cdf(z);
+FDR.cpp:  double pv = 1.0-this->norm_all.cdf(y);
+FDR.cpp:  window        = stod(P->p["-pad"]), ns=stod(P->p["-ns"]) ;
+FDR.cpp:  sigma         = stod(P->p["-sigma"])/ns , lambda= ns/stod(P->p["-lambda"]);
+FDR.cpp:  fp            = stod(P->p["-foot_print"])/ns , pi= stod(P->p["-pi"]), w= stod(P->p["-w"]);
+FDR.cpp:  pval_threshold= stod(P->p["-bct"]) ;
+FDR.cpp:  double min_x  = -1 , max_x = -1, n = 0;
+FDR.cpp:    int NN         = int(U*(CN-1));
+FDR.cpp:    int c          = U2*int(data->XN);
+FDR.cpp:    while (j > 0 and (data->X[0][c] - data->X[0][j] )< window){
+FDR.cpp:      N_pos+=data->X[1][j];
+FDR.cpp:      N_neg+=data->X[2][j];
+FDR.cpp:      j--;
+FDR.cpp:    while (k < data->XN and (data->X[0][k] - data->X[0][c] )< window  ){
+FDR.cpp:      N_pos+=data->X[1][k];
+FDR.cpp:      N_neg+=data->X[2][k];
+FDR.cpp:    if (N_pos + N_neg > CC and (data->X[0][k] - data->X[0][j]) > 1.75*window  ){
+FDR.cpp:      double val =  BIC3(data->X,  j,  k,  c, N_pos,  N_neg, sigma , lambda, fp , pi, w);
+FDR.cpp:  string job_name    = P->p["-N"];
+FDR.cpp:  string log_out_dir = P->p["-log_out"];
+FDR.cpp:  //---------------
+FDR.cpp:  //-------------
+FDR.cpp:  window        = pw->pad, ns=pw->ns;
+FDR.cpp:  sigma         = pw->sigma/ns , lambda= ns/pw->lambda;
+FDR.cpp:  fp            = pw->footPrint/ns , pi=pw->pi, w=pw->w;
+FDR.cpp:  pval_threshold= pw->llrthresh;
+FDR.cpp:  double min_x  = -1 , max_x = -1, n = 0;
+FDR.cpp:    int NN         = int(U*(CN-1));
+FDR.cpp:    int c          = U2*int(data->XN);
+FDR.cpp:    while (j > 0 and (data->X[0][c] - data->X[0][j] )< window){
+FDR.cpp:      N_pos+=data->X[1][j];
+FDR.cpp:      N_neg+=data->X[2][j];
+FDR.cpp:      j--;
+FDR.cpp:    while (k < data->XN and (data->X[0][k] - data->X[0][c] )< window  ){
+FDR.cpp:      N_pos+=data->X[1][k];
+FDR.cpp:      N_neg+=data->X[2][k];
+FDR.cpp:    if (N_pos + N_neg > CC and (data->X[0][k] - data->X[0][j]) > 1.75*window  ){
+FDR.cpp:      double val =  BIC3(data->X,  j,  k,  c, N_pos,  N_neg, sigma , lambda, fp , pi, w);
+FDR.cpp:  string job_name    = pw->jobName;
+FDR.cpp:  string log_out_dir = pw->logDir;
+FDR.cpp:  //---------------
+FDR.cpp:  //-------------
+FDR.cpp~:  double Z  =erf( (x-this->mean) / (this->std*c2));
+FDR.cpp~:  return 1.0 / (sqrt(2*M_PI)*this->std  )*exp(-pow(x-this->mean,2)/(2*pow(this->std,2) ));  
+FDR.cpp~:  this->mu = MU , this->lambda = LAMBDA;
+FDR.cpp~:    return this->lambda*exp(-this->lambda*(x-mu) ); 
+FDR.cpp~:  this->mu = MU , this->alpha=ALPHA;
+FDR.cpp~:    return this->alpha*pow(this->mu,alpha) / pow(x, this->alpha+1);
+FDR.cpp~:  double prevw = -0.1;
+FDR.cpp~:      p1= (1-w)*N.pdf(x);
+FDR.cpp~:	  EY += (log(x) - log(N.mean))*r2*y;
+FDR.cpp~:	EX2 +=(r1*pow(x-N.mean,2))*y;
+FDR.cpp~:    if (abs(w-prevw) < pow(10,-6)){
+FDR.cpp~:  this->start = ST, this->stop = SP, this->bins=BINS;
+FDR.cpp~:  double step = (stop - start)/double(this->bins);
+FDR.cpp~:  for (double c = this->start; c < this->stop ; c+=step){
+FDR.cpp~:    this->XY.push_back(row);
+FDR.cpp~:  while (c < this->XY.size() and this->XY[c][0] < x ){
+FDR.cpp~:    return c -1;
+FDR.cpp~:  int c = this->get_closest(y);
+FDR.cpp~:  this->XY[c][1]+=1;
+FDR.cpp~:  this->mean=0.1, this->std=0.1, this->w=0.5, this->c=1.0;
+FDR.cpp~:  this->converged = EM(this->XY, this->mean, this->std, this->w, this->c, 1);
+FDR.cpp~:  this->norm_all  = normal(0.0, this->mean, this->std);
+FDR.cpp~:  double z        = this->norm_all.mean - this->norm_all.std;
+FDR.cpp~:  double pv       = this->norm_all.cdf(z);
+FDR.cpp~:  while (pv < (1.0 - pval) and z < 100.0){
+FDR.cpp~:    pv=this->norm_all.cdf(z);
+FDR.cpp~:  this->norm_all  = normal(0.0, this->mean, this->std);
+FDR.cpp~:  double z        = this->norm_all.mean - this->norm_all.std;
+FDR.cpp~:  double pv       = this->norm_all.cdf(z);
+FDR.cpp~:  while (pv < (1.0 - pval) and z < 100.0){
+FDR.cpp~:    pv=this->norm_all.cdf(z);
+FDR.cpp~:  double pv = 1.0-this->norm_all.cdf(y);
+FDR.cpp~:  window        = stod(P->p["-pad"]), ns=stod(P->p["-ns"]) ;
+FDR.cpp~:  sigma         = stod(P->p["-sigma"])/ns , lambda= ns/stod(P->p["-lambda"]);
+FDR.cpp~:  fp            = stod(P->p["-foot_print"])/ns , pi= stod(P->p["-pi"]), w= stod(P->p["-w"]);
+FDR.cpp~:  pval_threshold= stod(P->p["-bct"]) ;
+FDR.cpp~:  double min_x  = -1 , max_x = -1, n = 0;
+FDR.cpp~:    int NN         = int(U*(CN-1));
+FDR.cpp~:    int c          = U2*int(data->XN);
+FDR.cpp~:    while (j > 0 and (data->X[0][c] - data->X[0][j] )< window){
+FDR.cpp~:      N_pos+=data->X[1][j];
+FDR.cpp~:      N_neg+=data->X[2][j];
+FDR.cpp~:      j--;
+FDR.cpp~:    while (k < data->XN and (data->X[0][k] - data->X[0][c] )< window  ){
+FDR.cpp~:      N_pos+=data->X[1][k];
+FDR.cpp~:      N_neg+=data->X[2][k];
+FDR.cpp~:    if (N_pos + N_neg > CC and (data->X[0][k] - data->X[0][j]) > 1.75*window  ){
+FDR.cpp~:      double val =  BIC3(data->X,  j,  k,  c, N_pos,  N_neg, sigma , lambda, fp , pi, w);
+FDR.cpp~:  //---------------
+FDR.cpp~:  //-------------
+Binary file FDR.o matches
+load.cpp:   string text   = ("#" + chrom + ":" + to_string(start) + "-"
+load.cpp:   } else if (strand == -1) {
+load.cpp:   BINS    = (maxX - minX) / delta;
+load.cpp:      X[0][i]   = X[0][i - 1] + delta;
+load.cpp:         X[1][j - 1] += forward[i][1];
+load.cpp:         X[2][j - 1] += reverse[i][1];
+load.cpp:         X[0][i]   = (X[0][i] - minX) / scale;
+load.cpp:            centers[i] = (centers[i] - minX) / scale;
+load.cpp:            int a     = center - std * 3;
+load.cpp:            fitted_bidirs[fb][0] = (fitted_bidirs[fb][0] - minX) / scale;
+load.cpp:      maxX      = (maxX - minX) / scale;
+load.cpp:   center  = (double(segments[0]->start)  + double(segments[segments.size() - 1]->stop)) / 2.;
+load.cpp:      if (segments[i]->stop < center) {
+load.cpp:      else if (segments[i]->start > center) {
+load.cpp:      if (x[0] > current[i]->start and  x[0] < current[i]->stop  ) {
+load.cpp:            current[i]->forward.push_back(x);
+load.cpp:            current[i]->reverse.push_back(x);
+load.cpp:      right->insert_coverage(x, s);
+load.cpp:      left->insert_coverage(x,  s);
+load.cpp:      if (stop > current[i]->start and  start < current[i]->stop  ) {
+load.cpp:      right->searchInterval(start, stop, finds);
+load.cpp:      left->searchInterval(start, stop, finds);
+load.cpp:      right->retrieve_nodes(saves);
+load.cpp:      left->retrieve_nodes(saves);
+load.cpp:      if (m->first > 0) {
+load.cpp:         score     = -2 * m->second + log(N) * (ms_pen * m->first);
+load.cpp:         score     = -2 * m->second + log(N) ;
+load.cpp:         null_score  = -2 * m->second + log(N) ;
+load.cpp:         arg     = m->first;
+load.cpp:         int start   = max(mu - (std + lam), 0.0), stop = mu + (std + lam);
+load.cpp:         if (segments[i - 1]->start > segments[i]->start) {
+load.cpp:            segment * copy  = segments[i - 1];
+load.cpp:            segments[i - 1]   = segments[i];
+load.cpp:      segment * S   = new segment(segments[i]->chrom,
+load.cpp:                                  segments[j]->start, segments[j]->stop, T, segments[j]->strand );
+load.cpp:      while (j < N and segments[j]->start < S->stop and segments[j]->stop > S->start ) {
+load.cpp:         S->start  = min(S->start, segments[j]->start);
+load.cpp:         S->stop   = max(S->stop, segments[j]->stop);
+load.cpp:         ID += IDS_first[segments[j]->ID] + ",";
+load.cpp:         S->counts += 1;
+load.cpp:      IDS[T]      = ID.substr(0, ID.size() - 1);
+load.cpp:                     G[chrom]->add2(1, double(xx), abs(coverage));
+load.cpp:                     G[chrom]->add2(-1, double(xx), abs(coverage));
+load.cpp:                  G[chrom]->add2(-1, double(xx), abs(coverage));
+load.cpp:         i->second->bin(BINS, scale, 0);
+load.cpp:         if (chromosomes.find(i->second->chrom) == chromosomes.end()) {
+load.cpp:            chromosomes[i->second->chrom] = c;
+load.cpp:            ID_to_chrom[c]  = i->second->chrom;
+load.cpp:         segments.push_back(i->second);
+load.cpp:   string spec_chrom   = P->p["-chr"];
+load.cpp:   int pad           = stoi(P->p["-pad"]) + 1;
+load.cpp:                  printf("\ninterval id in line: %s, contains a | symbol changing to :: -> %s\n", line.c_str(), lineArray[3].c_str() );
+load.cpp:                  chrom = lineArray[0], start = max(stoi(lineArray[1]) - pad, 0), stop = stoi(lineArray[2]) + pad;
+load.cpp:                  start     = max(x - pad, 0) , stop  = x + pad;
+load.cpp:                  GS[S->chrom].push_back(S);
+load.cpp:         m_segs  = c->second;
+load.cpp:   string spec_chrom   = pw->chromosome;
+load.cpp:   int pad           = pw->pad + 1;
+load.cpp:                  printf("\ninterval id in line: %s, contains a | symbol changing to :: -> %s\n", line.c_str(), lineArray[3].c_str() );
+load.cpp:                  chrom = lineArray[0], start = max(stoi(lineArray[1]) - pad, 0), stop = stoi(lineArray[2]) + pad;
+load.cpp:                  start     = max(x - pad, 0) , stop  = x + pad;
+load.cpp:                  GS[S->chrom].push_back(S);
+load.cpp:         m_segs  = c->second;
+load.cpp:      NT[c->first]  = node(c->second);
+load.cpp:                  strand  = -1;
+load.cpp:      c->second.retrieve_nodes(NS);
+load.cpp:            line              = line.substr(1, line.size() - 1);
+load.cpp:            line  = line.substr(1, line.size() - 1);
+load.cpp:            S->M[complexity] = ll;
+load.cpp:            S->parameters[complexity]   = parameters;
+load.cpp:         if (X[i - 1][0] > X[i][0]) {
+load.cpp:            vector<double > copy  = X[i - 1];
+load.cpp:            X[i - 1]          = X[i];
+load.cpp:   FHW.open(out_dir + job_name + "-" + to_string(job_ID) + "_prelim_bidir_hits.bed");
+load.cpp:   FHW << P->get_header(1);
+load.cpp:      vector<vector<double>> data_intervals   =  bubble_sort_alg(c->second);
+load.cpp:         FHW << c->first << "\t" << to_string(int(data_intervals[i][0])) << "\t" << to_string(int(data_intervals[i][1])) << "\tME_" << to_string(ID) << "\t";
+load.cpp:   FHW.open(out_dir + job_name + "-" + to_string(job_ID) + "_prelim_bidir_hits.bed");
+load.cpp:   FHW << pw->getHeader(1);
+load.cpp:      vector<vector<double>> data_intervals   =  bubble_sort_alg(c->second);
+load.cpp:         FHW << c->first << "\t" << to_string(int(data_intervals[i][0])) << "\t" << to_string(int(data_intervals[i][1])) << "\tME_" << to_string(ID) << "\t";
+load.cpp:   double scale  = stof(P->p["-ns"]);
+load.cpp:   double penality = stof(P->p["-ms_pen"]) ;
+load.cpp:   string out_dir  = P->p["-o"];
+load.cpp:   file_name   = out_dir +  P->p["-N"] + "-" + to_string(job_ID) +  "_K_models_MLE.tsv";
+load.cpp:   FHW << P->get_header(2);
+load.cpp:   double ALPHA_2  = stof(P->p["-ALPHA_2"]);
+load.cpp:   FHW << "#ID|chromosome:start-stop|forward strand coverage, reverse strand coverage" << endl;
+load.cpp:   FHW << "#model complexity,log-likelihood" << endl;
+load.cpp:      FHW << ">" + IDS[s->first] + "|";
+load.cpp:      for (it_type_2 k  = s->second.begin(); k != s->second.end(); k++) { //iterate over each model_complexity
+load.cpp:         for (it_type_3 c = k->second.begin(); c != k->second.end(); c++) {
+load.cpp:            INFO    = chrom + ":" + to_string((*c).ID[1]) + "-" + to_string((*c).ID[2]);
+load.cpp:      for (it_type_2 k  = s->second.begin(); k != s->second.end(); k++) { //iterate over each model_complexity
+load.cpp:         string k_header = "~" + to_string(k->first) + ",";
+load.cpp:         int NN      = k->second.size();
+load.cpp:         for (it_type_3 c = k->second.begin(); c != k->second.end(); c++) {
+load.cpp:         if (k->first > 0) {
+load.cpp:   double scale  = pw->ns;
+load.cpp:   double penality = pw->penalty;
+load.cpp:   string out_dir  = pw->outputDir;
+load.cpp:   file_name   = out_dir + pw->jobName + "-" + to_string(job_ID) +  "_K_models_MLE.tsv";
+load.cpp:   FHW << pw->getHeader(2);
+load.cpp:   double ALPHA_2  = pw->alpha2;
+load.cpp:   FHW << "#ID|chromosome:start-stop|forward strand coverage, reverse strand coverage" << endl;
+load.cpp:   FHW << "#model complexity,log-likelihood" << endl;
+load.cpp:      FHW << ">" + IDS[s->first] + "|";
+load.cpp:      for (it_type_2 k  = s->second.begin(); k != s->second.end(); k++) { //iterate over each model_complexity
+load.cpp:         for (it_type_3 c = k->second.begin(); c != k->second.end(); c++) {
+load.cpp:            INFO    = chrom + ":" + to_string((*c).ID[1]) + "-" + to_string((*c).ID[2]);
+load.cpp:      for (it_type_2 k  = s->second.begin(); k != s->second.end(); k++) { //iterate over each model_complexity
+load.cpp:         string k_header = "~" + to_string(k->first) + ",";
+load.cpp:         int NN      = k->second.size();
+load.cpp:         for (it_type_3 c = k->second.begin(); c != k->second.end(); c++) {
+load.cpp:         if (k->first > 0) {
+load.cpp:   FHW.open(P->p["-o"] +  P->p["-N"] + "-" + to_string(job_ID) +  "_bidir_predictions.bed");
+load.cpp:   FHW << P->get_header(2);
+load.cpp:   double penality   = stod(P->p["-ms_pen"]);
+load.cpp:      fits[i]->get_model(penality);
+load.cpp:      FHW << fits[i]->write();
+load.cpp:   FHW.open(pw->outputDir + pw->jobName + "-" + to_string(job_ID) +  "_bidir_predictions.bed");
+load.cpp:   FHW << pw->getHeader(2);
+load.cpp:   double penality   = pw->penalty;
+load.cpp:      fits[i]->get_model(penality);
+load.cpp:      FHW << fits[i]->write();
+load.cpp:      if (segments[i]->forward.size() > 0 or segments[i]->reverse.size() > 0 ) {
+load.cpp:         segments[i]->bin(BINS, scale, erase);
+load.cpp:   string OUT    = dir + job_name + "-" + to_string(job_ID) + "_" + DT + ".log";
+load.cpp:      string FILE   = dir + "tmp_" + job_name + "-" + to_string(job_ID) + "_" + to_string(rank) + ".log";
+load.cpp:         T[c->first]   = node(c->second);
+load.cpp:         if (T.find(query_fits[i]->chrom) != T.end()) {
+load.cpp:            T[query_fits[i]->chrom].searchInterval(query_fits[i]->start, query_fits[i]->stop, FINDS);
+load.cpp:            if (!FINDS.empty() and query_fits[i]->M[1] != nINF and query_fits[i]->M[1] > query_fits[i]->M[0]   ) {
+load.cpp:               query_fits[i]->TSS = 1;
+Binary file load.o matches
+main.cpp:/** Main function for tfit-revisions.
+main.cpp:  if (P->EXIT){
+main.cpp:  int job_ID 		=  MPI_comm::get_job_ID(pw.logDir, pw.jobName, rank, nprocs); //P->p["-log_out"], P->p["-N"], rank, nprocs);
+main.cpp:  int verbose 	= pw.verbose; //stoi(//P->p["-v"]);
+main.cpp:  Log_File * LG 	= new Log_File(rank, job_ID, pw.jobName, pw.logDir); //new  Log_File(rank, job_ID, P->p["-N"], P->p["-log_out"]);
+main.cpp:    //P->display(nprocs,threads);
+main.cpp:    LG->write(pw.getHeader(1), 0);
+Binary file main.o matches
+Makefile:CXXFLAGS        = -static-libstdc++ -static-libgcc  -Wno-unused-variable -Wno-non-virtual-dtor -std=c++11 -fopenmp -Wno-write-strings -Wno-literal-suffix -D_GLIBCXX_USE_CXX11_ABI=0
+Makefile:CPP_FLAGS_32  	= -D32_BIT
+Makefile:CPP_FLAGS_64  	= -D64_BIT
+Makefile:GCCVERSION 	= $(shell ${CXX} -dumpversion)
+Makefile:	${PWD}/select_main.o  ${PWD}/error_stdo_logging.o ${PWD}/ParamWrapper.o ${PWD}/old_template_matching.o -o ${EXEC} -lmpi
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/main.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/error_stdo_logging.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/BIC.cpp
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/select_main.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/model_main.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/bidir_main.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/bootstrap.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/MPI_comm.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/load.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/model_selection.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/split.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/model.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/across_segments.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/template_matching.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/old_template_matching.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/read_in_parameters.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/model_single.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/density_profiler.cpp 
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/FDR.cpp
+Makefile:	@${CXX} -c ${CXXFLAGS} ${PWD}/ParamWrapper.cpp 
+Makefile:	@rm -f *.o
+Makefile:	@rm -f EMGU
+Makefile:	@rm -f Tfit	
+model.cpp:	return exp(-pow(x, 2) * 0.5) / sqrt(2 * M_PI);
+model.cpp:	if (D < pow(10, -15)) { //machine epsilon
+model.cpp:		return 1.0 / pow(10, -15);
+model.cpp:	return exp(log(1. - N) - log(D));
+model.cpp:		return (w * pi) / abs(b - a);
+model.cpp:	return (w * (1 - pi)) / abs(b - a);
+model.cpp:		p = w / abs(b - a);
+model.cpp:		p = p * pow(pi, max(0, strand) ) * pow(1. - pi, max(0, -strand) );
+model.cpp:		z -= foot_print;
+model.cpp:	double vl 		= (l / 2.0) * (s * 2 * (mu - z) + l * pow(si, 2));
+model.cpp:		p 			= l * IN((z - mu) / si) * R(l * si - s * ((z - mu) / si));
+model.cpp:		p 			= (l / 2) * exp(vl) * erfc((s * (mu - z) + l * pow(si , 2) ) / (sqrt(2) * si));
+model.cpp:	p     = (l / 2) * exp(vl) * erfc((s * (mu - z) + l * pow(si , 2) ) / (sqrt(2) * si));
+model.cpp:	p     = p * w * pow(pi, max(0, s) ) * pow(1 - pi, max(0, -s) );
+model.cpp:		z -= foot_print;
+model.cpp:	return max(0. , s * (z - mu) - l * pow(si, 2) + (si / R(l * si - s * ((z - mu) / si))));
+model.cpp:		z -= foot_print;
+model.cpp:	return pow(l, 2) * pow(si, 4) + pow(si, 2) * (2 * l * s * (mu - z) + 1 ) + pow(mu - z, 2) - ((si * (l * pow(si, 2) + s * (mu - z))) / R(l * si - s * ((z - mu) / si) ));
+model.cpp:		while (i < (data->XN - 1) and (data->X[0][i] - center) < dist) {
+model.cpp:		i = data->XN - 1;
+model.cpp:		while (i > 0 and (data->X[0][i] - center) > dist) {
+model.cpp:			i--;
+model.cpp:		S += data->X[st][i];
+model.cpp:			components[k].reverse_neighbor 	= &components[k - 1];
+model.cpp:		while ( j < K and components[j].forward_neighbor != NULL and  components[j].forward_neighbor->bidir.w  < pow(10, -2)   ) {
+model.cpp:			components[k].forward.k 	= get_nearest_position(data, center, components[j].forward_neighbor->bidir.mu - center  );
+model.cpp:			components[k].forward.k 	= get_nearest_position(data, components[k].bidir.mu, data->maxX - components[k].bidir.mu );
+model.cpp:		while (j >= 0 and components[j].reverse_neighbor != NULL and  components[j].reverse_neighbor->bidir.w   < pow(10, -2) ) {
+model.cpp:			j--;
+model.cpp:			center 						= components[k].bidir.mu - delta;
+model.cpp:			components[k].reverse.j 	= get_nearest_position(data, center, components[j].reverse_neighbor->bidir.mu - center );
+model.cpp:			components[k].reverse.j 	= get_nearest_position(data, components[k].bidir.mu, data->minX - components[k].bidir.mu );
+model.cpp:		components[k].reverse.k 		= get_nearest_position(data, components[k].bidir.mu, -delta);
+model.cpp:		double null_vl 	= 0.05 / (data->maxX - data->minX  );
+model.cpp:		double null_ll 	= N * LOG(1. / (data->maxX - data->minX  ));
+model.cpp:		double null_BIC = -2 * null_ll + LOG(N);
+model.cpp:			left_SUM += data->X[1][l];
+model.cpp:			right_SUM -= data->X[1][l];
+model.cpp:			vl 		= 1.0 / (data->X[0][l] - data->X[0][components[k].forward.j]);
+model.cpp:			mod_BIC = -2 * mod_ll + 5 * LOG(N);
+model.cpp:		components[k].forward.b 	= data->X[0][arg_l];
+model.cpp:		null_ll 	= N * LOG(1. / (data->maxX - data->minX  ));
+model.cpp:		null_BIC = -2 * null_ll + LOG(N);
+model.cpp:			left_SUM += data->X[2][l];
+model.cpp:			right_SUM -= data->X[2][l];
+model.cpp:			vl 		= 1.0 / (data->X[0][components[k].reverse.k] - data->X[0][l]);
+model.cpp:			mod_BIC = -2 * mod_ll + 5 * LOG(N);
+model.cpp:		components[k].reverse.a 	= data->X[0][arg_l];
+model.cpp:		noise 	= NOISE(data->minX, data->maxX,
+model.cpp:		if (data->strand == ".") {
+model.cpp:		gamma_distribution<double> dist_lengths(1, ( (data->maxX - data->minX) / (K)));
+model.cpp:		int k 				= get_nearest_position(data, mu, forward_bound - mu);
+model.cpp:		if (data->strand == "+") {
+model.cpp:		} else if (data->strand == "-") {
+model.cpp:		forward 			= UNI(mu + (1.0 / lambda), data->maxX, 1.0 / (complexity * K), 1, j, pi);
+model.cpp:		dist 				=  -(1.0 / lambda);
+model.cpp:		k 					= get_nearest_position(data, mu, reverse_bound - mu);
+model.cpp:		reverse 			= UNI(data->minX, mu - (1.0 / lambda),  1.0 / (complexity * K) , -1, j, 1 - pi);
+model.cpp:			double current_EX 	= x - (st * current_EY) - bidir.foot_print * st;
+model.cpp:			//	self.C+=max( ((z-self.mu) -E_Y) *r,0)
+model.cpp:			// 	self.C+=max((-(z-self.mu) -E_Y)   *r ,0)
+model.cpp:			bidir.C += max((st * (x - bidir.mu) - current_EY  ) * vl * y, 0.0);
+model.cpp:			bidir.ex2 += (pow(current_EX, 2) + current_EY2 - pow(current_EY, 2)) * vl * y;
+model.cpp:		bidir.si 	= pow(abs((1. / (r + 3 + ALPHA_0 )) * (bidir.ex2 - 2 * bidir.mu * bidir.ex +
+model.cpp:		if (abs(bidir.mu - bidir.prev_mu) < 0.01 and false ) {
+model.cpp:		for (int k = 0; k < K - 1; k++) {
+model.cpp:		for (int i = 0; i < X.size() - 1; i++  )	{
+model.cpp:		for (int i = 0; i < N - 1; i++) {
+model.cpp:		double 	l 	= (data->maxX - data->minX);
+model.cpp:		for (int i = 0; i < data->XN; i++) {
+model.cpp:			pos += data->X[1][i];
+model.cpp:			neg += data->X[2][i];
+model.cpp:		for (int i = 0; i < data->XN; i++) {
+model.cpp:				ll += log(pi / l) * data->X[1][i];
+model.cpp:				ll += log((1 - pi) / l) * data->X[2][i];
+model.cpp:		components[k].set_priors(ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3, data->N, K);
+model.cpp:			normal_distribution<double> dist_MU((data->minX + data->maxX) / 2., r_mu);
+model.cpp:		                                data, K, data->SCALE , 0., topology, foot_print, data->maxX, data->maxX);
+model.cpp:			components[k].reverse_neighbor 	= &components[k - 1];
+model.cpp:		components[K].initialize_bounds(0., data, 0., 0. , noise_max, pi, foot_print, data->minX, data->maxX);
+model.cpp:		//E-step, grab all the stats and responsibilities
+model.cpp:		for (int i = 0; i < data->XN; i++) {
+model.cpp:				if (data->X[1][i]) { //if there is actually data point here...
+model.cpp:					norm_forward += components[k].evaluate(data->X[0][i], 1);
+model.cpp:				if (data->X[2][i]) { //if there is actually data point here...
+model.cpp:					norm_reverse += components[k].evaluate(data->X[0][i], -1);
+model.cpp:				ll += LOG(norm_forward) * data->X[1][i];
+model.cpp:				ll += LOG(norm_reverse) * data->X[2][i];
+model.cpp:					components[k].add_stats(data->X[0][i], data->X[1][i], 1, norm_forward);
+model.cpp:					components[k].add_stats(data->X[0][i], data->X[2][i], -1, norm_reverse);
+model.cpp:		//M-step
+model.cpp:		if (abs(ll - prevll) < convergence_threshold) {
+model_main.cpp:	int verbose 	= stoi(P->p["-v"]);
+model_main.cpp:	LG->write("\ninitializing model module...............................done\n\n",verbose);
+model_main.cpp:	string job_name = P->p["-N"];
+model_main.cpp:	string forward_bed_graph_file 	= P->p["-i"];
+model_main.cpp:	string reverse_bed_graph_file 	= P->p["-j"];
+model_main.cpp:	string joint_bed_graph_file 	= P->p["-ij"];
+model_main.cpp:	string interval_file 			= P->p["-k"];
+model_main.cpp:	string out_file_dir 			= P->p["-o"];
+model_main.cpp:	string spec_chrom 				= P->p["-chr"];
+model_main.cpp:	LG->write("loading intervals of interest...........................",verbose);
+model_main.cpp:	LG->write("done\n",verbose);
+model_main.cpp:	LG->write("sending interval assignments............................",verbose);
+model_main.cpp:	LG->write("done\n",verbose);
+model_main.cpp:	LG->write("inserting bedgraph data.................................",verbose);
+model_main.cpp:	LG->write("done\n",verbose);
+model_main.cpp:	LG->write("binning, centering, scaling.............................",verbose);
+model_main.cpp:	load::BIN(integrated_segments, stod(P->p["-br"]), stod(P->p["-ns"]),true);	
+model_main.cpp:	LG->write("done\n",verbose);
+model_main.cpp:	LG->write("running template matching...............................",verbose);
+model_main.cpp:	SC.mean = 0.78, SC.std = 0.08; //this dependent on -w 0.9 !!!
+model_main.cpp:	SC.set_2(stod(P->p["-bct"]));
+model_main.cpp:	LG->write("done\n",verbose);
+model_main.cpp:	LG->write("gathering all model fits................................",verbose);
+model_main.cpp:	LG->write("done\n",verbose);
+model_main.cpp:	if (rank==0){//write_out_to_MLE, //out_dir+  P->p["-N"] + "-" + to_string(job_ID)+  "_K_models_MLE.tsv"
+model_main.cpp:		LG->write("writing out results (MLE)...............................",verbose);
+model_main.cpp:		LG->write("done\n",verbose);
+model_main.cpp:		LG->write("loading results (MLE)...................................",verbose);
+model_main.cpp:		LG->write("done\n",verbose);		
+model_main.cpp:		LG->write("writing out results (model selection)...................",verbose);
+model_main.cpp:		LG->write("done\n",verbose);
+model_main.cpp:	LG->write("\nexiting model module....................................done\n\n",verbose);
+model_main.cpp:	int verbose 	= pw->verbose;//stoi(P->p["-v"]);
+model_main.cpp:	LG->write("\ninitializing model module...............................done\n\n",verbose);
+model_main.cpp:	string job_name = pw->jobName;//P->p["-N"];
+model_main.cpp:	string forward_bed_graph_file 	= pw->forwardStrand;//P->p["-i"];
+model_main.cpp:	string reverse_bed_graph_file 	= pw->reverseStrand;//P->p["-j"];
+model_main.cpp:	string joint_bed_graph_file 	= pw->mergedStrand;//P->p["-ij"];
+model_main.cpp:	string interval_file 			= pw->regionsOfInterest;//P->p["-k"];
+model_main.cpp:	string out_file_dir 			= pw->outputDir;//P->p["-o"];
+model_main.cpp:	string spec_chrom 				= pw->chromosome;//P->p["-chr"];
+model_main.cpp:	LG->write("loading intervals of interest...........................",verbose);
+model_main.cpp:	LG->write("done\n",verbose);
+model_main.cpp:	LG->write("sending interval assignments............................",verbose);
+model_main.cpp:	LG->write("done\n",verbose);
+model_main.cpp:	LG->write("inserting bedgraph data.................................",verbose);
+model_main.cpp:	LG->write("done\n",verbose);
+model_main.cpp:	LG->write("binning, centering, scaling.............................",verbose);
+model_main.cpp:	load::BIN(integrated_segments, pw->br, pw->ns,true);	
+model_main.cpp:	LG->write("done\n",verbose);
+model_main.cpp:	LG->write("running template matching...............................",verbose);
+model_main.cpp:	SC.mean = 0.78, SC.std = 0.08; //this dependent on -w 0.9 !!!
+model_main.cpp:	SC.set_2(pw->llrthresh);
+model_main.cpp:	LG->write("done\n",verbose);
+model_main.cpp:	LG->write("gathering all model fits................................",verbose);
+model_main.cpp:	LG->write("done\n",verbose);
+model_main.cpp:	if (rank==0){//write_out_to_MLE, //out_dir+  P->p["-N"] + "-" + to_string(job_ID)+  "_K_models_MLE.tsv"
+model_main.cpp:		LG->write("writing out results (MLE)...............................",verbose);
+model_main.cpp:		LG->write("done\n",verbose);
+model_main.cpp:		LG->write("loading results (MLE)...................................",verbose);
+model_main.cpp:		LG->write("done\n",verbose);		
+model_main.cpp:		LG->write("writing out results (model selection)...................",verbose);
+model_main.cpp:		LG->write("done\n",verbose);
+model_main.cpp:	LG->write("\nexiting model module....................................done\n\n",verbose);
+Binary file model_main.o matches
+Binary file model.o matches
+model_selection.cpp:	if (S->M[0]==nINF and S->M[1]==INF){
+model_selection.cpp:	if (S->M[1]==nINF){
+model_selection.cpp:		S->M[1]=S->M[0];
+model_selection.cpp:	noise_bic 	= -2*S->M[0] + log(S->N)*2;
+model_selection.cpp:	model_bic 	= -2*S->M[1] + log(S->N)*7*penality;
+model_selection.cpp:	double penality_a 	= -1000; //everything is model
+model_selection.cpp:	double delta 		= (penality_b - penality_a)/ res;
+model_selection.cpp:		AUC+=(prev_fp - fp )*prev_tp;
+model_selection.cpp:		if (tp -fp   > max_dist   ){
+model_selection.cpp:			max_dist 	= tp - fp ;
+model_selection.cpp:		if (fp < pow(10,-5)){
+Binary file model_selection.o matches
+model_single.cpp:	double scale 	= data->SCALE;
+model_single.cpp:	forward 			= UNI(MU+(1.0/l ), data->maxX, 1.0 / (3*K), 1, int(data->XN), 0.5);
+model_single.cpp:	reverse 			= UNI(data->minX, MU-(1.0/l ), 1.0 / (3*K), -1, 0,0.5);
+model_single.cpp:	return bidir.pdf(x,1) + bidir.pdf(x,-1) + forward.pdf(x,1) + forward.pdf(x,-1) + reverse.pdf(x,1) + reverse.pdf(x,-1);
+model_single.cpp:	re 	= (bidir.pdf(x,1) + bidir.pdf(x,-1))/norm;
+model_single.cpp:	rf 	= (forward.pdf(x,1) + forward.pdf(x,-1))/norm;
+model_single.cpp:	rr 	= (reverse.pdf(x,1) + reverse.pdf(x,-1))/norm;
+model_single.cpp:	epi 	= (bidir.pdf(x,1)  ) / ((bidir.pdf(x,1) )+ (bidir.pdf(x,-1) ) );
+model_single.cpp:	ey 		= max(epi*bidir.EY(x,1)+(1.-epi)*bidir.EY(x,-1),0.);
+model_single.cpp:	ey2 	= epi*bidir.EY2(x,1)+(1.-epi)*bidir.EY2(x,-1);
+model_single.cpp:	ex 		= (x-(ey*epi)  + (ey *(1.-epi)	));
+model_single.cpp:	ex 		+= (bidir.foot_print*(1-epi) -bidir.foot_print*epi  );
+model_single.cpp:	EX2 	+= max((pow(ex,2) + ey2 - pow(ey,2))*y,0.)*re;
+model_single.cpp:	si 	= sqrt((EX2 - 2*mu*EX + (pow(mu,2)*WE) + 2*beta_1 ) / (WE  + 3 + alpha_1)  );
+model_single.cpp:	reverse.w 	= wl, reverse.b = mu - (1.0 / l);
+model_single.cpp:	uniform_real_distribution<double> dist_uni(data->minX,data->maxX);
+model_single.cpp:	for (int i = 0; i < data->parameters.size(); i++){
+model_single.cpp:		mu_seeds.push_back(data->parameters[i][0]);
+model_single.cpp:		//e-step
+model_single.cpp:		for (int i = 0; i < data->XN; i++){
+model_single.cpp:			x=data->X[0][i],y=data->X[1][i];
+model_single.cpp:		//m-step
+model_single.cpp:		if (abs(prev_ll - ll) < covergence_threshold){
+MPI_comm.cpp:  if (rank==(nprocs-1)){
+MPI_comm.cpp:      for (int j = 0; j < segments[i]->bidirectional_bounds.size();j++){
+MPI_comm.cpp:	G[segments[i]->chrom].push_back(segments[i]->bidirectional_bounds[j]);
+MPI_comm.cpp:      if (j==nprocs-1){
+MPI_comm.cpp:      for (int i = 0; i < (stop-start) ; i++){
+MPI_comm.cpp:	G[all[ start+i ]->chrom] 	= vector<vector<double> >(S);
+MPI_comm.cpp:	    G[all[ start+i ]->chrom][u].push_back(B.lower_upper[l]);
+MPI_comm.cpp:      int S 	= segments[i]->bidirectional_bounds.size();
+MPI_comm.cpp:      for (int u=0; u < segments[i]->bidirectional_bounds.size(); u++){				
+MPI_comm.cpp:	  B.lower_upper[l] = segments[i]->bidirectional_bounds[u][l];
+MPI_comm.cpp:  cout<<"-------------------------"<<endl;
+MPI_comm.cpp:      for (int j = 0; j < segments[i]->bidirectional_bounds.size();j++){
+MPI_comm.cpp:	G[segments[i]->chrom].push_back(segments[i]->bidirectional_bounds[j]);
+MPI_comm.cpp:      if (j==nprocs-1){
+MPI_comm.cpp:      for (int i = 0; i < (stop-start) ; i++){
+MPI_comm.cpp:	G[all[ start+i ]->chrom] 	= vector<vector<double> >(S);
+MPI_comm.cpp:	    G[all[ start+i ]->chrom][u].push_back(B.lower_upper[l]);
+MPI_comm.cpp:      int S 	= segments[i]->bidirectional_bounds.size();
+MPI_comm.cpp:      for (int u=0; u < segments[i]->bidirectional_bounds.size(); u++){				
+MPI_comm.cpp:	  B.lower_upper[l] = segments[i]->bidirectional_bounds[u][l];
+MPI_comm.cpp:  cout<<"-------------------------"<<endl;
+MPI_comm.cpp:	int st_sp[4]; //first->start, second->stop
+MPI_comm.cpp:			if (j == nprocs-1){
+MPI_comm.cpp:			S 		= stop-start;
+MPI_comm.cpp:					if (c <FSI[i]->chrom.size() ){
+MPI_comm.cpp:						SSS.chrom[c] 	= FSI[i]->chrom[c];
+MPI_comm.cpp:				SSS.strand[0] 	= FSI[i]->strand[0];
+MPI_comm.cpp:				SSS.st_sp[0] 	= FSI[i]->start;
+MPI_comm.cpp:				SSS.st_sp[1] 	= FSI[i]->stop;
+MPI_comm.cpp:				SSS.st_sp[2] 	= FSI[i]->ID;
+MPI_comm.cpp:				SSS.st_sp[3] 	= FSI[i]->counts;
+MPI_comm.cpp:		ns->counts 		= runs[i].st_sp[3];
+MPI_comm.cpp:		GG[ns->chrom].push_back(ns) ;
+MPI_comm.cpp:	//string OUT = dir+"EMGU-" + to_string(job_ID) +"_" + DT+ ".log";
+MPI_comm.cpp:	//tmp_EMGU-0_2.log
+MPI_comm.cpp:				current_file 	= hFile->d_name;
+MPI_comm.cpp:					if (current_file.substr(jN, 1) =="-"){
+MPI_comm.cpp:					if (current_file.substr(jN+4,1) =="-"){
+MPI_comm.cpp:						for (int sc= 0; sc < k->second.size();sc++ ){
+MPI_comm.cpp:							recieved.push_back( k->second[sc] );
+MPI_comm.cpp:				for (int sc= 0; sc < k->second.size();sc++ ){
+MPI_comm.cpp:				for (int sc= 0; sc < k->second.size();sc++ ){
+MPI_comm.cpp:					simple_c_free_mode sc_FM 	= k->second[sc];
+MPI_comm.cpp:		GG[FSI[s]->chrom].push_back(FSI[s]);
+Binary file MPI_comm.o matches
+old_template_matching.cpp://double nINF	=-exp(1000);
+old_template_matching.cpp:		for (int i = 0; i < X.size()-1; i++  )	{
+old_template_matching.cpp:	uniform_int_distribution<int> distribution(0,centers.size()-1);
+old_template_matching.cpp:	double fp_delta = (fp_b-fp_a) /fp_res;
+old_template_matching.cpp:	double uni_ll= LOG(pi/ pow(b-a,1) )*N_pos + LOG((1-pi)/pow(b-a,1))*N_neg;
+old_template_matching.cpp:		double l  	= 1./ (0.5*((S_pos / N_pos) - (S_neg / N_neg)) - foot_print);
+old_template_matching.cpp:		double sv_f = sqrt((S2_pos - (2*(mu )*S_pos) + (N_pos*pow((mu ),2)))/N_pos);
+old_template_matching.cpp:		double sv_r = sqrt((S2_neg - (2*(mu )*S_neg) + (N_neg*pow((mu ),2)))/N_neg);
+old_template_matching.cpp:		double si 	= 0.5*(sv_f + sv_r) - (1. / l);
+old_template_matching.cpp:				emg_ll+=(LOG(EMG_clf.pdf((X[0][i] ),1))*X[1][i] + LOG(EMG_clf.pdf((X[0][i] ),-1))*X[2][i]);	
+old_template_matching.cpp:			double currBIC= (-2*uni_ll + 1*LOG(N) ) / (-2*emg_ll + 3*LOG(N));
+old_template_matching.cpp:		emg_ll+=LOG(EMG_clf.pdf(X[0][i],1) + (1.0-w)*pi*(1.0/l) )*X[1][i] + LOG(EMG_clf.pdf(X[0][i],-1) + (1.0-w)*(1.0-pi)*(1.0/l) )*X[2][i];
+old_template_matching.cpp:	double uni_ll= LOG(pi/  (b-a ) )*N_pos + LOG((1-pi)/ (b-a ))*N_neg;
+old_template_matching.cpp:	double 		l = b-a;
+old_template_matching.cpp:		emg_ll+=LOG(EMG_clf.pdf(X[0][i],1) + (1.0-w)*pi*(1.0/l) )*X[1][i] + LOG(EMG_clf.pdf(X[0][i],-1) + (1.0-w)*(1.0-pi)*(1.0/l) )*X[2][i];
+old_template_matching.cpp:	double emg_ratio 			= (-2*uni_ll + LOG(N)) / (-2*emg_ll + 1*LOG(N));
+old_template_matching.cpp:	int NN 	= int(data->XN);
+old_template_matching.cpp:			while (j < data->XN and (data->X[0][j] - data->X[0][i]) < -window){
+old_template_matching.cpp:				N_pos-=data->X[1][j];
+old_template_matching.cpp:				N_neg-=data->X[2][j];
+old_template_matching.cpp:				S_pos-=(data->X[0][j]*data->X[1][j]);
+old_template_matching.cpp:				S_neg-=(data->X[0][j]*data->X[2][j]);
+old_template_matching.cpp:				S2_pos-=(pow(data->X[0][j],2)*data->X[1][j]);
+old_template_matching.cpp:				S2_neg-=(pow(data->X[0][j],2)*data->X[2][j]);
+old_template_matching.cpp:			while (k < data->XN and (data->X[0][k] - data->X[0][i]) < window){
+old_template_matching.cpp:				N_pos+=data->X[1][k];
+old_template_matching.cpp:				N_neg+=data->X[2][k];
+old_template_matching.cpp:				S_pos+=(data->X[0][k]*data->X[1][k]);
+old_template_matching.cpp:				S_neg+=(data->X[0][k]*data->X[2][k]);
+old_template_matching.cpp:				S2_pos+=(pow(data->X[0][k],2)*data->X[1][k]);
+old_template_matching.cpp:				S2_neg+=(pow(data->X[0][k],2)*data->X[2][k]);
+old_template_matching.cpp:			if (k < data->XN  and j < data->XN and k!=j and N_neg > 0 and N_pos > 0 ){
+old_template_matching.cpp:				total_density 	= (N_pos / (data->X[0][k] - data->X[0][j])) + (N_neg / (data->X[0][k] - data->X[0][j]));
+old_template_matching.cpp:				// BIC_values[i] 	= BIC(data->X, avgLL, variances, 
+old_template_matching.cpp:				// 	lambdas, skews, data->X[0][i], i, k, j,  single, foot_res, 
+old_template_matching.cpp:				double mu 		= (data->X[0][k] + data->X[0][j]) /2.;
+old_template_matching.cpp:				//double CENTER 	= (mu*100 + data->start);
+old_template_matching.cpp:				// BIC_values[i] 	=  BIC2(data->X, avgLL, variances, 
+old_template_matching.cpp:				BIC_values[i] 	= BIC3(data->X,  j,  k,  i, N_pos,  N_neg,avgLL, variances, lambdas, skews);
+old_template_matching.cpp:				double II 		= data->X[0][i]*scale + data->start;
+old_template_matching.cpp:				// if   (CENTER < 1144764 and CENTER > 1139533 and data->chrom == "chr1"){
+old_template_matching.cpp:	double window_delta = (window_b-window_a)/res;
+old_template_matching.cpp:		double * avgLL 			= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * BIC_values 	= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * densities 		= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * densities_r 	= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * variances 		= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * lambdas 		= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double ** skews 		= new double*[int(segments[i]->XN)] ;
+old_template_matching.cpp:		for (int t =0; t < segments[i]->XN; t++ ){
+old_template_matching.cpp:			double l 		=  segments[i]->XN*scale;
+old_template_matching.cpp:			double ef 		= segments[i]->fN*( 2*(window_a+window_delta*w)  /l);
+old_template_matching.cpp:			double er 		= segments[i]->rN*( 2*(window_a+window_delta*w) /l);
+old_template_matching.cpp:			double stdf 	= sqrt(ef*(1- (  2*(window_a+window_delta*w) /l  ) )  );
+old_template_matching.cpp:			double stdr 	= sqrt(er*(1- (  2*(window_a+window_delta*w) /l  ) )  );
+old_template_matching.cpp:			for (int j = 1; j<segments[i]->XN-1; j++){
+old_template_matching.cpp:					// start 		= int(segments[i]->X[0][j]*scale+segments[i]->start - ((variances[j]/2.)+(1.0/lambdas[j]))*scale);
+old_template_matching.cpp:					// stop 		= int(segments[i]->X[0][j]*scale+segments[i]->start + ((variances[j]/2.)+(1.0/lambdas[j]))*scale);
+old_template_matching.cpp:					start 		= int(segments[i]->X[0][j]*scale+segments[i]->start - window*scale*0.5);
+old_template_matching.cpp:					stop 		= int(segments[i]->X[0][j]*scale+segments[i]->start + window*scale*0.5);
+old_template_matching.cpp:			segments[i]->bidirectional_bounds.push_back(bounds);	
+old_template_matching.cpp:		segments[i]->bidirectional_bounds 	= bubble_sort3(segments[i]->bidirectional_bounds);
+old_template_matching.cpp:	double uni_ll= LOG(pi/  (b-a ) )*N_pos + LOG((1-pi)/ (b-a ))*N_neg;
+old_template_matching.cpp:	double 		l = b-a;
+old_template_matching.cpp:		emg_ll+=LOG(EMG_clf.pdf(X[0][i],1) + (1.0-w)*pi*(1.0/l) )*X[1][i] + LOG(EMG_clf.pdf(X[0][i],-1) + (1.0-w)*(1.0-pi)*(1.0/l) )*X[2][i];
+old_template_matching.cpp:	double emg_ratio 			= (-2*uni_ll + LOG(N)) / (-2*emg_ll + 20*LOG(N));
+old_template_matching.cpp:	int NN 	= int(data->XN);
+old_template_matching.cpp:			while (j < data->XN and (data->X[0][j] - data->X[0][i]) < -window){
+old_template_matching.cpp:				N_pos-=data->X[1][j];
+old_template_matching.cpp:				N_neg-=data->X[2][j];
+old_template_matching.cpp:			while (k < data->XN and (data->X[0][k] - data->X[0][i]) < window){
+old_template_matching.cpp:				N_pos+=data->X[1][k];
+old_template_matching.cpp:				N_neg+=data->X[2][k];
+old_template_matching.cpp:			int aa=k < data->XN;
+old_template_matching.cpp:			int bb=j < data->XN;
+old_template_matching.cpp:			if (k < data->XN  and j < data->XN and k!=j and N_neg > 0 and N_pos > 0 ){
+old_template_matching.cpp:				total_density 	= (N_pos / (data->X[0][k] - data->X[0][j])) + (N_neg / (data->X[0][k] - data->X[0][j]));
+old_template_matching.cpp:				double mu 		= (data->X[0][k] + data->X[0][j]) /2.;
+old_template_matching.cpp:				BIC_values[i] 	= BIC3_old_long(data->X,  j,  k,  i, N_pos,  N_neg,avgLL, 
+old_template_matching.cpp:	double ns 			= pw->ns;
+old_template_matching.cpp:	double window 		= pw->pad/ns;
+old_template_matching.cpp:	double ct 			= pw->llrthresh;
+old_template_matching.cpp:	sigma 	= pw->sigma , lambda=pw->lambda;
+old_template_matching.cpp:	foot_print= pw->footPrint , pi=pw->pi, w=pw->w;
+old_template_matching.cpp:	bool SCORES 		= pw->scores!="";
+old_template_matching.cpp:		FHW_scores.open(pw->scores);
+old_template_matching.cpp:		double * avgLL 			= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * BIC_values 	= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * densities 		= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * densities_r 	= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * variances 		= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * lambdas 		= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double ** skews 		= new double*[int(segments[i]->XN)] ;
+old_template_matching.cpp:		for (int t =0; t < segments[i]->XN; t++ ){
+old_template_matching.cpp:		double l 		=  segments[i]->XN;
+old_template_matching.cpp:		double ef 		= segments[i]->fN*( 2*(window*ns)*0.05  /(l*15));
+old_template_matching.cpp:		double er 		= segments[i]->rN*( 2*(window*ns)*0.05 /(l*15));
+old_template_matching.cpp:		double stdf 	= sqrt(ef*(1- (  2*(window*ns)*0.05/(l*15)  ) )  );
+old_template_matching.cpp:		double stdr 	= sqrt(er*(1- (  2*(window*ns)*0.05 /(l*15) ) )  );
+old_template_matching.cpp:		for (int j = 1; j<segments[i]->XN-1; j++){
+old_template_matching.cpp:				FHW_scores<<segments[i]->chrom<<"\t"<<to_string(int(segments[i]->X[0][j-1]*ns+segments[i]->start))<<"\t";
+old_template_matching.cpp:				FHW_scores<<to_string(int(segments[i]->X[0][j]*ns+segments[i]->start ))<<"\t" <<to_string(BIC_values[j])<<endl;
+old_template_matching.cpp:				start 		= int(segments[i]->X[0][j]*ns+segments[i]->start - 100);
+old_template_matching.cpp:				stop 		= int(segments[i]->X[0][j]*ns+segments[i]->start + 100);
+old_template_matching.cpp:			segments[i]->bidirectional_bounds.push_back(bounds);	
+old_template_matching.cpp:		segments[i]->bidirectional_bounds 	= bubble_sort3(segments[i]->bidirectional_bounds);
+old_template_matching.cpp:	double window_delta = (window_b-window_a)/res;
+old_template_matching.cpp:		double * avgLL 			= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * BIC_values 	= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * densities 		= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * densities_r 	= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * variances 		= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double * lambdas 		= new double[int(segments[i]->XN)];
+old_template_matching.cpp:		double ** skews 		= new double*[int(segments[i]->XN)] ;
+old_template_matching.cpp:		for (int t =0; t < segments[i]->XN; t++ ){
+old_template_matching.cpp:		double l 		=  segments[i]->XN*scale;
+old_template_matching.cpp:		double ef 		= segments[i]->fN*( 2*(1000)  /l);
+old_template_matching.cpp:		double er 		= segments[i]->rN*( 2*(1000) /l);
+old_template_matching.cpp:		double stdf 	= sqrt(ef*(1- (  2*(1000) /l  ) )  );
+old_template_matching.cpp:		double stdr 	= sqrt(er*(1- (  2*(1000) /l  ) )  );
+old_template_matching.cpp:		for (int j = 1; j<segments[i]->XN-1; j++){
+old_template_matching.cpp:				stop 	= segments[i]->X[0][j]*scale + segments[i]->start;
+old_template_matching.cpp:				if (stop - start > 1000 and sample(mt) < 0.05 and ct < ct_thresh ){
+old_template_matching.cpp:					current[0]=double(start), current[1]=double(stop), current[2]=BIC_values[j-1];
+old_template_matching.cpp:					segments[i]->bidirectional_bounds.push_back(current);		
+old_template_matching.cpp:				start 	= segments[i]->X[0][j]*scale + segments[i]->start;
+old_template_matching.cpp:		segments[i]->bidirectional_bounds 	= bubble_sort3(segments[i]->bidirectional_bounds);
+Binary file old_template_matching.o matches
+ParamWrapper.cpp: * of argument-value pairs. This meant that any changes to the command line specification of Tfit would
+ParamWrapper.cpp:    printf("\tbidir - This module searches the genome for areas resembling bidirectional transcription\n");
+ParamWrapper.cpp:    printf("\t\tby comparing a fixed template mixture model to a noise model by a log-likelihood ratio score.\n");
+ParamWrapper.cpp:    printf("\tbidir_old - This module implements the functionality seen in versions of Tfit used in publications\n");
+ParamWrapper.cpp:    printf("\tmodel - This module attempts to generate an optimal set of parameters per region instead \n");
+ParamWrapper.cpp:    printf("\t-i\tForward bedgraph file\n");
+ParamWrapper.cpp:    printf("\t-j\tReverse bedgraph file.\n");
+ParamWrapper.cpp:    printf("\t-ij\tBoth forward and reverse bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.\n");
+ParamWrapper.cpp:    printf("\t-N\tJob name.\n");
+ParamWrapper.cpp:    printf("\t-o\tOutput directory. If it does not exist, it will be created.\n");
+ParamWrapper.cpp:    printf("\t-log_out\tLog file output directory. If it does not exist, it will be created.\n");
+ParamWrapper.cpp:    printf("\t-tss\tTranscription model path. Models are provided for hg19 and mm10 in the annotations directory of this project.\n");
+ParamWrapper.cpp:    printf("\t-chr\tRun bidir only on the specified chromosome by name. The default is, \"all\"\n");
+ParamWrapper.cpp:    printf("\t-bct\tLLR threshold. Default=1\n");
+ParamWrapper.cpp:    printf("\nIf -tss is not specified, the values normally specified by the model file can be specified explicitly using the following:\n");
+ParamWrapper.cpp:    printf("\t-lambda\tThis is the entry length parameter for the EMG density function. default=200 bp\n");
+ParamWrapper.cpp:    printf("\t-sigma\tThis is the variance parameter for the EMG density function. default=10bp\n");
+ParamWrapper.cpp:    printf("\t-pi\tThis is the strand bias parameter for the EMG density function. default=0.5\n");
+ParamWrapper.cpp:    printf("\t-w\tThis is the pausing probability parameter for the EMG denisty function. default=0.5\n");
+ParamWrapper.cpp:    printf("\t-scores\tSome form of score output file. This parameter is presently undocumented.\n");
+ParamWrapper.cpp:    printf("\t-r_mu\tSome classification parameter. Default=0. This parameter is presently undocumented.\n");
+ParamWrapper.cpp:    printf("\t-ms_pen\tPenalty term for model selection. Default=1.\n");
+ParamWrapper.cpp:    printf("\t-max_noise\tMaximum noise threshold. Default=0.05. This parameter is presently undocumented.\n");
+ParamWrapper.cpp:    printf("\t-fdr\tGenerate a likelihood score distribution on the input data. This parameter has yet to be fully documented and tested.\n");
+ParamWrapper.cpp:    printf("\t-i\tForward bedgraph file\n");
+ParamWrapper.cpp:    printf("\t-j\tReverse bedgraph file\n");
+ParamWrapper.cpp:    printf("\t-ij\tBoth forward and reverse bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.\n");
+ParamWrapper.cpp:    printf("\t-k\tBedgraph file containing a set of regions of interest.\n");
+ParamWrapper.cpp:    printf("\t-N\tJob name.\n");
+ParamWrapper.cpp:    printf("\t-o\tOutput directory. If it does not exist, it will be created.\n");
+ParamWrapper.cpp:    printf("\t-log_out\tLog file output directory. If it does not exist, it will be created.\n");
+ParamWrapper.cpp:    printf("\t-mink\tMinimum number of finite mixtures to consider. default=1\n");
+ParamWrapper.cpp:    printf("\t-maxk\tMaximum number of finite mixtures to consider. default=1\n");
+ParamWrapper.cpp:    printf("\t-rounds\tNumber of random seeds to use in the model. default=5\n");
+ParamWrapper.cpp:    printf("\t-ct\tConvergence threshold after which processing stops. default=0.0001\n");
+ParamWrapper.cpp:    printf("\t-mi\tMaximum number of model iterations after which processing stops. default=2000\n");
+ParamWrapper.cpp:    printf("\t-ALPHA_0\tPrior parameter 1 for sigma. Recommended value=1\n");
+ParamWrapper.cpp:    printf("\t-BETA_0\tPrior parameter 2 for sigma. Recommended value=1\n");
+ParamWrapper.cpp:    printf("\t-ALPHA_1\tPrior parameter 1 for lambda.\n");
+ParamWrapper.cpp:    printf("\t-BETA_1\tPrior parameter 2 for lambda.\n");
+ParamWrapper.cpp:    printf("\t-ALPHA_2\tSymmetric prior on mixing weights. Higher values=stronger attempt to find components of equal mixing weights.\n");
+ParamWrapper.cpp:    printf("\t-ALPHA_3\tSymmetric prior on the strand bias. Higher values=stronger attempt to find bidirectional events with equal strand bias.\n");
+ParamWrapper.cpp:    printf("-elon     : (boolean integer) adjust support of elongation component, (default=0)\n");
+ParamWrapper.cpp:    this->module="";
+ParamWrapper.cpp:    this->forwardStrand="";
+ParamWrapper.cpp:    this->reverseStrand="";
+ParamWrapper.cpp:    this->mergedStrand="";
+ParamWrapper.cpp:    this->jobName="";
+ParamWrapper.cpp:    this->outputDir="";
+ParamWrapper.cpp:    this->logDir="";
+ParamWrapper.cpp:    this->regionsOfInterest="";
+ParamWrapper.cpp:    this->promoterTSS="";
+ParamWrapper.cpp:    this->chromosome="";
+ParamWrapper.cpp:    this->llrthresh=1;
+ParamWrapper.cpp:    this->lambda=200;
+ParamWrapper.cpp:    this->sigma=10;
+ParamWrapper.cpp:    this->pi=0.5;
+ParamWrapper.cpp:    this->w=0.5;
+ParamWrapper.cpp:    this->mink=1;
+ParamWrapper.cpp:    this->maxk=1;
+ParamWrapper.cpp:    this->rounds=5;
+ParamWrapper.cpp:    this->ct=0.0001;
+ParamWrapper.cpp:    this->mi=2000;
+ParamWrapper.cpp:    this->ns=100;
+ParamWrapper.cpp:    this->experimentalValsSpecified=false;
+ParamWrapper.cpp:    this->alpha0=1;
+ParamWrapper.cpp:    this->beta0=1;
+ParamWrapper.cpp:    this->alpha1=0;
+ParamWrapper.cpp:    this->beta1=0;
+ParamWrapper.cpp:    this->alpha2=100;
+ParamWrapper.cpp:    this->alpha3=100;
+ParamWrapper.cpp:    this->br=25;
+ParamWrapper.cpp:    this->fdr=0;
+ParamWrapper.cpp:    this->exit=false;
+ParamWrapper.cpp:    this->verbose=true;//false;
+ParamWrapper.cpp:    this->module="";
+ParamWrapper.cpp:    this->forwardStrand="";
+ParamWrapper.cpp:    this->reverseStrand="";
+ParamWrapper.cpp:    this->mergedStrand="";
+ParamWrapper.cpp:    this->jobName="EMG"; //"";
+ParamWrapper.cpp:    this->outputDir="";
+ParamWrapper.cpp:    this->logDir="";
+ParamWrapper.cpp:    this->regionsOfInterest="";
+ParamWrapper.cpp:    this->promoterTSS="";
+ParamWrapper.cpp:    this->chromosome="all";//"";
+ParamWrapper.cpp:    this->llrthresh=0.95;//1;
+ParamWrapper.cpp:    this->lambda=2000;
+ParamWrapper.cpp:    this->sigma=123;
+ParamWrapper.cpp:    this->pi=0.5;
+ParamWrapper.cpp:    this->w=0.9;
+ParamWrapper.cpp:    this->mink=1;
+ParamWrapper.cpp:    this->maxk=3;//1;
+ParamWrapper.cpp:    this->rounds=10;//5;
+ParamWrapper.cpp:    this->ct=0.0001;
+ParamWrapper.cpp:    this->mi=2000;
+ParamWrapper.cpp:    this->experimentalValsSpecified=false;
+ParamWrapper.cpp:    this->alpha0=1;
+ParamWrapper.cpp:    this->beta0=1;
+ParamWrapper.cpp:    this->ns=100;
+ParamWrapper.cpp:    this->alpha0=1;
+ParamWrapper.cpp:    this->beta0=1;
+ParamWrapper.cpp:    this->alpha1=1;
+ParamWrapper.cpp:    this->beta1=1;
+ParamWrapper.cpp:    this->alpha2=1;//100;
+ParamWrapper.cpp:    this->alpha3=1;//100;
+ParamWrapper.cpp:    this->br=25;
+ParamWrapper.cpp:    this->pad=2000;
+ParamWrapper.cpp:    this->footPrint=86;
+ParamWrapper.cpp:    this->fdr=0; //This parameter appears to change how this software computes prior distributions in the bidir module. 
+ParamWrapper.cpp:    this->scores=""; //This is another undocumented parameter.
+ParamWrapper.cpp:    this->r_mu=0; //yet another undocumented parameter.
+ParamWrapper.cpp:    this->penalty=1; //There's documentation, but only in read_in_parameters.
+ParamWrapper.cpp:    this->maxNoise=0.05; //This seems to only be used in across_segments.
+ParamWrapper.cpp:    this->mle=0; //This parameter runs the model module after bidir, IIRC.
+ParamWrapper.cpp:    this->elon=0;
+ParamWrapper.cpp:        this->printUsage();
+ParamWrapper.cpp:        this->exit=true;
+ParamWrapper.cpp:        this->printUsage();
+ParamWrapper.cpp:        this->exit=true;
+ParamWrapper.cpp:    this->module=std::string(argv[1]);
+ParamWrapper.cpp:    if(this->module!="bidir" && this->module!="select" && this->module!="model" && this->module!="bidir_old")
+ParamWrapper.cpp:        this->exit=true;
+ParamWrapper.cpp:    this->bidir=this->module=="bidir";
+ParamWrapper.cpp:    this->bidirOld=this->module=="bidir_old";
+ParamWrapper.cpp:    this->model=this->module=="model";
+ParamWrapper.cpp:    this->select=this->module=="select";
+ParamWrapper.cpp:        if(argv[i][0]=='-' && strlen(argv[i])!=1)
+ParamWrapper.cpp:            if(!strcmp(prevCmd, "-v"))
+ParamWrapper.cpp:                this->verbose=true;
+ParamWrapper.cpp:            else if((!strcmp(prevCmd, "-h"))||(!strcmp(prevCmd, "--help")))
+ParamWrapper.cpp:                this->printUsage();
+ParamWrapper.cpp:                this->exit=true;
+ParamWrapper.cpp:        if(it->first=="-i" || it->first=="--forward" || it->first=="-pos")
+ParamWrapper.cpp:            this->forwardStrand=it->second;
+ParamWrapper.cpp:        else if(it->first=="-j" || it->first=="--reverse" || it->first=="-neg")
+ParamWrapper.cpp:            this->reverseStrand=it->second;
+ParamWrapper.cpp:        else if(it->first=="-ij" || it->first=="-bed" || it->first=="--combined")
+ParamWrapper.cpp:            this->mergedStrand=it->second;
+ParamWrapper.cpp:        else if(it->first=="-N" || it->first=="--jobname")
+ParamWrapper.cpp:            this->jobName=it->second;
+ParamWrapper.cpp:        else if(it->first=="-ns")
+ParamWrapper.cpp:            this->ns=atoi(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-o")
+ParamWrapper.cpp:            if(it->second.back()!='/')
+ParamWrapper.cpp:                if(this->verbose)
+ParamWrapper.cpp:                this->outputDir=it->second+"\n";
+ParamWrapper.cpp:                this->outputDir=it->second;
+ParamWrapper.cpp:        else if(it->first=="-fdr" || it->first=="-FDR")
+ParamWrapper.cpp:            this->fdr=atoi(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-log_out")
+ParamWrapper.cpp:            if(it->second.back()!='/')
+ParamWrapper.cpp:                if(this->verbose)
+ParamWrapper.cpp:                this->logDir=it->second+"\n";
+ParamWrapper.cpp:                this->logDir=it->second;
+ParamWrapper.cpp:        else if(it->first=="-ms_pen")
+ParamWrapper.cpp:            this->penalty=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-tss")
+ParamWrapper.cpp:            this->promoterTSS=it->second;
+ParamWrapper.cpp:        else if(it->first=="-chr")
+ParamWrapper.cpp:            this->chromosome=it->second;
+ParamWrapper.cpp:        else if(it->first=="-bct")
+ParamWrapper.cpp:            this->llrthresh=atoi(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-max_noise")
+ParamWrapper.cpp:            this->maxNoise=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-lambda")
+ParamWrapper.cpp:            this->lambda=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-scores")
+ParamWrapper.cpp:            this->scores=it->second;
+ParamWrapper.cpp:        else if(it->first=="-sigma")
+ParamWrapper.cpp:            this->sigma=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-pi")
+ParamWrapper.cpp:            this->pi=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-w")
+ParamWrapper.cpp:            this->w=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-mink")
+ParamWrapper.cpp:            this->mink=atoi(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-pad")
+ParamWrapper.cpp:            this->pad=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-maxk")
+ParamWrapper.cpp:            this->maxk=atoi(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-rounds")
+ParamWrapper.cpp:            this->rounds=atoi(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-ct")
+ParamWrapper.cpp:            this->ct=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-mi")
+ParamWrapper.cpp:            this->mi=atoi(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-ALPHA_0")
+ParamWrapper.cpp:            this->experimentalValsSpecified=true;
+ParamWrapper.cpp:            this->alpha0=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-BETA_0")
+ParamWrapper.cpp:            this->experimentalValsSpecified=true;
+ParamWrapper.cpp:            this->beta0=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-foot_print")
+ParamWrapper.cpp:            this->footPrint=atof(it->second.c_str());
+ParamWrapper.cpp:            printf("this->footprint is %f\n", atof(it->second.c_str()));
+ParamWrapper.cpp:        else if(it->first=="-ALPHA_1")
+ParamWrapper.cpp:            this->experimentalValsSpecified=true;
+ParamWrapper.cpp:            this->alpha1=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-BETA_1")
+ParamWrapper.cpp:            this->experimentalValsSpecified=true;
+ParamWrapper.cpp:            this->beta1=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-ALPHA_2")
+ParamWrapper.cpp:            this->experimentalValsSpecified=true;
+ParamWrapper.cpp:            this->alpha2=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-ALPHA_3")
+ParamWrapper.cpp:            this->experimentalValsSpecified=true;
+ParamWrapper.cpp:            this->alpha3=atof(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-mle")
+ParamWrapper.cpp:            this->mle=atoi(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-elon")
+ParamWrapper.cpp:            this->elon=atoi(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-k")
+ParamWrapper.cpp:            printf("Setting regions of interest to %s\n", it->second.c_str());
+ParamWrapper.cpp:            this->regionsOfInterest=it->second;
+ParamWrapper.cpp:        else if(it->first=="-r_mu")
+ParamWrapper.cpp:            this->r_mu=atoi(it->second.c_str());
+ParamWrapper.cpp:        else if(it->first=="-threads")
+ParamWrapper.cpp:            this->cores=atoi(it->second.c_str());
+ParamWrapper.cpp:    if((this->forwardStrand=="" || this->reverseStrand=="") && this->mergedStrand=="")
+ParamWrapper.cpp:        this->exit=true;
+ParamWrapper.cpp:    if(this->outputDir!="")
+ParamWrapper.cpp:        if(this->outputDir[this->outputDir.length()-2]!='/')
+ParamWrapper.cpp:            this->outputDir=this->outputDir+"/";
+ParamWrapper.cpp:    //bool MLE 	= stoi(p["-MLE"]);
+ParamWrapper.cpp:	//bool SELECT = stoi(p["-select"]);
+ParamWrapper.cpp:	header+="----------------------------------------------------------------\n";
+ParamWrapper.cpp:	}//if (this->module=="bidir" and MLE){
+ParamWrapper.cpp:	printf("-N         : %s\n", this->jobName.c_str());
+ParamWrapper.cpp:	if (this->mergedStrand!=""){
+ParamWrapper.cpp:		printf("-ij        : %s\n", this->mergedStrand.c_str());
+ParamWrapper.cpp:		printf("-i         : %s\n", this->forwardStrand.c_str());
+ParamWrapper.cpp:		printf("-j         : %s\n", this->reverseStrand.c_str());
+ParamWrapper.cpp:	//printf("-k         : %s\n", p["-k"].c_str()  );
+ParamWrapper.cpp:	if (this->promoterTSS!=""){
+ParamWrapper.cpp:		printf("-tss       : %s\n", promoterTSS.c_str()  );
+ParamWrapper.cpp:	printf("-o         : %s\n", this->outputDir.c_str()  );
+ParamWrapper.cpp:	printf("-log_out   : %s\n", this->logDir.c_str()  );
+ParamWrapper.cpp:	printf("-MLE       : %d\n", this->mle);
+ParamWrapper.cpp:	printf("-chr       : %s\n", this->chromosome.c_str());	
+ParamWrapper.cpp:	printf("-br        : %d\n", this->br);	
+ParamWrapper.cpp:	printf("-rounds    : %d\n", this->rounds);
+ParamWrapper.cpp:	if (this->elon){
+ParamWrapper.cpp:		printf("-elon      : %d\n", this->elon);
+ParamWrapper.cpp:	printf("-pad       : %lf\n", this->pad);
+ParamWrapper.cpp:	printf("-bct       : %d\n", this->llrthresh);
+ParamWrapper.cpp:		printf("-minK      : %d\n", this->mink);
+ParamWrapper.cpp:		printf("-maxK      : %d\n", this->maxk);
+ParamWrapper.cpp:	printf("-threads   : %d\n",  cores);
+ParamWrapper.cpp:	printf("-MPI_np    : %d\n",  nodes);
+ParamWrapper.cpp:	printf("----------------------------------------------------------------\n" );
+ParamWrapper.cpp: * @return Pretty-printed string representing command line arguments.
+ParamWrapper.cpp:	os<<"#----------------------------------------------------\n";
+ParamWrapper.cpp:	os<<"#-N           : "<<this->jobName<<"\n";
+ParamWrapper.cpp:	if (this->mergedStrand==""){
+ParamWrapper.cpp:		os<<"#-i           : "<<this->forwardStrand<<"\n";
+ParamWrapper.cpp:		os<<"#-j           : "<<this->reverseStrand<<"\n";
+ParamWrapper.cpp:		os<<"#-ij          : "<<this->mergedStrand<<"\n";
+ParamWrapper.cpp:		os<<"#-k           : "<<this->regionsOfInterest<<"\n";
+ParamWrapper.cpp:	os<<"#-o           : "<<this->outputDir<<"\n";
+ParamWrapper.cpp:	os<<"#-br          : "<<this->br<<"\n";
+ParamWrapper.cpp:		os<<"#-bct         : "<<this->llrthresh<<"\n";
+ParamWrapper.cpp:        os<<"#-pad         : "<<this->pad<<"\n";
+ParamWrapper.cpp:		os<<"#-elon        : "<<this->elon<<"\n";
+ParamWrapper.cpp:		os<<"#-minK        : "<<this->mink<<"\n";
+ParamWrapper.cpp:		os<<"#-maxK        : "<<this->maxk<<"\n";
+ParamWrapper.cpp:		os<<"#-mi          : "<<this->mi<<"\n";
+ParamWrapper.cpp:		os<<"#-ct          : "<<this->ct<<"\n";
+ParamWrapper.cpp:		os<<"#-rounds      : "<<this->rounds<<"\n";
+ParamWrapper.cpp:		os<<"#-ALPHA_0     : "<<this->alpha0<<"\n";	
+ParamWrapper.cpp:		os<<"#-BETA_0      : "<<this->beta0<<"\n";	
+ParamWrapper.cpp:		os<<"#-BETA_1      : "<<this->beta1<<"\n";	
+ParamWrapper.cpp:		os<<"#-ALPHA_2     : "<<this->alpha2<<"\n";	
+ParamWrapper.cpp:		os<<"#-ALPHA_3     : "<<this->alpha3<<"\n";	
+ParamWrapper.cpp:		os<<"#-sigma       : "<< this->sigma <<"\n";
+ParamWrapper.cpp:		os<<"#-lambda      : "<< this->lambda<<"\n";
+ParamWrapper.cpp:		os<<"#-foot_print  : "<< this->footPrint<<"\n";
+ParamWrapper.cpp:		os<<"#-pi          : "<< this->pi<<"\n";
+ParamWrapper.cpp:		os<<"#-w           : "<< this->w<<"\n";
+ParamWrapper.cpp:	os<<"#----------------------------------------------------\n";
+ParamWrapper.hpp: * of argument-value pairs. This meant that any changes to the command line specification of Tfit would
+ParamWrapper.hpp:    int llrthresh; //LLR threshold specified by -bct default=1
+Binary file ParamWrapper.o matches
+read_in_parameters.cpp:  p["-N"] 		= "EMG";
+read_in_parameters.cpp:  p["-v"] 		= "1";
+read_in_parameters.cpp:  p["-h"] 		= "";
+read_in_parameters.cpp:  p["--help"] 	= "";
+read_in_parameters.cpp:  p["-config"] 	= "";
+read_in_parameters.cpp:  p["-i"] 		= "";
+read_in_parameters.cpp:  p["-j"] 		= "";
+read_in_parameters.cpp:  p["-ij"] 		= "";
+read_in_parameters.cpp:  p["-k"] 		= "";
+read_in_parameters.cpp:  p["-tss"] 		= "";
+read_in_parameters.cpp:  p["-o"] 		= "";
+read_in_parameters.cpp:  p["-log_out"] 	= "";
+read_in_parameters.cpp:  p["-FDR"]             = "0";
+read_in_parameters.cpp:  p["-pad"] 		= "2000";
+read_in_parameters.cpp:  p["-br"] 		= "25";
+read_in_parameters.cpp:  p["-ns"] 		= "100";
+read_in_parameters.cpp:  p["-minK"] 		= "1";
+read_in_parameters.cpp:  p["-maxK"] 		= "3";
+read_in_parameters.cpp:  p["-rounds"] 	= "10";
+read_in_parameters.cpp:  p["-ct"] 		= "0.0001";
+read_in_parameters.cpp:  p["-bct"] 		= "0.95";
+read_in_parameters.cpp:  p["-ms_pen"] 	= "1";
+read_in_parameters.cpp:  p["-MLE"] 		= "0";
+read_in_parameters.cpp:  p["-select"] 	= "0";
+read_in_parameters.cpp:  p["-max_noise"] = "0.05";
+read_in_parameters.cpp:  p["-chr"] 		= "all";
+read_in_parameters.cpp:  p["-elon"] 		= "0";
+read_in_parameters.cpp:  p["-mi"] 		= "2000";
+read_in_parameters.cpp:  p["-r_mu"] 		= "0";
+read_in_parameters.cpp:  p["-scores"] 	= "";
+read_in_parameters.cpp:  p["-ALPHA_0"] = "1";
+read_in_parameters.cpp:  p["-BETA_0"] 	= "1";
+read_in_parameters.cpp:  p["-ALPHA_1"] = "1";
+read_in_parameters.cpp:  p["-BETA_1"] 	= "1";
+read_in_parameters.cpp:  p["-ALPHA_2"] = "1";
+read_in_parameters.cpp:  p["-ALPHA_3"] = "1";
+read_in_parameters.cpp:  p["-lambda"] 		= "2000";
+read_in_parameters.cpp:  p["-sigma"] 		= "123";
+read_in_parameters.cpp:  p["-foot_print"] 	= "86";
+read_in_parameters.cpp:  p["-pi"] 			= "0.5";
+read_in_parameters.cpp:  p["-w"] 			= "0.9";
+read_in_parameters.cpp:			if (isPathGroup[i] == "-o" and !path_FILE.empty() and path_FILE.substr(path_FILE.size()-1, 1) != "/"  ){
+read_in_parameters.cpp:	if (p["-o"].empty()){
+read_in_parameters.cpp:		errors.push_back("User did not specify an output path, (-o)");
+read_in_parameters.cpp:	}else if(not is_path(p["-o"])){
+read_in_parameters.cpp:		errors.push_back("User specified output path, " +  p["-o"] +", but does not exist (-o)" );
+read_in_parameters.cpp:	if (!p["-ij"].empty() and (!p["-i"].empty() or !p["-j"].empty() )  ){
+read_in_parameters.cpp:		errors.push_back("User specified both -ij and (-i or -j)");
+read_in_parameters.cpp:	else if (p["-ij"].empty()){
+read_in_parameters.cpp:		if (p["-j"].empty()){
+read_in_parameters.cpp:			errors.push_back("User did not specify a reverse strand file path or combinded file path, (-j, -ij)");
+read_in_parameters.cpp:		}else if(not is_path(p["-j"])){
+read_in_parameters.cpp:			errors.push_back("User specified reverse strand file path, " +  p["-j"] +", but does not exist (-j)" );
+read_in_parameters.cpp:		if (p["-i"].empty()){
+read_in_parameters.cpp:			errors.push_back("User did not specify a forward strand file or combinded file, (-i, -ij)");	
+read_in_parameters.cpp:		}else if(not is_path(p["-i"])){
+read_in_parameters.cpp:			errors.push_back("User specified forward strand file path, " +  p["-i"] +", but does not exist (-i)" );
+read_in_parameters.cpp:	}else if (not is_path(p["-ij"])){
+read_in_parameters.cpp:		errors.push_back("User specified combinded bedgraph file path, " +  p["-ij"] +", but does not exist (-ij)" );
+read_in_parameters.cpp:	if (p["-log_out"].empty()){
+read_in_parameters.cpp:		p["-log_out"] 	= p["-o"];
+read_in_parameters.cpp:	}else if (not is_path(p["-log_out"] )){
+read_in_parameters.cpp:		errors.push_back("User specified log file out path, " +  p["-ij"] +", but does not exist (-log_out)" );		
+read_in_parameters.cpp:	if (model == 1 and (p["-k"].empty()) ){
+read_in_parameters.cpp:		errors.push_back("User did not specify bed file of intervals (-k), specific to model module");
+read_in_parameters.cpp:	}else if(model == 1 and not is_path(p["-k"] ) ){
+read_in_parameters.cpp:		errors.push_back("User specified bed file of intervals, " +  p["-k"] +", but does not exist (-k)" );			
+read_in_parameters.cpp:	if (!p["-tss"].empty() and not is_path(p["-tss"])){
+read_in_parameters.cpp:		errors.push_back("User specified a file for tss bidir filter training, " +  p["-tss"] +", but does not exist (-tss)" );				
+read_in_parameters.cpp:	header+="--------------------------------------------------------------------------------------\n";
+read_in_parameters.cpp:	printf("              to perform maximum likelihood or a-posteriori parameter inference\n");
+read_in_parameters.cpp:	printf("              RNA polymerase II loading position needed for TF ID-ing \n");
+read_in_parameters.cpp:	header+="                ....description of non-default parameters....          \n";
+read_in_parameters.cpp:	printf("-N        : Name of Job; default is \"EMG\"\n");
+read_in_parameters.cpp:	printf("-i        : /path/to/forward/strand/bedgraph/file\n");
+read_in_parameters.cpp:	printf("-j        : /path/to/reverse/strand/bedgraph/file\n");
+read_in_parameters.cpp:	printf("-ij       : /path/to/bedgraph/file\n");
+read_in_parameters.cpp:	printf("-k        : /path/to/interval/file\n");
+read_in_parameters.cpp:	printf("              from -minK components to -maxK components\n");
+read_in_parameters.cpp:	printf("-o        : /path/to/output/directory/\n");
+read_in_parameters.cpp:	printf("              directory {-N}_prelim_bidir_hits.bed\n");
+read_in_parameters.cpp:	printf("              directory {-N}_K_models_MLE.tsv and\n");
+read_in_parameters.cpp:	printf("              {-N}_bidirectional_hits_intervals.bed\n");
+read_in_parameters.cpp:	printf("-log_out  : /path/to/directory/where/tmp/log_files/will/be/stored\n");
+read_in_parameters.cpp:	printf("              as the application runs, this directory will house tmp_{-N}.log\n");
+read_in_parameters.cpp:	printf("                                (non-critical)                         \n");
+read_in_parameters.cpp:	printf("-chr      : (chromosome ID; i.e. chr1) specific chromosome to run on (default is \"all\")\n");
+read_in_parameters.cpp:	printf("-merge    : (boolean integer) will merge overlaping intervals and run model on joint\n");
+read_in_parameters.cpp:	printf("-elon     : (boolean integer) adjust support of elongation component, (default=0)\n");
+read_in_parameters.cpp:	printf("-pad      : (positive integer) each provided interval will be extended\n");
+read_in_parameters.cpp:	printf("              in both the five-prime and three-prime direction (default=1000)\n");
+read_in_parameters.cpp:	printf("-MLE      : (boolean integer) specific to the bidir module, will perform parameter\n");
+read_in_parameters.cpp:	printf("-ms_pen   : (positive floating) penalty term in BIC criteria for model selection\n");
+read_in_parameters.cpp:	printf("                        (non-critical, advanced useage)                 \n");
+read_in_parameters.cpp:	printf("-minK     : (positive integer) minimum number of model components to try\n");	
+read_in_parameters.cpp:	printf("-maxK     : (positive integer) maximum number of model components to try\n");
+read_in_parameters.cpp:	printf("-rounds   : (positive integer) number of random initializations to the\n");
+read_in_parameters.cpp:	printf("-mi       : (positive integer) maximum number of iterates to the\n");
+read_in_parameters.cpp:	printf("-ct       : (positive decimal) EM log-likelihood convergence threshold\n");
+read_in_parameters.cpp:	printf("-ALPHA_0  : hyperparameter (1) for the Normal Inverse Wishart prior for loading variance (sigma)\n" );	                  
+read_in_parameters.cpp:	printf("-BETA_0   : hyperparameter (2) for the Normal Inverse Wishart fprior for loading variance (sigma)\n" );	                  
+read_in_parameters.cpp:	printf("-ALPHA_1  : hyperparameter (1) for the Gamma prior for initiating length (lambda)\n" );	                  
+read_in_parameters.cpp:	printf("-BETA_1   : hyperparameter (2) for the Gamma prior for initiating length (lambda)\n" );	                  
+read_in_parameters.cpp:	printf("-ALPHA_2  : hyperparameter (symmetric) for the Dirichlet prior for component mixing weights\n" );	                  
+read_in_parameters.cpp:	printf("-ALPHA_3  : hyperparameter (symmetric) for the Beta prior for strand bias\n" );	                  
+read_in_parameters.cpp:	printf("-config   :  all parameters may be specified in a config file with     \n");	
+read_in_parameters.cpp:	printf("              following the -config flag will override any parameters given in the config file\n" );	                 
+read_in_parameters.cpp:	printf("--------------------------------------------------------------------------------------------\n");
+read_in_parameters.cpp:	bool MLE 	= stoi(p["-MLE"]);
+read_in_parameters.cpp:	bool SELECT = stoi(p["-select"]);
+read_in_parameters.cpp:	header+="----------------------------------------------------------------\n";
+read_in_parameters.cpp:	printf("-N         : %s\n", p["-N"].c_str()  );
+read_in_parameters.cpp:	if (not p["-ij"].empty()){
+read_in_parameters.cpp:		printf("-ij        : %s\n", p["-ij"].c_str()  );
+read_in_parameters.cpp:		printf("-i         : %s\n", p["-i"].c_str()  );
+read_in_parameters.cpp:		printf("-j         : %s\n", p["-j"].c_str()  );
+read_in_parameters.cpp:	printf("-k         : %s\n", p["-k"].c_str()  );
+read_in_parameters.cpp:	if (not p["-tss"].empty()){
+read_in_parameters.cpp:		printf("-tss       : %s\n", p["-tss"].c_str()  );
+read_in_parameters.cpp:	printf("-o         : %s\n", p["-o"].c_str()  );
+read_in_parameters.cpp:	printf("-log_out   : %s\n", p["-log_out"].c_str()  );
+read_in_parameters.cpp:	printf("-MLE       : %s\n",  p["-MLE"].c_str());
+read_in_parameters.cpp:	printf("-chr       : %s\n", p["-chr"].c_str());	
+read_in_parameters.cpp:	printf("-br        : %s\n", p["-br"].c_str());	
+read_in_parameters.cpp:	printf("-rounds    : %s\n", p["-rounds"].c_str()  );
+read_in_parameters.cpp:	if (stod(p["-elon"])){
+read_in_parameters.cpp:		printf("-elon      : %s\n", p["-elon"].c_str()  );
+read_in_parameters.cpp:	printf("-pad       : %s\n", p["-pad"].c_str()  );
+read_in_parameters.cpp:	printf("-bct       : %s\n", p["-bct"].c_str());
+read_in_parameters.cpp:		printf("-minK      : %s\n", p["-minK"].c_str());
+read_in_parameters.cpp:		printf("-maxK      : %s\n", p["-maxK"].c_str());
+read_in_parameters.cpp:	printf("-threads   : %d\n",  cores);
+read_in_parameters.cpp:	printf("-MPI_np    : %d\n",  nodes);
+read_in_parameters.cpp:	printf("----------------------------------------------------------------\n" );
+read_in_parameters.cpp:	header+="#----------------------------------------------------\n";
+read_in_parameters.cpp:	header+="#-N           : "+p["-N"]+"\n";
+read_in_parameters.cpp:	if (p["-ij"].empty()){
+read_in_parameters.cpp:		header+="#-i           : "+p["-i"]+"\n";
+read_in_parameters.cpp:		header+="#-j           : "+p["-j"]+"\n";
+read_in_parameters.cpp:		header+="#-ij          : "+p["-ij"]+"\n";
+read_in_parameters.cpp:		header+="#-k           : "+p["-k"]+"\n";
+read_in_parameters.cpp:	header+="#-o           : "+p["-o"]+"\n";
+read_in_parameters.cpp:	header+="#-br          : "+p["-br"]+"\n";
+read_in_parameters.cpp:		header+="#-bct         : "+p["-bct"]+"\n";
+read_in_parameters.cpp:		header+="#-pad         : "+p["-pad"]+"\n";
+read_in_parameters.cpp:		header+="#-elon        : "+p["-elon"]+"\n";
+read_in_parameters.cpp:		header+="#-minK        : "+p["-minK"]+"\n";
+read_in_parameters.cpp:		header+="#-maxK        : "+p["-maxK"]+"\n";
+read_in_parameters.cpp:		header+="#-mi          : "+p["-mi"]+"\n";
+read_in_parameters.cpp:		header+="#-ct          : "+p["-ct"]+"\n";
+read_in_parameters.cpp:		header+="#-rounds      : "+p["-rounds"]+"\n";
+read_in_parameters.cpp:		header+="#-ALPHA_0     : "+p["-ALPHA_0"]+"\n";	
+read_in_parameters.cpp:		header+="#-BETA_0      : "+p["-BETA_0"]+"\n";	
+read_in_parameters.cpp:		header+="#-BETA_1      : "+p["-BETA_1"]+"\n";	
+read_in_parameters.cpp:		header+="#-ALPHA_2     : "+p["-ALPHA_2"]+"\n";	
+read_in_parameters.cpp:		header+="#-ALPHA_3     : "+p["-ALPHA_3"]+"\n";	
+read_in_parameters.cpp:		header+="#-sigma       : "+ p["-sigma"] +"\n";
+read_in_parameters.cpp:		header+="#-lambda      : "+ p["-lambda"]+"\n";
+read_in_parameters.cpp:		header+="#-foot_print  : "+ p["-foot_print"]+"\n";
+read_in_parameters.cpp:		header+="#-pi          : "+ p["-pi"]+"\n";
+read_in_parameters.cpp:		header+="#-w           : "+ p["-w"]+"\n";
+read_in_parameters.cpp:	header+="#----------------------------------------------------\n";
+read_in_parameters.cpp:					if (!param.empty() and param.substr(0,1)!= "-" and P->p.find(param)==P->p.end()){
+read_in_parameters.cpp:						P->EXIT=1;
+read_in_parameters.cpp:						P->p[param]=value;
+read_in_parameters.cpp:		P->EXIT 	= 1;
+read_in_parameters.cpp:	bool bidir 		= P->bidir;
+read_in_parameters.cpp:	bool model 		= P->model;
+read_in_parameters.cpp:	char * COM 		= "-";
+read_in_parameters.cpp:			if (F=="-config"){
+read_in_parameters.cpp:				P->CONFIG 	= true;
+read_in_parameters.cpp:			if ( P->p.find(F) ==P->p.end() ){
+read_in_parameters.cpp:				P->EXIT 	= 1;
+read_in_parameters.cpp:			if (F.substr(0,2) == "-h" or F.substr(0,7)=="--help" ){
+read_in_parameters.cpp:				P->EXIT=true;
+read_in_parameters.cpp:				P->help();
+read_in_parameters.cpp:			if ((model or bidir or select) && P->p.find(F) !=P->p.end()){
+read_in_parameters.cpp:				P->p[F]=string(*argv);
+read_in_parameters.cpp:				if (F=="-config"){
+read_in_parameters.cpp:					fill_in_config_file(P->p[F], P, rank );
+read_in_parameters.cpp:	if (P->CONFIG and P->p["-config"].empty())
+read_in_parameters.cpp:		P->EXIT 	= true;
+read_in_parameters.cpp:		P->EXIT = 1;
+read_in_parameters.cpp:	if (not P->EXIT){
+read_in_parameters.cpp:		if ((F.size()==2 and F.substr(0,2) == "-h") or (F.size()==6 and F.substr(0,6)=="--help") ){
+read_in_parameters.cpp:			P->EXIT=true;
+read_in_parameters.cpp:			P->help();
+read_in_parameters.cpp:			P->bidir 	= 1;
+read_in_parameters.cpp:			P->model 	= 1;
+read_in_parameters.cpp:			P->select 	= 1;
+read_in_parameters.cpp:			P->EXIT = 1;
+read_in_parameters.cpp:		if (not P->EXIT){
+read_in_parameters.cpp:	if (not P->EXIT){
+read_in_parameters.cpp:		vector<string> errors = P->validate_parameters();
+read_in_parameters.cpp:			P->EXIT=1;
+read_in_parameters.h:	char * isIntGroup[8] = {"-pad", "-minK", "-maxK", 
+read_in_parameters.h:						 "-rounds", "-mi", "-MLE", "-elon", "-merge"};
+read_in_parameters.h:	char * isDecGroup[17]  = {  "-br","-ns", "-ct",
+read_in_parameters.h:						"-max_noise",    "-r_mu",
+read_in_parameters.h:						"-ALPHA_0", "-ALPHA_1", "-ALPHA_2", "-BETA_0", "-BETA_1",
+read_in_parameters.h:						"-bct", "-ms_pen" ,
+read_in_parameters.h:						"-lambda", "-sigma", 
+read_in_parameters.h:						"-foot_print", "-pi",
+read_in_parameters.h:						"-w"  };  
+read_in_parameters.h:	char * isPathGroup[8] = {"-config", "-i", "-j", "-k", "-tss", "-log_out", "-o", "-q"};
+Binary file read_in_parameters.o matches
+select_main.cpp:	// LG->write("\ninitializing select module..............................done\n\n",verbose);
+select_main.cpp:	// string job_name = P->p["-N"];
+select_main.cpp:	// string forward_bedgraph 		= P->p["-i"]; //forward strand bedgraph file
+select_main.cpp:	// string reverse_bedgraph 		= P->p["-j"]; //reverse strand bedgraph file
+select_main.cpp:	// string out_file_dir 			= P->p["-o"];//out file directory
+select_main.cpp:	// string query_file 				= P->p["-q"];
+select_main.cpp:	// string tss_file 				= P->p["-tss"];
+select_main.cpp:	// LG->write("loading bedgraph files..................................",verbose);
+select_main.cpp:	// vector<segment *> 	segments 	= load::load_bedgraphs_total(forward_bedgraph, reverse_bedgraph, stoi(P->p["-br"]), stof(P->p["-ns"]), P->p["-chr"], chrom_to_ID, ID_to_chrom );
+select_main.cpp:	// LG->write("done\n",verbose);
+select_main.cpp:	// LG->write("slicing segments........................................",verbose);
+select_main.cpp:	// LG->write("done\n",verbose);
+select_main.cpp:	// LG->write("global template matching for non-divergent signal.......",verbose);
+select_main.cpp:	// noise_global_template_matching(segments, stod(P->p["-ns"]) );
+select_main.cpp:	// LG->write("done\n",verbose);
+select_main.cpp:	// LG->write("gather non-divergent signal.............................",verbose);
+select_main.cpp:	// LG->write("done\n",verbose);
+select_main.cpp:	// LG->write("clearing allocated segment memory.......................",verbose);	
+select_main.cpp:	// LG->write("done\n",verbose);
+select_main.cpp:	// //out_dir+ job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed"
+select_main.cpp:	// P->p["-k"] 	= out_file_dir+ job_name+ "-" + to_string(job_ID)+ "_non_div_txn.bed";
+select_main.cpp:	// P->p["-minK"] 	= "1",P->p["-maxK"] 	= "1";
+select_main.cpp:	// string noise_K_models_file 	= out_file_dir +  P->p["-N"] + "-" + to_string(job_ID)+  "_non_div_txn_K_models_MLE.tsv";
+select_main.cpp:	// string noise_bidir_ms_file 	= P->p["-o"]+  P->p["-N"] + "-" + to_string(job_ID)+  "_non_div_txn_divergent_classifications.bed";
+select_main.cpp:	// 	LG->write("loading K_model out files...............................",verbose);
+select_main.cpp:	// 	LG->write("done\n",verbose);
+select_main.cpp:	// 	LG->write("labeling TSS overlap (true positive assumption).........",verbose);
+select_main.cpp:	// 	LG->write("done\n",verbose);
+select_main.cpp:	// 	LG->write("calculating ROC curve and optimizing penalized BIC......",verbose);
+select_main.cpp:	// 	LG->write("done\n",verbose);
+select_main.cpp:	// 	LG->write("deleting noise model files..............................",verbose);
+select_main.cpp:	// 	remove( P->p["-k"].c_str() ) ;
+select_main.cpp:	// 	LG->write("done\n\n",verbose);
+select_main.cpp:	// 	LG->write("AUC              : " + to_string(AUC) + "\n", verbose);
+select_main.cpp:	// 	LG->write("Optimal TP       : " + to_string(TP) + "\n", verbose);
+select_main.cpp:	// 	LG->write("Optimal FP       : " + to_string(FP) + "\n", verbose);
+select_main.cpp:	// 	LG->write("Optimal Penalty  : " + to_string(optimal_penality) + "\n", verbose);
+select_main.cpp:	// LG->write("\nexiting select module...................................done\n\n",verbose);
+select_main.cpp:	// P->p["-ms_pen"] 	= to_string(optimal_penality);
+Binary file select_main.o matches
+split.cpp:      output.emplace_back(s.substr(start, end-start));
+split.cpp:	while(std::getline(iss, token, '-' )){   // but we can specify a different one
+Binary file split.o matches
+template_matching.cpp:double nINF = -exp(1000);
+template_matching.cpp:      double start = X[t][0] - window, stop = X[t][1], n = 0;
+template_matching.cpp:      while (t < N and stop + window > X[t][0] - window ) {
+template_matching.cpp:      for (int i = 0; i < X.size() - 1; i++  )  {
+template_matching.cpp:   uniform_int_distribution<int> distribution(0, centers.size() - 1);
+template_matching.cpp:   int NN        = int(data->XN);
+template_matching.cpp:         while ((j < data->XN) and ((data->X[0][j] - data->X[0][i]) < -window)) {
+template_matching.cpp:            N_pos -= data->X[1][j];
+template_matching.cpp:            N_neg -= data->X[2][j];
+template_matching.cpp:         while ((k < data->XN) and ((data->X[0][k] - data->X[0][i]) < window)) {
+template_matching.cpp:            N_pos += data->X[1][k];
+template_matching.cpp:            N_neg += data->X[2][k];
+template_matching.cpp:         if (k < data->XN  and j < data->XN and k != j ) {
+template_matching.cpp:            total_density   = (N_pos / (data->X[0][k] - data->X[0][j])) + (N_neg / (data->X[0][k] - data->X[0][j]));
+template_matching.cpp:            double mu   = (data->X[0][k] + data->X[0][j]) / 2.;
+template_matching.cpp:            BIC_values[i]   = BIC3(data->X,  j,  k,  i, N_pos,  N_neg,
+template_matching.cpp:   double ns                     = stod(P->p["-ns"]);
+template_matching.cpp:   double window                 = stod(P->p["-pad"]) / ns;
+template_matching.cpp:   double ct                     = stod(P->p["-bct"]);
+template_matching.cpp:   sigma   = stod(P->p["-sigma"]) / ns , lambda = ns / stod(P->p["-lambda"]);
+template_matching.cpp:   foot_print = stod(P->p["-foot_print"]) / ns , pi = stod(P->p["-pi"]), w = stod(P->p["-w"]);
+template_matching.cpp:   bool SCORES     = not P->p["-scores"].empty();
+template_matching.cpp:      FHW_scores.open(P->p["-scores"]);
+template_matching.cpp:      double * BIC_values   = new double[int(segments[i]->XN)];
+template_matching.cpp:      double * densities    = new double[int(segments[i]->XN)];
+template_matching.cpp:      double * densities_r  = new double[int(segments[i]->XN)];
+template_matching.cpp:      double l    =  segments[i]->maxX - segments[i]->minX;
+template_matching.cpp:      double ef     = segments[i]->fN * ( 2 * (window * ns) * 0.05  / (l * ns ));
+template_matching.cpp:      double er     = segments[i]->rN * ( 2 * (window * ns) * 0.05 / (l * ns ));
+template_matching.cpp:      double stdf   = sqrt(ef * (1 - (  2 * (window * ns) * 0.05 / (l * ns )  ) )  );
+template_matching.cpp:      double stdr   = sqrt(er * (1 - (  2 * (window * ns) * 0.05 / (l * ns ) ) )  );
+template_matching.cpp:      double start = -1, rN = 0.0 , rF = 0.0, rR = 0.0, rB = 0.0;
+template_matching.cpp:      for (int j = 1; j < segments[i]->XN - 1; j++) {
+template_matching.cpp:            FHW_scores << segments[i]->chrom << "\t" << to_string(int(segments[i]->X[0][j - 1]*ns + segments[i]->start)) << "\t";
+template_matching.cpp:            FHW_scores << to_string(int(segments[i]->X[0][j]*ns + segments[i]->start )) << "\t" << to_string(vl) + "\t" + to_string(densities[j]) + "\t" + to_string(densities_r[j]) + "\t" +  to_string(int(HIT)) << endl;
+template_matching.cpp:               start = segments[i]->X[0][j - 1] * ns + segments[i]->start;
+template_matching.cpp:            start += 1, rN += 1 , rF += densities[j], rR += densities_r[j], rB += log10( SC.pvalue(BIC_values[j]) + pow(10, -20)) ;
+template_matching.cpp:            vector<double> row = {start , segments[i]->X[0][j - 1]*ns + segments[i]->start, rB / rN , rF / rN, rR / rN  };
+template_matching.cpp:            start = -1, rN = 0.0 , rF = 0.0, rR = 0.0, rB = 0.0;
+template_matching.cpp:         segments[i]->bidirectional_bounds.push_back(HITS[j]);
+template_matching.cpp:      segments[i]->bidirectional_bounds   = merge(segments[i]->bidirectional_bounds, window * 0.5);
+template_matching.cpp:   double ns                     = pw->ns;
+template_matching.cpp:   double window                 = pw->pad / ns;
+template_matching.cpp:   double ct                     = pw->llrthresh;
+template_matching.cpp:   sigma   = pw->sigma / ns , lambda = ns / pw->lambda;
+template_matching.cpp:   foot_print = pw->footPrint / ns , pi = pw->pi, w = pw->w;
+template_matching.cpp:   bool SCORES= pw->scores!="";//not P->p["-scores"].empty();
+template_matching.cpp:      FHW_scores.open(pw->scores);
+template_matching.cpp:      double * BIC_values   = new double[int(segments[i]->XN)];
+template_matching.cpp:      double * densities    = new double[int(segments[i]->XN)];
+template_matching.cpp:      double * densities_r  = new double[int(segments[i]->XN)];
+template_matching.cpp:      double l    =  segments[i]->maxX - segments[i]->minX;
+template_matching.cpp:      double ef     = segments[i]->fN * ( 2 * (window * ns) * 0.05  / (l * ns ));
+template_matching.cpp:      double er     = segments[i]->rN * ( 2 * (window * ns) * 0.05 / (l * ns ));
+template_matching.cpp:      double stdf   = sqrt(ef * (1 - (  2 * (window * ns) * 0.05 / (l * ns )  ) )  );
+template_matching.cpp:      double stdr   = sqrt(er * (1 - (  2 * (window * ns) * 0.05 / (l * ns ) ) )  );
+template_matching.cpp:      double start = -1, rN = 0.0 , rF = 0.0, rR = 0.0, rB = 0.0;
+template_matching.cpp:      for (int j = 1; j < segments[i]->XN - 1; j++) {
+template_matching.cpp:            FHW_scores << segments[i]->chrom << "\t" << to_string(int(segments[i]->X[0][j - 1]*ns + segments[i]->start)) << "\t";
+template_matching.cpp:            FHW_scores << to_string(int(segments[i]->X[0][j]*ns + segments[i]->start )) << "\t" << to_string(vl) + "\t" + to_string(densities[j]) + "\t" + to_string(densities_r[j]) + "\t" +  to_string(int(HIT)) << endl;
+template_matching.cpp:               start = segments[i]->X[0][j - 1] * ns + segments[i]->start;
+template_matching.cpp:            start += 1, rN += 1 , rF += densities[j], rR += densities_r[j], rB += log10( SC.pvalue(BIC_values[j]) + pow(10, -20)) ;
+template_matching.cpp:            vector<double> row = {start , segments[i]->X[0][j - 1]*ns + segments[i]->start, rB / rN , rF / rN, rR / rN  };
+template_matching.cpp:            start = -1, rN = 0.0 , rF = 0.0, rR = 0.0, rB = 0.0;
+template_matching.cpp:         segments[i]->bidirectional_bounds.push_back(HITS[j]);
+template_matching.cpp:      segments[i]->bidirectional_bounds   = merge(segments[i]->bidirectional_bounds, window * 0.5);
+Binary file template_matching.o matches
+Binary file Tfit matches

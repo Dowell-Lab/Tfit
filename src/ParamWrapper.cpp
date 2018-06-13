@@ -1,6 +1,15 @@
+/** \brief ParamWrapper parses and preprocesses command line arguments.
+ * 
+ * The ParamWrapper class was implemented to enable a greater degree of abstraction within tfit
+ * with respect to how command line arguments are passed and parsed. Under the previous model,
+ * each function that made use of values gathered from the command line would search through a dictionary
+ * of argument-value pairs. This meant that any changes to the command line specification of Tfit would
+ * require functions throughout the codebase to be revised.
+ */
 #include "ParamWrapper.hpp" 
 
-
+/** Prints a usage statement including all currently supported command line arguments.
+ */
 void ParamWrapper::printUsage()
 {
     printf("Usage: TFit modulename [arguments]\n");
@@ -62,6 +71,8 @@ void ParamWrapper::printUsage()
 	printf("              useful only when fitting to FStitch[1] or groHMM[2] output intervals\n");
 }
 
+/** Sets all values to their defaults as per the old read_in_parameters codebase.
+ */
 ParamWrapper::ParamWrapper()
 {
     this->module="";
@@ -98,6 +109,10 @@ ParamWrapper::ParamWrapper()
     this->fdr=0;
 }
 
+/** Parses the arguments passed to tfit and attempts to store them internally.
+ * @param argc The number of command line arguments (first parameter to main())
+ * @param argv The command line arguments array (second parameter to main())
+ */
 ParamWrapper::ParamWrapper(int argc, char **argv)
 {
     int i;
@@ -371,7 +386,10 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
         
         else if(it->first=="-foot_print")
         {
-            this->footPrint=atoi(it->second.c_str());
+            printf("Reading footprint parameter.\n");
+            this->footPrint=atof(it->second.c_str());
+            //Added for debugging purposes.
+            printf("this->footprint is %f\n", atof(it->second.c_str()));
         }
         
         else if(it->first=="-ALPHA_1")
@@ -445,6 +463,12 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
 }
 
 //Functions implemented to reach feature parity with read_in_parameters:
+
+/** Displays a summary of relevant command line arguments.
+ * 
+ * @param nodes Number of nodes on which Tfit is to run. This is obtained from the MPI runtime.
+ * @param cores Number of cores on which Tfit is to run. This is obtained from the MPI runtime.
+ */
 void ParamWrapper::display(int nodes, int cores){
 	//We have no analogs, since these parameters aren't in the repo documentation:
     //bool MLE 	= stoi(p["-MLE"]);
@@ -505,6 +529,10 @@ void ParamWrapper::display(int nodes, int cores){
 	
 }
 
+/** Returns the date and time as a C++ string.
+ * 
+ * @return Date and time as a string.
+ */
 const std::string cdt() {
     time_t     now = time(0);
     struct tm  tstruct;
@@ -517,6 +545,11 @@ const std::string cdt() {
     return buf;
 }
 
+/** Returns a summary of command line arguments.
+ * 
+ * @param ID likely specifies either execution mode (such as the running module) or is obtained from MPI.
+ * @return Pretty-printed string representing command line arguments.
+ */
 std::string ParamWrapper::getHeader(int ID){
     std::ostringstream os;
 	os<<"#----------------------------------------------------\n";
