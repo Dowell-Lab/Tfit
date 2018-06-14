@@ -9,7 +9,12 @@
 #include <map>
 using namespace std;
 
-
+/** Encapsulates a dictionary of parameters used by older codepaths within Tfit.
+ * This is the original interface through which various functions would obtain their parameters. Due to 
+ * the rigid mapping between requested parameters and command line parameters, this inteface would make it extremely
+ * difficult to change tfit's interface later on. As such, ParamWrapper was developed to supercede the functionality
+ * presented here.
+ */
 class params{
 public:
 	map<string, string> p;

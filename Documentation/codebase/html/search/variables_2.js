@@ -1,4 +1,19 @@
 var searchData=
 [
-  ['parameters',['parameters',['../classsegment.html#a04f94233086787de64d86b60fbb46149',1,'segment']]]
+  ['c',['C',['../class_e_m_g.html#ae9060227ecb005740624029e5c657089',1,'EMG::C()'],['../classslice__ratio.html#aa1ea6b9f6bac21373202bf63cd36901a',1,'slice_ratio::c()']]],
+  ['c2',['c2',['../classnormal.html#a5a1a4d3f148324afc91a0090a21829c3',1,'normal']]],
+  ['center',['center',['../classnode.html#a35c18f924b650dd518c0f9976edcc85a',1,'node']]],
+  ['centers',['centers',['../classsegment.html#add3d9a2aea3157f6583b29c6a0e198eb',1,'segment']]],
+  ['chrom',['chrom',['../structsimple__c__free__mode.html#a9f5fbd0312d46bd1e160c101ebd7ed00',1,'simple_c_free_mode::chrom()'],['../structsingle__simple__c.html#a54883f7e9b2bbe45cf7a58ac50e1e414',1,'single_simple_c::chrom()'],['../classsegment.html#a3544bac7c1d7aa06fbd6f1e783fac118',1,'segment::chrom()'],['../classsegment__fits.html#a5223f1cb52a861a03d6eb8d0c72eda54',1,'segment_fits::chrom()'],['../structsimple__seg__struct.html#a56179b57927ae5e9272533c7dfb97da1',1,'simple_seg_struct::chrom()']]],
+  ['chrom_5fid',['chrom_ID',['../classsegment.html#a60048f651fba3173f3cab0533346224b',1,'segment']]],
+  ['chromosome',['chromosome',['../class_param_wrapper.html#ad8f708bddd8d61a0424aae20d25bc1df',1,'ParamWrapper']]],
+  ['components',['components',['../classclassifier.html#a3197fddcd41c7ac531172f27ba9f7b68',1,'classifier::components()'],['../classclassifier__single.html#ab9ebf6c471b32a6f50b3e66ecee9c9bb',1,'classifier_single::components()']]],
+  ['config',['CONFIG',['../classparams.html#a66c17fea9a141aed84ce988ed513fef4',1,'params']]],
+  ['converged',['converged',['../classslice__ratio.html#aa1e3e820de64c96a4caa05f687fd5fde',1,'slice_ratio::converged()'],['../classclassifier.html#a343e9f2ecda8c1515d7bc28a28591bb1',1,'classifier::converged()']]],
+  ['convergence_5fthreshold',['convergence_threshold',['../classclassifier.html#a493760d4263c433dce9e548825bea0c6',1,'classifier']]],
+  ['cores',['cores',['../class_param_wrapper.html#a36ca84f79113ed13a626ecd753b945dd',1,'ParamWrapper']]],
+  ['counts',['counts',['../classsegment.html#ac13b6b867e335b4b66f65b7e2166cb44',1,'segment']]],
+  ['covergence_5fthreshold',['covergence_threshold',['../classclassifier__single.html#a2800a095b2974b551afbf35705d26bc9',1,'classifier_single']]],
+  ['ct',['ct',['../class_param_wrapper.html#ada1ee91c231e9f3fef3ee70c21e7a3be',1,'ParamWrapper']]],
+  ['current',['current',['../classnode.html#a14e0077f98d3bb0a99ec6f4fd36c931e',1,'node']]]
 ];

@@ -13,14 +13,27 @@
 #endif
 using namespace std;
 
+/** Default constructor for the gap_interval class.
+ */
 gap_interval::gap_interval(){};
+
+/** Full constructor for the gap_interval class.
+ * @param st Start position (base pairs)
+ * @param sp Stop position (base pairs)
+ */
 gap_interval::gap_interval(double st, double sp){
 		start=st, stop=sp;
 }
 
+/** Computes the mean variance of a given bedgraph.
+ * @param GAP_FILE Path to a file containing (training labels?)
+ * @param bed_file Path to a begraph file.
+ * @param res Resolution at which to perform the computation.
+ * @param bin_res Resolution at which to establish bins within the provided bedgraph.
+ * @param scale Scaling factor.
+ * @return Mean variance value.
+ */
 double get_table_mean_var(string GAP_FILE, string bed_file, double res, double bin_res, double scale){
-
-
 	map<int, vector<double> > A;
 	map<string, vector<gap_interval>> G;
 	ifstream FH(GAP_FILE);

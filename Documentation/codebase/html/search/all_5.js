@@ -1,6 +1,25 @@
 var searchData=
 [
-  ['gap_5finterval',['gap_interval',['../classgap__interval.html',1,'']]],
-  ['get_5fmodel',['get_model',['../classsegment__fits.html#aec3b5034461aa9202af69cd93b1fb434',1,'segment_fits']]],
-  ['getheader',['getHeader',['../class_param_wrapper.html#ad64ee5b3163af7dbdfe04b8bb0e359c8',1,'ParamWrapper']]]
+  ['fdr',['fdr',['../class_param_wrapper.html#a88f697abf861cbd723f9e1cfc3f0d311',1,'ParamWrapper']]],
+  ['fdr_2ecpp',['FDR.cpp',['../_f_d_r_8cpp.html',1,'']]],
+  ['fdr_2eh',['FDR.h',['../_f_d_r_8h.html',1,'']]],
+  ['fhw',['FHW',['../class_log___file.html#aef7b054218f0c1d063c6db711f9afd69',1,'Log_File']]],
+  ['fill_5fin_5fbidir_5fboostrap',['fill_in_bidir_boostrap',['../read__in__parameters_8h.html#a8d1abb9ec8146a356c8b25686623d624',1,'read_in_parameters.h']]],
+  ['fill_5fin_5fconfig_5ffile',['fill_in_config_file',['../read__in__parameters_8cpp.html#a032ed6dd9900c4883b47c00dfc8b4289',1,'read_in_parameters.cpp']]],
+  ['fill_5fin_5foptions',['fill_in_options',['../read__in__parameters_8cpp.html#abd8da77aa70261e5264cefdaa1f4d091',1,'read_in_parameters.cpp']]],
+  ['fillinoptions',['fillInOptions',['../read__in__parameters_8h.html#ae73a357f24133df7d840c95afa1e2bdd',1,'read_in_parameters.h']]],
+  ['fit',['fit',['../classclassifier.html#a4a82faca1efb03f3f9407a9e271256f7',1,'classifier::fit()'],['../classclassifier__single.html#aef238e489bef379a33f4977e9f2ef070',1,'classifier_single::fit()']]],
+  ['fit2',['fit2',['../classclassifier.html#a018b1ccaacadb221606da92a112c8075',1,'classifier']]],
+  ['fit_5funiform_5fonly',['fit_uniform_only',['../classclassifier.html#a119c0277192a8839ddc0fb2129149b02',1,'classifier']]],
+  ['fit_5funiform_5fonly2',['fit_uniform_only2',['../classclassifier.html#aa36a53e92bcb2bb8d48e57fa8439c425',1,'classifier']]],
+  ['fitted_5fbidirs',['fitted_bidirs',['../classsegment.html#ac0299fdcf01f5cdafaa2e6f7572af19d',1,'segment']]],
+  ['fn',['fN',['../classsegment.html#a9f8280c8f515ad85e703c7e0ce2125f6',1,'segment']]],
+  ['foot_5fprint',['foot_print',['../class_e_m_g.html#a4bcb4c27b836baef438532f20e22d239',1,'EMG::foot_print()'],['../classcomponent.html#ab9128aac5d4b3bb45c009a475856cd69',1,'component::foot_print()'],['../classclassifier.html#abdd5d321fd3369ab19567cf7b33cb8d5',1,'classifier::foot_print()']]],
+  ['footprint',['footPrint',['../class_param_wrapper.html#ab0b47f317470e3628ea3a497b3bc35ae',1,'ParamWrapper']]],
+  ['forward',['forward',['../classsegment.html#ab90cbcc35c05a69da136bcfffc524895',1,'segment::forward()'],['../classcomponent.html#a7093df5455afc6d582914d0502c0fef8',1,'component::forward()'],['../class_n_l_r.html#aeb94a2af25a666f255f19060ee6aa158',1,'NLR::forward()']]],
+  ['forward_5fneighbor',['forward_neighbor',['../classcomponent.html#a8c66508ca84a9cf0635377efd73d3cdd',1,'component']]],
+  ['forwardstrand',['forwardStrand',['../class_param_wrapper.html#af63d802e96aa922ebbd12b91baee8eed',1,'ParamWrapper']]],
+  ['fp',['fp',['../class_n_l_r.html#a29eb571595a5dce36937b1d8f975f1af',1,'NLR']]],
+  ['free_5fclassifier',['free_classifier',['../classclassifier.html#a19ade023504491bd4d66ddc78902897f',1,'classifier']]],
+  ['free_5fsegments',['free_segments',['../across__segments_8h.html#a7ab87f1d310a6655638c6664b578aba5',1,'across_segments.h']]]
 ];

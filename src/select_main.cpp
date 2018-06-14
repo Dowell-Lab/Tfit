@@ -5,6 +5,15 @@
 #include <omp.h>
 #include "model_main.h"
 #include "model_selection.h"
+
+/** Does nothing. The entire body of this function was commented out as of the latest (non "-revisions") tfit commit.
+ * @param P Pointer to params object.
+ * @param rank Rank parameter obtained from the MPI runtime.
+ * @param nprocs Number of processes obtained from the MPI runtime.
+ * @param job_ID Job identifier obtained from the MPI runtime.
+ * @param LG Output log file.
+ * @return Whether or not the run succeeded (always 0 as per main() function conventions).
+ */
 int select_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 
 	// LG->write("\ninitializing select module..............................done\n\n",verbose);
@@ -101,10 +110,18 @@ int select_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	// P->p["-ms_pen"] 	= to_string(optimal_penality);
 
 	// MPI_comm::wait_on_root(rank, nprocs);
-
-	
+	return 0;
 }
 
+/** Does nothing. See notes for select_run.
+ * @param pw Input ParamWrapper.
+ * @param rank Rank parameter obtained from the MPI runtime.
+ * @param nprocs Number of processes obtained from the MPI runtime.
+ * @param job_ID Job identifier obtained from the MPI runtime.
+ * @param LG Log file.
+ * @return Whether or not the run succeeded (always 0 as per main() function conventions).
+ */
 int select_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_File * LG){
     //Was the entire body of this function really supposed to be commented out?
+    return 0;
 }
