@@ -144,7 +144,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a4878e0340ad980f5b9c5e607c365dd79"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnormal.html">normal</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslice__ratio.html#a4878e0340ad980f5b9c5e607c365dd79">norm_all</a></td></tr>
 <tr class="separator:a4878e0340ad980f5b9c5e607c365dd79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents an individual model component over a set of values. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="abe9e2f821d1bd49ae68ab767b6653cd2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abe9e2f821d1bd49ae68ab767b6653cd2">&#9670;&nbsp;</a></span>slice_ratio() <span class="overload">[1/2]</span></h2>
 
@@ -176,6 +178,14 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Full constructor for <a class="el" href="classslice__ratio.html">slice_ratio</a> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ST</td><td>Start position (base pairs) </td></tr>
+    <tr><td class="paramname">SP</td><td>Stop position (base pairs) </td></tr>
+    <tr><td class="paramname">BINS</td><td>Number of bins to use. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -193,6 +203,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Default constructor for <a class="el" href="classslice__ratio.html">slice_ratio</a>. Does nothing. </p>
 
 </div>
 </div>
@@ -212,6 +223,13 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Determines the closest slice to the specified sample value. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>sample value at which to get a slice. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Index of the closest slice. </dd></dl>
 
 </div>
 </div>
@@ -230,6 +248,12 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Increments the count of the closest slice to the sample value y. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td>sample value at which to index the slice. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -248,6 +272,13 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Computes the p-value based on the values within the slice. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td>The point at which to compute the p-value. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>p-value </dd></dl>
 
 </div>
 </div>
@@ -266,6 +297,12 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Updates the slice given a specified p-value. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pval</td><td>p-value to use. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -284,6 +321,12 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Performs all of the same operations as set except for updating the mean and convergence value. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pval</td><td>p-value to use. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

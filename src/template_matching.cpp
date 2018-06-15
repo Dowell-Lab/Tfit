@@ -13,9 +13,18 @@
 #include "FDR.h"
 using namespace std;
 
+/** Negative infinity.
+ */
 double nINF = -exp(1000);
+/** Positive infinity.
+ */
 double INF  = exp(1000);
 
+/** Merges all vectors within a given window.
+ * @param X Vector of vectors to merge.
+ * @param window Window over which to merge the vectors.
+ * @return Vector of merged vectors.
+ */
 vector<vector<double>> merge(vector<vector<double>> X, double window) {
    int N = X.size(), t = 0;
    vector<vector<double> > nX;
@@ -33,7 +42,10 @@ vector<vector<double>> merge(vector<vector<double>> X, double window) {
    return nX;
 }
 
-
+/** Sorts all values within the first vector of vectors by the values in the second vector of vectors.
+ * @param X Vector of vectors to sort.
+ * @return Vector of sorted vectors.
+ */
 vector<vector<double>> bubble_sort3(vector<vector<double>> X) { //sort vector of vectors by second
    bool changed = true;
    if (X.size() < 2) {
@@ -52,7 +64,12 @@ vector<vector<double>> bubble_sort3(vector<vector<double>> X) { //sort vector of
    }
    return X;
 }
-
+ 
+/** Samples a random integer from a unifrom distribution.
+ * @param centers Set of distribution centers used to calculate the range of the returned value.
+ * @param p Unused.
+ * @return Random integer drawn from a uniform distribution.
+ */
 int sample_centers(vector<double> centers, double p) {
    random_device rd;
    mt19937 mt(rd());
@@ -62,6 +79,18 @@ int sample_centers(vector<double> centers, double p) {
    return i;//required in model.o (ugh...)
 }
 
+/** Performs template matching based on models with optimal scores via the baysean information criterion.
+ * @param data Input data on which to evaluate and train models.
+ * @param BIC_values Set of output BIC scores for a given set of models.
+ * @param densities Set of output densities indexed with the given set of models.
+ * @param densities_r Set of output densities for the reverse strand.
+ * @param window Sets a window over which to compute models.
+ * @param sigma Sigma parameter for BIC3 scoring.
+ * @param lambda Lambda parameter for BIC3 scoring.
+ * @param foot_print foot_print parameter for BIC3 scoring.
+ * @param pi pi parameter for BIC3 scoring.
+ * @param w w parameter for BIC3 scoring.
+ */
 void BIC_template(segment * data,  double * BIC_values, double * densities, double * densities_r, double window,
                   double sigma, double lambda, double foot_print, double pi, double w) {
    double vl;
@@ -110,6 +139,19 @@ void BIC_template(segment * data,  double * BIC_values, double * densities, doub
    }
 }
 
+/** Determines whether or not each respective value is greater than the value to which it corresponds.
+ * "a" must be greater than "x"
+ * "b" must be greater than "y"
+ * etc
+ * 
+ * @param a Parameter that must correspond to x
+ * @param b Parameter that must correspond to y
+ * @param c Parameter that must correspond to z
+ * @param x Parameter that must correspond to a
+ * @param y Parameter that must correspond to b
+ * @param z Parameter that must correspond to c.
+ * @return Whether or not a, b, and c are greater than x, y, and z, respectively.
+ */
 bool check_hit(double a, double b, double c, double x, double y, double z) {
    if (a > x and b > y and c > z) {
       return true;
@@ -117,6 +159,13 @@ bool check_hit(double a, double b, double c, double x, double y, double z) {
    return false;
 }
 
+/** Runs template matching given a depreciated params object.
+ * This should effectively implement the functionality seen within the bidir module.
+ * @param segments Set of input segments read from an input bedgraph.
+ * @param out_dir Output directory in which to save the trained model.
+ * @param P Depreciated params object.
+ * @param SC slice_ratio used to keep track of various thresholds.
+ */
 double run_global_template_matching(vector<segment*> segments,
                                     string out_dir,  params * P, slice_ratio SC) {
 
@@ -186,6 +235,13 @@ double run_global_template_matching(vector<segment*> segments,
    return 1.0;
 }
 
+/** Runs template matching given a ParamWrapper object.
+ * This should effectively implement the functionality seen within the bidir module.
+ * @param segments Set of input segments read from an input bedgraph.
+ * @param out_dir Output directory in which to save the trained model.
+ * @param pw ParamWrapper from which the function reads a number of parameters.
+ * @param SC slice_ratio used to keep track of various thresholds.
+ */
 double run_global_template_matching_pwrapper(vector<segment*> segments,
                                     string out_dir, ParamWrapper *pw, slice_ratio SC) {
 

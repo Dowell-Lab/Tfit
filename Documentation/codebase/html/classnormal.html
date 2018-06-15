@@ -116,7 +116,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a5a1a4d3f148324afc91a0090a21829c3"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnormal.html#a5a1a4d3f148324afc91a0090a21829c3">c2</a></td></tr>
 <tr class="separator:a5a1a4d3f148324afc91a0090a21829c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents a normal distribution. This class provides methods that enable a user to sample from the distribution represented. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a269d15d20d6c9e2f2cfad5964ec1da34"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a269d15d20d6c9e2f2cfad5964ec1da34">&#9670;&nbsp;</a></span>normal() <span class="overload">[1/2]</span></h2>
 
@@ -131,6 +133,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Default constructor for the normal class. Does nothing. </p>
 
 </div>
 </div>
@@ -165,6 +168,14 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Full constructor for the normal class. Accepts a parameter X, mean MU, and standard deviation STD. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>Sample parameter for the distribution. </td></tr>
+    <tr><td class="paramname">MU</td><td>Mean of the distribution. </td></tr>
+    <tr><td class="paramname">STD</td><td>Standard deviation of the distribution </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -184,6 +195,13 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns the cumulative distribution function at the sample point specified. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Sample point </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Cumulative distribution at the sample point. (ie. how likely all values less than x combined are). </dd></dl>
 
 </div>
 </div>
@@ -202,6 +220,13 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns the probability density of the distribution at the specified point. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Point at which to sample the distribution. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Probability density at that point. </dd></dl>
 
 </div>
 </div>

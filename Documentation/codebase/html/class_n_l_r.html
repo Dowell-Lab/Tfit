@@ -171,7 +171,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a10d2d6795ba2ce428bcc24e41d1abc8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_u_n_i.html">UNI</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_n_l_r.html#a10d2d6795ba2ce428bcc24e41d1abc8a">reverse</a></td></tr>
 <tr class="separator:a10d2d6795ba2ce428bcc24e41d1abc8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents an individual nonlinear regression model over a given segment. Much of the functionality within this class is presently unimplemented, though it does appear capable of computing a probability density sample at a given point. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0757873ce2375eff6725ed58e9ddc6b9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0757873ce2375eff6725ed58e9ddc6b9">&#9670;&nbsp;</a></span>NLR()</h2>
 
@@ -186,6 +188,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Default constructor for the <a class="el" href="class_n_l_r.html">NLR</a> class. Use this in conjunction with <a class="el" href="class_n_l_r.html#aed980c36f850e1b7c8a538756eb57ff9">init()</a>. </p>
 
 </div>
 </div>
@@ -308,6 +311,20 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Initializes the nonlinear regression classifier. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>The input segment on which to regress. </td></tr>
+    <tr><td class="paramname">MU</td><td>Mean parameter for the desired distribution. </td></tr>
+    <tr><td class="paramname">K</td><td>Scaling factor for the window on which to regress. </td></tr>
+    <tr><td class="paramname">foot_print</td><td>foot_print parameter for internal <a class="el" href="class_e_m_g.html">EMG</a> model. </td></tr>
+    <tr><td class="paramname">Alpha_1</td><td>Used to compute si during set_new_parameters updates. </td></tr>
+    <tr><td class="paramname">Beta_1</td><td>Unused </td></tr>
+    <tr><td class="paramname">Alpha_2</td><td>Unused </td></tr>
+    <tr><td class="paramname">Beta_2</td><td>Unused </td></tr>
+    <tr><td class="paramname">Alpha_3</td><td>Unused </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -326,6 +343,13 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns the probability density at the specified point. This function enables each <a class="el" href="class_n_l_r.html">NLR</a> instance to function as a probability distribution. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Point at which to get a probability density. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Probability density sample at x. </dd></dl>
 
 </div>
 </div>
@@ -343,6 +367,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Prints all fields within the object. </p>
 
 </div>
 </div>
@@ -360,6 +385,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Resets internal weights to 0. Not used in the current Tfit codebase. </p>
 
 </div>
 </div>
@@ -378,6 +404,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Updates all parameters within the object given a value N. This function is used internally during regression. </p>
 
 </div>
 </div>

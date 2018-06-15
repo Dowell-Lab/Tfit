@@ -213,6 +213,21 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Performs template matching based on models with optimal scores via the baysean information criterion. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>Input data on which to evaluate and train models. </td></tr>
+    <tr><td class="paramname">BIC_values</td><td>Set of output BIC scores for a given set of models. </td></tr>
+    <tr><td class="paramname">densities</td><td>Set of output densities indexed with the given set of models. </td></tr>
+    <tr><td class="paramname">densities_r</td><td>Set of output densities for the reverse strand. </td></tr>
+    <tr><td class="paramname">window</td><td>Sets a window over which to compute models. </td></tr>
+    <tr><td class="paramname">sigma</td><td>Sigma parameter for BIC3 scoring. </td></tr>
+    <tr><td class="paramname">lambda</td><td>Lambda parameter for BIC3 scoring. </td></tr>
+    <tr><td class="paramname">foot_print</td><td>foot_print parameter for BIC3 scoring. </td></tr>
+    <tr><td class="paramname">pi</td><td>pi parameter for BIC3 scoring. </td></tr>
+    <tr><td class="paramname">w</td><td>w parameter for BIC3 scoring. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -231,6 +246,13 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Sorts all values within the first vector of vectors by the values in the second vector of vectors. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>Vector of vectors to sort. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of sorted vectors. </dd></dl>
 
 </div>
 </div>
@@ -283,6 +305,19 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Determines whether or not each respective value is greater than the value to which it corresponds. "a" must be greater than "x" "b" must be greater than "y" etc</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">a</td><td>Parameter that must correspond to x </td></tr>
+    <tr><td class="paramname">b</td><td>Parameter that must correspond to y </td></tr>
+    <tr><td class="paramname">c</td><td>Parameter that must correspond to z </td></tr>
+    <tr><td class="paramname">x</td><td>Parameter that must correspond to a </td></tr>
+    <tr><td class="paramname">y</td><td>Parameter that must correspond to b </td></tr>
+    <tr><td class="paramname">z</td><td>Parameter that must correspond to c. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether or not a, b, and c are greater than x, y, and z, respectively. </dd></dl>
 
 </div>
 </div>
@@ -311,6 +346,14 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Merges all vectors within a given window. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>Vector of vectors to merge. </td></tr>
+    <tr><td class="paramname">window</td><td>Window over which to merge the vectors. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of merged vectors. </dd></dl>
 
 </div>
 </div>
@@ -351,6 +394,15 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Runs template matching given a depreciated params object. This should effectively implement the functionality seen within the bidir module. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segments</td><td>Set of input segments read from an input bedgraph. </td></tr>
+    <tr><td class="paramname">out_dir</td><td>Output directory in which to save the trained model. </td></tr>
+    <tr><td class="paramname">P</td><td>Depreciated params object. </td></tr>
+    <tr><td class="paramname">SC</td><td><a class="el" href="classslice__ratio.html">slice_ratio</a> used to keep track of various thresholds. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -391,6 +443,15 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Runs template matching given a <a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> object. This should effectively implement the functionality seen within the bidir module. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segments</td><td>Set of input segments read from an input bedgraph. </td></tr>
+    <tr><td class="paramname">out_dir</td><td>Output directory in which to save the trained model. </td></tr>
+    <tr><td class="paramname">pw</td><td><a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> from which the function reads a number of parameters. </td></tr>
+    <tr><td class="paramname">SC</td><td><a class="el" href="classslice__ratio.html">slice_ratio</a> used to keep track of various thresholds. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -419,6 +480,14 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Samples a random integer from a unifrom distribution. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">centers</td><td>Set of distribution centers used to calculate the range of the returned value. </td></tr>
+    <tr><td class="paramname">p</td><td>Unused. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Random integer drawn from a uniform distribution. </dd></dl>
 
 </div>
 </div>
@@ -434,6 +503,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Positive infinity. </p>
 
 </div>
 </div>
@@ -448,6 +518,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Negative infinity. </p>
 
 </div>
 </div>

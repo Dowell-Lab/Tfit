@@ -138,7 +138,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a339b2940c6d2431e3551669e4e34c753"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classclassifier__single.html#a339b2940c6d2431e3551669e4e34c753">alpha_3</a></td></tr>
 <tr class="separator:a339b2940c6d2431e3551669e4e34c753"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Represents a binary classifier that makes judgements based on a single segment of input data. It would appear based on prior documentation that this class was created in order to provide support for the new parameters introduced with the latest development revision of Tfit. Despite this, the classes present in <a class="el" href="model__single_8h.html">model_single.h</a> and <a class="el" href="model__single_8cpp.html">model_single.cpp</a> are unused in Tfit. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0371a10f79b28ac7d3bc2d9d144943d3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0371a10f79b28ac7d3bc2d9d144943d3">&#9670;&nbsp;</a></span>classifier_single() <span class="overload">[1/2]</span></h2>
 
@@ -153,6 +155,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Default constructor for <a class="el" href="classclassifier__single.html">classifier_single</a>. Does nothing. </p>
 
 </div>
 </div>
@@ -229,6 +232,21 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Full constructor for <a class="el" href="classclassifier__single.html">classifier_single</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ct</td><td>Convergence threshold </td></tr>
+    <tr><td class="paramname">mi</td><td>Maximum iterations </td></tr>
+    <tr><td class="paramname">k</td><td>K </td></tr>
+    <tr><td class="paramname">TY</td><td>Type of classification (unused within <a class="el" href="classclassifier__single.html">classifier_single</a>). </td></tr>
+    <tr><td class="paramname">SC</td><td>Scale (unused within <a class="el" href="classclassifier__single.html">classifier_single</a>). </td></tr>
+    <tr><td class="paramname">Alpha_1</td><td>alpha1 model parameter (unused within <a class="el" href="classclassifier__single.html">classifier_single</a>). </td></tr>
+    <tr><td class="paramname">Beta_1</td><td>beta1 model parameter (unused within <a class="el" href="classclassifier__single.html">classifier_single</a>). </td></tr>
+    <tr><td class="paramname">Alpha_2</td><td>alpha2 model paramter (unused within <a class="el" href="classclassifier__single.html">classifier_single</a>). </td></tr>
+    <tr><td class="paramname">Beta_2</td><td>beta2 model parameter (unused within <a class="el" href="classclassifier__single.html">classifier_single</a>). </td></tr>
+    <tr><td class="paramname">Alpha_3</td><td>alpha3 model parameter (unused within <a class="el" href="classclassifier__single.html">classifier_single</a>). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -258,6 +276,15 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Fits the model to a single segment of input data. Once fit, the classifier can then be useful in determining higher order model characteristics over an entire dataset rather than a single segment within it.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>Segment on which to train. </td></tr>
+    <tr><td class="paramname">foot_print</td><td>Footprint parameter for the nonlinear regression components used internally. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>log likelihood of the fit. A log likelihood closer to 0 should indicate a better fit. </dd></dl>
 
 </div>
 </div>

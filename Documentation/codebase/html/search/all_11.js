@@ -1,7 +1,7 @@
 var searchData=
 [
   ['sample',['sample',['../bootstrap_8cpp.html#a8e0438bed616a95ab145e44df133370e',1,'bootstrap.cpp']]],
-  ['sample_5fcenters',['sample_centers',['../template__matching_8cpp.html#ab9960c0918ea02345e2327a58e0dfa6a',1,'sample_centers(vector&lt; double &gt; centers, double p):&#160;template_matching.cpp'],['../template__matching_8h.html#a52656626750d7fd6a5655856ecc8d366',1,'sample_centers(vector&lt; double &gt;, double):&#160;template_matching.cpp']]],
+  ['sample_5fcenters',['sample_centers',['../template__matching_8cpp.html#ab9960c0918ea02345e2327a58e0dfa6a',1,'sample_centers(vector&lt; double &gt; centers, double p):&#160;template_matching.cpp'],['../template__matching_8h.html#ab9960c0918ea02345e2327a58e0dfa6a',1,'sample_centers(vector&lt; double &gt; centers, double p):&#160;template_matching.cpp']]],
   ['scale',['SCALE',['../classsegment.html#a23fdb3e0b19f2fa5b9499fafa0cb67a7',1,'segment::SCALE()'],['../classclassifier__single.html#a4d356669f125481fae3c9237937c39e2',1,'classifier_single::scale()']]],
   ['scores',['scores',['../class_param_wrapper.html#a3e3e710ffa3db9a0a81c526035e13be0',1,'ParamWrapper']]],
   ['searchinterval',['searchInterval',['../classnode.html#a41ae77370305ef9226d81a70e5f1573a',1,'node']]],

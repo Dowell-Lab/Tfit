@@ -25,6 +25,8 @@
 using namespace std;
 
 /** Main function for tfit-revisions.
+ * @param argc Count of arguments passed from the calling process.
+ * @param argv Array of arguments passed from the calling process.
  */
 int main(int argc, char* argv[]){
   int rank, nprocs;

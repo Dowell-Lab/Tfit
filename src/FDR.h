@@ -13,6 +13,10 @@
 #include "read_in_parameters.h"
 #include "ParamWrapper.hpp"
 using namespace std;
+
+/** Represents a normal distribution.
+ * This class provides methods that enable a user to sample from the distribution represented.
+ */
 class normal{
  public:
   double mean, std, x,threshold, c2;
@@ -22,6 +26,9 @@ class normal{
   double pdf(double); 
 };
 
+/** Represents an exponential distribution.
+ * This class provides methods that enable a user to sample from an exponential distribution.
+ */
 class exponential{
  public:
   double lambda,mu;
@@ -38,9 +45,8 @@ class pareto{
   double pdf(double );
 };
 
-
-
-
+/** Represents an individual model component over a set of values.
+ */
 class slice_ratio{
  public:
   double start, stop ; //these should be base ten

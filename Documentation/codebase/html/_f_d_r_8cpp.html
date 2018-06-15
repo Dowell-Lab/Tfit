@@ -141,6 +141,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns whether or not the value passed is finite and a number. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Value to check. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether or not the value is finite and a number. </dd></dl>
 
 </div>
 </div>
@@ -193,6 +200,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Attempts to train a model on the given input data. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>Input data on which to train the model. </td></tr>
+    <tr><td class="paramname">mean</td><td>Starting mean for the model. If the model converges, then this value will be overwritten with the optimized mean. </td></tr>
+    <tr><td class="paramname">sigma</td><td>Starting standard deviation for the model. If the model converges, then this value will be overwritten with the standard deviation (scaled to base pairs?) </td></tr>
+    <tr><td class="paramname">w</td><td>Weighting parameter within the model. This is continuously overwritten during training. </td></tr>
+    <tr><td class="paramname">c</td><td>Exponential decay parameter used within the model. This value is overwritten immediatley. </td></tr>
+    <tr><td class="paramname">EXP</td><td>Whether or not to use a larger exponential decay parameter during training. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Whether or not the model converged. </dd></dl>
 
 </div>
 </div>
@@ -233,6 +252,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Computes a <a class="el" href="classslice__ratio.html">slice_ratio</a> given a set of segments and various other parameters. Use get_slice_pwrapper instead.  </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segments</td><td>Set of segments over which to compute the <a class="el" href="classslice__ratio.html">slice_ratio</a>. </td></tr>
+    <tr><td class="paramname">N</td><td>Number of parameters to estimate. </td></tr>
+    <tr><td class="paramname">CC</td><td>Threshold (?) </td></tr>
+    <tr><td class="paramname">P</td><td>Obsolete params object from which to read command line parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

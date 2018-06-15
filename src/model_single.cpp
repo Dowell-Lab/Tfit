@@ -24,11 +24,27 @@
 
 
 
+/** Default constructor for the NLR class. Use this in conjunction with init().
+ */
 NLR::NLR(){}
 
+/** Resets internal weights to 0. Not used in the current Tfit codebase.
+ */
 void NLR::resetSS(){
 	EX=0, EX2=0, EY=0, EPI=0, WE=0, WF=0, WR=0,EPIN=0 ;
 }
+
+/** Initializes the nonlinear regression classifier.
+ * @param data The input segment on which to regress.
+ * @param MU Mean parameter for the desired distribution.
+ * @param K Scaling factor for the window on which to regress.
+ * @param foot_print foot_print parameter for internal EMG model.
+ * @param Alpha_1 Used to compute si during set_new_parameters updates.
+ * @param Beta_1 Unused
+ * @param Alpha_2 Unused
+ * @param Beta_2 Unused
+ * @param Alpha_3 Unused
+ */
 void NLR::init(segment * data, double MU , int K, double foot_print, 
 	double Alpha_1, double Beta_1, double Alpha_2, double Beta_2, double Alpha_3 ){
 	alpha_1=Alpha_1, alpha_2=Alpha_2, alpha_3=Alpha_3, beta_1=Beta_1, beta_2=Beta_2;
@@ -51,10 +67,17 @@ void NLR::init(segment * data, double MU , int K, double foot_print,
 
 }
 
+/** Returns the probability density at the specified point.
+ * This function enables each NLR instance to function as a probability distribution.
+ * @param x Point at which to get a probability density.
+ * @return Probability density sample at x.
+ */
 double NLR::pdf(double x){
 	return bidir.pdf(x,1) + bidir.pdf(x,-1) + forward.pdf(x,1) + forward.pdf(x,-1) + reverse.pdf(x,1) + reverse.pdf(x,-1);
 }
 
+/** 
+ */
 double NLR::addSS(double x, double y, double norm){
 	double re, rf,rr, epi, ex, ey, ey2;
 	re 	= (bidir.pdf(x,1) + bidir.pdf(x,-1))/norm;
@@ -81,6 +104,8 @@ double NLR::addSS(double x, double y, double norm){
 	return  re*y + rf*y + rr*y;
 }
 
+/** Updates all parameters within the object given a value N. This function is used internally during regression.
+ */
 void NLR::set_new_parameters(double N){
 	mu 	= EX / WE;
 	si 	= sqrt((EX2 - 2*mu*EX + (pow(mu,2)*WE) + 2*beta_1 ) / (WE  + 3 + alpha_1)  );
@@ -97,10 +122,24 @@ void NLR::set_new_parameters(double N){
 
 }
 
+/** Prints all fields within the object.
+ */
 void NLR::print(){
 	printf("mu: %f, si: %f,l: %f,pi: %f,w: %f, wf: %f, wr: %f  \n", mu, si, l, pi, wn, wl, wr );
 }
 
+/** Full constructor for classifier_single.
+ * @param ct Convergence threshold
+ * @param mi Maximum iterations
+ * @param k K
+ * @param TY Type of classification (unused within classifier_single).
+ * @param SC Scale (unused within classifier_single).
+ * @param Alpha_1 alpha1 model parameter (unused within classifier_single).
+ * @param Beta_1 beta1 model parameter (unused within classifier_single).
+ * @param Alpha_2 alpha2 model paramter (unused within classifier_single).
+ * @param Beta_2 beta2 model parameter (unused within classifier_single).
+ * @param Alpha_3 alpha3 model parameter (unused within classifier_single).
+ */
 classifier_single::classifier_single(double ct, int mi, int k, int TY, double SC,
 	double Alpha_1, double Beta_1, double Alpha_2, double Beta_2, double Alpha_3){
 	alpha_1=Alpha_1, alpha_2=Alpha_2, alpha_3=Alpha_3, beta_1=Beta_1, beta_2=Beta_2;
@@ -110,10 +149,18 @@ classifier_single::classifier_single(double ct, int mi, int k, int TY, double SC
 	scale 	= SC;
 }
 
+/** Default constructor for classifier_single. Does nothing.
+ */
 classifier_single::classifier_single(){}
 
-
-
+/** Fits the model to a single segment of input data.
+ * Once fit, the classifier can then be useful in determining higher order model characteristics over an entire
+ * dataset rather than a single segment within it.
+ * 
+ * @param data Segment on which to train.
+ * @param foot_print Footprint parameter for the nonlinear regression components used internally.
+ * @return log likelihood of the fit. A log likelihood closer to 0 should indicate a better fit.
+ */
 double classifier_single::fit(segment * data,double foot_print){
 
 	double mu;

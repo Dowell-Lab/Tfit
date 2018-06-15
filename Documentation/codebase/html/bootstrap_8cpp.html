@@ -184,19 +184,19 @@ Functions</h2></td></tr>
           <td class="memname">void run_bootstrap_across </td>
           <td>(</td>
           <td class="paramtype">vector&lt; <a class="el" href="classsegment.html">segment</a> *&gt;&#160;</td>
-          <td class="paramname"><em>segments</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classparams.html">params</a> *&#160;</td>
-          <td class="paramname"><em>P</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">ofstream &amp;&#160;</td>
-          <td class="paramname"><em>log_file</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -205,6 +205,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Performs initial data acquisition and computations given a set of segments. This includes computing internal variances as well as setting all relevant segment parameters to match those passed in the (depreciated) params object passed. This function is unused in the present Tfit codebase. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segments</td><td>Set of segments to initialize. </td></tr>
+    <tr><td class="paramname">P</td><td>Command line parameters. </td></tr>
+    <tr><td class="paramname">log_file</td><td>Output log file represented as an ofstream. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

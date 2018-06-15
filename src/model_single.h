@@ -5,6 +5,10 @@
 
 using namespace std;
 
+/** Represents an individual nonlinear regression model over a given segment.
+ * Much of the functionality within this class is presently unimplemented, though
+ * it does appear capable of computing a probability density sample at a given point.
+ */ 
 class NLR{
 public:
 	double mu, si, l, pi, wn , wl, wr, fp;
@@ -25,7 +29,11 @@ public:
 
 };
 
-
+/** Represents a binary classifier that makes judgements based on a single segment of input data.
+ * It would appear based on prior documentation that this class was created in order to provide support for the new
+ * parameters introduced with the latest development revision of Tfit. Despite this, the classes present in 
+ * model_single.h and model_single.cpp are unused in Tfit.
+ */
 class classifier_single{
 public:
 	double ll, covergence_threshold, max_iterations;
