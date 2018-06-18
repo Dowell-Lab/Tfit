@@ -250,6 +250,34 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Computes a baysean information criterion score (in two dimensions?) given the input data. As the model optimizes parameters, this function provides a score with which the model can determine the magnitude of improvement.</p>
+<p>In effect, the BIC3 function should determine how well a given iteration of the model fits its input data.</p>
+<p>The BIC is defined as ln(n)*k-2ln(L), where L is the maximized likelihood function.</p>
+<p>This likelihood function is defined as: L=p(x|th, M), where th is the set of parameters that maximize said likelihood function.</p>
+<p>In this case, p() is represented by a call to the functions within the <a class="el" href="class_e_m_g.html">EMG</a> class, as <a class="el" href="class_e_m_g.html">EMG</a> encapsulates the distribution fitting code central to tfit's operation. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>Set of points on which to compute scores. </td></tr>
+    <tr><td class="paramname">avgLL</td><td>Filled with the average log likelihoods of a given model over the distributions. </td></tr>
+    <tr><td class="paramname">variances</td><td>Filled with the variances computed here. </td></tr>
+    <tr><td class="paramname">lambdas</td><td>Filled with the optimal lambdas computed here. </td></tr>
+    <tr><td class="paramname">skews</td><td>Set to 0. </td></tr>
+    <tr><td class="paramname">N_pos</td><td>Number of reads on the positive (forward) strand. </td></tr>
+    <tr><td class="paramname">N_neg</td><td>Number of reads on the negative (reverse) strand. </td></tr>
+    <tr><td class="paramname">S_pos</td><td>Sigma parameter for positive strand. </td></tr>
+    <tr><td class="paramname">S_neg</td><td>Sigma parameter for negative strand. </td></tr>
+    <tr><td class="paramname">S2_pos</td><td></td></tr>
+    <tr><td class="paramname">S2_neg</td><td></td></tr>
+    <tr><td class="paramname">mu</td><td>Mu parameter for the classifier. </td></tr>
+    <tr><td class="paramname">j</td><td>Starting position in the data range to compute on. </td></tr>
+    <tr><td class="paramname">k</td><td>Stopping position in the data range to compute on. </td></tr>
+    <tr><td class="paramname">i</td><td>Index in given arrays (avgLL, variances, lambdas, and skews) in which to write output values. </td></tr>
+    <tr><td class="paramname">scale</td><td>Scaling parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>BIC score of the given distributions. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="old__template__matching_8cpp_source.html#l00069">69</a> of file <a class="el" href="old__template__matching_8cpp_source.html">old_template_matching.cpp</a>.</p>
 
 </div>
 </div>
@@ -326,6 +354,29 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Implements the Bayesian Information Criterion for scoring within the model. As the model optimizes parameters, this function provides a score with which the model can determine the magnitude of improvement.</p>
+<p>In effect, the BIC3 function should determine how well a given iteration of the model fits its input data.</p>
+<p>The BIC is defined as ln(n)*k-2ln(L), where L is the maximized likelihood function.</p>
+<p>This likelihood function is defined as: L=p(x|th, M), where th is the set of parameters that maximize said likelihood function.</p>
+<p>In this case, p() is represented by a call to the functions within the <a class="el" href="class_e_m_g.html">EMG</a> class, as <a class="el" href="class_e_m_g.html">EMG</a> encapsulates the distribution fitting code central to tfit's operation. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>Set of data points on which to compute optimal parameter values. </td></tr>
+    <tr><td class="paramname">j</td><td>Starting point within the input dataset. </td></tr>
+    <tr><td class="paramname">k</td><td>Stopping point within the input dataset. </td></tr>
+    <tr><td class="paramname">i</td><td>Used to index the mu parameter within the input data array. </td></tr>
+    <tr><td class="paramname">N_pos</td><td>Number of positive reads in the input dataset. </td></tr>
+    <tr><td class="paramname">N_neg</td><td>Number of negative reads in the input dataset. </td></tr>
+    <tr><td class="paramname">sigma</td><td>Model parameter sigma </td></tr>
+    <tr><td class="paramname">lambda</td><td>Model parameter lambda </td></tr>
+    <tr><td class="paramname">fp</td><td>used to compute a footprint parameter. Presumably specified in base pairs. </td></tr>
+    <tr><td class="paramname">pi</td><td>Not used. </td></tr>
+    <tr><td class="paramname">w</td><td>Not used. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>BIC score. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="old__template__matching_8cpp_source.html#l00160">160</a> of file <a class="el" href="old__template__matching_8cpp_source.html">old_template_matching.cpp</a>.</p>
 
 </div>
 </div>
@@ -420,6 +471,23 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Performs template matching based on models with optimal scores via the baysean information criterion. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>Input data on which to evaluate and train models. </td></tr>
+    <tr><td class="paramname">BIC_values</td><td>Set of output BIC scores for a given set of models. </td></tr>
+    <tr><td class="paramname">densities</td><td>Set of output densities indexed with the given set of models. </td></tr>
+    <tr><td class="paramname">densities_r</td><td>Set of output densities for the reverse strand. </td></tr>
+    <tr><td class="paramname">window</td><td>Sets a window over which to compute models. </td></tr>
+    <tr><td class="paramname">sigma</td><td>Sigma parameter for BIC3 scoring. </td></tr>
+    <tr><td class="paramname">lambda</td><td>Lambda parameter for BIC3 scoring. </td></tr>
+    <tr><td class="paramname">foot_print</td><td>foot_print parameter for BIC3 scoring. </td></tr>
+    <tr><td class="paramname">pi</td><td>pi parameter for BIC3 scoring. </td></tr>
+    <tr><td class="paramname">w</td><td>w parameter for BIC3 scoring. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="old__template__matching_8cpp_source.html#l00209">209</a> of file <a class="el" href="old__template__matching_8cpp_source.html">old_template_matching.cpp</a>.</p>
 
 </div>
 </div>
@@ -478,6 +546,21 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Computes the (Riemann sum?) of log likelihoods over a set of sample points given various distribution parameters. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">X</td><td>Set of sample points on which to run. </td></tr>
+    <tr><td class="paramname">mu</td><td>Mu parameter for <a class="el" href="class_e_m_g.html">EMG</a> model distribution. </td></tr>
+    <tr><td class="paramname">w</td><td>W parameter for <a class="el" href="class_e_m_g.html">EMG</a> model distribution. </td></tr>
+    <tr><td class="paramname">pi</td><td>Pi parameter for <a class="el" href="class_e_m_g.html">EMG</a> model distribution. </td></tr>
+    <tr><td class="paramname">l</td><td>Length of integral division. </td></tr>
+    <tr><td class="paramname">j</td><td>Starting position within X. </td></tr>
+    <tr><td class="paramname">k</td><td>Stopping position within X. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Sum of log liklihoods for the given distribution </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="old__template__matching_8cpp_source.html#l00124">124</a> of file <a class="el" href="old__template__matching_8cpp_source.html">old_template_matching.cpp</a>.</p>
 
 </div>
 </div>
@@ -506,6 +589,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Performs template matching utilizing random noise instead of pre-assigned parameters. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segments</td><td>Set of input segments. </td></tr>
+    <tr><td class="paramname">scale</td><td>Scaling parameter (should be 1000 for window size to be 1bp). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="old__template__matching_8cpp_source.html#l00739">739</a> of file <a class="el" href="old__template__matching_8cpp_source.html">old_template_matching.cpp</a>.</p>
 
 </div>
 </div>
@@ -576,6 +668,24 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Runs template matching given a set of input parameters. Unlike the newer version of the template matching algorithm, this has no need for a <a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> input.</p>
+<p>TODO: Describe other functional differences.</p>
+<p>This should effectively implement the functionality seen within the bidir module. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segments</td><td>Set of input segments read from an input bedgraph. </td></tr>
+    <tr><td class="paramname">out_dir</td><td>Output directory in which to save the trained model. </td></tr>
+    <tr><td class="paramname">res</td><td>Resolution at which to perform the template matching. </td></tr>
+    <tr><td class="paramname">density</td><td>Expected density of reads (Unused) </td></tr>
+    <tr><td class="paramname">scale</td><td>Window scaling parameter. A value of 2500 will yield a window size of 1bp. </td></tr>
+    <tr><td class="paramname">ct</td><td>Cutoff for BIC score values (?) </td></tr>
+    <tr><td class="paramname">np</td><td>Number of workers obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">skew</td><td>Skew parameter. Unused. </td></tr>
+    <tr><td class="paramname">single</td><td>Passed to BIC_template and is unused there. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="old__template__matching_8cpp_source.html#l00302">302</a> of file <a class="el" href="old__template__matching_8cpp_source.html">old_template_matching.cpp</a>.</p>
 
 </div>
 </div>
@@ -610,6 +720,19 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Runs template matching given a set of input parameters. Unlike the newer version of the template matching algorithm, this has no need for a <a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> input. NOTE: This is labelled old_long because it was part of a revision of tfit in which overall implementation was noticably more fleshed out than earlier versions.</p>
+<p>TODO: Describe other functional differences.</p>
+<p>This should effectively implement the functionality seen within the bidir module. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segments</td><td>Set of input segments read from an input bedgraph. </td></tr>
+    <tr><td class="paramname">out_dir</td><td>Output directory in which to save the trained model. </td></tr>
+    <tr><td class="paramname">pw</td><td><a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> object. </td></tr>
+    <tr><td class="paramname">SC</td><td><a class="el" href="classslice__ratio.html">slice_ratio</a> used to keep track of various thresholds. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="old__template__matching_8cpp_source.html#l00589">589</a> of file <a class="el" href="old__template__matching_8cpp_source.html">old_template_matching.cpp</a>.</p>
 
 </div>
 </div>

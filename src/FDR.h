@@ -37,6 +37,9 @@ class exponential{
   double pdf(double );
 };
 
+/** Represents a pareto distribution.
+ * This class provides methods that enable a user to sample from a pareto distribution.
+ */
 class pareto{
  public:
   double alpha,mu;

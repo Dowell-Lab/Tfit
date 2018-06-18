@@ -14,6 +14,11 @@
 using namespace std;
 
 
+/** Recursively attempts to return a valid output filename.
+ * This function is used so that Tfit doesn't overwrite the results returned from prior runs.
+ * @param FILE Base filename
+ * @param i initial iterator parameter with which to generate a unique filename. 
+ */
 string check_file(string FILE, int i){ //don't want to write over an existing file
 	string template_file 	= FILE + to_string(i);
 	ifstream FH(template_file);
@@ -24,7 +29,13 @@ string check_file(string FILE, int i){ //don't want to write over an existing fi
 	return template_file;
 }
 
-
+/** Generates a structure containing representations of various command line parameters for use in classification utilizing a depreciated params object.
+ * Use make_classifier_struct_free_model_pwrapper instead.
+ * @depreciated
+ * @param P Params object encapsulating command line arguments.
+ * @param data Input reads.
+ * @return Map between integers (in this case just indices) and filled out classifier structures.
+ */
 map<int, vector<classifier> > make_classifier_struct_free_model(params * P, segment * data){
 
 	int min_k 		= stoi(P->p["-minK"]);
@@ -54,6 +65,11 @@ map<int, vector<classifier> > make_classifier_struct_free_model(params * P, segm
 	return A;
 }
 
+/** Generates a structure containing representations of various command line parameters for use in classification utilizing a ParamWrapper.
+ * @param pw ParamWrapper object encapsulating command line arguments.
+ * @param data Input reads.
+ * @return Map between integers (in this case just indices) and filled out classifier structures.
+ */
 map<int, vector<classifier> > make_classifier_struct_free_model_pwrapper(ParamWrapper *pw, segment * data){
 
 	int min_k 		= pw->mink;
@@ -81,6 +97,16 @@ map<int, vector<classifier> > make_classifier_struct_free_model_pwrapper(ParamWr
 	return A;
 }
 
+/** Full constructor for simple_c_free_mode class.
+ * @param FOUND Whether or not the learning process has converged (used as a tag within the object).
+ * @param ll Log likelihood of the converged result.
+ * @param C Set of components specifying various bidirectional model parameters.
+ * @param K Index or ID?
+ * @param data Input segment set.
+ * @param i Unused.
+ * @param forward_N Number of forward strand elements (base pairs; used to set values with respect to call dimensions).
+ * @param reverse_N Number of reverse strand elements (see notes for forward_N).
+ */
 simple_c_free_mode::simple_c_free_mode(bool FOUND, double ll, 
 	component C, int K, segment * data, int i, double forward_N, double reverse_N){
 	SS[0]=ll, SS[1]=forward_N, SS[2]=reverse_N;
@@ -109,6 +135,9 @@ simple_c_free_mode::simple_c_free_mode(bool FOUND, double ll,
 		ps[11]=C.bidir.foot_print;
 	}
 }
+
+/** Default constructor for simple_c_free_mode.
+ */
 simple_c_free_mode::simple_c_free_mode(){}
 
 vector<simple_c_free_mode> transform_free_mode(bool FOUND, double ll, component * components, 
@@ -125,6 +154,14 @@ vector<simple_c_free_mode> transform_free_mode(bool FOUND, double ll, component 
 	
 }
 
+/** Returns the optimal set of model parameters and results from a given free_mode object.
+ * 
+ * @param A Set of classifiers to check.
+ * @param data Set of segments over which those classifiers (presumably) ran.
+ * @param i Unused.
+ * 
+ * @return Map of ints (used as indices) to simple_c_free_mode objects representing the best fitting models.
+ */
 map<int, vector<simple_c_free_mode> > get_max_from_free_mode(map<int, vector<classifier> > A, segment * data, int i){
 	map<int, vector<simple_c_free_mode> > BEST;
 	typedef map<int, vector<classifier> >::iterator it_type_A;
@@ -157,7 +194,15 @@ map<int, vector<simple_c_free_mode> > get_max_from_free_mode(map<int, vector<cla
 	return BEST;
 }
 
-
+/** Runs the model (presumably the core of the behavior seen in the model module) across a set of segments given a depreciated params object.
+ * Use run_model_across_free_mode_pwrapper() instead.
+ * 
+ * @depreciated
+ * @param FSI Input segments.
+ * @param P Obsolete params object.
+ * @param LG Output log file.
+ * @return A set of optimal simple_c_free_mode maps as obtained from get_max_from_free_mode().
+ */
 vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<segment *> FSI, params * P, 
 	Log_File * LG){
 	vector<map<int, vector<simple_c_free_mode> >> D;
@@ -198,6 +243,13 @@ vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<
 	return D;
 }
 
+/** Runs the model (presumably the core of the behavior seen in the model module) across a set of segments given a ParamWrapper.
+ * 
+ * @param FSI Input segments.
+ * @param pw Command line arguments used in setting model parameters.
+ * @param LG Output log file.
+ * @return A set of optimal simple_c_free_mode maps as obtained from get_max_from_free_mode().
+ */
 vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode_pwrapper(vector<segment *> FSI, ParamWrapper *pw, Log_File * LG){
 	vector<map<int, vector<simple_c_free_mode> >> D;
 	typedef map<int, vector<classifier> > ::iterator it_type;
@@ -237,7 +289,12 @@ vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode_pwrappe
 	return D;
 }
 
-
+/** This computes the average set of model parameters for a given set of segments and an obsolete params object.
+ * @depreciated
+ * @param segments Input reads.
+ * @param P Command line arguments from which to read parameters.
+ * @return Set of model parameters.
+ */
 vector<double> compute_average_model(vector<segment *> segments, params * P){
 	//need to compute average model
 	double minX 	= 0;
@@ -314,6 +371,11 @@ vector<double> compute_average_model(vector<segment *> segments, params * P){
 	return parameters;
 }	
 
+/** This computes the average set of model parameters for a given set of segments and a ParamWrapper.
+ * @param segments Input reads.
+ * @param pw Command line arguments from which to read parameters.
+ * @return Set of model parameters.
+ */
 vector<double> compute_average_model_pwrapper(vector<segment *> segments, ParamWrapper *pw){
 	//need to compute average model
 	double minX 	= 0;

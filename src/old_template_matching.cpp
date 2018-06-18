@@ -35,6 +35,37 @@ int sample_centers(vector<double> centers, double p){
 	return i;//required in model.o (ugh...)
 }*/
 
+/** Computes a baysean information criterion score (in two dimensions?) given the input data.
+ * As the model optimizes parameters, this function provides a score with which the model can determine
+ * the magnitude of improvement.
+ * 
+ * In effect, the BIC3 function should determine how well a given iteration of the model fits its input data.
+ * 
+ * The BIC is defined as ln(n)*k-2ln(L), where L is the maximized likelihood function.
+ * 
+ * This likelihood function is defined as:
+ * L=p(x|th, M), where th is the set of parameters that maximize said likelihood function.
+ * 
+ * In this case, p() is represented by a call to the functions within the EMG class, as EMG
+ * encapsulates the distribution fitting code central to tfit's operation.
+ * @param X Set of points on which to compute scores.
+ * @param avgLL Filled with the average log likelihoods of a given model over the distributions.
+ * @param variances Filled with the variances computed here.
+ * @param lambdas Filled with the optimal lambdas computed here.
+ * @param skews Set to 0.
+ * @param N_pos Number of reads on the positive (forward) strand.
+ * @param N_neg Number of reads on the negative (reverse) strand.
+ * @param S_pos Sigma parameter for positive strand.
+ * @param S_neg Sigma parameter for negative strand.
+ * @param S2_pos
+ * @param S2_neg
+ * @param mu Mu parameter for the classifier.
+ * @param j Starting position in the data range to compute on.
+ * @param k Stopping position in the data range to compute on.
+ * @param i Index in given arrays (avgLL, variances, lambdas, and skews) in which to write output values.
+ * @param scale Scaling parameter.
+ * @return BIC score of the given distributions.
+ */
 double BIC2(double ** X,  double * avgLL, double * variances,double * lambdas, 
 	double ** skews, double N_pos, double N_neg, double S_pos, 
 		double S_neg, double S2_pos, double S2_neg,double mu, int j,int k,int i, double scale ){
@@ -80,6 +111,16 @@ double BIC2(double ** X,  double * avgLL, double * variances,double * lambdas,
 	return argBIC;
 }
 
+/** Computes the (Riemann sum?) of log likelihoods over a set of sample points given various distribution parameters.
+ * @param X Set of sample points on which to run.
+ * @param mu Mu parameter for EMG model distribution.
+ * @param w W parameter for EMG model distribution.
+ * @param pi Pi parameter for EMG model distribution.
+ * @param l Length of integral division.
+ * @param j Starting position within X.
+ * @param k Stopping position within X.
+ * @return Sum of log liklihoods for the given distribution
+ */
 double get_ll(double ** X, double mu, double w, double pi, double l, int j, int k){
 	double emg_ll 	= 0;
 	EMG EMG_clf(mu, 1.0, 0.1, w, pi  );
@@ -90,7 +131,32 @@ double get_ll(double ** X, double mu, double w, double pi, double l, int j, int 
 
 }
 
-
+/** Implements the Bayesian Information Criterion for scoring within the model.
+ * As the model optimizes parameters, this function provides a score with which the model can determine
+ * the magnitude of improvement.
+ * 
+ * In effect, the BIC3 function should determine how well a given iteration of the model fits its input data.
+ * 
+ * The BIC is defined as ln(n)*k-2ln(L), where L is the maximized likelihood function.
+ * 
+ * This likelihood function is defined as:
+ * L=p(x|th, M), where th is the set of parameters that maximize said likelihood function.
+ * 
+ * In this case, p() is represented by a call to the functions within the EMG class, as EMG
+ * encapsulates the distribution fitting code central to tfit's operation.
+ * @param X Set of data points on which to compute optimal parameter values.
+ * @param j Starting point within the input dataset.
+ * @param k Stopping point within the input dataset.
+ * @param i Used to index the mu parameter within the input data array.
+ * @param N_pos Number of positive reads in the input dataset.
+ * @param N_neg Number of negative reads in the input dataset.
+ * @param sigma Model parameter sigma
+ * @param lambda Model parameter lambda
+ * @param fp used to compute a footprint parameter. Presumably specified in base pairs.
+ * @param pi Not used.
+ * @param w Not used.
+ * @return BIC score.
+ */
 double BIC3(double ** X, int j, int k, int i,
 	double N_pos, double N_neg, double * avgLL, double * variances,double * lambdas, 
 	double ** skews){
@@ -128,6 +194,18 @@ double BIC3(double ** X, int j, int k, int i,
 
 }
 
+/** Performs template matching based on models with optimal scores via the baysean information criterion.
+ * @param data Input data on which to evaluate and train models.
+ * @param BIC_values Set of output BIC scores for a given set of models.
+ * @param densities Set of output densities indexed with the given set of models.
+ * @param densities_r Set of output densities for the reverse strand.
+ * @param window Sets a window over which to compute models.
+ * @param sigma Sigma parameter for BIC3 scoring.
+ * @param lambda Lambda parameter for BIC3 scoring.
+ * @param foot_print foot_print parameter for BIC3 scoring.
+ * @param pi pi parameter for BIC3 scoring.
+ * @param w w parameter for BIC3 scoring.
+ */
 void BIC_template(segment * data, double * avgLL, double * BIC_values, double * densities, double * densities_r,
 	double * variances,double * lambdas, double ** skews ,double window, int np, int single,double foot_res,double scale){
 	double vl;
@@ -206,6 +284,21 @@ void BIC_template(segment * data, double * avgLL, double * BIC_values, double * 
 	}
 }
 
+/** Runs template matching given a set of input parameters. Unlike the newer version of the template matching algorithm, this has no need for a ParamWrapper input.
+ * 
+ * TODO: Describe other functional differences.
+ * 
+ * This should effectively implement the functionality seen within the bidir module.
+ * @param segments Set of input segments read from an input bedgraph.
+ * @param out_dir Output directory in which to save the trained model.
+ * @param res Resolution at which to perform the template matching.
+ * @param density Expected density of reads (Unused)
+ * @param scale Window scaling parameter. A value of 2500 will yield a window size of 1bp.
+ * @param ct Cutoff for BIC score values (?)
+ * @param np Number of workers obtained from the MPI runtime.
+ * @param skew Skew parameter. Unused.
+ * @param single Passed to BIC_template and is unused there.
+ */
 void run_global_template_matching_old(vector<segment*> segments, 
 	string out_dir,  double res, double density,
 	double scale, double ct, int np, double skew, int single){
@@ -348,6 +441,34 @@ void run_global_template_matching_old(vector<segment*> segments,
 	}
 }
 
+/** Implements the Bayesian Information Criterion for scoring within the model.
+ * As the model optimizes parameters, this function provides a score with which the model can determine
+ * the magnitude of improvement.
+ * 
+ * In effect, the BIC3 function should determine how well a given iteration of the model fits its input data.
+ * 
+ * The BIC is defined as ln(n)*k-2ln(L), where L is the maximized likelihood function.
+ * 
+ * This likelihood function is defined as:
+ * L=p(x|th, M), where th is the set of parameters that maximize said likelihood function.
+ * 
+ * In this case, p() is represented by a call to the functions within the EMG class, as EMG
+ * encapsulates the distribution fitting code central to tfit's operation.
+ * 
+ * NOTE: This is labelled old_long because it was part of a revision of tfit in which overall implementation was noticably more fleshed out than earlier versions.
+ * @param X Set of data points on which to compute optimal parameter values.
+ * @param j Starting point within the input dataset.
+ * @param k Stopping point within the input dataset.
+ * @param i Used to index the mu parameter within the input data array.
+ * @param N_pos Number of positive reads in the input dataset.
+ * @param N_neg Number of negative reads in the input dataset.
+ * @param sigma Model parameter sigma
+ * @param lambda Model parameter lambda
+ * @param fp used to compute a footprint parameter. Presumably specified in base pairs.
+ * @param pi Not used.
+ * @param w Not used.
+ * @return BIC score.
+ */
 double BIC3_old_long(double ** X, int j, int k, int i,
 	double N_pos, double N_neg, double * avgLL, double * variances,double * lambdas, 
 	double ** skews, double sigma, double lambda, double fp, double pi, double w){
@@ -378,11 +499,21 @@ double BIC3_old_long(double ** X, int j, int k, int i,
 	avgLL[i] 		= best_emg_ll / N;
 	skews[i][0]  	= 0, skews[i][1]= 0;
 	return emg_ratio;
-
-
-
 }
 
+/** Performs template matching based on models with optimal scores via the baysean information criterion.
+ * NOTE: This is labelled old_long because it was part of a revision of tfit in which overall implementation was noticably more fleshed out than earlier versions.
+ * @param data Input data on which to evaluate and train models.
+ * @param BIC_values Set of output BIC scores for a given set of models.
+ * @param densities Set of output densities indexed with the given set of models.
+ * @param densities_r Set of output densities for the reverse strand.
+ * @param window Sets a window over which to compute models.
+ * @param sigma Sigma parameter for BIC3 scoring.
+ * @param lambda Lambda parameter for BIC3 scoring.
+ * @param foot_print foot_print parameter for BIC3 scoring.
+ * @param pi pi parameter for BIC3 scoring.
+ * @param w w parameter for BIC3 scoring.
+ */
 void BIC_template_old_long(segment * data, double * avgLL, double * BIC_values, double * densities, double * densities_r,
 	double * variances,double * lambdas, double ** skews ,double window, 
 	double sigma, double lambda, double foot_print, double pi, double w){
@@ -444,6 +575,17 @@ void BIC_template_old_long(segment * data, double * avgLL, double * BIC_values, 
 	}
 }
 
+/** Runs template matching given a set of input parameters. Unlike the newer version of the template matching algorithm, this has no need for a ParamWrapper input.
+ * NOTE: This is labelled old_long because it was part of a revision of tfit in which overall implementation was noticably more fleshed out than earlier versions.
+ * 
+ * TODO: Describe other functional differences.
+ * 
+ * This should effectively implement the functionality seen within the bidir module.
+ * @param segments Set of input segments read from an input bedgraph.
+ * @param out_dir Output directory in which to save the trained model.
+ * @param pw ParamWrapper object.
+ * @param SC slice_ratio used to keep track of various thresholds.
+ */
 void run_global_template_matching_old_long(vector<segment*> segments, 
 	string out_dir,  ParamWrapper * pw){
 	
@@ -590,7 +732,10 @@ void run_global_template_matching_old_long(vector<segment*> segments,
 	}
 }
 
-
+/** Performs template matching utilizing random noise instead of pre-assigned parameters.
+ * @param segments Set of input segments.
+ * @param scale Scaling parameter (should be 1000 for window size to be 1bp).
+ */
 void noise_global_template_matching_old(vector<segment*> segments, double scale){
 
 	double window, foot_print;

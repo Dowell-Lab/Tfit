@@ -346,6 +346,12 @@ slice_ratio get_slice(vector<segment *> segments, int N, double CC, params * P){
   return SC;
 }
 
+/** Computes a slice_ratio given a set of segments and various other parameters.
+ * @param segments Set of segments over which to compute the slice_ratio.
+ * @param N Number of parameters to estimate.
+ * @param CC Threshold (?)
+ * @param pw ParamWrapper object from which to read command line parameters.
+ */
 slice_ratio get_slice_pwrapper(vector<segment *> segments, int N, double CC, ParamWrapper *pw){
   double sigma, lambda, fp, pi, w, window, pval_threshold,ns;
  

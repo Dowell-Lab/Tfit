@@ -116,7 +116,9 @@ Include dependency graph for across_segments.cpp:</div>
 <area shape="rect" id="node21" href="_f_d_r_8h.html" title="FDR.h" alt="" coords="926,184,987,211"/>
 </map>
 </div>
-</div><table class="memberdecls">
+</div>
+<p><a href="across__segments_8cpp_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a6ac35181865c80ec4432884a653f90c5"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="across__segments_8cpp.html#a6ac35181865c80ec4432884a653f90c5">check_file</a> (string FILE, int i)</td></tr>
@@ -164,6 +166,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Recursively attempts to return a valid output filename. This function is used so that Tfit doesn't overwrite the results returned from prior runs. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">FILE</td><td>Base filename </td></tr>
+    <tr><td class="paramname">i</td><td>initial iterator parameter with which to generate a unique filename. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="across__segments_8cpp_source.html#l00022">22</a> of file <a class="el" href="across__segments_8cpp_source.html">across_segments.cpp</a>.</p>
 
 </div>
 </div>
@@ -192,6 +203,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>This computes the average set of model parameters for a given set of segments and an obsolete params object.  </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segments</td><td>Input reads. </td></tr>
+    <tr><td class="paramname">P</td><td>Command line arguments from which to read parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Set of model parameters. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="across__segments_8cpp_source.html#l00298">298</a> of file <a class="el" href="across__segments_8cpp_source.html">across_segments.cpp</a>.</p>
 
 </div>
 </div>
@@ -220,6 +241,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>This computes the average set of model parameters for a given set of segments and a <a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segments</td><td>Input reads. </td></tr>
+    <tr><td class="paramname">pw</td><td>Command line arguments from which to read parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Set of model parameters. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="across__segments_8cpp_source.html#l00379">379</a> of file <a class="el" href="across__segments_8cpp_source.html">across_segments.cpp</a>.</p>
 
 </div>
 </div>
@@ -254,6 +285,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns the optimal set of model parameters and results from a given free_mode object.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">A</td><td>Set of classifiers to check. </td></tr>
+    <tr><td class="paramname">data</td><td>Set of segments over which those classifiers (presumably) ran. </td></tr>
+    <tr><td class="paramname">i</td><td>Unused.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Map of ints (used as indices) to <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> objects representing the best fitting models. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="across__segments_8cpp_source.html#l00165">165</a> of file <a class="el" href="across__segments_8cpp_source.html">across_segments.cpp</a>.</p>
 
 </div>
 </div>
@@ -282,6 +325,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Generates a structure containing representations of various command line parameters for use in classification utilizing a depreciated params object. Use make_classifier_struct_free_model_pwrapper instead.  </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">P</td><td>Params object encapsulating command line arguments. </td></tr>
+    <tr><td class="paramname">data</td><td>Input reads. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Map between integers (in this case just indices) and filled out classifier structures. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="across__segments_8cpp_source.html#l00039">39</a> of file <a class="el" href="across__segments_8cpp_source.html">across_segments.cpp</a>.</p>
 
 </div>
 </div>
@@ -310,6 +363,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Generates a structure containing representations of various command line parameters for use in classification utilizing a <a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pw</td><td><a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> object encapsulating command line arguments. </td></tr>
+    <tr><td class="paramname">data</td><td>Input reads. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Map between integers (in this case just indices) and filled out classifier structures. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="across__segments_8cpp_source.html#l00073">73</a> of file <a class="el" href="across__segments_8cpp_source.html">across_segments.cpp</a>.</p>
 
 </div>
 </div>
@@ -344,6 +407,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Runs the model (presumably the core of the behavior seen in the model module) across a set of segments given a depreciated params object. Use <a class="el" href="across__segments_8cpp.html#ac0c15e7209a353baa41dfcc9bbe4675c">run_model_across_free_mode_pwrapper()</a> instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">FSI</td><td>Input segments. </td></tr>
+    <tr><td class="paramname">P</td><td>Obsolete params object. </td></tr>
+    <tr><td class="paramname">LG</td><td>Output log file. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A set of optimal <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> maps as obtained from <a class="el" href="across__segments_8cpp.html#a60a0de42566f30e53e555cc5c9b1580b">get_max_from_free_mode()</a>. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="across__segments_8cpp_source.html#l00206">206</a> of file <a class="el" href="across__segments_8cpp_source.html">across_segments.cpp</a>.</p>
 
 </div>
 </div>
@@ -378,6 +453,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Runs the model (presumably the core of the behavior seen in the model module) across a set of segments given a <a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">FSI</td><td>Input segments. </td></tr>
+    <tr><td class="paramname">pw</td><td>Command line arguments used in setting model parameters. </td></tr>
+    <tr><td class="paramname">LG</td><td>Output log file. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A set of optimal <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> maps as obtained from <a class="el" href="across__segments_8cpp.html#a60a0de42566f30e53e555cc5c9b1580b">get_max_from_free_mode()</a>. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="across__segments_8cpp_source.html#l00253">253</a> of file <a class="el" href="across__segments_8cpp_source.html">across_segments.cpp</a>.</p>
 
 </div>
 </div>
@@ -442,6 +529,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="across__segments_8cpp_source.html#l00143">143</a> of file <a class="el" href="across__segments_8cpp_source.html">across_segments.cpp</a>.</p>
 
 </div>
 </div>

@@ -12,10 +12,16 @@
 
 //=============================================
 //Helper functions
+/** Computes the probability density at a given point for a standard distribution.
+ * @param x
+ * @return Probability density at x.
+ */
 double IN(double x) { //Standard Normal PDF
 	return exp(-pow(x, 2) * 0.5) / sqrt(2 * M_PI);
 }
 
+/**
+ */
 double IC(double x) { //Standard Normal CDF
 	return 0.5 * (1 + erf(x / sqrt(2)));
 }
