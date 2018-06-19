@@ -6,11 +6,14 @@
 #include "read_in_parameters.h"
 #include "ParamWrapper.hpp"
 using namespace std;
+
+/** This class appears to encapsulate an individual set of parameters and related model data such that it
+ * can be esaily summarized and dumped to a file.
+ */
 class simple_c_free_mode;
 
-
-
-
+/** 
+ */
 class classifier; //forward declare
 
 

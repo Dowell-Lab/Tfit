@@ -142,8 +142,6 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Encapsulates a dictionary of parameters used by older codepaths within Tfit. This is the original interface through which various functions would obtain their parameters. Due to the rigid mapping between requested parameters and command line parameters, this inteface would make it extremely difficult to change tfit's interface later on. As such, <a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> was developed to supercede the functionality presented here. </p>
-
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00018">18</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a20bbc13222589486dd7799ae4a20b260"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a20bbc13222589486dd7799ae4a20b260">&#9670;&nbsp;</a></span>params()</h2>
@@ -160,8 +158,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Default constructor. This sets all values to their defaults; this proved to be the basis upon which <a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> was constructed. Please note that the last published Tfit documentation directly from this project's original developer features a different set of default parameters than is represented here. </p>
-
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8cpp_source.html#l00025">25</a> of file <a class="el" href="read__in__parameters_8cpp_source.html">read_in_parameters.cpp</a>.</p>
 
 </div>
 </div>
@@ -200,8 +196,6 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8cpp_source.html#l00350">350</a> of file <a class="el" href="read__in__parameters_8cpp_source.html">read_in_parameters.cpp</a>.</p>
-
 </div>
 </div>
 <a id="a91c6c57e6ec87955bfabc9250067b12f"></a>
@@ -228,8 +222,6 @@ Public Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pretty printed list of parameters. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8cpp_source.html#l00413">413</a> of file <a class="el" href="read__in__parameters_8cpp_source.html">read_in_parameters.cpp</a>.</p>
-
 </div>
 </div>
 <a id="a91a35287738f0c6ed14d9773f86f1daf"></a>
@@ -247,8 +239,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Prints a usage statement. </p>
-
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8cpp_source.html#l00230">230</a> of file <a class="el" href="read__in__parameters_8cpp_source.html">read_in_parameters.cpp</a>.</p>
 
 </div>
 </div>
@@ -269,8 +259,6 @@ Public Attributes</h2></td></tr>
 <p>Determines whether or not the user passed appropriate values for all given parameters. For example, if a value that's normally specified as in integer or path is not specified as such, then this function will return an error string matching that problem.</p>
 <dl class="section return"><dt>Returns</dt><dd>A vector of error messages for all non-compliant parameters. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8cpp_source.html#l00147">147</a> of file <a class="el" href="read__in__parameters_8cpp_source.html">read_in_parameters.cpp</a>.</p>
-
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -286,8 +274,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00026">26</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
-
 </div>
 </div>
 <a id="a66c17fea9a141aed84ce988ed513fef4"></a>
@@ -301,8 +287,6 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00028">28</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
 
 </div>
 </div>
@@ -318,8 +302,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00052">52</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
-
 </div>
 </div>
 <a id="a3c1db8b95d5ccaabd7d0eb45187474d5"></a>
@@ -334,8 +316,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {  <span class="stringliteral">&quot;-br&quot;</span>,<span class="stringliteral">&quot;-ns&quot;</span>, <span class="stringliteral">&quot;-ct&quot;</span>,</div><div class="line">                        <span class="stringliteral">&quot;-max_noise&quot;</span>,    <span class="stringliteral">&quot;-r_mu&quot;</span>,</div><div class="line">                        <span class="stringliteral">&quot;-ALPHA_0&quot;</span>, <span class="stringliteral">&quot;-ALPHA_1&quot;</span>, <span class="stringliteral">&quot;-ALPHA_2&quot;</span>, <span class="stringliteral">&quot;-BETA_0&quot;</span>, <span class="stringliteral">&quot;-BETA_1&quot;</span>,</div><div class="line">                        <span class="stringliteral">&quot;-bct&quot;</span>, <span class="stringliteral">&quot;-ms_pen&quot;</span> ,</div><div class="line">                        <span class="stringliteral">&quot;-lambda&quot;</span>, <span class="stringliteral">&quot;-sigma&quot;</span>, </div><div class="line">                        <span class="stringliteral">&quot;-foot_print&quot;</span>, <span class="stringliteral">&quot;-pi&quot;</span>,</div><div class="line">                        <span class="stringliteral">&quot;-w&quot;</span>  }</div></div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00041">41</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
-
 </div>
 </div>
 <a id="a8c15e59503de3948c080a19b408ff70d"></a>
@@ -350,8 +330,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {<span class="stringliteral">&quot;-pad&quot;</span>, <span class="stringliteral">&quot;-minK&quot;</span>, <span class="stringliteral">&quot;-maxK&quot;</span>, </div><div class="line">                         <span class="stringliteral">&quot;-rounds&quot;</span>, <span class="stringliteral">&quot;-mi&quot;</span>, <span class="stringliteral">&quot;-MLE&quot;</span>, <span class="stringliteral">&quot;-elon&quot;</span>, <span class="stringliteral">&quot;-merge&quot;</span>}</div></div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00038">38</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
-
 </div>
 </div>
 <a id="a8819ee6c31d66c1631607e8012f4f3e4"></a>
@@ -365,8 +343,6 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00048">48</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
 
 </div>
 </div>
@@ -382,8 +358,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00027">27</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
-
 </div>
 </div>
 <a id="a373bd462f28e8f111e3a02822159acd5"></a>
@@ -397,8 +371,6 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00025">25</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
 
 </div>
 </div>
@@ -414,8 +386,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00024">24</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
-
 </div>
 </div>
 <a id="ae1a0fb3826c0d090a297b1fa8faecdc5"></a>
@@ -429,8 +399,6 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00020">20</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
 
 </div>
 </div>
@@ -446,8 +414,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00031">31</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
-
 </div>
 </div>
 <a id="abd4b26eb02a89cf446ea7800ca3ea4a9"></a>
@@ -461,8 +427,6 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00033">33</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
 
 </div>
 </div>
@@ -478,8 +442,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00034">34</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
-
 </div>
 </div>
 <a id="a69caafcd07db6d08ee8954fc181316ce"></a>
@@ -493,8 +455,6 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00035">35</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
 
 </div>
 </div>
@@ -510,8 +470,6 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00036">36</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
-
 </div>
 </div>
 <a id="a6945215811d756ff74ef12f07936c322"></a>
@@ -526,13 +484,11 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="read__in__parameters_8h_source.html#l00029">29</a> of file <a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>.</p>
-
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/mgohde/dworkspace/tfit-revisions/src/<a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a></li>
-<li>/home/mgohde/dworkspace/tfit-revisions/src/<a class="el" href="read__in__parameters_8cpp_source.html">read_in_parameters.cpp</a></li>
+<li>/home/mgohde/dworkspace/tfit-revisions/src/<a class="el" href="read__in__parameters_8cpp.html">read_in_parameters.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -1,12 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"classclassifier.html#a119c0277192a8839ddc0fb2129149b02":[1,0,1,6],
-"classclassifier.html#a19ade023504491bd4d66ddc78902897f":[1,0,1,8],
-"classclassifier.html#a1cd9f36e765fea03488ab444e765f0b4":[1,0,1,10],
-"classclassifier.html#a2d1c46215d26a06d8707c946f0390ecf":[1,0,1,22],
-"classclassifier.html#a3197fddcd41c7ac531172f27ba9f7b68":[1,0,1,16],
-"classclassifier.html#a3434e419faf9a2d956d89e20781b2472":[1,0,1,15],
-"classclassifier.html#a343e9f2ecda8c1515d7bc28a28591bb1":[1,0,1,17],
 "classclassifier.html#a3c8972aab8f7e8f1c0d6aad7fc9496cf":[1,0,1,12],
 "classclassifier.html#a3e97829a3d0b7dacf540f7b5ff95a827":[1,0,1,30],
 "classclassifier.html#a493760d4263c433dce9e548825bea0c6":[1,0,1,18],
@@ -221,13 +214,11 @@ var NAVTREEINDEX1 =
 "classslice__ratio.html#aec1c98f7ed70b38954d1de259e3a50f3":[1,0,22,18],
 "density__profiler_8cpp.html":[2,0,0,8],
 "density__profiler_8cpp.html#a4fa94d57f6d4cf59273279a396bb0505":[2,0,0,8,0],
-"density__profiler_8cpp_source.html":[2,0,0,8],
 "density__profiler_8h.html":[2,0,0,9],
 "density__profiler_8h.html#a5847d55c3fdc30e95ac7e4cb73142eed":[2,0,0,9,1],
 "density__profiler_8h_source.html":[2,0,0,9],
 "dir_68267d1309a1af8e8297ef4c3efbcdba.html":[2,0,0],
 "error__stdo__logging_8cpp.html":[2,0,0,10],
-"error__stdo__logging_8cpp_source.html":[2,0,0,10],
 "error__stdo__logging_8h.html":[2,0,0,11],
 "error__stdo__logging_8h_source.html":[2,0,0,11],
 "files.html":[2,0],
@@ -249,5 +240,14 @@ var NAVTREEINDEX1 =
 "functions_n.html":[1,2,0,13],
 "functions_o.html":[1,2,0,14],
 "functions_p.html":[1,2,0,15],
-"functions_r.html":[1,2,0,16]
+"functions_r.html":[1,2,0,16],
+"functions_s.html":[1,2,0,17],
+"functions_t.html":[1,2,0,18],
+"functions_u.html":[1,2,0,19],
+"functions_v.html":[1,2,0,20],
+"functions_vars.html":[1,2,2],
+"functions_vars.html":[1,2,2,0],
+"functions_vars_b.html":[1,2,2,1],
+"functions_vars_c.html":[1,2,2,2],
+"functions_vars_d.html":[1,2,2,3]
 };

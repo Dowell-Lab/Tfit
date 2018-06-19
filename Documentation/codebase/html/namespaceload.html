@@ -161,8 +161,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l01233">1233</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Bins a set of segments.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segments</td><td>Set of segments to bin. </td></tr>
+    <tr><td class="paramname">BINS</td><td>Number of bins to use. </td></tr>
+    <tr><td class="paramname">scale</td><td>Scaling factor to use in the binning process. </td></tr>
+    <tr><td class="paramname">erase</td><td>Whether or not to delete existing data after binning (?) </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -181,8 +189,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l01273">1273</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Deletes all segments in the specified vector.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">segments</td><td>Set of segments to delete. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -223,8 +236,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l01241">1241</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Deletes all temporary files used in the fitting and model output process.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dir</td><td>Directory in which temporary files were created. </td></tr>
+    <tr><td class="paramname">job_name</td><td>User-specified name for the job. </td></tr>
+    <tr><td class="paramname">nprocs</td><td>Number of workers obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">job_ID</td><td>Job identifier likely obtained from the MPI runtime. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -271,8 +292,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l00822">822</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>This inserts a set of reads into a set of preexisting segments per-chromosome. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">A</td><td>Chromosome-indexed map of segment vectors in which to insert the given data. </td></tr>
+    <tr><td class="paramname">forward</td><td>Forward strand bed3 file (may be left blank if "joint" is specified.) </td></tr>
+    <tr><td class="paramname">reverse</td><td>Reverse strand bed3 file (may be left blank if "joint" is specified.) </td></tr>
+    <tr><td class="paramname">joint</td><td>Combined bed6 file with both forward and reverse strand reads. (May be used in place of "forward" and "reverse") </td></tr>
+    <tr><td class="paramname">rank</td><td>Rank parameter obtained from the MPI runtime. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector of processed segments. </dd></dl>
 
 </div>
 </div>
@@ -301,8 +331,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l01280">1280</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Loads a TSS input file. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tss_file</td><td>Input TSS training file. </td></tr>
+    <tr><td class="paramname">query_fits</td><td>Set of <a class="el" href="classsegment__fits.html">segment_fits</a> to match against the given TSS inputs. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>New set of <a class="el" href="classsegment__fits.html">segment_fits</a> with TSS values inserted. </dd></dl>
 
 </div>
 </div>
@@ -367,8 +403,21 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l00552">552</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Reads all elements from a bedgraph and returns a set of segments.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">forward_strand</td><td>Forward strand bed3 file. This can be left blank if "joint_bedgraph" is specified. </td></tr>
+    <tr><td class="paramname">reverse_strand</td><td>Reverse strand bed3 file. This can be left blank if "joint_bedgraph" is specified. </td></tr>
+    <tr><td class="paramname">joint_bedgraph</td><td>Bed6 file containing both forward and reverse strand reads. This can take the place of both "forward_strand" and "reverse_strand." </td></tr>
+    <tr><td class="paramname">BINS</td><td>Number of bins to use in segmenting the input bedgaph file. This should affect how various data is mapped and searched for internally. </td></tr>
+    <tr><td class="paramname">scale</td><td>Scaling parameter used in generating individual segments. </td></tr>
+    <tr><td class="paramname">spec_chrom</td><td>User-specified chromosome. This enables Tfit to efficiently run on a subset of a whole dataset. </td></tr>
+    <tr><td class="paramname">chromosomes</td><td>Map in which to place chromosome to index mappings. </td></tr>
+    <tr><td class="paramname">ID_to_chrom</td><td>Map in which to place index to chromosome mappings. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Set of segments read from the specified input file(s). </dd></dl>
 
 </div>
 </div>
@@ -409,8 +458,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l00652">652</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Loads a set of segments from a given input training file. This file should indicate groundtruth regions of transcription from which Tfit can generate a useful model. This function uses a depreciated params object. Please use load_intervals_of_interest_pwrapper instead.  </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">FILE</td><td>Input training file path. </td></tr>
+    <tr><td class="paramname">IDS</td><td>Map of integers to strings in which to place ID to (chromosome?) mappings. </td></tr>
+    <tr><td class="paramname">P</td><td>Obsolete params object from which to read user parameters such as desired chromosome, etc. </td></tr>
+    <tr><td class="paramname">center</td><td>Whether or not the input reads file indicates the center of the given set of distributions instead of entire regions of transcription. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Set of segments representing training intervals. </dd></dl>
 
 </div>
 </div>
@@ -451,8 +508,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l00737">737</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Loads a set of segments from a given input training file. This file should indicate groundtruth regions of transcription from which Tfit can generate a useful model.  </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">FILE</td><td>Input training file path. </td></tr>
+    <tr><td class="paramname">IDS</td><td>Map of integers to strings in which to place ID to (chromosome?) mappings. </td></tr>
+    <tr><td class="paramname">pw</td><td><a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> object from which to read user parameters such as desired chromosome, etc. </td></tr>
+    <tr><td class="paramname">center</td><td>Whether or not the input reads file indicates the center of the given set of distributions instead of entire regions of transcription. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Set of segments representing training intervals. </dd></dl>
 
 </div>
 </div>
@@ -471,8 +536,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l00897">897</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Returns a set of <a class="el" href="classsegment__fits.html">segment_fits</a> from a given input model bidir file. This should be used in conjunction with the bidir module to provide useful model inputs. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">FILE</td><td>Input file from which to read fits. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A set of <a class="el" href="classsegment__fits.html">segment_fits</a> representing individual segment models. </dd></dl>
 
 </div>
 </div>
@@ -513,8 +583,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l01207">1207</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Writes a set of bidirectional model fits utilizing a penalty value passed from the command line (the -ms_pen parameter at the time of this writing). This function uses a depreciated params object. Please use write_out_bidirectionals_ms_pen_pwrapper instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fits</td><td>Set of models to write. </td></tr>
+    <tr><td class="paramname">P</td><td>Obsolete params object from which to read command line parameters. </td></tr>
+    <tr><td class="paramname">job_ID</td><td>Job identifier most likely obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">noise</td><td>Unused. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -555,8 +633,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l01219">1219</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Writes a set of bidirectional model fits utilizing a penalty value passed from the command line (the -ms_pen parameter at the time of this writing).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">fits</td><td>Set of models to write. </td></tr>
+    <tr><td class="paramname">pw</td><td><a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> object from which to read command line parameters. </td></tr>
+    <tr><td class="paramname">job_ID</td><td>Job identifier most likely obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">noise</td><td>Unused. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -609,8 +695,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l00970">970</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Dumps a set of bidirectional predictions and fits to the specified output file. This function uses the obsolete params class and is thus depreciated. Please use write_out_bidirs_pwrapper instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">G</td><td>Chromosome-indexed map of (what appear to be?) model parameters. </td></tr>
+    <tr><td class="paramname">out_dir</td><td>Directory in which to write all of the bidirectional output files. </td></tr>
+    <tr><td class="paramname">job_name</td><td>Job name prefix with which to name the output files. </td></tr>
+    <tr><td class="paramname">job_ID</td><td>Job ID number likely obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">P</td><td>Command line arguments encapsulated in an obsolete params object. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -663,8 +758,17 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l00989">989</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Dumps a set of bidirectional predictions and fits to the specified output file.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">G</td><td>Chromosome-indexed map of (what appear to be?) model parameters. </td></tr>
+    <tr><td class="paramname">out_dir</td><td>Directory in which to write all of the bidirectional output files. </td></tr>
+    <tr><td class="paramname">job_name</td><td>Job name prefix with which to name the output files. </td></tr>
+    <tr><td class="paramname">job_ID</td><td>Job ID number likely obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">pw</td><td>Command line arguments encapsulated in a <a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -717,8 +821,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l01009">1009</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Dumps a set of fit model parameters to a file. This function uses a depreciated params object. Please use write_out_models_from_free_mode_pwrapper instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">G</td><td>Map between (segment ids or indices?) and <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> models. </td></tr>
+    <tr><td class="paramname">P</td><td>Obsolete params object containing user command line options. </td></tr>
+    <tr><td class="paramname">job_ID</td><td>Job identifier possibly obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">IDS</td><td>Map of ids to chromosome names. </td></tr>
+    <tr><td class="paramname">noise</td><td>Unused. </td></tr>
+    <tr><td class="paramname">file_name</td><td>Output file path. This name is modified by the function so that it is possible to refer back to the output file. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -771,8 +885,18 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="load_8cpp_source.html#l01108">1108</a> of file <a class="el" href="load_8cpp_source.html">load.cpp</a>.</p>
+<p>Dumps a set of fit model parameters to a file.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">G</td><td>Map between (segment ids or indices?) and <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> models. </td></tr>
+    <tr><td class="paramname">pw</td><td><a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> object containing user command line options. </td></tr>
+    <tr><td class="paramname">job_ID</td><td>Job identifier possibly obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">IDS</td><td>Map of ids to chromosome names. </td></tr>
+    <tr><td class="paramname">noise</td><td>Unused. </td></tr>
+    <tr><td class="paramname">file_name</td><td>Output file path. This name is modified by the function so that it is possible to refer back to the output file. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

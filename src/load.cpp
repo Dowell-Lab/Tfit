@@ -548,7 +548,18 @@ int check_ID_name(string & INFO) {
 //================================================================================================
 //LOADING from file functions...need to clean this up...
 
-
+/** Reads all elements from a bedgraph and returns a set of segments.
+ * 
+ * @param forward_strand Forward strand bed3 file. This can be left blank if "joint_bedgraph" is specified.
+ * @param reverse_strand Reverse strand bed3 file. This can be left blank if "joint_bedgraph" is specified.
+ * @param joint_bedgraph Bed6 file containing both forward and reverse strand reads. This can take the place of both "forward_strand" and "reverse_strand."
+ * @param BINS Number of bins to use in segmenting the input bedgaph file. This should affect how various data is mapped and searched for internally.
+ * @param scale Scaling parameter used in generating individual segments. 
+ * @param spec_chrom User-specified chromosome. This enables Tfit to efficiently run on a subset of a whole dataset.
+ * @param chromosomes Map in which to place chromosome to index mappings.
+ * @param ID_to_chrom Map in which to place index to chromosome mappings.
+ * @return Set of segments read from the specified input file(s).
+ */
 vector<segment*> load::load_bedgraphs_total(string forward_strand,
       string reverse_strand, string joint_bedgraph, int BINS, double scale, string spec_chrom, map<string, int>& chromosomes
       , map<int, string>& ID_to_chrom) {
@@ -649,6 +660,16 @@ vector<segment*> load::load_bedgraphs_total(string forward_strand,
    }
    return segments;
 }
+
+/** Loads a set of segments from a given input training file. This file should indicate groundtruth
+ * regions of transcription from which Tfit can generate a useful model. This function uses a depreciated params object. Please use load_intervals_of_interest_pwrapper instead.
+ * @depreciated
+ * @param FILE Input training file path.
+ * @param IDS Map of integers to strings in which to place ID to (chromosome?) mappings.
+ * @param P Obsolete params object from which to read user parameters such as desired chromosome, etc.
+ * @param center Whether or not the input reads file indicates the center of the given set of distributions instead of entire regions of transcription.
+ * @return Set of segments representing training intervals.
+ */
 vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&  IDS,
       params * P, int center) {
    ifstream FH(FILE);
@@ -734,6 +755,15 @@ vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&
    return G;
 }
 
+/** Loads a set of segments from a given input training file. This file should indicate groundtruth
+ * regions of transcription from which Tfit can generate a useful model. 
+ * @depreciated
+ * @param FILE Input training file path.
+ * @param IDS Map of integers to strings in which to place ID to (chromosome?) mappings.
+ * @param pw ParamWrapper object from which to read user parameters such as desired chromosome, etc.
+ * @param center Whether or not the input reads file indicates the center of the given set of distributions instead of entire regions of transcription.
+ * @return Set of segments representing training intervals.
+ */
 vector<segment*> load::load_intervals_of_interest_pwrapper(string FILE, map<int, string>&  IDS,
       ParamWrapper *pw, int center) {
    ifstream FH(FILE);
@@ -819,11 +849,16 @@ vector<segment*> load::load_intervals_of_interest_pwrapper(string FILE, map<int,
    return G;
 }
 
+/** This inserts a set of reads into a set of preexisting segments per-chromosome.
+ * @param A Chromosome-indexed map of segment vectors in which to insert the given data.
+ * @param forward Forward strand bed3 file (may be left blank if "joint" is specified.)
+ * @param reverse Reverse strand bed3 file (may be left blank if "joint" is specified.)
+ * @param joint Combined bed6 file with both forward and reverse strand reads. (May be used in place of "forward" and "reverse")
+ * @param rank Rank parameter obtained from the MPI runtime.
+ * @return Vector of processed segments.
+ */
 vector<segment* > load::insert_bedgraph_to_segment_joint(map<string, vector<segment *> > A ,
       string forward, string reverse, string joint, int rank ) {
-
-
-
    map<string, node> NT;
    typedef map<string, vector<segment *> >::iterator it_type_5;
    for (it_type_5 c = A.begin(); c != A.end(); c++) {
@@ -894,6 +929,12 @@ vector<segment* > load::insert_bedgraph_to_segment_joint(map<string, vector<segm
 
    return NS;
 }
+
+/** Returns a set of segment_fits from a given input model bidir file.
+ * This should be used in conjunction with the bidir module to provide useful model inputs.
+ * @param FILE Input file from which to read fits.
+ * @return A set of segment_fits representing individual segment models.
+ */
 vector<segment_fits *> load::load_K_models_out(string FILE) {
    ifstream FH(FILE);
    string line;
@@ -950,6 +991,11 @@ vector<segment_fits *> load::load_K_models_out(string FILE) {
 //================================================================================================
 //WRITE out to file functions
 
+/** Sorts a set of sets of values.
+ * 
+ * @param X Values to sort
+ * @return Sorted set
+ */
 vector<vector<double>> bubble_sort_alg(vector<vector<double>> X) {
    int changed   = 1;
    while (changed) {
@@ -966,7 +1012,15 @@ vector<vector<double>> bubble_sort_alg(vector<vector<double>> X) {
    return X;
 }
 
-
+/** Dumps a set of bidirectional predictions and fits to the specified output file. This function uses the obsolete params class and is thus depreciated. Please use write_out_bidirs_pwrapper instead.
+ * 
+ * @depreciated
+ * @param G Chromosome-indexed map of (what appear to be?) model parameters.
+ * @param out_dir Directory in which to write all of the bidirectional output files.
+ * @param job_name Job name prefix with which to name the output files.
+ * @param job_ID Job ID number likely obtained from the MPI runtime.
+ * @param P Command line arguments encapsulated in an obsolete params object.
+ */
 void load::write_out_bidirs(map<string , vector<vector<double> > > G, string out_dir,
                             string job_name, int job_ID, params * P, int noise) {
    typedef map<string , vector<vector<double> > >::iterator it_type;
@@ -986,6 +1040,15 @@ void load::write_out_bidirs(map<string , vector<vector<double> > > G, string out
    FHW.close();
 }
 
+/** Dumps a set of bidirectional predictions and fits to the specified output file.
+ * 
+ * @depreciated
+ * @param G Chromosome-indexed map of (what appear to be?) model parameters.
+ * @param out_dir Directory in which to write all of the bidirectional output files.
+ * @param job_name Job name prefix with which to name the output files.
+ * @param job_ID Job ID number likely obtained from the MPI runtime.
+ * @param pw Command line arguments encapsulated in a ParamWrapper.
+ */
 void load::write_out_bidirs_pwrapper(map<string , vector<vector<double> > > G, string out_dir,
                             string job_name, int job_ID, ParamWrapper *pw, int noise) {
    typedef map<string , vector<vector<double> > >::iterator it_type;
@@ -1005,7 +1068,16 @@ void load::write_out_bidirs_pwrapper(map<string , vector<vector<double> > > G, s
    FHW.close();
 }
 
-
+/** Dumps a set of fit model parameters to a file. This function uses a depreciated params object. Please use write_out_models_from_free_mode_pwrapper instead.
+ * 
+ * @depreciated
+ * @param G Map between (segment ids or indices?) and simple_c_free_mode models.
+ * @param P Obsolete params object containing user command line options.
+ * @param job_ID Job identifier possibly obtained from the MPI runtime.
+ * @param IDS Map of ids to chromosome names.
+ * @param noise Unused.
+ * @param file_name Output file path. This name is modified by the function so that it is possible to refer back to the output file.
+ */
 void load::write_out_models_from_free_mode(map<int, map<int, vector<simple_c_free_mode>  > > G,
       params * P, int job_ID, map<int, string> IDS, int noise, string & file_name) {
 
@@ -1105,6 +1177,16 @@ void load::write_out_models_from_free_mode(map<int, map<int, vector<simple_c_fre
    FHW.flush();
 }
 
+/** Dumps a set of fit model parameters to a file.
+ * 
+ * @depreciated
+ * @param G Map between (segment ids or indices?) and simple_c_free_mode models.
+ * @param pw ParamWrapper object containing user command line options.
+ * @param job_ID Job identifier possibly obtained from the MPI runtime.
+ * @param IDS Map of ids to chromosome names.
+ * @param noise Unused.
+ * @param file_name Output file path. This name is modified by the function so that it is possible to refer back to the output file.
+ */
 void load::write_out_models_from_free_mode_pwrapper(map<int, map<int, vector<simple_c_free_mode>  > > G,
       ParamWrapper *pw, int job_ID, map<int, string> IDS, int noise, string & file_name) {
 
@@ -1204,6 +1286,14 @@ void load::write_out_models_from_free_mode_pwrapper(map<int, map<int, vector<sim
    FHW.flush();
 }
 
+/** Writes a set of bidirectional model fits utilizing a penalty value passed from the command line (the -ms_pen parameter at the time of this writing). This function uses a depreciated params object. Please use write_out_bidirectionals_ms_pen_pwrapper instead.
+ * 
+ * @depreciated
+ * @param fits Set of models to write.
+ * @param P Obsolete params object from which to read command line parameters.
+ * @param job_ID Job identifier most likely obtained from the MPI runtime.
+ * @param noise Unused.
+ */
 void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params * P, int job_ID, int noise ) {
    ofstream FHW;
    FHW.open(P->p["-o"] +  P->p["-N"] + "-" + to_string(job_ID) +  "_bidir_predictions.bed");
@@ -1216,6 +1306,13 @@ void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params * 
    FHW.flush();
 }
 
+/** Writes a set of bidirectional model fits utilizing a penalty value passed from the command line (the -ms_pen parameter at the time of this writing).
+ * 
+ * @param fits Set of models to write.
+ * @param pw ParamWrapper object from which to read command line parameters.
+ * @param job_ID Job identifier most likely obtained from the MPI runtime.
+ * @param noise Unused.
+ */
 void load::write_out_bidirectionals_ms_pen_pwrapper(vector<segment_fits*> fits, ParamWrapper * pw, int job_ID, int noise ) {
    ofstream FHW;
    FHW.open(pw->outputDir + pw->jobName + "-" + to_string(job_ID) +  "_bidir_predictions.bed");
@@ -1230,6 +1327,14 @@ void load::write_out_bidirectionals_ms_pen_pwrapper(vector<segment_fits*> fits, 
 
 //================================================================================================
 //misc.
+
+/** Bins a set of segments.
+ * 
+ * @param segments Set of segments to bin.
+ * @param BINS Number of bins to use.
+ * @param scale Scaling factor to use in the binning process.
+ * @param erase Whether or not to delete existing data after binning (?)
+ */
 void load::BIN(vector<segment*> segments, int BINS, double scale, int erase) {
    for (int i = 0 ; i < segments.size() ; i ++) {
       if (segments[i]->forward.size() > 0 or segments[i]->reverse.size() > 0 ) {
@@ -1238,6 +1343,13 @@ void load::BIN(vector<segment*> segments, int BINS, double scale, int erase) {
    }
 }
 
+/** Deletes all temporary files used in the fitting and model output process.
+ * 
+ * @param dir Directory in which temporary files were created.
+ * @param job_name User-specified name for the job.
+ * @param nprocs Number of workers obtained from the MPI runtime.
+ * @param job_ID Job identifier likely obtained from the MPI runtime.
+ */
 void load::collect_all_tmp_files(string dir, string job_name, int nprocs, int job_ID) {
    int c   = 0;
    time_t     now = time(0);
@@ -1270,6 +1382,11 @@ void load::collect_all_tmp_files(string dir, string job_name, int nprocs, int jo
       }
    }
 }
+
+/** Deletes all segments in the specified vector.
+ * 
+ * @param segments Set of segments to delete.
+ */
 void load::clear_segments(vector<segment *> segments) {
    for (int i = 0; i < segments.size(); i++) {
       if (segments[i] != NULL) {
@@ -1277,6 +1394,12 @@ void load::clear_segments(vector<segment *> segments) {
       }
    }
 }
+
+/** Loads a TSS input file.
+ * @param tss_file Input TSS training file.
+ * @param query_fits Set of segment_fits to match against the given TSS inputs.
+ * @return New set of segment_fits with TSS values inserted.
+ */
 vector<segment_fits *> load::label_tss(string tss_file, vector<segment_fits *> query_fits ) {
    vector<segment_fits *> new_fits;
    ifstream FH(tss_file);
