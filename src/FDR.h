@@ -56,6 +56,7 @@ class slice_ratio{
   int bins ; //the number of segments
   double mean , std , w,c,threshold ;
   bool converged;
+  double score;
   vector<vector<double> > XY ; //bins X 3
   vector<normal> NORMS;
   normal norm_all;
@@ -66,6 +67,8 @@ class slice_ratio{
   void insert(double);
   double pvalue(double);
   int get_closest(double);
+  //TODO: Add log file support for dump():
+  void dump();
 };
 slice_ratio get_slice(vector<segment *> , int,double,params * P );
 slice_ratio get_slice_pwrapper(vector<segment *>, int, double, ParamWrapper *);

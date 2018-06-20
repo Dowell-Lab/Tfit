@@ -258,6 +258,22 @@ double slice_ratio::pvalue(double y){
   return pv;
 }
 
+/** Pretty prints the contents of the slice ratio for debugging purposes.
+ */
+void slice_ratio::dump(){
+    printf("Slice spans %lf to %lf\n", this->start, this->stop);
+    printf("Number of segments: %d\n", this->bins);
+    printf("Model parameters inferred:\n");
+    printf("    mean      %lf\n", this->mean);
+    printf("    stdev     %lf\n", this->std);
+    printf("    w         %lf\n", this->w);
+    printf("    c         %lf\n", this->c);
+    printf("    threshold %lf\n", this->threshold);
+    printf("Did this slice converge? %s\n", this->converged ? "Yes." : "No.");
+    printf("Number of normal distributions: %ld\n", this->NORMS.size());
+    printf("XY size: %ld\n", this->XY.size());
+}
+
 /** Computes a slice_ratio given a set of segments and various other parameters.
  * Use get_slice_pwrapper instead.
  * @depreciated
@@ -392,6 +408,8 @@ slice_ratio get_slice_pwrapper(vector<segment *> segments, int N, double CC, Par
     CovN[n] = N_pos + N_neg;
     if (N_pos + N_neg > CC and (data->X[0][k] - data->X[0][j]) > 1.75*window  ){
       
+      //Todo: reconsider BIC3's return value given that 
+      //this appears to be using it in order to estimate model parameters.
       double val =  BIC3(data->X,  j,  k,  c, N_pos,  N_neg, sigma , lambda, fp , pi, w);
       if (val >0 ){
         XY[n]=val,CovN[n]=N_pos+N_neg;

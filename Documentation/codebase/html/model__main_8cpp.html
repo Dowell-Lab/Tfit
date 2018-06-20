@@ -129,37 +129,37 @@ Functions</h2></td></tr>
           <td class="memname">int model_run </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classparams.html">params</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>P</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>rank</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>nprocs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>density</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>job_ID</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="class_log___file.html">Log_File</a> *&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>LG</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -168,18 +168,19 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Utilizes an old style params struct and data computed from the bidir module to make predictions with respect to regions of transcription in a given input bedgraph file. This function is depreciated in favor of model_run_pwrapper, as the old style params struct interface is depreciated.  </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Runs the Tfit model module. This module accepts a set of intervals of interest in addition to related information collected by the bidir module and yields a ser of transcription calls over the desired region. This function makes use of a depreciated params object. Please use model_run_pwrapper instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">P</td><td>params struct containing parsed command line arguments. </td></tr>
-    <tr><td class="paramname">rank</td><td>MPI rank parameter. This is used to determine the level of output a given instance of this function will generate. </td></tr>
-    <tr><td class="paramname">nprocs</td><td>Number of processors available. This should, in practice, be an MPI runtime parameter. </td></tr>
-    <tr><td class="paramname">density</td><td>Obstensibly used to set various output modes; in practice, this parameter is unused and does nothing. </td></tr>
-    <tr><td class="paramname">job_ID</td><td>Current job identifier. This should, in practice, be an MPI runtime parameter. </td></tr>
-    <tr><td class="paramname">LG</td><td><a class="el" href="class_log___file.html">Log_File</a> object pointing to a valid output log file. </td></tr>
+    <tr><td class="paramname">P</td><td>obsolete params object from which to read command line parameters. </td></tr>
+    <tr><td class="paramname">rank</td><td>rank parameter obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">nprocs</td><td>worker count obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">density</td><td>desired density of written outputs. See documentation for write_out_models_from_free_mode to see how this value is used. </td></tr>
+    <tr><td class="paramname">job_ID</td><td>job identifier likely obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">LG</td><td>output log file encapsulated in a <a class="el" href="class_log___file.html">Log_File</a> object. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An output status code. 0 indicates no errors during operation. Any other value indicates errors. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Exit status code representing whether the run was successful. 0 for success, any other value for failure. </dd></dl>
 
 </div>
 </div>
@@ -193,37 +194,37 @@ Functions</h2></td></tr>
           <td class="memname">int model_run_pwrapper </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_param_wrapper.html">ParamWrapper</a> *&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>pw</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>rank</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>nprocs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>density</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname">, </td>
+          <td class="paramname"><em>job_ID</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="class_log___file.html">Log_File</a> *&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>LG</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -232,18 +233,19 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Utilizes a <a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> and data computed from the bidir module to make predictions with respect to regions of transcription in a given input bedgraph file. This function is depreciated in favor of model_run_pwrapper, as the old style params struct interface is depreciated.  </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Runs the Tfit model module. This module accepts a set of intervals of interest in addition to related information collected by the bidir module and yields a ser of transcription calls over the desired region. This function makes use of a depreciated params object.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">P</td><td>params struct containing parsed command line arguments. </td></tr>
-    <tr><td class="paramname">rank</td><td>MPI rank parameter. This is used to determine the level of output a given instance of this function will generate. </td></tr>
-    <tr><td class="paramname">nprocs</td><td>Number of processors available. This should, in practice, be an MPI runtime parameter. </td></tr>
-    <tr><td class="paramname">density</td><td>Obstensibly used to set various output modes; in practice, this parameter is unused and does nothing. </td></tr>
-    <tr><td class="paramname">job_ID</td><td>Current job identifier. This should, in practice, be an MPI runtime parameter. </td></tr>
-    <tr><td class="paramname">LG</td><td><a class="el" href="class_log___file.html">Log_File</a> object pointing to a valid output log file. </td></tr>
+    <tr><td class="paramname">pw</td><td><a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> object from which to read command line parameters. </td></tr>
+    <tr><td class="paramname">rank</td><td>rank parameter obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">nprocs</td><td>worker count obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">density</td><td>desired density of written outputs. See documentation for write_out_models_from_free_mode to see how this value is used. </td></tr>
+    <tr><td class="paramname">job_ID</td><td>job identifier likely obtained from the MPI runtime. </td></tr>
+    <tr><td class="paramname">LG</td><td>output log file encapsulated in a <a class="el" href="class_log___file.html">Log_File</a> object. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An output status code. 0 indicates no errors during operation. Any other value indicates errors. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Exit status code representing whether the run was successful. 0 for success, any other value for failure. </dd></dl>
 
 </div>
 </div>

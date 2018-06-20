@@ -5,6 +5,19 @@
 #include <omp.h>
 using namespace std;
 
+/** Runs the Tfit model module. This module accepts a set of intervals of interest in addition to related
+ * information collected by the bidir module and yields a ser of transcription calls over the desired region.
+ * This function makes use of a depreciated params object. Please use model_run_pwrapper instead.
+ * 
+ * @depreciated
+ * @param P obsolete params object from which to read command line parameters.
+ * @param rank rank parameter obtained from the MPI runtime.
+ * @param nprocs worker count obtained from the MPI runtime.
+ * @param density desired density of written outputs. See documentation for write_out_models_from_free_mode to see how this value is used.
+ * @param job_ID job identifier likely obtained from the MPI runtime.
+ * @param LG output log file encapsulated in a Log_File object.
+ * @return Exit status code representing whether the run was successful. 0 for success, any other value for failure.
+ */
 int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_File * LG){
 	int verbose 	= stoi(P->p["-v"]);
 	LG->write("\ninitializing model module...............................done\n\n",verbose);
@@ -91,6 +104,19 @@ int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_
 	return 1;
 }
 
+/** Runs the Tfit model module. This module accepts a set of intervals of interest in addition to related
+ * information collected by the bidir module and yields a ser of transcription calls over the desired region.
+ * This function makes use of a depreciated params object.
+ * 
+ * @depreciated
+ * @param pw ParamWrapper object from which to read command line parameters.
+ * @param rank rank parameter obtained from the MPI runtime.
+ * @param nprocs worker count obtained from the MPI runtime.
+ * @param density desired density of written outputs. See documentation for write_out_models_from_free_mode to see how this value is used.
+ * @param job_ID job identifier likely obtained from the MPI runtime.
+ * @param LG output log file encapsulated in a Log_File object.
+ * @return Exit status code representing whether the run was successful. 0 for success, any other value for failure.
+ */
 int model_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, double density, int job_ID, Log_File * LG){
 	int verbose 	= pw->verbose;//stoi(P->p["-v"]);
 	LG->write("\ninitializing model module...............................done\n\n",verbose);
@@ -171,8 +197,6 @@ int model_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, double density, i
 	LG->write("\nexiting model module....................................done\n\n",verbose);
 	//wait for everybody to catch up
 	MPI_comm::wait_on_root(rank, nprocs);
-
-
 
 	return 1;
 }

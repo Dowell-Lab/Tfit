@@ -281,6 +281,8 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	  LG->write("standard Deviation   : "+to_string(SC.std ) + "\n" ,verbose );
 	  LG->write("h                    : "+to_string(SC.w ) + "\n" ,verbose );
 	  LG->write("threshold            : "+to_string(SC.threshold) + "\n\n" ,verbose );
+      
+      SC.dump();
 	}
 	else{
 	  SC.mean = 0.6, SC.std = 0.001; //this dependent on -w 0.9 !!!
