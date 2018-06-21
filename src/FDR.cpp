@@ -44,6 +44,20 @@ double normal::pdf(double x){
   return 1.0 / (sqrt(2*M_PI)*this->std  )*exp(-pow(x-this->mean,2)/(2*pow(this->std,2) ));  
 }
 
+/** Dumps a pretty printed representation of the normal distribution to stdout.
+ * @param header Optional header to print before the dump. No header will be printed if this value is set to NULL.
+ */
+void normal::dump(char *header){
+    if(header)
+    {
+        printf("%s\n", header);
+    }
+    
+    printf("    mean:    %lf", this->mean);
+    printf("    x:       %lf", this->x);
+    printf("    stdev:   %lf", this->std);
+}
+
 /** Default constructor for the exponential class.
  */
 exponential::exponential(){};
@@ -261,6 +275,8 @@ double slice_ratio::pvalue(double y){
 /** Pretty prints the contents of the slice ratio for debugging purposes.
  */
 void slice_ratio::dump(){
+    int i, j;
+    char tmp[80];
     printf("Slice spans %lf to %lf\n", this->start, this->stop);
     printf("Number of segments: %d\n", this->bins);
     printf("Model parameters inferred:\n");
@@ -272,6 +288,25 @@ void slice_ratio::dump(){
     printf("Did this slice converge? %s\n", this->converged ? "Yes." : "No.");
     printf("Number of normal distributions: %ld\n", this->NORMS.size());
     printf("XY size: %ld\n", this->XY.size());
+    this->norm_all.dump("Internal normal distribution parameters (norm_all):");
+    
+    printf("Dumping internal normal distributions...");
+    for(i=0;i<this->NORMS.size();i++)
+    {
+        sprintf(tmp, "Distribution %d", i);
+        this->NORMS[i].dump(tmp);
+    }
+    
+    printf("Dump of XY:");
+    for(i=0;i<this->XY.size();i++)
+    {
+        for(j=0;j<this->XY[i].size();j++)
+        {
+            printf("%lf ", this->XY[i][j]);
+        }
+        
+        printf("\n");
+    }
 }
 
 /** Computes a slice_ratio given a set of segments and various other parameters.

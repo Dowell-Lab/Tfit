@@ -282,10 +282,17 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	  LG->write("h                    : "+to_string(SC.w ) + "\n" ,verbose );
 	  LG->write("threshold            : "+to_string(SC.threshold) + "\n\n" ,verbose );
       
+      //The SC should contain a set of likelihood scores for a set of model parameters.
+      //Speculation: this should associate sets of model parameters to their respective likelihoods across
+      //a grid search or some sort of approximation function.
       SC.dump();
 	}
 	else{
 	  SC.mean = 0.6, SC.std = 0.001; //this dependent on -w 0.9 !!!
+	  //This should effectively set the internal parameters to:
+	  //(norm_all) -> normal dist with internal mean and stdev as stated above.
+	  //Iteratively shifts pv up the distribution until it meets the mean.
+	  //This search starts at pw->llrthresh.
 	  SC.set_2(pw->llrthresh);
 	}
 
@@ -306,7 +313,8 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	//(3a) now going to run the template matching algorithm based on pseudo-
 	//moment estimator and compute BIC ratio (basically penalized LLR)
 	LG->write("running template matching algorithm.....................", verbose);
-	double threshold 	= run_global_template_matching_pwrapper(segments, out_file_dir, pw, SC);	
+	double threshold 	= run_global_template_matching_pwrapper(segments, out_file_dir, pw, SC);
+    printf("Threshold obtained from global template matching: %lf", threshold);
 	//(3b) now need to send out, gather and write bidirectional intervals 
 	LG->write("done\n", verbose);
 	

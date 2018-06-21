@@ -12,6 +12,7 @@
 #include <string>
 #include "read_in_parameters.h"
 #include "ParamWrapper.hpp"
+#include <cstring>
 using namespace std;
 
 /** Represents a normal distribution.
@@ -24,6 +25,7 @@ class normal{
   normal(double, double, double);
   double cdf(double);
   double pdf(double); 
+  void dump(char *header);
 };
 
 /** Represents an exponential distribution.
