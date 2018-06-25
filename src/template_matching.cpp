@@ -241,9 +241,10 @@ double run_global_template_matching(vector<segment*> segments,
  * @param out_dir Output directory in which to save the trained model.
  * @param pw ParamWrapper from which the function reads a number of parameters.
  * @param SC slice_ratio used to keep track of various thresholds.
+ * @param debug Whether or not to dump all BIC scores, etc to the log.
  */
 double run_global_template_matching_pwrapper(vector<segment*> segments,
-                                    string out_dir, ParamWrapper *pw, slice_ratio SC) {
+                                    string out_dir, ParamWrapper *pw, slice_ratio SC, int debug) {
 
    double CTT                    = 5; //filters for low coverage regions
 
@@ -277,6 +278,21 @@ double run_global_template_matching_pwrapper(vector<segment*> segments,
       double stdf   = sqrt(ef * (1 - (  2 * (window * ns) * 0.05 / (l * ns )  ) )  );
       double stdr   = sqrt(er * (1 - (  2 * (window * ns) * 0.05 / (l * ns ) ) )  );
       BIC_template(segments[i],  BIC_values, densities, densities_r, window, sigma, lambda, foot_print, pi, w);
+      if(debug)
+      {
+        double avgbic=0;
+        printf("Number of segments passed to run_global_template_matching_pwrapper: %ld\n", segments.size());
+        printf("Initial round of BIC values:\n");
+        for(int j=0;j<(int) segments[i]->XN;j++)
+        {
+            avgbic+=BIC_values[j];
+            printf("BIC_values[%d]=%f\n", j, BIC_values[j]);
+        }
+        
+        avgbic=avgbic/segments[i]->XN;
+        printf("Mean BIC score: %f\n", avgbic);
+      }
+      
       double start = -1, rN = 0.0 , rF = 0.0, rR = 0.0, rB = 0.0;
       vector<vector<double>> HITS;
       for (int j = 1; j < segments[i]->XN - 1; j++) {

@@ -169,7 +169,7 @@ int model_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, double density, i
 	SC.mean = 0.78, SC.std = 0.08; //this dependent on -w 0.9 !!!
 	SC.set_2(pw->llrthresh);
 	
-	run_global_template_matching_pwrapper(integrated_segments, out_file_dir, pw, SC);	
+	run_global_template_matching_pwrapper(integrated_segments, out_file_dir, pw, SC, 1);	
 
 	LG->write("done\n",verbose);
 	//=======================================================================================

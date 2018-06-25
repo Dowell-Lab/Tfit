@@ -35,7 +35,7 @@ double run_global_template_matching(vector<segment*> segments, string out_dir,  
  * @param pw ParamWrapper from which the function reads a number of parameters.
  * @param SC slice_ratio used to keep track of various thresholds.
  */
-double run_global_template_matching_pwrapper(vector<segment*> segments, string out_dir, ParamWrapper *pw, slice_ratio SC);
+double run_global_template_matching_pwrapper(vector<segment*> segments, string out_dir, ParamWrapper *pw, slice_ratio SC, int);
 void EX(vector<segment*> , double, double , double & , double &);
 
 /** Sorts all values within the first vector of vectors by the values in the second vector of vectors.
