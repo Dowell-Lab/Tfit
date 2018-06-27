@@ -183,12 +183,14 @@ bool EM(vector<vector<double>> X , double & mean, double & sigma, double & w, do
     prevw=w, t+=1;
   }
   if(not converged){
-    mean = 0.3 , sigma    = 0.05;
-  }else{
     printf("EM did not converge. Outputs:\n");
     printf("Mean: %lf\n", N.mean);
     printf("Std: %lf\n", N.std);
     printf("Sigma: %lf\n", N.std*15);
+    
+    mean = 0.3 , sigma    = 0.05;
+  }else{
+    
     mean = N.mean , sigma = N.std*15;
   }
   return converged;
