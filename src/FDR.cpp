@@ -141,52 +141,69 @@ bool EM(vector<vector<double>> X , double & mean, double & sigma, double & w, do
   int t=0, T=300;
   double prevw = -0.1;
   bool converged=false;
+  double EX, EX2, EY, R1, R2, p1, p2, r1, r2;
+  
   while (t < T and not converged  ){
-    double EX=0.0,EX2=0.0, EY=0.0,R1=0.0, R2=0.0,p1=0.0,p2=0.0,r1=0.0,r2=0.0;
-    for (int i = 0 ; i < X.size();i++){
-      
-      double x = X[i][0], y = X[i][1];
-      p1= (1-w)*N.pdf(x);
-      if (EXP){
-	p2=w*E.pdf(x);
-      }else{
-	p2=w*P.pdf(x);
-      }
-      if ((p1 + p2) > 0){
-	r1= p1 / (p1 + p2) ,r2=p2 / (p1 + p2);
-	R1 += r1*y,R2+=r2*y;
-	EX +=(r1*x)*y;
-	if (EXP){
-	  EY +=(r2*x)*y;
-	}else{
-	  EY += (log(x) - log(N.mean))*r2*y;
-	}
-	EX2 +=(r1*pow(x-N.mean,2))*y;
-      }
-    }
+      //This horrible construct is so that we can print these values for debugging purposes:
+    EX=0.0; EX2=0.0; EY=0.0; R1=0.0; R2=0.0; p1=0.0; p2=0.0; r1=0.0; r2=0.0;
     
+    for (int i = 0 ; i < X.size();i++){
+        double x = X[i][0], y = X[i][1];
+        p1= (1-w)*N.pdf(x);
+        
+        if (EXP){
+            p2=w*E.pdf(x);
+        }else{
+            p2=w*P.pdf(x);
+        }
+        
+        if ((p1 + p2) > 0){
+            r1= p1 / (p1 + p2) ,r2=p2 / (p1 + p2);
+            R1 += r1*y,R2+=r2*y;
+            EX +=(r1*x)*y;
+            
+            if (EXP){
+                EY +=(r2*x)*y;
+            }else{
+                EY += (log(x) - log(N.mean))*r2*y;
+            }
+            
+            EX2 +=(r1*pow(x-N.mean,2))*y;
+        }
+    }
+
     N.mean = EX /R1;
     N.std = sqrt(EX2 / R1);
+    
     if (EXP){
-      E.lambda = R2/EY ;
+        E.lambda = R2/EY ;
     }else{
-      P.alpha = R2/EY;
+        P.alpha = R2/EY;
     }
+    
     if( not check_value(N.mean)  or not check_value(N.std)  ){
-      converged = false;
-      break;
+        converged = false;
+        break;
     }
+    
     w = R2 / (R1 + R2);
-    if (abs(w-prevw) < pow(10,-6)){
-      converged=true;
+    
+    if (abs(w-prevw) < pow(10,-6)){ // The convergence threshold here is 10^-6
+        converged=true;
     } 
+    
     prevw=w, t+=1;
   }
   if(not converged){
     printf("EM did not converge. Outputs:\n");
     printf("Mean: %lf\n", N.mean);
+    printf("Mean was computed by dividing EX by R1. Values: EX=%lf, R1=%lf\n", EX, R1);
     printf("Std: %lf\n", N.std);
+    printf("Std was computed by computing sqrt EX2/R1. Values: EX2=%lf, R1=%lf\n", EX2, R1);
     printf("Sigma: %lf\n", N.std*15);
+    printf("Sigma was computed by multiplying std by 15.\n");
+    printf("Potential reasons for model estimation failure:\n");
+    printf("\tthresh-conv thresh (neg if threshold met): %lf\n", abs(w-prevw) - pow(10,-6));
     
     mean = 0.3 , sigma    = 0.05;
   }else{
