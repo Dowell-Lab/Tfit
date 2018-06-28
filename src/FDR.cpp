@@ -151,9 +151,34 @@ bool EM(vector<vector<double>> X , double & mean, double & sigma, double & w, do
         double x = X[i][0], y = X[i][1];
         p1= (1-w)*N.pdf(x);
         
+        if(p1==0)
+        {
+            printf("p1 is 0.\n");
+            printf("\tw=%lf, x=%lf, N.pdf(x)=%lf\n", w, x, N.pdf(x));
+            printf("Existing mean: %lf\n", N.mean);
+            printf("Existing std: %lf\n", N.std);
+            printf("x=%lf, y=%lf\n", x, y);
+        }
+        
         if (EXP){
             p2=w*E.pdf(x);
+            if(p2==0)
+            {
+                printf("p2 is 0.\n");
+                printf("\tw=%lf, x=%lf, N.pdf(x)=%lf\n", w, x, N.pdf(x));
+                printf("Existing mean: %lf\n", N.mean);
+                printf("Existing std: %lf\n", N.std);
+                printf("x=%lf, y=%lf\n", x, y);
+            }
         }else{
+            if(p2==0)
+            {
+                printf("p2 is 0.\n");
+                printf("\tw=%lf, x=%lf, N.pdf(x)=%lf\n", w, x, N.pdf(x));
+                printf("Existing mean: %lf\n", N.mean);
+                printf("Existing std: %lf\n", N.std);
+                printf("x=%lf, y=%lf\n", x, y);
+            }
             p2=w*P.pdf(x);
         }
         
@@ -202,6 +227,7 @@ bool EM(vector<vector<double>> X , double & mean, double & sigma, double & w, do
     printf("Std was computed by computing sqrt EX2/R1. Values: EX2=%lf, R1=%lf\n", EX2, R1);
     printf("Sigma: %lf\n", N.std*15);
     printf("Sigma was computed by multiplying std by 15.\n");
+    printf("EXP: %d\n", EXP);
     printf("Potential reasons for model estimation failure:\n");
     printf("\tthresh-conv thresh (neg if threshold met): %lf\n", abs(w-prevw) - pow(10,-6));
     
