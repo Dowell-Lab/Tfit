@@ -160,6 +160,11 @@ bool EM(vector<vector<double>> X , double & mean, double & sigma, double & w, do
             printf("x=%lf, y=%lf\n", x, y);
         }
         
+        else
+        {
+            printf("p1=%lf for iteration %d\n", p1, i);
+        }
+        
         if (EXP){
             p2=w*E.pdf(x);
             if(p2==0)
@@ -170,6 +175,11 @@ bool EM(vector<vector<double>> X , double & mean, double & sigma, double & w, do
                 printf("Existing std: %lf\n", N.std);
                 printf("x=%lf, y=%lf\n", x, y);
             }
+            
+            else
+            {
+                printf("p2=%lf for iteration %d\n", p2, i);
+            }
         }else{
             if(p2==0)
             {
@@ -178,6 +188,11 @@ bool EM(vector<vector<double>> X , double & mean, double & sigma, double & w, do
                 printf("Existing mean: %lf\n", N.mean);
                 printf("Existing std: %lf\n", N.std);
                 printf("x=%lf, y=%lf\n", x, y);
+            }
+            
+            else
+            {
+                printf("p2=%lf for iteration %d\n", p2, i);
             }
             p2=w*P.pdf(x);
         }
