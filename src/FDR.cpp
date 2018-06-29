@@ -147,6 +147,7 @@ bool EM(vector<vector<double>> X , double & mean, double & sigma, double & w, do
       //This horrible construct is so that we can print these values for debugging purposes:
     EX=0.0; EX2=0.0; EY=0.0; R1=0.0; R2=0.0; p1=0.0; p2=0.0; r1=0.0; r2=0.0;
     
+    printf("X size: %ld\n", X.size());
     for (int i = 0 ; i < X.size();i++){
         double x = X[i][0], y = X[i][1];
         p1= (1-w)*N.pdf(x);
