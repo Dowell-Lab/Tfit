@@ -46,6 +46,15 @@ double BIC3(double ** X, int j, int k, int i,
    int res         = 5;
    double N        = N_pos + N_neg;
    double l        = X[0][k] - X[0][j];
+   if(l<=0)
+   {
+       printf("In BIC3: l<=0. l=%lf\n", l);
+       printf("Why? X[0][%d]=%lf, X[0][%d]=%lf\n", k, X[0][k], j, X[0][j]);
+   }
+   if((N_neg+N_pos+20000)<=0)
+   {
+       printf("pi2 will give neg nan because N_neg=%lf, N_pos=%lf\n", N_neg, N_pos);
+   }
    double pi2      = (N_pos + 10000) / (N_neg + N_pos + 20000);
    double uni_ll   = log(pi2 /   l ) *  N_pos  + log((1 - pi2) /  l ) * N_neg ;
    double MU       = X[0][i];
@@ -65,6 +74,14 @@ double BIC3(double ** X, int j, int k, int i,
          best_ll  = emg_ll;
       }
    }
+   
+   if((-2*best_ll + log(N)*4)<=0)
+   {
+       printf("best_ll=%lf N=%lf, log(N)=%lf\n", best_ll, N, log(N));
+       printf("uni_ll=%lf\n", uni_ll);
+   }
+
+   
 
    double arg_bic =  (-2*uni_ll + log(N))/(-2*best_ll + log(N)*4)      ;
    return arg_bic;

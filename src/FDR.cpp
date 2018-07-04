@@ -522,8 +522,11 @@ slice_ratio get_slice_pwrapper(vector<segment *> segments, int N, double CC, Par
       
       else
       {
+          //These values are often -NaN.
           printf("BIC3 value <= 0 in get_slice_pwrapper. Val=%lf\n", val);
-          printf("N_pos=%lf, N_neg=%lf\n", N_pos, N_neg);
+          printf("\tN_pos=%lf, N_neg=%lf\n", N_pos, N_neg);
+          printf("\tsigma=%lf, lambda=%lf, fp=%lf, pi=%lf, w=%lf\n", sigma, lambda, fp, pi, w);
+          printf("\tj=%d, k=%d, c=%d\n", j, k, c);
       }
     }
   }
