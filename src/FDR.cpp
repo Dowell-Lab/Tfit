@@ -515,12 +515,14 @@ slice_ratio get_slice_pwrapper(vector<segment *> segments, int N, double CC, Par
       //this appears to be using it in order to estimate model parameters.
       double val =  BIC3(data->X,  j,  k,  c, N_pos,  N_neg, sigma , lambda, fp , pi, w);
       if (val >0 ){
+          printf("BIC3 value >0 in get_slice_pwrapper\n");
+          printf("Value: %lf\n", val);
         XY[n]=val,CovN[n]=N_pos+N_neg;
       }
       
       else
       {
-          printf("BIC3 value <= 0 in get_slice_pwrapper\n");
+          printf("BIC3 value <= 0 in get_slice_pwrapper. Val=%lf\n", val);
           printf("N_pos=%lf, N_neg=%lf\n", N_pos, N_neg);
       }
     }
