@@ -377,7 +377,7 @@ void slice_ratio::dump(){
  * Use get_slice_pwrapper instead.
  * @depreciated
  * @param segments Set of segments over which to compute the slice_ratio.
- * @param N Number of parameters to estimate.
+ * @param N Number of parameters to estimate (?)
  * @param CC Threshold (?)
  * @param P Obsolete params object from which to read command line parameters.
  */
@@ -394,6 +394,7 @@ slice_ratio get_slice(vector<segment *> segments, int N, double CC, params * P){
   mt19937 mt(rd());
   default_random_engine generator;
   uniform_real_distribution<double> distribution(0,1);
+  printf("get_slice N: %d\n", N);
   vector<double> XY(N);
   vector<double> CovN(N);
   for (int i = 0 ; i < XY.size(); i++){
@@ -480,6 +481,9 @@ slice_ratio get_slice_pwrapper(vector<segment *> segments, int N, double CC, Par
   mt19937 mt(rd());
   default_random_engine generator;
   uniform_real_distribution<double> distribution(0,1);
+  printf("In get_slice_pwrapper\n");
+  printf("N: %d\n", N);
+  printf("CC: %lf\n", CC);
   vector<double> XY(N);
   vector<double> CovN(N);
   for (int i = 0 ; i < XY.size(); i++){
@@ -513,6 +517,12 @@ slice_ratio get_slice_pwrapper(vector<segment *> segments, int N, double CC, Par
       if (val >0 ){
         XY[n]=val,CovN[n]=N_pos+N_neg;
       }
+      
+      else
+      {
+          printf("BIC3 value <= 0 in get_slice_pwrapper\n");
+          printf("N_pos=%lf, N_neg=%lf\n", N_pos, N_neg);
+      }
     }
   }
   string job_name    = pw->jobName;
@@ -541,6 +551,7 @@ slice_ratio get_slice_pwrapper(vector<segment *> segments, int N, double CC, Par
   slice_ratio SC(min_x,max_x,400);
   for (int n = 0 ; n < XY.size();n++){
 
+      //It is the case that this is never called (most likely)
     if (XY[n] > 0.0){
       SC.insert(XY[n] );
     }

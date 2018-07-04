@@ -270,6 +270,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	slice_ratio SC;
 	if (pw->fdr){
 	  LG->write("getting likelihood score distribution...................", verbose);
+      //This may not be working correctly:
 	  SC                      = get_slice_pwrapper(segments, pow(10,6) , pow(10,4) , pw);
 	  LG->write("done\n\n", verbose);
 	  if (not SC.converged){
