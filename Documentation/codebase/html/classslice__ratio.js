@@ -2,6 +2,7 @@ var classslice__ratio =
 [
     [ "slice_ratio", "classslice__ratio.html#abe9e2f821d1bd49ae68ab767b6653cd2", null ],
     [ "slice_ratio", "classslice__ratio.html#a92310b762d0cfb6fa343873f10b0fed8", null ],
+    [ "dump", "classslice__ratio.html#af79edfe2d2e59a53f25e0cb438529e11", null ],
     [ "get_closest", "classslice__ratio.html#ad25c465508371a711b25eb9afc47258e", null ],
     [ "insert", "classslice__ratio.html#a49c0d0a018def8e7f9a36085890dea70", null ],
     [ "pvalue", "classslice__ratio.html#a71b0b76b6b13aed8a6eb6afc250478e6", null ],
@@ -13,6 +14,7 @@ var classslice__ratio =
     [ "mean", "classslice__ratio.html#a4ca3bbb795fd77efcb9ba91147a2c5ae", null ],
     [ "norm_all", "classslice__ratio.html#a4878e0340ad980f5b9c5e607c365dd79", null ],
     [ "NORMS", "classslice__ratio.html#a96cb00ba2f2dfc860af8b67a104bb686", null ],
+    [ "score", "classslice__ratio.html#adfcc597256b1d8411389db8ca50bcb0c", null ],
     [ "start", "classslice__ratio.html#a1f0adbf1013ea23726bb45e8e4a96024", null ],
     [ "std", "classslice__ratio.html#ae24bf69d9749afbfceeccbe2bec77043", null ],
     [ "stop", "classslice__ratio.html#abf7250b3949adaa559519c7e90310336", null ],

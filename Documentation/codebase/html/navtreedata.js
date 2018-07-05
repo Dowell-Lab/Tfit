@@ -32,7 +32,7 @@ var NAVTREEINDEX =
 [
 "_b_i_c_8cpp.html",
 "classclassifier.html#a3c8972aab8f7e8f1c0d6aad7fc9496cf",
-"functions_vars_e.html"
+"functions_vars_b.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

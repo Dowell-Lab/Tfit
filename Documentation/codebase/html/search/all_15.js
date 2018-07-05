@@ -7,7 +7,7 @@ var searchData=
   ['wf',['WF',['../class_n_l_r.html#a94e79ea8fcadde4a210439ff82498338',1,'NLR']]],
   ['wl',['wl',['../class_n_l_r.html#acf24e6850673fdcb592378aa564abb42',1,'NLR']]],
   ['wn',['wn',['../class_n_l_r.html#a931d982757ef4c00a6c7bf259fffe4ec',1,'NLR']]],
-  ['wr',['wr',['../class_n_l_r.html#a52e3aa3b626aed3041266baf70494f16',1,'NLR::wr()'],['../class_n_l_r.html#ac37e4b13600c6045881c363d2310021c',1,'NLR::WR()']]],
+  ['wr',['WR',['../class_n_l_r.html#ac37e4b13600c6045881c363d2310021c',1,'NLR::WR()'],['../class_n_l_r.html#a52e3aa3b626aed3041266baf70494f16',1,'NLR::wr()']]],
   ['write',['write',['../class_log___file.html#aea5f8f5aa532aeefe9d6874059a71313',1,'Log_File::write()'],['../classsegment__fits.html#af238a3d9442c741d2381f7d89076ee34',1,'segment_fits::write()']]],
   ['write_5fout',['write_out',['../classsegment.html#ab2b95bddf2cca1254908f58b65659d4a',1,'segment::write_out()'],['../classcomponent.html#acaeccc21b95fa05d0fce4914535fecfc',1,'component::write_out()']]],
   ['write_5fout_5fbidirectionals_5fms_5fpen',['write_out_bidirectionals_ms_pen',['../namespaceload.html#a61085211dce26834e1f9db2f4a9c3903',1,'load']]],

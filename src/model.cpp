@@ -20,12 +20,18 @@ double IN(double x) { //Standard Normal PDF
 	return exp(-pow(x, 2) * 0.5) / sqrt(2 * M_PI);
 }
 
-/**
+/** Returns the CDF at a given point of the standard normal distribution.
+ * @param x
+ * @return CDF at a given point of the standard normal distribution.
  */
 double IC(double x) { //Standard Normal CDF
 	return 0.5 * (1 + erf(x / sqrt(2)));
 }
 
+/** Computes the mills ratio (how frequently a given random variable is greater than a provided test value)
+ * @param x Point at which to sample
+ * @return Mills ratio of the standard normal distribution given the provided point
+ */
 double R(double x) { //Mills Ratio
 	if (x > 4) {
 		return 1.0 / x;
@@ -38,6 +44,10 @@ double R(double x) { //Mills Ratio
 	return exp(log(1. - N) - log(D));
 }
 
+/** Determines whether a given number is finite or not.
+ * @param x Value to check
+ * @return Whether or not x is finite
+ */
 bool checkNumber(double x) {
 	if (isfinite(x)) {
 		return true;
@@ -45,6 +55,10 @@ bool checkNumber(double x) {
 	return false;//wrapper for isfinite()
 }
 
+/** Performs a bounds checked log computation of the given value.
+ * @param x Value of which to compute the log.
+ * @return either log(x) or -Inf if x <= 0.
+ */
 double LOG(double x) {
 	if (x <= 0) {
 		return nINF;
@@ -57,13 +71,25 @@ double LOG(double x) {
 // Uniform Noise Class
 NOISE::NOISE() {} //empty constructor
 
+/** Full constructor for the uniform noise distribution class.
+ * @param A
+ * @param B
+ * @param W
+ * @param PI
+ */
 NOISE::NOISE(double A, double B, double W, double PI) {
 	a = A;
 	b = B;
 	w = W;
 	pi = PI;
 }
+
 //density function
+/** Computes the probability density of the given sample point and strand.
+ * @param x
+ * @param strand
+ * @return PDF of the given parameters.
+ */
 double NOISE::pdf(double x, int strand) {
 	if (strand == 1) {
 		return (w * pi) / abs(b - a);
@@ -76,6 +102,14 @@ double NOISE::pdf(double x, int strand) {
 //Uniform Class
 UNI::UNI() {} //empty constructor
 
+/** Full constructor for the uniform distribution class.
+ * @param start Starting position of the uniform "on" portion
+ * @param stop Stopping position of the uniform "on" portion
+ * @param w_i 
+ * @param strand Strand on which the uniform is to exist
+ * @param POS
+ * @param Pi
+ */
 UNI::UNI(double start, double stop, double w_i, int strand, int POS, double Pi) {
 	a 		= start;
 	b 		= stop;

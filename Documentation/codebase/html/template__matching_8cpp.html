@@ -105,13 +105,13 @@ Include dependency graph for template_matching.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="template__matching_8cpp__incl.png" border="0" usemap="#_2home_2mgohde_2dworkspace_2tfit-revisions_2src_2template__matching_8cpp" alt=""/></div>
 <map name="_2home_2mgohde_2dworkspace_2tfit-revisions_2src_2template__matching_8cpp" id="_2home_2mgohde_2dworkspace_2tfit-revisions_2src_2template__matching_8cpp">
-<area shape="rect" id="node2" href="load_8h.html" title="load.h" alt="" coords="395,333,453,360"/>
-<area shape="rect" id="node15" href="model_8h.html" title="model.h" alt="" coords="309,259,377,285"/>
-<area shape="rect" id="node18" href="template__matching_8h.html" title="template_matching.h" alt="" coords="514,109,657,136"/>
-<area shape="rect" id="node20" href="_f_d_r_8h.html" title="FDR.h" alt="" coords="859,184,920,211"/>
-<area shape="rect" id="node24" href="_b_i_c_8h.html" title="BIC.h" alt="" coords="1485,109,1541,136"/>
-<area shape="rect" id="node6" href="read__in__parameters_8h.html" title="read_in_parameters.h" alt="" coords="613,408,760,435"/>
-<area shape="rect" id="node10" href="_param_wrapper_8hpp.html" title="ParamWrapper.hpp" alt="" coords="150,408,285,435"/>
+<area shape="rect" id="node2" href="load_8h.html" title="load.h" alt="" coords="398,333,455,360"/>
+<area shape="rect" id="node15" href="model_8h.html" title="model.h" alt="" coords="43,259,111,285"/>
+<area shape="rect" id="node18" href="template__matching_8h.html" title="template_matching.h" alt="" coords="663,109,806,136"/>
+<area shape="rect" id="node20" href="_f_d_r_8h.html" title="FDR.h" alt="" coords="599,184,660,211"/>
+<area shape="rect" id="node24" href="_b_i_c_8h.html" title="BIC.h" alt="" coords="1277,109,1333,136"/>
+<area shape="rect" id="node6" href="read__in__parameters_8h.html" title="read_in_parameters.h" alt="" coords="344,408,491,435"/>
+<area shape="rect" id="node10" href="_param_wrapper_8hpp.html" title="ParamWrapper.hpp" alt="" coords="718,408,853,435"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -129,8 +129,8 @@ Functions</h2></td></tr>
 <tr class="separator:ae0026a99f6987dc0b4f3038f88a9d2bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acb550156271b092126dd7c6a4fba17aa"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="template__matching_8cpp.html#acb550156271b092126dd7c6a4fba17aa">run_global_template_matching</a> (vector&lt; <a class="el" href="classsegment.html">segment</a> *&gt; segments, string out_dir, <a class="el" href="classparams.html">params</a> *P, <a class="el" href="classslice__ratio.html">slice_ratio</a> SC)</td></tr>
 <tr class="separator:acb550156271b092126dd7c6a4fba17aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa28bc6b6359f8b47ef28860245a1aa58"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="template__matching_8cpp.html#aa28bc6b6359f8b47ef28860245a1aa58">run_global_template_matching_pwrapper</a> (vector&lt; <a class="el" href="classsegment.html">segment</a> *&gt; segments, string out_dir, <a class="el" href="class_param_wrapper.html">ParamWrapper</a> *pw, <a class="el" href="classslice__ratio.html">slice_ratio</a> SC)</td></tr>
-<tr class="separator:aa28bc6b6359f8b47ef28860245a1aa58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acae11dd8b19156a69c2a6f949a36b18c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="template__matching_8cpp.html#acae11dd8b19156a69c2a6f949a36b18c">run_global_template_matching_pwrapper</a> (vector&lt; <a class="el" href="classsegment.html">segment</a> *&gt; segments, string out_dir, <a class="el" href="class_param_wrapper.html">ParamWrapper</a> *pw, <a class="el" href="classslice__ratio.html">slice_ratio</a> SC, int debug)</td></tr>
+<tr class="separator:acae11dd8b19156a69c2a6f949a36b18c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -406,8 +406,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="aa28bc6b6359f8b47ef28860245a1aa58"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa28bc6b6359f8b47ef28860245a1aa58">&#9670;&nbsp;</a></span>run_global_template_matching_pwrapper()</h2>
+<a id="acae11dd8b19156a69c2a6f949a36b18c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acae11dd8b19156a69c2a6f949a36b18c">&#9670;&nbsp;</a></span>run_global_template_matching_pwrapper()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -434,7 +434,13 @@ Variables</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="classslice__ratio.html">slice_ratio</a>&#160;</td>
-          <td class="paramname"><em>SC</em>&#160;</td>
+          <td class="paramname"><em>SC</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>debug</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -449,6 +455,7 @@ Variables</h2></td></tr>
     <tr><td class="paramname">out_dir</td><td>Output directory in which to save the trained model. </td></tr>
     <tr><td class="paramname">pw</td><td><a class="el" href="class_param_wrapper.html" title="ParamWrapper parses and preprocesses command line arguments. ">ParamWrapper</a> from which the function reads a number of parameters. </td></tr>
     <tr><td class="paramname">SC</td><td><a class="el" href="classslice__ratio.html">slice_ratio</a> used to keep track of various thresholds. </td></tr>
+    <tr><td class="paramname">debug</td><td>Whether or not to dump all BIC scores, etc to the log. </td></tr>
   </table>
   </dd>
 </dl>

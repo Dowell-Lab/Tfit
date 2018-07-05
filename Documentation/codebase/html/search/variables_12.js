@@ -6,5 +6,5 @@ var searchData=
   ['wf',['WF',['../class_n_l_r.html#a94e79ea8fcadde4a210439ff82498338',1,'NLR']]],
   ['wl',['wl',['../class_n_l_r.html#acf24e6850673fdcb592378aa564abb42',1,'NLR']]],
   ['wn',['wn',['../class_n_l_r.html#a931d982757ef4c00a6c7bf259fffe4ec',1,'NLR']]],
-  ['wr',['wr',['../class_n_l_r.html#a52e3aa3b626aed3041266baf70494f16',1,'NLR::wr()'],['../class_n_l_r.html#ac37e4b13600c6045881c363d2310021c',1,'NLR::WR()']]]
+  ['wr',['WR',['../class_n_l_r.html#ac37e4b13600c6045881c363d2310021c',1,'NLR::WR()'],['../class_n_l_r.html#a52e3aa3b626aed3041266baf70494f16',1,'NLR::wr()']]]
 ];

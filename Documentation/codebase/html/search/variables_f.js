@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['scale',['SCALE',['../classsegment.html#a23fdb3e0b19f2fa5b9499fafa0cb67a7',1,'segment::SCALE()'],['../classclassifier__single.html#a4d356669f125481fae3c9237937c39e2',1,'classifier_single::scale()']]],
+  ['scale',['scale',['../classclassifier__single.html#a4d356669f125481fae3c9237937c39e2',1,'classifier_single::scale()'],['../classsegment.html#a23fdb3e0b19f2fa5b9499fafa0cb67a7',1,'segment::SCALE()']]],
+  ['score',['score',['../classslice__ratio.html#adfcc597256b1d8411389db8ca50bcb0c',1,'slice_ratio']]],
   ['scores',['scores',['../class_param_wrapper.html#a3e3e710ffa3db9a0a81c526035e13be0',1,'ParamWrapper']]],
   ['seed',['seed',['../classclassifier.html#ad5d460005032600f492ffb395e5a28a7',1,'classifier']]],
   ['select',['select',['../class_param_wrapper.html#a7ced524eee4cd7149feb1cbe94fbc130',1,'ParamWrapper::select()'],['../classparams.html#a6945215811d756ff74ef12f07936c322',1,'params::select()']]],
