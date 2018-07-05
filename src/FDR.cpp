@@ -527,6 +527,8 @@ slice_ratio get_slice_pwrapper(vector<segment *> segments, int N, double CC, Par
           printf("\tN_pos=%lf, N_neg=%lf\n", N_pos, N_neg);
           printf("\tsigma=%lf, lambda=%lf, fp=%lf, pi=%lf, w=%lf\n", sigma, lambda, fp, pi, w);
           printf("\tj=%d, k=%d, c=%d\n", j, k, c);
+          
+          printf("\tfp=%lf / %lf\n", pw->footPrint, ns);
       }
     }
   }
