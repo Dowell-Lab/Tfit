@@ -196,6 +196,15 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns the index of the segment most similar to the parameters provided. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>Segment set to check </td></tr>
+    <tr><td class="paramname">center</td><td>Approximate center point of the desired segment. </td></tr>
+    <tr><td class="paramname">dist</td><td>Maximum acceptable distance from the desired center point. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Index of the nearest possible segment to the deisred center point. </dd></dl>
 
 </div>
 </div>
@@ -236,6 +245,16 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns the sum of all reads in the specified segment within the range specified. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>Segment to sum </td></tr>
+    <tr><td class="paramname">j</td><td>Starting position in the segment at which to sum. </td></tr>
+    <tr><td class="paramname">k</td><td>Stopping position in the segment at which to sum. </td></tr>
+    <tr><td class="paramname">st</td><td>Strand to sum. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Sum of values in the specified segment. </dd></dl>
 
 </div>
 </div>
@@ -450,6 +469,13 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>This should shift a set of input coordinates closer to the specified data segment. Probably. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">K</td><td>Stop, threshold, and scaling parameter used internally. </td></tr>
+    <tr><td class="paramname">N</td><td>Offset scaling parameter used internally. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -484,6 +510,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Who knows?! </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">components</td><td>Input components to arrange? </td></tr>
+    <tr><td class="paramname">data</td><td>Data segment on which to compute the update. </td></tr>
+    <tr><td class="paramname">K</td><td>Threshold and bounds parameter. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

@@ -199,6 +199,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Default constructor for the componet class. This sets foot_print, forward_neighbor, and reverse_neighbor to 0. </p>
 
 </div>
 </div>
@@ -430,6 +431,20 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Randomly sets initial values based on the input paramaters given. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mu</td><td></td></tr>
+    <tr><td class="paramname">data</td><td></td></tr>
+    <tr><td class="paramname">K</td><td></td></tr>
+    <tr><td class="paramname">scale</td><td></td></tr>
+    <tr><td class="paramname">noise_w</td><td></td></tr>
+    <tr><td class="paramname">termination</td><td></td></tr>
+    <tr><td class="paramname">fp</td><td></td></tr>
+    <tr><td class="paramname">forward_bound</td><td></td></tr>
+    <tr><td class="paramname">reverse_bound</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -660,6 +675,20 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Sets all hyperparameters based on both defaults and the values passed. Sets alpha_0 to 20.46, beta_0 to 10.6, alpha_1 to 20.823, beta_1 to 0.5 alpha_2 to 1.297, and beta_2 to 8260</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s_0</td><td>Internal ALPHA_0 prior (for sigma) </td></tr>
+    <tr><td class="paramname">s_1</td><td>Internal BETA_0 prior (for sigma) </td></tr>
+    <tr><td class="paramname">l_0</td><td>Internal ALPHA_1 prior (for lambda) </td></tr>
+    <tr><td class="paramname">l_1</td><td>Internal BETA_1 prior (for lambda) </td></tr>
+    <tr><td class="paramname">w_0</td><td>Internal ALPHA_3 prior (for weights) </td></tr>
+    <tr><td class="paramname">strand_0</td><td>Internal strand probability prior </td></tr>
+    <tr><td class="paramname">N</td><td>Used to compute a threshold. </td></tr>
+    <tr><td class="paramname">K</td><td>Used to compute a threshold. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

@@ -205,6 +205,16 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Full constructor for the exponentailly modified gaussian class. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">MU</td><td>Center of the distribution </td></tr>
+    <tr><td class="paramname">SI</td><td>Distribution spread </td></tr>
+    <tr><td class="paramname">L</td><td>Exponential rate </td></tr>
+    <tr><td class="paramname">W</td><td>??? </td></tr>
+    <tr><td class="paramname">PI</td><td>??? </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -234,6 +244,14 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns the conditional expectation of the internal parameter Y given the provided sample point z on strand s. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">z</td><td>Sample point at which to compute the expectation </td></tr>
+    <tr><td class="paramname">s</td><td>Strand on which to compute the expectation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Conditional expecation at the given point and strand </dd></dl>
 
 </div>
 </div>
@@ -262,6 +280,14 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns the conditional expectation of the internal parameter Y^2 given the provided sample point z on strand s. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">z</td><td>Sample point at which to compute the expectation </td></tr>
+    <tr><td class="paramname">s</td><td>Strand on which to compute the expectation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Conditional expectation of Y^2 at the given point and strand. </dd></dl>
 
 </div>
 </div>
@@ -290,6 +316,14 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns the probability density at a given sample point for this distribution. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">z</td><td>Sample point. </td></tr>
+    <tr><td class="paramname">s</td><td>Strand on which the sample resides. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Sample probability density. </dd></dl>
 
 </div>
 </div>
@@ -307,6 +341,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns a pretty printed string representation of all of the parameters in this exponentially modified gaussian distribution. </p>
 
 </div>
 </div>
