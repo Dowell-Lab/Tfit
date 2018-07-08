@@ -12,12 +12,18 @@ test_new_I_fit
 template_window_matching
 
 
+Made file func_test.py which is for testing functions
+It may also have classes for testing the differences in outputs from python2-3
+
+
 
 In model.py:
 This error is given for python3: matplotlib does not support generators as input
 fixed in python2
 
-simulate.py seems good
+simulate.py:
+uppon review there are changes from run to run, however the difference between py3-py2 doesnt seem to have a big difference
+Could possibly write a script to check the varation between the two
 
 main.py/load.py:
 seems good for transition, however when I get tsv files, there is nothing writen to them(in both 2 and 3).
@@ -49,6 +55,13 @@ looks good
 
 bootstrapping:
 looks good
+
+template window matching:
+when it calls simulate, there is an error(in py27)
+I had to input correct bounds from example files in the main, but error in py27 went away(kinda)
+get the same output in py3, however there is still an index out of range error.
+simiare to the same error from model.py
+
 
 
 

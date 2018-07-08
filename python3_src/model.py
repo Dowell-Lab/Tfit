@@ -11,6 +11,7 @@ import matplotlib as mpl
 import matplotlib.cm as cm
 import load
 import template_window_matching as twm
+import func_test as ft
 
 class component_elongation:
 	def __init__(self, a,b, w, pi, bidir_component, ty, classifier, j, foot_print=0):
@@ -316,6 +317,7 @@ class EMGU:
 
 		ws 			= np.random.dirichlet([self.alpha_0]*self.K*3).reshape(self.K, 3)
 		pis 		= np.random.beta(self.beta_0, self.beta_0, self.K*3).reshape(self.K,3)
+		
 		if self.peaks is None:
 			mus 		=  np.random.uniform(minX, maxX, self.K)
 		else:

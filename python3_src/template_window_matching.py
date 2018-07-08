@@ -1,8 +1,9 @@
 import load,matplotlib.pyplot as plt
 import numpy as np
 import model
-
 import math
+import func_test as ft
+
 def LOG(x):
 	if x >0:
 		return math.log(x)
@@ -104,7 +105,7 @@ def sample(X, k, std=1, lam=0.1):
 	
 
 if __name__=="__main__":
-	X 	= load.grab_specific_region("chr1",524481, 524674, SHOW=True, bins=300 )
+	X 	= load.grab_specific_region("chr1",11654, 11655, SHOW=True, bins=300 )
 	X[:,0]/=100.
 	X[:,0]-=X[0,0]
 
@@ -113,6 +114,7 @@ if __name__=="__main__":
 	clf = model.EMGU(noise=True, K=3,noise_max=0.01,
 		moveUniformSupport=5,
 		max_it=50,seed=True)
+		
 	clf.fit(X)
 	clf.draw(X)
 	
