@@ -1,0 +1,41 @@
+First I changed all of the print statments to have braces
+
+In model.py:
+This error is given for python3: matplotlib does not support generators as input
+fixed in python2
+
+simulate.py seems good
+
+main.py/load.py:
+seems good for transition, however when I get tsv files, there is nothing writen to them(in both 2 and 3).
+also, only hardcode function works. ill try to get the run function working
+
+find_regions_of_intrest.py
+just had to change around some print statement brackets
+
+make_test_file:
+the only function to work is run2. makes, bedgraph files
+
+make_interval_files:
+from a python3 standpoint this looks good
+
+make_noise_region_file:
+no problems in python3
+
+display__iterates:
+found a pretty big bug: in the run function the list G never gets filled
+
+nodes:
+problems with list  indices
+
+unstranded model:
+looks good
+
+check moment estimators:
+looks good
+
+bootstrapping:
+looks good
+
+
+
