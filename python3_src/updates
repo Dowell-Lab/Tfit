@@ -1,5 +1,18 @@
 First I changed all of the print statments to have braces
 
+Functions to look at:
+Display__iterates
+make_test_file
+nodes
+model across
+unstranded_model
+parse_argv(right now the python version is hardcoded to work)
+simulate
+test_new_I_fit
+template_window_matching
+
+
+
 In model.py:
 This error is given for python3: matplotlib does not support generators as input
 fixed in python2
@@ -36,6 +49,7 @@ looks good
 
 bootstrapping:
 looks good
+
 
 
 
