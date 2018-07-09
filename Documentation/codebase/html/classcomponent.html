@@ -241,6 +241,17 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Depending on the value of the internal type parameter, this function either updates the values within the noise distribution or the forward/reverse/bidir distributions.</p>
+<p>This appears to be part of a process of determining expected values of various model parameters given the data provided.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Value of which to get the expectation (E of X...) </td></tr>
+    <tr><td class="paramname">y</td><td>Given value for the expectation (...given Y) </td></tr>
+    <tr><td class="paramname">st</td><td>Strand on which to compute the expectation. </td></tr>
+    <tr><td class="paramname">normalize</td><td>Normalization parameter for the expectation. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -286,6 +297,16 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Depending on the evaluation type (specified internally), this either computes a set of PDFs given internal models and strand inputs or a uniform noise output.</p>
+<p>If the internal type parameter is 0, then this returns the PDF of random noise at the given sample point (x) If the internal type parameter is not 0, then this will return the sum of the following: The bidir pdf for the given strand and point, The reverse pdf for the given point The forward pdf of the given point.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Sample point at which to determine the model probability. </td></tr>
+    <tr><td class="paramname">st</td><td>Strand on which to sample. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The value specified in this function's description. </dd></dl>
 
 </div>
 </div>
@@ -303,6 +324,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Returns the sum of all forward and reverse expectations or 0 if type==0. </p><dl class="section return"><dt>Returns</dt><dd>the sum of all forward and reverse expectations or 0 if type==0. </dd></dl>
 
 </div>
 </div>
@@ -594,6 +616,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Pretty prints the bidirectional, forward, and reverse portions of a component </p>
 
 </div>
 </div>
@@ -611,6 +634,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Sets all parameters in all objects within the component to 0. </p>
 
 </div>
 </div>
@@ -717,6 +741,14 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Recomputes all parameters in the component based on the values provided. Does not recompute if type!=1.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">N</td><td>Used to scale the w parameter of the forward and reverse distributions. </td></tr>
+    <tr><td class="paramname">K</td><td>Used to scale the w parameter of the forward and reverse distributions. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

@@ -131,6 +131,12 @@ UNI::UNI(double start, double stop, double w_i, int strand, int POS, double Pi) 
 	ri_forward = 0, ri_reverse = 0;
 }
 //density function
+
+/** Computes the probability density at a given sample point and strand for the uniform distribution.
+ * @param x Sample point
+ * @param strand Strand on which to sample
+ * @return Probability density given the provided parameters.
+ */
 double UNI::pdf(double x, int strand) {
 	double p;
 	if (w == 0) {
@@ -146,6 +152,8 @@ double UNI::pdf(double x, int strand) {
 	return 0;
 }
 
+/** Returns a pretty printed string representation of all of the parameters in this uniform distribution.
+ */
 string UNI::print() {
 	string text = ("U: " + to_string(a) + "," + to_string(b)
 	               + "," + to_string(w) + "," + to_string(pi));
@@ -159,6 +167,13 @@ string UNI::print() {
 //Exponentially Modified Gaussian class
 EMG::EMG() {} //empty constructor
 
+/** Full constructor for the exponentailly modified gaussian class.
+ * @param MU Center of the distribution
+ * @param SI Distribution spread 
+ * @param L Exponential rate
+ * @param W ???
+ * @param PI ???
+ */
 EMG::EMG(double MU, double SI, double L, double W, double PI ) {
 	mu 	= MU;
 	si 	= SI;
@@ -169,12 +184,19 @@ EMG::EMG(double MU, double SI, double L, double W, double PI ) {
 	move_fp = 0;
 }
 
+/** Returns a pretty printed string representation of all of the parameters in this exponentially modified gaussian distribution.
+ */
 string EMG::print() {
 	string text 	= ("N: " + to_string(mu) + "," + to_string(si)
 	                  + "," + to_string(l) + "," + to_string(w) + "," + to_string(pi) + "," + to_string(foot_print) );
 	return text;
 }
 //density function
+/** Returns the probability density at a given sample point for this distribution.
+ * @param z Sample point.
+ * @param s Strand on which the sample resides.
+ * @return Sample probability density.
+ */
 double EMG::pdf(double z, int s ) {
 	if (w == 0) {
 		return 0.0;
@@ -199,6 +221,11 @@ double EMG::pdf(double z, int s ) {
 	return 0.0;
 }
 //conditional expectation of Y given z_i
+/** Returns the conditional expectation of the internal parameter Y given the provided sample point z on strand s.
+ * @param z Sample point at which to compute the expectation
+ * @param s Strand on which to compute the expectation
+ * @return Conditional expecation at the given point and strand
+ */
 double EMG::EY(double z, int s) {
 	if (s == 1) {
 		z -= foot_print;
@@ -209,6 +236,11 @@ double EMG::EY(double z, int s) {
 	return max(0. , s * (z - mu) - l * pow(si, 2) + (si / R(l * si - s * ((z - mu) / si))));
 }
 //conditional expectation of Y^2 given z_i
+/** Returns the conditional expectation of the internal parameter Y^2 given the provided sample point z on strand s.
+ * @param z Sample point at which to compute the expectation
+ * @param s Strand on which to compute the expectation
+ * @return Conditional expectation of Y^2 at the given point and strand.
+ */
 double EMG::EY2(double z, int s) {
 	if (s == 1) {
 		z -= foot_print;
@@ -220,6 +252,12 @@ double EMG::EY2(double z, int s) {
 
 //===============================================================================
 //functions that help estimate uniform support bounds
+/** Returns the index of the segment most similar to the parameters provided.
+ * @param data Segment set to check
+ * @param center Approximate center point of the desired segment.
+ * @param dist Maximum acceptable distance from the desired center point.
+ * @return Index of the nearest possible segment to the deisred center point.
+ */
 int get_nearest_position(segment * data, double center, double dist) {
 	int i;
 
@@ -237,6 +275,13 @@ int get_nearest_position(segment * data, double center, double dist) {
 	return i;
 }
 
+/** Returns the sum of all reads in the specified segment within the range specified.
+ * @param data Segment to sum
+ * @param j Starting position in the segment at which to sum.
+ * @param k Stopping position in the segment at which to sum.
+ * @param st Strand to sum.
+ * @return Sum of values in the specified segment.
+ */
 double get_sum(segment * data, int j, int k, int st) {
 	double S 	= 0;
 	for (int i = j; i < k; i++) {
@@ -245,7 +290,12 @@ double get_sum(segment * data, int j, int k, int st) {
 	return S;
 }
 
+/** This should shift a set of input coordinates closer to the specified data segment. Probably.
+ * @param K Stop, threshold, and scaling parameter used internally.
+ * @param N Offset scaling parameter used internally.
+ */
 void update_j_k( component * components, segment * data, int K, double N) {
+    //This appears to sort the components based on some threshold.
 	for (int k = 0 ; k < K; k++) {
 		if (k > 0) {
 			components[k].reverse_neighbor 	= &components[k - 1];
@@ -299,6 +349,11 @@ void update_j_k( component * components, segment * data, int K, double N) {
 	}
 }
 
+/** Who knows?!
+ * @param components Input components to arrange?
+ * @param data Data segment on which to compute the update.
+ * @param K Threshold and bounds parameter.
+ */
 void update_l(component * components, segment * data, int K) {
 	for (int k 	= 0; k < K; k++) {
 		//forward
@@ -362,12 +417,28 @@ void update_l(component * components, segment * data, int K) {
 //components
 //wrapper class for EMG and UNIFORM objects
 
+/** Default constructor for the componet class.
+ * This sets foot_print, forward_neighbor, and reverse_neighbor to 0.
+ */
 component::component() { //empty constructor
 	foot_print 			= 0;
 	forward_neighbor 	= NULL;
 	reverse_neighbor 	= NULL;
 }
 //set the hyperparameters
+/** Sets all hyperparameters based on both defaults and the values passed.
+ * Sets alpha_0 to 20.46, beta_0 to 10.6, alpha_1 to 20.823, beta_1 to 0.5
+ * alpha_2 to 1.297, and beta_2 to 8260
+ * 
+ * @param s_0 Internal ALPHA_0 prior (for sigma)
+ * @param s_1 Internal BETA_0 prior (for sigma)
+ * @param l_0 Internal ALPHA_1 prior (for lambda)
+ * @param l_1 Internal BETA_1 prior  (for lambda)
+ * @param w_0 Internal ALPHA_3 prior (for weights)
+ * @param strand_0 Internal strand probability prior
+ * @param N Used to compute a threshold.
+ * @param K Used to compute a threshold.
+ */
 void component::set_priors(double s_0, double s_1,
                            double l_0, double l_1, double w_0, double strand_0, double N, int K) {
 	//============================
@@ -395,6 +466,17 @@ void component::set_priors(double s_0, double s_1,
 }
 
 //randomly seed the sigma, pi, lambda ws etc...
+/** Randomly sets initial values based on the input paramaters given.
+ * @param mu
+ * @param data
+ * @param K
+ * @param scale
+ * @param noise_w
+ * @param termination
+ * @param fp
+ * @param forward_bound
+ * @param reverse_bound
+ */
 void component::initialize_bounds(double mu, segment * data , int K, double scale, double noise_w,
                                   double termination, double fp, double forward_bound, double reverse_bound) { //random seeds...
 	foot_print 	= fp;
@@ -456,6 +538,8 @@ void component::initialize_bounds(double mu, segment * data , int K, double scal
 	}
 }
 //print out the component parameters
+/** Pretty prints the bidirectional, forward, and reverse portions of a component
+ */
 void component::print() {
 	if (type == 1) {
 		string text 	= bidir.print() + "\n";
@@ -466,7 +550,20 @@ void component::print() {
 		cout << "NOISE: " << noise.w << "," << noise.pi << endl;
 	}
 }
+
 //compute the density at x_i,s_i
+/** Depending on the evaluation type (specified internally), this either computes a set of PDFs given internal models and strand inputs or a uniform noise output.
+ * 
+ * If the internal type parameter is 0, then this returns the PDF of random noise at the given sample point (x)
+ * If the internal type parameter is not 0, then this will return the sum of the following:
+ * The bidir pdf for the given strand and point,
+ * The reverse pdf for the given point
+ * The forward pdf of the given point.
+ * 
+ * @param x Sample point at which to determine the model probability.
+ * @param st Strand on which to sample.
+ * @return The value specified in this function's description.
+ */
 double component::evaluate(double x, int st) {
 	if (type == 0) { //this is the uniform noise component
 		return noise.pdf(x, st);
@@ -483,6 +580,17 @@ double component::evaluate(double x, int st) {
 	return bidir.ri_reverse + reverse.ri_reverse + forward.ri_reverse;
 }
 //compute the conditional expectations and add to running total
+
+/** Depending on the value of the internal type parameter, this function either updates the values within
+ * the noise distribution or the forward/reverse/bidir distributions.
+ * 
+ * This appears to be part of a process of determining expected values of various model parameters given the data provided.
+ * 
+ * @param x Value of which to get the expectation (E of X...)
+ * @param y Given value for the expectation (...given Y)
+ * @param st Strand on which to compute the expectation.
+ * @param normalize Normalization parameter for the expectation.
+ */
 void component::add_stats(double x, double y, int st, double normalize) {
 	if (type == 0) { //noise component
 		if (st == 1) {
@@ -529,6 +637,8 @@ void component::add_stats(double x, double y, int st, double normalize) {
 	}
 }
 //rest running totals and responsibility terms
+/** Sets all parameters in all objects within the component to 0.
+ */
 void component::reset() {
 	if (type) {
 		bidir.C = 0;
@@ -543,14 +653,25 @@ void component::reset() {
 
 	}
 }
+
 //used for large responsibility normalization term
+/** Returns the sum of all forward and reverse expectations or 0 if type==0.
+ * @return the sum of all forward and reverse expectations or 0 if type==0.
+ */
 double component::get_all_repo() {
 	if (type == 1) {
 		return bidir.r_forward + bidir.r_reverse + forward.r_forward + reverse.r_reverse;
 	}
 	return 0.;
 }
+
 //take all the nice sample means and variances
+/** Recomputes all parameters in the component based on the values provided.
+ * Does not recompute if type!=1.
+ * 
+ * @param N Used to scale the w parameter of the forward and reverse distributions.
+ * @param K Used to scale the w parameter of the forward and reverse distributions.
+ */
 void component::update_parameters(double N, int K) {
 	if (type == 1) {
 		//first for the bidirectional
@@ -593,6 +714,10 @@ void component::update_parameters(double N, int K) {
 //=========================================================
 //sorting functions for the classifier class
 //(they are all bubble sort...)
+/** Bubble sorts components by their means.
+ * @param components Set of components to sort
+ * @param K Number of elements to sort.
+ */
 void sort_components(component components[], int K) {
 	bool sorted = true;
 	while (sorted) {
@@ -608,6 +733,10 @@ void sort_components(component components[], int K) {
 	}
 }
 
+/** Bubble sorts a set of values by the first value in said set.
+ * @param X Set of sets to sort
+ * @return Sorted set of sets.
+ */
 vector<vector<double>> sort_mus(vector<vector<double>> X) {
 	bool changed = true;
 
@@ -625,6 +754,10 @@ vector<vector<double>> sort_mus(vector<vector<double>> X) {
 	return X;
 }
 
+/** Sorts an array of doubles.
+ * @param X array to sort
+ * @param N Number of elements in X to sort.
+ */
 void sort_vector(double X[], int N) {
 	bool sorted = true;
 	while (sorted) {
@@ -645,6 +778,22 @@ void sort_vector(double X[], int N) {
 //classifier class
 //wrapper around EM
 //(most of these constructors are deprecated)
+/** First classifier constructor.
+ * Sets all classifier parameters appropriately and zeroes out all hyperparameters.
+ * 
+ * @param k
+ * @param ct
+ * @param mi
+ * @param nm
+ * @param R_MU
+ * @param alpha_0
+ * @param beta_0
+ * @param alpha_1
+ * @param beta_1
+ * @param alpha_2
+ * @param alpha_3
+ * @param fp
+ */
 classifier::classifier(int k, double ct, int mi, double nm,
                        double R_MU, double alpha_0, double beta_0,
                        double alpha_1, double beta_1, double alpha_2, double alpha_3, double fp) {
