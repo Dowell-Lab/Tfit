@@ -371,6 +371,26 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Second classifier constructure. This accepts a large set of parameters and sets the following parameters to fixed values:</p>
+<p>seed to true p to 0.8 last_diff to 0</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">k</td><td></td></tr>
+    <tr><td class="paramname">ct</td><td></td></tr>
+    <tr><td class="paramname">mi</td><td></td></tr>
+    <tr><td class="paramname">nm</td><td></td></tr>
+    <tr><td class="paramname">R_MU</td><td></td></tr>
+    <tr><td class="paramname">alpha_0</td><td></td></tr>
+    <tr><td class="paramname">beta_0</td><td></td></tr>
+    <tr><td class="paramname">alpha_1</td><td></td></tr>
+    <tr><td class="paramname">beta_1</td><td></td></tr>
+    <tr><td class="paramname">alpha_2</td><td></td></tr>
+    <tr><td class="paramname">alpha_3</td><td></td></tr>
+    <tr><td class="paramname">MOVE</td><td></td></tr>
+    <tr><td class="paramname">fp</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -459,6 +479,23 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Third classifier constructore. Sets all values as appropriate and fixed values as follows: seed to true p to 0.8 last_diff to 0</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ct</td><td></td></tr>
+    <tr><td class="paramname">nm</td><td></td></tr>
+    <tr><td class="paramname">R_MU</td><td></td></tr>
+    <tr><td class="paramname">alpha_0</td><td></td></tr>
+    <tr><td class="paramname">beta_0</td><td></td></tr>
+    <tr><td class="paramname">alpha_1</td><td></td></tr>
+    <tr><td class="paramname">beta_1</td><td></td></tr>
+    <tr><td class="paramname">alpha_2</td><td></td></tr>
+    <tr><td class="paramname">alpha_3</td><td></td></tr>
+    <tr><td class="paramname">IP</td><td></td></tr>
+    <tr><td class="paramname">fp</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -476,6 +513,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Default classifier constructor. Does nothing. </p>
 
 </div>
 </div>
@@ -545,6 +583,20 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Fits the data provided given the seed parameters passed.</p>
+<p>Based on a somewhat limited understanding of the specifics of the model, we effectively model two gaussian distributions followed by a uniform "tail" off in a direction of transcription.</p>
+<p>If k is 0, then this function generates a uniform distribution, computes its log likelihood, and then proceeds to do nothing with said log likelihood.</p>
+<p>If k&gt;0: This function will set up a list of components corresponding to the value k provided plus one (probably for the uniform distribution). For each of these components, all priors are set to the internal set of hyperparameters. For each of the components, if there is a corresponding value in mu_seeds, this value is used to initialize said component. Otherwise, the component is randomly initialized.</p>
+<p>Once all of the components are initialized and sorted,</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>Data to compute a model for. </td></tr>
+    <tr><td class="paramname">mu_seeds</td><td>Set of values used to randomly initialize internal distribution centers. </td></tr>
+    <tr><td class="paramname">topology</td><td>Used to initialize the internal organization of the component. </td></tr>
+    <tr><td class="paramname">elon_move</td><td>Whether or not to attempt to shift the uniform component of the model. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

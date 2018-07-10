@@ -814,6 +814,27 @@ classifier::classifier(int k, double ct, int mi, double nm,
 
 	move_l = true;
 }
+
+/** Second classifier constructure. This accepts a large set of parameters and sets the following parameters to fixed values:
+ * 
+ * seed to true
+ * p to 0.8
+ * last_diff to 0
+ * 
+ * @param k
+ * @param ct
+ * @param mi
+ * @param nm
+ * @param R_MU
+ * @param alpha_0
+ * @param beta_0
+ * @param alpha_1
+ * @param beta_1
+ * @param alpha_2
+ * @param alpha_3
+ * @param MOVE
+ * @param fp
+ */
 classifier::classifier(int k, double ct, int mi, double nm,
                        double R_MU, double alpha_0, double beta_0,
                        double alpha_1, double beta_1, double alpha_2, double alpha_3, bool MOVE, double fp) {
@@ -833,6 +854,24 @@ classifier::classifier(int k, double ct, int mi, double nm,
 	ALPHA_2 = alpha_2, ALPHA_3 = alpha_3;
 	move_l 	= MOVE;
 }
+
+/** Third classifier constructore. Sets all values as appropriate and fixed values as follows:
+ * seed to true
+ * p to 0.8
+ * last_diff to 0
+ * 
+ * @param ct
+ * @param nm
+ * @param R_MU
+ * @param alpha_0
+ * @param beta_0
+ * @param alpha_1
+ * @param beta_1
+ * @param alpha_2
+ * @param alpha_3
+ * @param IP
+ * @param fp
+ */
 classifier::classifier(double ct, int mi, double nm,
                        double R_MU, double alpha_0, double beta_0,
                        double alpha_1, double beta_1, double alpha_2, double alpha_3, vector<vector<double>> IP, double fp) {
@@ -853,9 +892,33 @@ classifier::classifier(double ct, int mi, double nm,
 	init_parameters 		= IP;
 }
 
+/** Default classifier constructor. Does nothing.
+ */
 classifier::classifier() {};
 
 //this IS the EM...estimate away
+/** Fits the data provided given the seed parameters passed.
+ * 
+ * Based on a somewhat limited understanding of the specifics of the model, we effectively
+ * model two gaussian distributions followed by a uniform "tail" off in a direction of transcription.
+ * 
+ * If k is 0, then this function generates a uniform distribution, computes its log likelihood, and then proceeds
+ * to do nothing with said log likelihood.
+ * 
+ * If k>0:
+ *  This function will set up a list of components corresponding to the value k provided plus one (probably for the uniform distribution).
+ *  For each of these components, all priors are set to the internal set of hyperparameters.
+ *  For each of the components, if there is a corresponding value in mu_seeds, this value is used
+ *  to initialize said component. Otherwise, the component is randomly initialized. 
+ * 
+ * Once all of the components are initialized and sorted, 
+ * 
+ * 
+ * @param data Data to compute a model for.
+ * @param mu_seeds Set of values used to randomly initialize internal distribution centers.
+ * @param topology Used to initialize the internal organization of the component.
+ * @param elon_move Whether or not to attempt to shift the uniform component of the model.
+ */
 int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
                      int elon_move ) {
 	//=========================================================================
@@ -879,6 +942,9 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 			}
 		}
 		components 	= new component[1];
+        
+        //Let's print the log likelihood for fun:
+        printf("Log likelihood for uniform distribution obtained in fit2: %lf\n", ll);
 		return 1;
 	}
 	random_device rd;
@@ -955,7 +1021,6 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 				converged = false, ll = nINF;
 				return 0;
 			}
-
 		}
 
 		//======================================================
@@ -1023,6 +1088,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 
 		u++;
 		t++;
+        printf("Iteration %d ll=%lf\n", t, ll);
 		prevll = ll;
 	}
 
