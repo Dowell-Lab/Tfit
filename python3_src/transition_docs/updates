@@ -14,6 +14,7 @@ template_window_matching
 
 Made file func_test.py which is for testing functions
 It may also have classes for testing the differences in outputs from python2-3
+This will run in python 3 and I am finding a library so that functions can run in python2
 
 
 
