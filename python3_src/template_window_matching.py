@@ -23,11 +23,11 @@ def window(X, std=10, lam=0.1, step_size=1, norm_to_max=True):
 		reverse.append( np.sum(X[k:i, 2]) )
 		i+=1
 	scores 	= [LOG(x) + LOG(y) for x,y in zip(forward, reverse)]
-	
+
 	if norm_to_max:
 		scores 	= [x / max(scores) for x in scores]
 	return scores
-	
+
 def bayes_factor(X, std=10, lam=0.1,step_size=1, norm_to_max=True):
 	KS 	= list()
 	i 	= 0
@@ -75,7 +75,7 @@ def draw(X, coverage_scores, bayes_ks, hybrid,starts):
 	ax1.bar(X[:,0], X[:,1]/np.sum(X[:,1:]))
 	ax1.bar(X[:,0], -X[:,2]/np.sum(X[:,1:]))
 	ax1.grid()
-	
+
 	ax2 = F.add_subplot(2,1,2)
 	print (starts[:3])
 	ax2.bar([x for x,y in starts[:3]], [y for x,y in starts[:3]] )
@@ -83,7 +83,7 @@ def draw(X, coverage_scores, bayes_ks, hybrid,starts):
 	ax2.plot(np.linspace(X[0,0], X[-1,0], len(bayes_ks)), bayes_ks, label="Bayes Factor" )
 	ax2.plot(np.linspace(X[0,0], X[-1,0], len(hybrid)), hybrid, label="center", linestyle="--")
 	ax2.grid()
-	
+
 	plt.show()
 
 def compute_possible_EM_starts(X, std=1, lam=0.1):
@@ -102,7 +102,7 @@ def sample(X, k, std=1, lam=0.1):
 	return keeps
 
 
-	
+
 
 if __name__=="__main__":
 	X 	= load.grab_specific_region("chr1",11654, 11655, SHOW=True, bins=300 )
@@ -114,8 +114,6 @@ if __name__=="__main__":
 	clf = model.EMGU(noise=True, K=3,noise_max=0.01,
 		moveUniformSupport=5,
 		max_it=50,seed=True)
-		
+
 	clf.fit(X)
 	clf.draw(X)
-	
-	

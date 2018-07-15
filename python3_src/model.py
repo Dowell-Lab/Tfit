@@ -317,7 +317,7 @@ class EMGU:
 
 		ws 			= np.random.dirichlet([self.alpha_0]*self.K*3).reshape(self.K, 3)
 		pis 		= np.random.beta(self.beta_0, self.beta_0, self.K*3).reshape(self.K,3)
-		
+
 		if self.peaks is None:
 			mus 		=  np.random.uniform(minX, maxX, self.K)
 		else:
