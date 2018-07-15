@@ -75,9 +75,9 @@ def weird_variance(x,y,mu,direct):#x is start, y is end, direc is direction
 		elif direct==-1 and x[i] > mu:
 			S+=pow(x[i]-mu,2)*y[i]
 			N+=y[i]
-		else:#this case is entered a lot also happens in py27 version
+		#else:#this case is entered a lot also happens in py27 version
 			#print("something wrong")
-			print("S: ",S," N: ",N)
+			#print("S: ",S," N: ",N)
 	return S/N
 
 
