@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/Library/Frameworks/Python.framework/Versions/3.6/bin/python3
 # -*- coding: utf-8 -*-
 #
 #  function_tests.py
@@ -27,21 +27,61 @@
 #
 #
 #
-import simulate as sim
+import simulate as sm
+import subprocess
+import numpy as np
+import matplotlib.pyplot as plt
+import math as m
 
 def test1(number):
 
 	print('Test: ',number)
 	return 0
 
-def testSimulate():
-	print("Testing Simulate Function")
-	#run simulations 50- 100 times, get mean and variance for mean and variance 
+def testSimulate3():
+	####################Python3 Version####################
+	print("Testing Simulate3 Function")
+	#run simulations 50- 100 times, get mean and variance for mean and variance
+
+	X1 	= sm.runOne(mu=0, s=20, l=5, lr=100, ll=-100, we=0.5,wl=0.25, wr=0.25, pie=0.5, pil=0.1, pir=0.9, N=10000, SHOW=False , bins=200, noise=False )
+	mu1 	= 0.5*(sm.weighted_mean(X1[:,0], X1[:,1])+sm.weighted_mean(X1[:,0], X1[:,2]))
+	l1 	= 0.5*(sm.weighted_mean(X1[:,0], X1[:,1])-sm.weighted_mean(X1[:,0], X1[:,2]))
+	print ("Mu1: ",mu1,"l1: ", l1)
+	print ("Some Var1: ",m.sqrt(sm.weird_variance(X1[:,0], X1[:,1], mu1, 1)))
+	print ("Some Var2: ",m.sqrt(sm.weird_variance(X1[:,0], X1[:,2], mu1, -1)))
+
+
 	return 0
+
+def testSimulate2():
+	####################Python2 Version####################
+	print("Testing Simulate2 Function")
+	#run simulations 50- 100 times, get mean and variance for mean and variance
+	'''
+	python3_command = "py2file.py arg1 arg2"  # launch your python2 script using bash
+
+	process = subprocess.Popen(python3_command.split(), stdout=subprocess.PIPE)
+	output, error = process.communicate()  # receive output from the python2 script
+	'''
+
+	X1 	= sm.runOne(mu=0, s=20, l=5, lr=100, ll=-100, we=0.5,wl=0.25, wr=0.25, pie=0.5, pil=0.1, pir=0.9, N=10000, SHOW=False , bins=200, noise=False )
+	mu1 	= 0.5*(sm.weighted_mean(X1[:,0], X1[:,1])+sm.weighted_mean(X1[:,0], X1[:,2]))
+	l1 	= 0.5*(sm.weighted_mean(X1[:,0], X1[:,1])-sm.weighted_mean(X1[:,0], X1[:,2]))
+	print ("Mu1: ",mu1,"l1: ", l1)
+	print ("Some Var1: ",m.sqrt(sm.weird_variance(X1[:,0], X1[:,1], mu1, 1)))
+	print ("Some Var2: ",m.sqrt(sm.weird_variance(X1[:,0], X1[:,2], mu1, -1)))
+
+
+	return 0
+
+
 
 def main(args):
     return 0
 
 if __name__ == '__main__':
-    import sys
-    sys.exit(main(sys.argv))
+
+	testSimulate3()
+	print("test subprocess")
+	subprocess.check_output(["echo", "Hello World!"])
+	print("end")
