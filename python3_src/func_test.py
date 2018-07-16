@@ -83,5 +83,5 @@ if __name__ == '__main__':
 
 	testSimulate3()
 	print("test subprocess")
-	subprocess.check_output(["echo", "Hello World!"])
+	subprocess.check_call(["echo","Hello World!"])
 	print("end")
