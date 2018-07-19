@@ -12,9 +12,9 @@ test_new_I_fit
 template_window_matching
 
 
-Made file func_test.py which is for testing functions
-It may also have classes for testing the differences in outputs from python2-3
-This will run in python 3 and I am finding a library so that functions can run in python2
+Now I have two test files, one in python_src and the other in python3_src, so these two files can test
+the files in each environment respectively. Right now I just pipe outputs to the transition docs folder. Still need
+to get a good way to compare the two different outputs. As of now I will push foreward in comparing the two versions.
 
 
 
@@ -62,9 +62,3 @@ when it calls simulate, there is an error(in py27)
 I had to input correct bounds from example files in the main, but error in py27 went away(kinda)
 get the same output in py3, however there is still an index out of range error.
 simiare to the same error from model.py(although it happens in both 2 and 3)
-
-
-
-
-
-
