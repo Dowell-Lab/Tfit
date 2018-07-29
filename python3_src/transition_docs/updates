@@ -5,12 +5,12 @@ Display__iterates**Special/non-crucial
 make_test_file
 nodes
 model across
-unstranded_model
-parse_argv(right now the python version is hardcoded to work)-> connecy with usage part of readme
-simulate
+unstranded_model**
+parse_argv(main is now changed to handle both hardcoded and arguments)-> connect with usage part of readme
 test_new_I_fit
-template_window_matching
+template_window_matching**
 
+(**) means that tests need to be run to ensure there is not value difference(which is last step in transfer)
 
 Now I have two test files, one in python_src and the other in python3_src, so these two files can test
 the files in each environment respectively. Right now I just pipe outputs to the transition docs folder. Still need
@@ -50,7 +50,10 @@ nodes:
 problems with list  indices
 
 unstranded model:
-looks good
+Creates an insane amount of figures. Also just prints them. Changed it to save them in folder "unstranded_model_figures"
+There is an error when it starts:"The 'normed' kwarg is deprecated, and has been replaced by the 'density' kwarg."
+This is just a python3 error. Now I need to check if this effects the values.
+Between runs there is variance as well (due to the simulated natue of the run)
 
 check moment estimators:
 looks good
