@@ -4,6 +4,7 @@ from scipy.special import erf, erfc
 from scipy.stats import invgamma
 import math as m
 import time
+
 def simulate(N=1000, mu=0,si=1,l=0.5, pi=0.5, fp=2, SHOW=True):
 	D1 	= np.random.normal(mu,si, int(N*pi) ) + np.random.exponential(1.0/l, int(N*pi)) +  fp
 	D2 	= np.random.normal(mu,si, int(N*(1-pi)) ) - np.random.exponential(1.0/l, int(N*(1-pi))) - fp
@@ -98,7 +99,8 @@ def estimate(X, fp=2):
 		plt.plot(xs,ys, color="blue")
 		plt.plot(xs,ysr, color="red")
 		
-		plt.show()
+		#plt.show()
+		#plt.savefig("fig"+ll+"png")
 		ll 	= 0
 		for i in range(X.shape[0]):
 			x,y 	= X[i,:]
@@ -116,6 +118,7 @@ def estimate(X, fp=2):
 			EX 		+= ex*y
 			EX2 	+= max((pow(ex,2) + ey2 - pow(ey,2))*y,0)
 		print (ll)
+		plt.savefig("unstranded_model_figures/fig"+str(ll)+".png")
 		#m-step
 		# self.pi, self.w 				=(self.r[1] + self.c.beta_0) / (r+ self.c.beta_0*2), (r + self.c.alpha_0)  / (N+self.c.alpha_0*self.c.K*3 + self.c.K*3 )
 		# self.mu 						= self.E_X  / (r+ 0.1)
@@ -135,7 +138,7 @@ def estimate(X, fp=2):
 
 
 if __name__ == "__main__":
-	X 				= simulate(N=1000, mu=0,si=1,l=0.5, pi=0.15,SHOW=False, fp=2                   )
+	X 				= simulate(N=1000, mu=0,si=1,l=0.5, pi=0.15,SHOW=True, fp=2                   )
 	estimate(X)
 
 
