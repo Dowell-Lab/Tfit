@@ -115,7 +115,11 @@ def run(argv):
 
 if __name__ == "__main__":
 
-	hardcode()
+	#example input: runModel -i /directory/of/input -wo /directory/of/output
+	if(len(sys.argv)>1):
+		run(sys.argv)
+	else:
+		print("No Arguments Were given, Running Hardcoded version \n")
+		hardcode()
 
-	#run(sys.argv)
 	pass

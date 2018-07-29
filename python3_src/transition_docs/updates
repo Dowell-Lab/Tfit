@@ -1,12 +1,12 @@
 First I changed all of the print statments to have braces
 
 Functions to look at:
-Display__iterates
+Display__iterates**Special/non-crucial
 make_test_file
 nodes
 model across
 unstranded_model
-parse_argv(right now the python version is hardcoded to work)
+parse_argv(right now the python version is hardcoded to work)-> connecy with usage part of readme
 simulate
 test_new_I_fit
 template_window_matching
@@ -29,6 +29,7 @@ Could possibly write a script to check the varation between the two
 main.py/load.py:
 seems good for transition, however when I get tsv files, there is nothing writen to them(in both 2 and 3).
 also, only hardcode function works. ill try to get the run function working
+I may add an option for the preset hardcoded versions-> if there are no arguments the hardcoded version is run.
 
 find_regions_of_intrest.py
 just had to change around some print statement brackets

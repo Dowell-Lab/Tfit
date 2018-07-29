@@ -2,7 +2,7 @@ import load,matplotlib.pyplot as plt
 import numpy as np
 import model
 import math
-import func_test as ft
+import func_test3 as ft
 
 def LOG(x):
 	if x >0:
@@ -13,6 +13,7 @@ def window(X, std=10, lam=0.1, step_size=1, norm_to_max=True):
 	win 			= (std + 1.0 / lam)
 	mns 			= list()
 	forward,reverse = list(), list()
+	
 	while i < X.shape[0]:
 		j,k 	= i,i
 		while j < X.shape[0] and (X[j,0] - X[i,0]) < win:
@@ -26,6 +27,7 @@ def window(X, std=10, lam=0.1, step_size=1, norm_to_max=True):
 
 	if norm_to_max:
 		scores 	= [x / max(scores) for x in scores]
+		print("Scores: ",scores)
 	return scores
 
 def bayes_factor(X, std=10, lam=0.1,step_size=1, norm_to_max=True):
@@ -91,7 +93,10 @@ def compute_possible_EM_starts(X, std=1, lam=0.1):
 	bayes_ks 			= bayes_factor(X,std=std,lam=lam,step_size=1)
 	hybrid 				= center(coverage_scores, bayes_ks)
 	starts 				= find_peaks([(x,y) for x,y in zip(np.linspace(X[0,0], X[-1,0], len(hybrid)), hybrid)])
+	
 	return coverage_scores, bayes_ks, hybrid, starts
+	
+	
 def sample(X, k, std=1, lam=0.1):
 	coverage_scores, bayes_ks, hybrid, starts 	= compute_possible_EM_starts(X,std=std, lam=lam)
 	keeps 			= list()
@@ -106,9 +111,11 @@ def sample(X, k, std=1, lam=0.1):
 
 if __name__=="__main__":
 	X 	= load.grab_specific_region("chr1",11654, 11655, SHOW=True, bins=300 )
+	
+	print( "X: ", X)
 	X[:,0]/=100.
 	X[:,0]-=X[0,0]
-
+	'''
 	coverage_scores, bayes_ks, hybrid, starts 	= compute_possible_EM_starts(X,std=1,lam=0.1)
 	draw(X, coverage_scores, bayes_ks, hybrid,starts)
 	clf = model.EMGU(noise=True, K=3,noise_max=0.01,
@@ -117,3 +124,4 @@ if __name__=="__main__":
 
 	clf.fit(X)
 	clf.draw(X)
+	'''

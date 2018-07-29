@@ -61,6 +61,9 @@ def grab_specific_region(chrom_spec,start_spec, stop_spec,
 		with open(f) as FH:
 			for line in FH:
 				chrom,start, stop, coverage 	= re.split("\s+", line.strip("\n"))
+				
+				#print("Chrom: ",chrom,"Start: " ,start, "Start: ",stop,"Diff: ", (float(start)-float(stop))," Coverage: ",coverage)
+				
 				if chrom == chrom_spec:
 					FOUND=True
 				start, stop, coverage 			= float(start), float(stop), abs(float(coverage))
@@ -77,7 +80,8 @@ def grab_specific_region(chrom_spec,start_spec, stop_spec,
 		plt.bar(X[:,0], X[:,1])
 		plt.bar(X[:,0], -X[:,2])
 		plt.show()
-	X 		= simulate.BIN(D[0], D[1], bins)
+	X 		= simulate.BIN(D[0], D[1], bins)##
+	
 	return X
 
 def merge_intervals(G):
@@ -232,7 +236,8 @@ def formatted_file(FILE, bins, sc):
 	D 	= list()
 	with open(FILE) as FH:
 		for i,line in enumerate(FH):
-
+			forward = True
+			reverse = True
 			if line[0]=="#":
 				if I is not None:
 					I.bin(bins=bins)
@@ -253,7 +258,7 @@ def formatted_file(FILE, bins, sc):
 			elif "reverse" in line:
 				forward = False
 				reverse = True
-			elif forward and I is not None:
+			elif forward and I is not None:#if given data here, foreward is refrenced before assignement also spelled wrong
 				x,y 	= line.strip("\n").split(",")
 				x,y 	= float(x), float(y)
 				I.insert(x, y, 0)

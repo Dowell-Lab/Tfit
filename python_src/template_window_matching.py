@@ -104,10 +104,12 @@ def sample(X, k, std=1, lam=0.1):
 	
 
 if __name__=="__main__":
-	X 	= load.grab_specific_region("chr1",6229860,6303055, SHOW=True, bins=300 )
+	X = load.grab_specific_region("chr1",11654, 11655, SHOW=True, bins=300 )
+	print("X: ", X)
 	X[:,0]/=100.
 	X[:,0]-=X[0,0]
-
+	
+	'''
 	coverage_scores, bayes_ks, hybrid, starts 	= compute_possible_EM_starts(X,std=1,lam=0.1)
 	draw(X, coverage_scores, bayes_ks, hybrid,starts)
 	clf = model.EMGU(noise=True, K=3,noise_max=0.01,
@@ -115,5 +117,5 @@ if __name__=="__main__":
 		max_it=50,seed=True)
 	clf.fit(X)
 	clf.draw(X)
-	
+	'''
 	

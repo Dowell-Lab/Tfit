@@ -51,8 +51,8 @@ class info:
 		return txt
 
 def grab_specific_region(chrom_spec,start_spec, stop_spec, 
-	pos_file="/Users/joazofeifa//Lab/gro_seq_files/HCT116/bed_graph_files/DMSO2_3.pos.BedGraph", 
-	neg_file="/Users/joazofeifa//Lab/gro_seq_files/HCT116/bed_graph_files/DMSO2_3.neg.BedGraph",
+	pos_file="/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/test_i_pos.BedGraph", #changed these files around
+	neg_file="/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/test_j_neg.BedGraph",
 	SHOW 	=False, bins=None):
 	D 		= (list(), list())
 	files 	= (pos_file, neg_file)

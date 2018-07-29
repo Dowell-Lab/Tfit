@@ -90,8 +90,9 @@ if __name__=="__main__":
 	print ("Some Var1: ",m.sqrt(weird_variance(X[:,0], X[:,1], mu, 1)))
 	print ("Some Var2: ",m.sqrt(weird_variance(X[:,0], X[:,2], mu, -1)))
 
-	bins 	= len(X)
 	'''
+	bins 	= len(X)
+
 	plt.bar(X[:,0], X[:,1],width = (X[-1,0]- X[0,0]) / bins,alpha=0.2)
 	plt.bar(X[:,0], -X[:,2], color="red",width = (X[-1,0]- X[0,0]) / bins,alpha=0.2)
 

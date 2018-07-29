@@ -11,7 +11,7 @@ import matplotlib as mpl
 import matplotlib.cm as cm
 import load
 import template_window_matching as twm
-import func_test as ft
+import func_test3 as ft
 
 class component_elongation:
 	def __init__(self, a,b, w, pi, bidir_component, ty, classifier, j, foot_print=0):
@@ -331,7 +331,9 @@ class EMGU:
 		self.uniform_rate= (maxX-minX)/(1*self.K)
 		fp 			= np.random.uniform(0,2)
 		print ("*********", fp)
-		bidirs 		= [component_bidir(mus[k], sigmas[k], lambdas[k], ws[k][0], pis[k][0],self, foot_print=fp) for k in range(self.K)]
+		#print("K: ",self.K) = 3
+		#I(Jack) dont really get whats happening here, must dig further
+		bidirs 		= [component_bidir(mus[k], sigmas[k], lambdas[k], ws[k][0], pis[k][0],self, foot_print=fp) for k in range(self.K)]#out of range error here
 
 		uniforms    = [component_elongation(minX, mus[k], ws[k][1], 0.5, bidirs[k], "reverse",self ,0 , foot_print=fp) for k in range(self.K)]
 		uniforms   += [component_elongation(mus[k],maxX, ws[k][2], 0.5, bidirs[k], "forward",self, X.shape[0] , foot_print=fp) for k in range(self.K)]
