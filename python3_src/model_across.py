@@ -1,15 +1,16 @@
 import multiprocessing as mp
 import model
 import os
+import load
 def checkFileExists(FILE, i):
 	if os.path.exists(FILE + str(i)):
 		return checkFileExists(FILE, i+1)
 	return FILE + str(i)
 
-def wrapper_fit_function(X, k, 
+def wrapper_fit_function(X, k=2, 
 max_iterations=200, convergence_thresh=0.0001,
 move_uniform=0):
-	clf 	= EMGU(max_ct=convergence_thresh, max_it=max_iterations, K=k, bayes=False, noise=True, 
+	clf 	= model.EMGU(max_ct=convergence_thresh, max_it=max_iterations, K=k, bayes=False, noise=True, 
 			noise_max=0.1, moveUniformSupport=0, cores=1, seed=True)
 	clf.fit(X)
 	return clf.ll , clf.rvs, clf.converged, clf.resets,clf
@@ -61,3 +62,19 @@ def run(D, bic, rounds, max_k,
 			model_txt = "\n".join([ m.__str__() for m in model])
 			FHW.write(model_txt+"\n")
 		FHW.flush()
+
+if __name__ == "__main__":
+	
+	X	=  load.grab_specific_region("chr1",836835, 843549,
+		pos_file="/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/test_i_pos.BedGraph",
+		neg_file="/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/test_j_neg.BedGraph",
+		SHOW 	=False, bins=300)
+		 	
+	shit = wrapper_fit_function(X, k=2, 
+		max_iterations=200, convergence_thresh=0.0001,
+		move_uniform=0)
+	
+	#run(D, bic, rounds, max_k, 
+	#standardize, convergence_thresh,
+	#		max_iterations, move_uniform, 
+	#		write_out_dir, specific_chromosome)

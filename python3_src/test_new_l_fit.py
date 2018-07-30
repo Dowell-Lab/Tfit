@@ -46,7 +46,7 @@ def move_l(X, parameters,penality=2):
 		else:
 			j 	= X.shape[0]-1
 		N 		= sum(X[i:j,1])
-		oll 		= sum(X[i:j,1])*m.log(1. / (X[j,0]-X[i,0] ))
+		oll 		= sum(X[i:j,1])*m.log(1. / (X[j,0]-X[i,0] )) ##Devide by zeros here
 		NULL 	= -2*oll + LOG(N)
 		for l in range(i,j):
 			N_left , N_right 	= sum(X[i:l, 1]),sum(X[l:j, 1])
@@ -70,7 +70,7 @@ def move_l(X, parameters,penality=2):
 		ax2.grid()
 		ax3.plot(X[i:j, 0], lls)
 		ax3.grid()
-		plt.show()
+		plt.savefig("fig"+str(X[1,1])+".png")
 	for f,j in enumerate(reverse_is):
 		lls 	= list()
 		if f == 0:

@@ -7,7 +7,7 @@ nodes
 model across
 unstranded_model**
 parse_argv(main is now changed to handle both hardcoded and arguments)-> connect with usage part of readme
-test_new_I_fit
+test_new_I_fit **
 template_window_matching**
 
 (**) means that tests need to be run to ensure there is not value difference(which is last step in transfer)
@@ -66,3 +66,14 @@ when it calls simulate, there is an error(in py27)
 I had to input correct bounds from example files in the main, but error in py27 went away(kinda)
 get the same output in py3, however there is still an index out of range error.
 simiare to the same error from model.py(although it happens in both 2 and 3)
+
+test_new_i_fit:
+there seems to be a problem with the function, however from a transition standpoint it looks good.
+The problem is that some of the math gets hung up with zeros/floats. Not always though.
+
+Model Across:
+When I first got to it this file seemed unfinished, with wierd errors, like missing imports and declarations
+then I had to create a main function so that I could test it, and since it calls the same function in model that is broken 
+this too does not work.
+
+
