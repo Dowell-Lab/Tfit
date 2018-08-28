@@ -30,11 +30,12 @@ using namespace std;
  */
 int main(int argc, char* argv[]){
   int rank, nprocs;
+  int retVal;
   MPI_Init(&argc, &argv);
   MPI_Comm_rank(MPI_COMM_WORLD, &rank); 
   MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
   
-  
+  retVal=0;
   int threads  	= omp_get_max_threads();
 
   //Todo: consider adding a rank parameter, since it appears to change how error messages are generated.
@@ -48,7 +49,8 @@ int main(int argc, char* argv[]){
           printf("Exiting...\n");
       }
       MPI_Finalize();
-      return 0;
+      //TODO: consider the status returned.
+      return 1;
   }
   
   /*
@@ -75,27 +77,29 @@ int main(int argc, char* argv[]){
   if (pw.bidir){
       printf("About to launch bidir module.\n");
     //bidir_run(P, rank, nprocs, job_ID,LG);
-    bidir_run_pwrapper(&pw, 0, nprocs, job_ID, LG);
+    retVal=bidir_run_pwrapper(&pw, 0, nprocs, job_ID, LG);
   }
   else if(pw.bidirOld)
   {
       printf("About to launch bidir module with older behavior.\n");
       //bidir_old_run_pwrapper(&pw, rank, nprocs, job_ID, LG);
-      bidir_run_old_long_pwrapper(&pw, rank, nprocs, job_ID, LG);
+      //0 indicates good return status. 1 indicates error.
+      retVal=bidir_run_old_long_pwrapper(&pw, rank, nprocs, job_ID, LG);
   }
   else if (pw.model){
       printf("About to launch model module.\n");
     //model_run(P, rank, nprocs,0,job_ID,LG);
-    model_run_pwrapper(&pw, rank, nprocs, 0, job_ID, LG);
+    retVal=model_run_pwrapper(&pw, rank, nprocs, 0, job_ID, LG);
   }else if (pw.select){
     //select_run(P, rank, nprocs, job_ID,LG);	
       printf("About to launch select module.\n");
-    select_run_pwrapper(&pw, rank, nprocs, job_ID, LG);
+    retVal=select_run_pwrapper(&pw, rank, nprocs, job_ID, LG);
   }
   
   else
   {
       printf("Something exceptionally bad just happened!\n");
+      retVal=1;
   }
   if (rank == 0){
     load::collect_all_tmp_files(pw.logDir, pw.jobName, nprocs, job_ID);
@@ -103,5 +107,5 @@ int main(int argc, char* argv[]){
   
   MPI_Finalize();
   
-  return 0;
+  return retVal;
 }
