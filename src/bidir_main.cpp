@@ -180,8 +180,7 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
  * @return An output status code. 0 indicates no errors during operation. Any other value indicates errors.
  */
 int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_File * LG){
-
-
+    int modelret=0;
 	int verbose 	= pw->verbose;
 	//pw->merge 	= "1";
 	
@@ -222,6 +221,12 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 			IDS, pw, 1 );
 		map<string, vector<segment *>> GG 	= MPI_comm::convert_segment_vector(tss_intervals);
 		LG->write("done\n", verbose);
+        
+        if(tss_intervals.empty())
+        {
+            LG->write("Could not read specified TSS interval file. Exiting...", verbose);
+            return 1;
+        }
 		
 		LG->write("inserting coverage data.................................",verbose);
 		vector<segment*> integrated_segments= load::insert_bedgraph_to_segment_joint(GG, 
@@ -262,7 +267,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 		pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom );
 
 	if (segments.empty()){
-		printf("exiting...\n");
+		printf("Could not read segments from file. Exiting...\n");
 		return 1;
 	}
 	LG->write("done\n", verbose);
@@ -344,11 +349,10 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 		pw->regionsOfInterest 	= pw->outputDir+job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
         printf("Regions of interest file..............................%s\n", pw->regionsOfInterest.c_str());
         
-		model_run_pwrapper(pw, rank, nprocs,0, job_ID, LG);
-		
+		modelret=model_run_pwrapper(pw, rank, nprocs,0, job_ID, LG);
 	}
 	LG->write("exiting bidir module....................................done\n\n", verbose);
-	return 1;
+	return modelret;
 }
 
 /** Performs bidirectional predictions given a ParamWrapper utilizing an older algorithm.
@@ -388,6 +392,9 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
 	sigma 		= pw->sigma, lambda=(double)pw->lambda;
     printf("%lf, %lf", lambda, pw->lambda);
 	foot_print 	= pw->footPrint, pi=pw->pi, w=pw->w;
+    int modelret;
+    
+    modelret=0;
 
 
 
@@ -402,6 +409,12 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
 		map<int, string> IDS;
 		vector<segment *> tss_intervals 	= load::load_intervals_of_interest_pwrapper(tss_file, 
 			IDS, pw, 1 );
+        
+        if(tss_intervals.empty())
+        {
+            LG->write("Could not read TSS intervals from specified file. Exiting...", verbose);
+            return 1;
+        }
 		map<string, vector<segment *>> GG 	= MPI_comm::convert_segment_vector(tss_intervals);
 		LG->write("done\n", verbose);
 	
@@ -453,7 +466,7 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
 		pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom );
 
 	if (segments.empty()){
-		printf("exiting...\n");
+		printf("Could not read bedgraphs from file. Exiting...\n");
 		return 1;
 	}
 	LG->write("done\n", verbose);
@@ -493,10 +506,10 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
 		pw->regionsOfInterest 	= pw->outputDir+job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
         printf("Regions of interest file..............................%s\n", pw->regionsOfInterest.c_str());
         
-		model_run_pwrapper(pw, rank, nprocs,0, job_ID, LG);
+		modelret=model_run_pwrapper(pw, rank, nprocs,0, job_ID, LG);
 	}
 	LG->write("exiting bidir module....................................done\n\n", verbose);
-	return 1;
+	return modelret;
 }
 
 /** Performs bidirectional predictions given a ParamWrapper utilizing an older algorithm.

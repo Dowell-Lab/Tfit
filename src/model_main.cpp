@@ -198,5 +198,5 @@ int model_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, double density, i
 	//wait for everybody to catch up
 	MPI_comm::wait_on_root(rank, nprocs);
 
-	return 1;
+	return 0;
 }
