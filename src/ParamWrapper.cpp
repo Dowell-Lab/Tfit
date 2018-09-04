@@ -20,7 +20,7 @@ void ParamWrapper::printUsage()
     printf("\tmodel - This module attempts to generate an optimal set of parameters per region instead \n");
     printf("\t\tof using a fixed set of parameters for the entire genome\n");
     
-    printf("\n\nWhere [arguments] is one or more of the following for the bidir module:\n");
+    printf("\n\nWhere [arguments] is one or more of the following for the bidir or bidir_old modules:\n");
     printf("\t-i\tForward bedgraph file\n");
     printf("\t-j\tReverse bedgraph file.\n");
     printf("\t-ij\tBoth forward and reverse bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.\n");
@@ -41,6 +41,7 @@ void ParamWrapper::printUsage()
     printf("\t-ms_pen\tPenalty term for model selection. Default=1.\n");
     printf("\t-max_noise\tMaximum noise threshold. Default=0.05. This parameter is presently undocumented.\n");
     printf("\t-fdr\tGenerate a likelihood score distribution on the input data. This parameter has yet to be fully documented and tested.\n");
+    printf("\t-mle [0, 1]\tAutomatically invoke the model module after generating preliminary bidirectional predictions.\n");
     
     printf("\n\nWhere [arguments] is one or more of the following for the model module:\n");
     printf("\t-i\tForward bedgraph file\n");
@@ -67,8 +68,8 @@ void ParamWrapper::printUsage()
     printf("\t-ALPHA_3\tSymmetric prior on the strand bias. Higher values=stronger attempt to find bidirectional events with equal strand bias.\n");
     printf("\t\t\tRecommended value=100\n");
     
-    printf("-elon     : (boolean integer) adjust support of elongation component, (default=0)\n");
-	printf("              useful only when fitting to FStitch[1] or groHMM[2] output intervals\n");
+    printf("\t-elon [0,1]\tadjust support of elongation component, (default=0)\n");
+	printf("\t\t\tuseful only when fitting to FStitch[1] or groHMM[2] output intervals\n");
 }
 
 /** Sets all values to their defaults as per the old read_in_parameters codebase.

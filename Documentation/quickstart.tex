@@ -7,7 +7,7 @@
 
 \title{Quick Start Guide for Revised Tfit}
 \author{Michael Gohde}
-\date{May 21, 2018}
+\date{September 4, 2018}
 \maketitle
 
 \abstract{Tfit is a tool that attempts to find useful parameters in sequencing datasets.}
@@ -46,7 +46,7 @@ Where modulename is one of the following:
                 of using a fixed set of parameters for the entire genome
 
 
-Where [arguments] is one or more of the following for the bidir module:
+Where [arguments] is one or more of the following for the bidir or bidir_old modules:
         -i      Forward bedgraph file
         -j      Reverse bedgraph file.
         -ij     Both forward and reverse bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.
@@ -68,7 +68,8 @@ If -tss is not specified, the values normally specified by the model file can be
         -r_mu   Some classification parameter. Default=0. This parameter is presently undocumented.
         -ms_pen Penalty term for model selection. Default=1.
         -max_noise      Maximum noise threshold. Default=0.05. This parameter is presently undocumented.
-        -FDR    Generate a likelihood score distribution on the input data. This parameter has yet to be fully documented and tested.
+        -fdr    Generate a likelihood score distribution on the input data. This parameter has yet to be fully documented and tested.
+        -mle [0, 1]     Automatically invoke the model module after generating preliminary bidirectional predictions.
 
 
 Where [arguments] is one or more of the following for the model module:
@@ -96,15 +97,14 @@ sigma, pi, and w via conjugate priors. These values are specified using the foll
                         Recommended value=100
         -ALPHA_3        Symmetric prior on the strand bias. Higher values=stronger attempt to find bidirectional events with equal strand bias.
                         Recommended value=100
--elon     : (boolean integer) adjust support of elongation component, (default=0)
-              useful only when fitting to FStitch[1] or groHMM[2] output intervals
-Exiting...
+        -elon [0,1]     adjust support of elongation component, (default=0)
+                        useful only when fitting to FStitch[1] or groHMM[2] output intervals
 \end{lstlisting}
 
 The above is Tfit's \textit{usage statement}. This presents a quick overview of all of Tfit's modules and their parameters. From it, we can determine that there are presently three available modules:
 \begin{enumerate}
 \item bidir -- This module attempts to fit a distribution to existing data.
-\item bidir\_old -- This module is the same as bidir, except it attempts to behave more similarly to early versions of Tfit.
+\item bidir\_old -- This module is the same as bidir, except it attempts to behave more similarly to early versions of Tfit. User testing has shown that this module generally tends to produce a slightly higher number of overall calls than `bidir.'
 \item model -- This module attempts to model every given bidirectional in a dataset individually instead of applying precomputed parameters.
 \end{enumerate}
 
@@ -123,7 +123,7 @@ While it is possible to run Tfit with only the minimum number of parameters (tec
 \item A name for the Tfit job. This is used to name various output files. This is specified with the `-N' parameter.
 \item A transcription model. Tfit uses this file to infer parameters about a given dataset. Models are provided for hg19 and mm10 in the annotations directory of the Tfit repository. This is specified with the `-tss' parameter.
 \item A chromosome name. By default, Tfit will attempt to fit every chromosome in a given dataset, which tends to be extremely computationally intensive. This parameter matches chromosome specifications in a bedgraph (eg. `chr1' etc.) This is specified with the `-chr' parameter.
-\item Whether to run the model module on bidir's inferences. It is possible to have Tfit automatically run the model module after inferring information about a given dataset. This feature tends to be very useful when trying to find regions of transcription as quickly as possible. If this is to be enabled, then Tfit must be invoked with `-mle 1'.
+\item Whether to run the model module on bidir's inferences. This removes the need to call fstitch or a related program to produce a set of preliminary reads for the model module, as it is possible to have Tfit automatically run the model module after inferring information about a given dataset. This feature tends to be very useful when trying to find regions of transcription as quickly as possible. If this is to be enabled, then Tfit must be invoked with `-mle 1'.
 \end{enumerate}
 
 Input bedgraphs are specified with the -i, -j, and -ij parameters. -i specifies a bedgraph with only forward strand data, while -j specifies a bedgraph with only reverse strand data. -ij can be used in place of -i or -j, as it specifies a bedgraph file with both forward and reverse strand data.
