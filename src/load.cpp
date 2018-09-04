@@ -427,6 +427,7 @@ segment_fits::segment_fits(string c, int st, int sp,
    N   = n_pos + n_neg, N_pos = n_pos, N_neg = n_neg;
    ID  = id;
    BIC_ratio   = 0;
+   model=0;
 }
 
 /** This function iterates over M (a map from integers to doubles) and appears to either score or get log likelihoods for the segment_fits.
@@ -435,10 +436,10 @@ segment_fits::segment_fits(string c, int st, int sp,
  */ 
 void segment_fits::get_model(double ms_pen) {
    typedef map<int, double>::iterator it_type;
-   int arg;
+   int arg=0;
    double MIN = INF;
    double score;
-   double null_score;
+   double null_score=0;
 
    for (it_type m  = M.begin(); m != M.end(); m++) {
       if (m->first > 0) {
