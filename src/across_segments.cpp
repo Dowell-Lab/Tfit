@@ -174,7 +174,8 @@ map<int, vector<simple_c_free_mode> > get_max_from_free_mode(map<int, vector<cla
 
 
 	for (it_type_A a = A.begin(); a!=A.end(); a++){
-		component * best_components;
+        //Initialize to the first set of components possible:
+		component * best_components=A[a->first][0].components;
 		double best_ll 	= nINF;
 		bool FOUND 		= false;
 		int best_k 		= 0;
