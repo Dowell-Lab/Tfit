@@ -6,7 +6,7 @@
  * of argument-value pairs. This meant that any changes to the command line specification of Tfit would
  * require functions throughout the codebase to be revised.
  */
-#include "ParamWrapper.hpp" 
+#include "ParamWrapper.hpp"
 
 /** Prints a usage statement including all currently supported command line arguments.
  */
@@ -19,7 +19,7 @@ void ParamWrapper::printUsage()
     printf("\tbidir_old - This module implements the functionality seen in versions of Tfit used in publications\n");
     printf("\tmodel - This module attempts to generate an optimal set of parameters per region instead \n");
     printf("\t\tof using a fixed set of parameters for the entire genome\n");
-    
+
     printf("\n\nWhere [arguments] is one or more of the following for the bidir or bidir_old modules:\n");
     printf("\t-i\tForward bedgraph file\n");
     printf("\t-j\tReverse bedgraph file.\n");
@@ -42,7 +42,7 @@ void ParamWrapper::printUsage()
     printf("\t-max_noise\tMaximum noise threshold. Default=0.05. This parameter is presently undocumented.\n");
     printf("\t-fdr\tGenerate a likelihood score distribution on the input data. This parameter has yet to be fully documented and tested.\n");
     printf("\t-mle [0, 1]\tAutomatically invoke the model module after generating preliminary bidirectional predictions.\n");
-    
+
     printf("\n\nWhere [arguments] is one or more of the following for the model module:\n");
     printf("\t-i\tForward bedgraph file\n");
     printf("\t-j\tReverse bedgraph file\n");
@@ -67,390 +67,337 @@ void ParamWrapper::printUsage()
     printf("\t\t\tRecommended value=100\n");
     printf("\t-ALPHA_3\tSymmetric prior on the strand bias. Higher values=stronger attempt to find bidirectional events with equal strand bias.\n");
     printf("\t\t\tRecommended value=100\n");
-    
+
     printf("\t-elon [0,1]\tadjust support of elongation component, (default=0)\n");
-	printf("\t\t\tuseful only when fitting to FStitch[1] or groHMM[2] output intervals\n");
+    printf("\t\t\tuseful only when fitting to FStitch[1] or groHMM[2] output intervals\n");
 }
 
 /** Sets all values to their defaults as per the old read_in_parameters codebase.
  */
 ParamWrapper::ParamWrapper()
 {
-    this->module="";
+    this->module = "";
     //This constructor sets blank or default values.
-    this->forwardStrand="";
-    this->reverseStrand="";
-    this->mergedStrand="";
-    this->jobName="";
-    this->outputDir="";
-    this->logDir="";
-    this->regionsOfInterest="";
-    this->promoterTSS="";
-    this->chromosome="";
-    this->llrthresh=1;
-    this->lambda=200;
-    this->sigma=10;
-    this->pi=0.5;
-    this->w=0.5;
-    this->mink=1;
-    this->maxk=1;
-    this->rounds=5;
-    this->ct=0.0001;
-    this->mi=2000;
-    this->ns=100;
-    this->experimentalValsSpecified=false;
-    this->alpha0=1;
-    this->beta0=1;
+    this->forwardStrand             = "";
+    this->reverseStrand             = "";
+    this->mergedStrand              = "";
+    this->jobName                   = "";
+    this->outputDir                 = "";
+    this->logDir                    = "";
+    this->regionsOfInterest         = "";
+    this->promoterTSS               = "";
+    this->chromosome                = "";
+    this->llrthresh                 = 1;
+    this->lambda                    = 200;
+    this->sigma                     = 10;
+    this->pi                        = 0.5;
+    this->w                         = 0.5;
+    this->mink                      = 1;
+    this->maxk                      = 1;
+    this->rounds                    = 5;
+    this->ct                        = 0.0001;
+    this->mi                        = 2000;
+    this->ns                        = 100;
+    this->experimentalValsSpecified = false;
+    this->alpha0                    = 1;
+    this->beta0                     = 1;
     //There are no default values for this parameter.
-    this->alpha1=0;
-    this->beta1=0;
-    this->alpha2=100;
-    this->alpha3=100;
-    this->br=25;
-    this->fdr=0;
+    this->alpha1 = 0;
+    this->beta1  = 0;
+    this->alpha2 = 100;
+    this->alpha3 = 100;
+    this->br     = 25;
+    this->fdr    = 0;
 }
 
 /** Parses the arguments passed to tfit and attempts to store them internally.
  * @param argc The number of command line arguments (first parameter to main())
  * @param argv The command line arguments array (second parameter to main())
  */
-ParamWrapper::ParamWrapper(int argc, char **argv)
+ParamWrapper::ParamWrapper(int argc, char** argv)
 {
-    int i;
-    std::map<std::string, std::string> paramMap;
-    char *prevCmd;
+    int                                          i;
+    std::map<std::string, std::string>           paramMap;
+    char*                                        prevCmd;
     std::map<std::string, std::string>::iterator it;
-    
+
     //NOTE: Parameters were changed to the defaults seen in read_in_parameters.cpp, rather than the documented defaults.
-    this->exit=false;
-    this->verbose=true;//false;
-    this->module="";
+    this->exit    = false;
+    this->verbose = true; //false;
+    this->module  = "";
     //This constructor sets blank or default values.
-    this->forwardStrand="";
-    this->reverseStrand="";
-    this->mergedStrand="";
-    this->jobName="EMG"; //"";
-    this->outputDir="";
-    this->logDir="";
-    this->regionsOfInterest="";
-    this->promoterTSS="";
-    this->chromosome="all";//"";
-    this->llrthresh=0.95;//1;
+    this->forwardStrand     = "";
+    this->reverseStrand     = "";
+    this->mergedStrand      = "";
+    this->jobName           = "EMG"; //"";
+    this->outputDir         = "";
+    this->logDir            = "";
+    this->regionsOfInterest = "";
+    this->promoterTSS       = "";
+    this->chromosome        = "all"; //"";
+    this->llrthresh         = 0.95; //1;
     //These parameters were modified given the behavior of stock Tfit:
-    this->lambda=2000;
-    this->sigma=123;
-    this->pi=0.5;
-    this->w=0.9;
-    this->mink=1;
-    this->maxk=3;//1;
-    this->rounds=10;//5;
-    this->ct=0.0001;
-    this->mi=2000;
-    this->experimentalValsSpecified=false;
-    this->alpha0=1;
-    this->beta0=1;
-    this->ns=100;
+    this->lambda                    = 2000;
+    this->sigma                     = 123;
+    this->pi                        = 0.5;
+    this->w                         = 0.9;
+    this->mink                      = 1;
+    this->maxk                      = 3; //1;
+    this->rounds                    = 10; //5;
+    this->ct                        = 0.0001;
+    this->mi                        = 2000;
+    this->experimentalValsSpecified = false;
+    this->alpha0                    = 1;
+    this->beta0                     = 1;
+    this->ns                        = 100;
     //There are no default values for this parameter.
-    this->alpha0=1;
-    this->beta0=1;
-    this->alpha1=1;
-    this->beta1=1;
-    this->alpha2=1;//100;
-    this->alpha3=1;//100;
-    this->br=25;
-    this->pad=2000;
-    this->footPrint=86.0;
-    this->fdr=0; //This parameter appears to change how this software computes prior distributions in the bidir module. 
-                 //When set to 0, Tfit will use a shortcut and/or precomputed model. 
-    this->scores=""; //This is another undocumented parameter.
-    this->r_mu=0; //yet another undocumented parameter.
-    this->penalty=1; //There's documentation, but only in read_in_parameters.
-    this->maxNoise=0.05; //This seems to only be used in across_segments.
-    this->mle=0; //This parameter runs the model module after bidir, IIRC.
-    this->elon=0;
-    
-    
-    if(argc==1)
-    {
+    this->alpha0    = 1;
+    this->beta0     = 1;
+    this->alpha1    = 1;
+    this->beta1     = 1;
+    this->alpha2    = 1; //100;
+    this->alpha3    = 1; //100;
+    this->br        = 25;
+    this->pad       = 2000;
+    this->footPrint = 86.0;
+    this->fdr       = 0; //This parameter appears to change how this software computes prior distributions in the bidir module.
+        //When set to 0, Tfit will use a shortcut and/or precomputed model.
+    this->scores   = ""; //This is another undocumented parameter.
+    this->r_mu     = 0; //yet another undocumented parameter.
+    this->penalty  = 1; //There's documentation, but only in read_in_parameters.
+    this->maxNoise = 0.05; //This seems to only be used in across_segments.
+    this->mle      = 0; //This parameter runs the model module after bidir, IIRC.
+    this->elon     = 0;
+
+    if (argc == 1) {
         this->printUsage();
-        this->exit=true;
+        this->exit = true;
         return;
     }
-    
-    else if(argc==2)
-    {
+
+    else if (argc == 2) {
         printf("Error: no arguments specified for module %s\n", argv[1]);
         this->printUsage();
-        this->exit=true;
+        this->exit = true;
         return;
     }
-    
-    this->module=std::string(argv[1]);
-    
-    if(this->module!="bidir" && this->module!="select" && this->module!="model" && this->module!="bidir_old")
-    {
+
+    this->module = std::string(argv[1]);
+
+    if (this->module != "bidir" && this->module != "select" && this->module != "model" && this->module != "bidir_old") {
         printf("Invalid module specification: %s\n", argv[1]);
-        this->exit=true;
+        this->exit = true;
         return;
     }
-    
-    this->bidir=this->module=="bidir";
-    this->bidirOld=this->module=="bidir_old";
-    this->model=this->module=="model";
-    this->select=this->module=="select";
-    
-    for(i=2;i<argc;i++)
-    {
-        if(argv[i][0]=='-' && strlen(argv[i])!=1)
-        {
-            prevCmd=argv[i];
+
+    this->bidir    = this->module == "bidir";
+    this->bidirOld = this->module == "bidir_old";
+    this->model    = this->module == "model";
+    this->select   = this->module == "select";
+
+    for (i = 2; i < argc; i++) {
+        if (argv[i][0] == '-' && strlen(argv[i]) != 1) {
+            prevCmd = argv[i];
             //Check to ensure that the argument is supposed to be able to work without additional parameters:
-            if(!strcmp(prevCmd, "-v"))
-            {
-                this->verbose=true;
+            if (!strcmp(prevCmd, "-v")) {
+                this->verbose = true;
             }
-            
-            else if((!strcmp(prevCmd, "-h"))||(!strcmp(prevCmd, "--help")))
-            {
+
+            else if ((!strcmp(prevCmd, "-h")) || (!strcmp(prevCmd, "--help"))) {
                 this->printUsage();
-                this->exit=true;
+                this->exit = true;
                 return;
             }
         }
-        
-        else
-        {
+
+        else {
             paramMap.insert(std::pair<std::string, std::string>(prevCmd, argv[i]));
-            prevCmd=NULL;
+            prevCmd = NULL;
         }
     }
-    
-    for(it=paramMap.begin();it!=paramMap.end();it++)
-    {
-        if(it->first=="-i" || it->first=="--forward" || it->first=="-pos")
-        {
-            this->forwardStrand=it->second;
+
+    for (it = paramMap.begin(); it != paramMap.end(); it++) {
+        if (it->first == "-i" || it->first == "--forward" || it->first == "-pos") {
+            this->forwardStrand = it->second;
         }
-        
-        else if(it->first=="-j" || it->first=="--reverse" || it->first=="-neg")
-        {
-            this->reverseStrand=it->second;
+
+        else if (it->first == "-j" || it->first == "--reverse" || it->first == "-neg") {
+            this->reverseStrand = it->second;
         }
-        
-        else if(it->first=="-ij" || it->first=="-bed" || it->first=="--combined")
-        {
-            this->mergedStrand=it->second;
+
+        else if (it->first == "-ij" || it->first == "-bed" || it->first == "--combined") {
+            this->mergedStrand = it->second;
         }
-        
-        else if(it->first=="-N" || it->first=="--jobname")
-        {
-            this->jobName=it->second;
+
+        else if (it->first == "-N" || it->first == "--jobname") {
+            this->jobName = it->second;
         }
-        
-        else if(it->first=="-ns")
-        {
-            this->ns=atoi(it->second.c_str());
+
+        else if (it->first == "-ns") {
+            this->ns = atoi(it->second.c_str());
         }
-        
-        else if(it->first=="-o")
-        {
-            if(it->second.back()!='/')
-            {
-                if(this->verbose)
-                {
+
+        else if (it->first == "-o") {
+            if (it->second.back() != '/') {
+                if (this->verbose) {
                     printf("Appending slash to end of output path.\n");
                 }
-                
-                this->outputDir=it->second+"\n";
+
+                this->outputDir = it->second + "\n";
             }
-            
-            else
-            {
-                this->outputDir=it->second;
+
+            else {
+                this->outputDir = it->second;
             }
         }
-        
-        else if(it->first=="-fdr" || it->first=="-FDR")
-        {
-            this->fdr=atoi(it->second.c_str());
+
+        else if (it->first == "-fdr" || it->first == "-FDR") {
+            this->fdr = atoi(it->second.c_str());
         }
-        
-        else if(it->first=="-log_out")
-        {
-            if(it->second.back()!='/')
-            {
-                if(this->verbose)
-                {
+
+        else if (it->first == "-log_out") {
+            if (it->second.back() != '/') {
+                if (this->verbose) {
                     printf("Appending slash to end of log output path.\n");
                 }
-                
-                this->logDir=it->second+"\n";
+
+                this->logDir = it->second + "\n";
             }
-            
-            else
-            {
-                this->logDir=it->second;
+
+            else {
+                this->logDir = it->second;
             }
         }
-        
-        else if(it->first=="-ms_pen")
-        {
-            this->penalty=atof(it->second.c_str());
+
+        else if (it->first == "-ms_pen") {
+            this->penalty = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-tss")
-        {
-            this->promoterTSS=it->second;
+
+        else if (it->first == "-tss") {
+            this->promoterTSS = it->second;
         }
-        
-        else if(it->first=="-chr")
-        {
-            this->chromosome=it->second;
+
+        else if (it->first == "-chr") {
+            this->chromosome = it->second;
         }
-        
-        else if(it->first=="-bct")
-        {
-            this->llrthresh=atoi(it->second.c_str());
+
+        else if (it->first == "-bct") {
+            this->llrthresh = atoi(it->second.c_str());
         }
-        
-        else if(it->first=="-max_noise")
-        {
-            this->maxNoise=atof(it->second.c_str());
+
+        else if (it->first == "-max_noise") {
+            this->maxNoise = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-lambda")
-        {
-            this->lambda=atof(it->second.c_str());
+
+        else if (it->first == "-lambda") {
+            this->lambda = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-scores")
-        {
-            this->scores=it->second;
+
+        else if (it->first == "-scores") {
+            this->scores = it->second;
         }
-        
-        else if(it->first=="-sigma")
-        {
-            this->sigma=atof(it->second.c_str());
+
+        else if (it->first == "-sigma") {
+            this->sigma = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-pi")
-        {
-            this->pi=atof(it->second.c_str());
+
+        else if (it->first == "-pi") {
+            this->pi = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-w")
-        {
-            this->w=atof(it->second.c_str());
+
+        else if (it->first == "-w") {
+            this->w = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-mink")
-        {
-            this->mink=atoi(it->second.c_str());
+
+        else if (it->first == "-mink") {
+            this->mink = atoi(it->second.c_str());
         }
-        
-        else if(it->first=="-pad")
-        {
-            this->pad=atof(it->second.c_str());
+
+        else if (it->first == "-pad") {
+            this->pad = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-maxk")
-        {
-            this->maxk=atoi(it->second.c_str());
+
+        else if (it->first == "-maxk") {
+            this->maxk = atoi(it->second.c_str());
         }
-        
-        else if(it->first=="-rounds")
-        {
-            this->rounds=atoi(it->second.c_str());
+
+        else if (it->first == "-rounds") {
+            this->rounds = atoi(it->second.c_str());
         }
-        
-        else if(it->first=="-ct")
-        {
-            this->ct=atof(it->second.c_str());
+
+        else if (it->first == "-ct") {
+            this->ct = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-mi")
-        {
-            this->mi=atoi(it->second.c_str());
+
+        else if (it->first == "-mi") {
+            this->mi = atoi(it->second.c_str());
         }
-        
-        else if(it->first=="-ALPHA_0")
-        {
-            this->experimentalValsSpecified=true;
-            this->alpha0=atof(it->second.c_str());
+
+        else if (it->first == "-ALPHA_0") {
+            this->experimentalValsSpecified = true;
+            this->alpha0                    = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-BETA_0")
-        {
-            this->experimentalValsSpecified=true;
-            this->beta0=atof(it->second.c_str());
+
+        else if (it->first == "-BETA_0") {
+            this->experimentalValsSpecified = true;
+            this->beta0                     = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-foot_print")
-        {
+
+        else if (it->first == "-foot_print") {
             printf("Reading footprint parameter.\n");
-            this->footPrint=atof(it->second.c_str());
+            this->footPrint = atof(it->second.c_str());
             //Added for debugging purposes.
             printf("this->footprint is %f\n", atof(it->second.c_str()));
         }
-        
-        else if(it->first=="-ALPHA_1")
-        {
-            this->experimentalValsSpecified=true;
-            this->alpha1=atof(it->second.c_str());
+
+        else if (it->first == "-ALPHA_1") {
+            this->experimentalValsSpecified = true;
+            this->alpha1                    = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-BETA_1")
-        {
-            this->experimentalValsSpecified=true;
-            this->beta1=atof(it->second.c_str());
+
+        else if (it->first == "-BETA_1") {
+            this->experimentalValsSpecified = true;
+            this->beta1                     = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-ALPHA_2")
-        {
-            this->experimentalValsSpecified=true;
-            this->alpha2=atof(it->second.c_str());
+
+        else if (it->first == "-ALPHA_2") {
+            this->experimentalValsSpecified = true;
+            this->alpha2                    = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-ALPHA_3")
-        {
-            this->experimentalValsSpecified=true;
-            this->alpha3=atof(it->second.c_str());
+
+        else if (it->first == "-ALPHA_3") {
+            this->experimentalValsSpecified = true;
+            this->alpha3                    = atof(it->second.c_str());
         }
-        
-        else if(it->first=="-mle")
-        {
-            this->mle=atoi(it->second.c_str());
+
+        else if (it->first == "-mle") {
+            this->mle = atoi(it->second.c_str());
         }
-        
-        else if(it->first=="-elon")
-        {
-            this->elon=atoi(it->second.c_str());
+
+        else if (it->first == "-elon") {
+            this->elon = atoi(it->second.c_str());
         }
-        
-        else if(it->first=="-k")
-        {
+
+        else if (it->first == "-k") {
             printf("Setting regions of interest to %s\n", it->second.c_str());
-            this->regionsOfInterest=it->second;
+            this->regionsOfInterest = it->second;
         }
-        
+
         //yet another undocumented parameter!
-        else if(it->first=="-r_mu")
-        {
-            this->r_mu=atoi(it->second.c_str());
+        else if (it->first == "-r_mu") {
+            this->r_mu = atoi(it->second.c_str());
         }
-        
-        else if(it->first=="-threads")
-        {
-            this->cores=atoi(it->second.c_str());
+
+        else if (it->first == "-threads") {
+            this->cores = atoi(it->second.c_str());
         }
     }
-    
-    if((this->forwardStrand=="" || this->reverseStrand=="") && this->mergedStrand=="")
-    {
+
+    if ((this->forwardStrand == "" || this->reverseStrand == "") && this->mergedStrand == "") {
         printf("Either i or j empty. Please specify i or j.\n");
-        this->exit=true;
+        this->exit = true;
     }
-    
+
     /* This has now been taken care of earlier:
     if(this->outputDir!="")
     {
@@ -459,7 +406,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
             this->outputDir=this->outputDir+"/";
         }
     }*/
-    
+
     //Todo: add more sanity checks.
 }
 
@@ -470,74 +417,75 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
  * @param nodes Number of nodes on which Tfit is to run. This is obtained from the MPI runtime.
  * @param cores Number of cores on which Tfit is to run. This is obtained from the MPI runtime.
  */
-void ParamWrapper::display(int nodes, int cores){
-	//We have no analogs, since these parameters aren't in the repo documentation:
+void ParamWrapper::display(int nodes, int cores)
+{
+    //We have no analogs, since these parameters aren't in the repo documentation:
     //bool MLE 	= stoi(p["-MLE"]);
-	//bool SELECT = stoi(p["-select"]);
-	std::string header 	= "";
-	header+="----------------------------------------------------------------\n";
-	header+="             transcriptional inference (tINF)                   \n";
-	if (bidir){
-	header+="               ...bidirectional scanner...     \n";
-	}//if (this->module=="bidir" and MLE){
-	//header+="             ....coupled to mixture model....     \n";
-	//}
-	if (bidir and select){
-	header+="       ....coupled to BIC penalty optimization....     \n";
-	}
-	if (model){
-	header+="               ...running mixture model...                      \n";
-	}
-	if (select){
-	header+="            ....BIC penalty optimization....                      \n";		
-	}
-	printf("%s\n",header.c_str() );
-	printf("-N         : %s\n", this->jobName.c_str());
-	if (this->mergedStrand!=""){
-		printf("-ij        : %s\n", this->mergedStrand.c_str());
-	}else{
-		printf("-i         : %s\n", this->forwardStrand.c_str());
-		printf("-j         : %s\n", this->reverseStrand.c_str());
-	}
-	//if (model or MLE){
-	//printf("-k         : %s\n", p["-k"].c_str()  );
-	//}
-	if (this->promoterTSS!=""){
-		printf("-tss       : %s\n", promoterTSS.c_str()  );
-	}
-	printf("-o         : %s\n", this->outputDir.c_str()  );
-	printf("-log_out   : %s\n", this->logDir.c_str()  );
-	printf("-MLE       : %d\n", this->mle);
-	printf("-chr       : %s\n", this->chromosome.c_str());	
-	printf("-br        : %d\n", this->br);	
-	printf("-rounds    : %d\n", this->rounds);
-	if (this->elon){
-		printf("-elon      : %d\n", this->elon);
-	}
-	printf("-pad       : %lf\n", this->pad);
-	if (!model){
-	printf("-bct       : %d\n", this->llrthresh);
-	}
-	if (model){
-		printf("-minK      : %d\n", this->mink);
-		printf("-maxK      : %d\n", this->maxk);
-	}
-	printf("-threads   : %d\n",  cores);
-	printf("-MPI_np    : %d\n",  nodes);
-	printf("\nQuestions/Bugs? joseph[dot]azofeifa[at]colorado[dot]edu\n" );
+    //bool SELECT = stoi(p["-select"]);
+    std::string header = "";
+    header += "----------------------------------------------------------------\n";
+    header += "             transcriptional inference (tINF)                   \n";
+    if (bidir) {
+        header += "               ...bidirectional scanner...     \n";
+    } //if (this->module=="bidir" and MLE){
+    //header+="             ....coupled to mixture model....     \n";
+    //}
+    if (bidir and select) {
+        header += "       ....coupled to BIC penalty optimization....     \n";
+    }
+    if (model) {
+        header += "               ...running mixture model...                      \n";
+    }
+    if (select) {
+        header += "            ....BIC penalty optimization....                      \n";
+    }
+    printf("%s\n", header.c_str());
+    printf("-N         : %s\n", this->jobName.c_str());
+    if (this->mergedStrand != "") {
+        printf("-ij        : %s\n", this->mergedStrand.c_str());
+    } else {
+        printf("-i         : %s\n", this->forwardStrand.c_str());
+        printf("-j         : %s\n", this->reverseStrand.c_str());
+    }
+    //if (model or MLE){
+    //printf("-k         : %s\n", p["-k"].c_str()  );
+    //}
+    if (this->promoterTSS != "") {
+        printf("-tss       : %s\n", promoterTSS.c_str());
+    }
+    printf("-o         : %s\n", this->outputDir.c_str());
+    printf("-log_out   : %s\n", this->logDir.c_str());
+    printf("-MLE       : %d\n", this->mle);
+    printf("-chr       : %s\n", this->chromosome.c_str());
+    printf("-br        : %d\n", this->br);
+    printf("-rounds    : %d\n", this->rounds);
+    if (this->elon) {
+        printf("-elon      : %d\n", this->elon);
+    }
+    printf("-pad       : %lf\n", this->pad);
+    if (!model) {
+        printf("-bct       : %d\n", this->llrthresh);
+    }
+    if (model) {
+        printf("-minK      : %d\n", this->mink);
+        printf("-maxK      : %d\n", this->maxk);
+    }
+    printf("-threads   : %d\n", cores);
+    printf("-MPI_np    : %d\n", nodes);
+    printf("\nQuestions/Bugs? joseph[dot]azofeifa[at]colorado[dot]edu\n");
     printf("\nRevisions made by michael[dot]gohde[at]colorado[dot]edu\n");
-	printf("----------------------------------------------------------------\n" );
-	
+    printf("----------------------------------------------------------------\n");
 }
 
 /** Returns the date and time as a C++ string.
  * 
  * @return Date and time as a string.
  */
-const std::string cdt() {
-    time_t     now = time(0);
-    struct tm  tstruct;
-    char       buf[80];
+const std::string cdt()
+{
+    time_t    now = time(0);
+    struct tm tstruct;
+    char      buf[80];
     tstruct = *localtime(&now);
     // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
     // for more information about date/time format
@@ -551,48 +499,49 @@ const std::string cdt() {
  * @param ID likely specifies either execution mode (such as the running module) or is obtained from MPI.
  * @return Pretty-printed string representing command line arguments.
  */
-std::string ParamWrapper::getHeader(int ID){
+std::string ParamWrapper::getHeader(int ID)
+{
     std::ostringstream os;
-	os<<"#----------------------------------------------------\n";
-	os<<"#Date Time    : "<<cdt()<<"\n";
-	os<<"#-N           : "<<this->jobName<<"\n";
-	if (this->mergedStrand==""){
-		os<<"#-i           : "<<this->forwardStrand<<"\n";
-		os<<"#-j           : "<<this->reverseStrand<<"\n";
-	}else{
-		os<<"#-ij          : "<<this->mergedStrand<<"\n";
-	}
-	if (ID!=1){
-		os<<"#-k           : "<<this->regionsOfInterest<<"\n";
-	}
-	os<<"#-o           : "<<this->outputDir<<"\n";
-	os<<"#-br          : "<<this->br<<"\n";
-	if (ID==1){
-		os<<"#-bct         : "<<this->llrthresh<<"\n";
-        os<<"#-pad         : "<<this->pad<<"\n";
-	}
-	if (ID!=1){
-		os<<"#-elon        : "<<this->elon<<"\n";
-		os<<"#-minK        : "<<this->mink<<"\n";
-		os<<"#-maxK        : "<<this->maxk<<"\n";
-		os<<"#-mi          : "<<this->mi<<"\n";
-		os<<"#-ct          : "<<this->ct<<"\n";
-		os<<"#-rounds      : "<<this->rounds<<"\n";
-	}
-	if (ID!=1){
-		os<<"#-ALPHA_0     : "<<this->alpha0<<"\n";	
-		os<<"#-BETA_0      : "<<this->beta0<<"\n";	
-		os<<"#-BETA_1      : "<<this->beta1<<"\n";	
-		os<<"#-ALPHA_2     : "<<this->alpha2<<"\n";	
-		os<<"#-ALPHA_3     : "<<this->alpha3<<"\n";	
-	}
-	if (ID==1){
-		os<<"#-sigma       : "<< this->sigma <<"\n";
-		os<<"#-lambda      : "<< this->lambda<<"\n";
-		os<<"#-foot_print  : "<< this->footPrint<<"\n";
-		os<<"#-pi          : "<< this->pi<<"\n";
-		os<<"#-w           : "<< this->w<<"\n";
-	}
-	os<<"#----------------------------------------------------\n";
-	return os.str();
+    os << "#----------------------------------------------------\n";
+    os << "#Date Time    : " << cdt() << "\n";
+    os << "#-N           : " << this->jobName << "\n";
+    if (this->mergedStrand == "") {
+        os << "#-i           : " << this->forwardStrand << "\n";
+        os << "#-j           : " << this->reverseStrand << "\n";
+    } else {
+        os << "#-ij          : " << this->mergedStrand << "\n";
+    }
+    if (ID != 1) {
+        os << "#-k           : " << this->regionsOfInterest << "\n";
+    }
+    os << "#-o           : " << this->outputDir << "\n";
+    os << "#-br          : " << this->br << "\n";
+    if (ID == 1) {
+        os << "#-bct         : " << this->llrthresh << "\n";
+        os << "#-pad         : " << this->pad << "\n";
+    }
+    if (ID != 1) {
+        os << "#-elon        : " << this->elon << "\n";
+        os << "#-minK        : " << this->mink << "\n";
+        os << "#-maxK        : " << this->maxk << "\n";
+        os << "#-mi          : " << this->mi << "\n";
+        os << "#-ct          : " << this->ct << "\n";
+        os << "#-rounds      : " << this->rounds << "\n";
+    }
+    if (ID != 1) {
+        os << "#-ALPHA_0     : " << this->alpha0 << "\n";
+        os << "#-BETA_0      : " << this->beta0 << "\n";
+        os << "#-BETA_1      : " << this->beta1 << "\n";
+        os << "#-ALPHA_2     : " << this->alpha2 << "\n";
+        os << "#-ALPHA_3     : " << this->alpha3 << "\n";
+    }
+    if (ID == 1) {
+        os << "#-sigma       : " << this->sigma << "\n";
+        os << "#-lambda      : " << this->lambda << "\n";
+        os << "#-foot_print  : " << this->footPrint << "\n";
+        os << "#-pi          : " << this->pi << "\n";
+        os << "#-w           : " << this->w << "\n";
+    }
+    os << "#----------------------------------------------------\n";
+    return os.str();
 }
