@@ -70,6 +70,9 @@ void ParamWrapper::printUsage()
 
     printf("\t-elon [0,1]\tadjust support of elongation component, (default=0)\n");
     printf("\t\t\tuseful only when fitting to FStitch[1] or groHMM[2] output intervals\n");
+    printf("\nAdditional new testing parameters:\n");
+    printf("\t-fzr [0,1] default 0\tFilter out regions with no reads during the bedgraph loading process.\n");
+    printf("\t-mr [value]\tFilter out regions below a certain threshold number of reads (absolute value) during the bedgraph loading process.");
 }
 
 /** Sets all values to their defaults as per the old read_in_parameters codebase.
@@ -108,6 +111,10 @@ ParamWrapper::ParamWrapper()
     this->alpha3 = 100;
     this->br     = 25;
     this->fdr    = 0;
+    //Additional new parameters:
+    this->filterMinReads=false;
+    this->minReads=0;
+    this->filterZeroRegions=false;
 }
 
 /** Parses the arguments passed to tfit and attempts to store them internally.
@@ -168,6 +175,11 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
     this->maxNoise = 0.05; //This seems to only be used in across_segments.
     this->mle      = 0; //This parameter runs the model module after bidir, IIRC.
     this->elon     = 0;
+    
+    //Additional new parameters:
+    this->filterMinReads=false;
+    this->minReads=0;
+    this->filterZeroRegions=false;
 
     if (argc == 1) {
         this->printUsage();
@@ -219,6 +231,21 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
     for (it = paramMap.begin(); it != paramMap.end(); it++) {
         if (it->first == "-i" || it->first == "--forward" || it->first == "-pos") {
             this->forwardStrand = it->second;
+        }
+        
+        //NEWLY ADDED TESTING PARAMETER:
+        else if(it->first=="-mr")
+        {
+            this->minReads=atof(it->second.c_str());
+            this->filterMinReads=true;
+            printf("NOTE: experimental min reads filtering parameter enabled!\n");
+        }
+        
+        //NEWLY ADDED TESTING PARAMETER:
+        else if(it->first=="-fzr")
+        {
+            this->filterZeroRegions=atoi(it->second.c_str());
+            printf("NOTE: experimental zero coverage filtering parameter enabled!\n");
         }
 
         else if (it->first == "-j" || it->first == "--reverse" || it->first == "-neg") {

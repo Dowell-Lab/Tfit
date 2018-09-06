@@ -570,7 +570,7 @@ int check_ID_name(string& INFO)
  * @return Set of segments read from the specified input file(s).
  */
 vector<segment*> load::load_bedgraphs_total(string forward_strand,
-                                            string reverse_strand, string joint_bedgraph, int BINS, double scale, string spec_chrom, map<string, int>& chromosomes, map<int, string>& ID_to_chrom)
+                                            string reverse_strand, string joint_bedgraph, int BINS, double scale, string spec_chrom, map<string, int>& chromosomes, map<int, string>& ID_to_chrom, bool filterZeroRegions, bool filterMinReads, double minReads)
 {
     int FOUND = 0;
     if (spec_chrom == "all") {
@@ -588,10 +588,13 @@ vector<segment*> load::load_bedgraphs_total(string forward_strand,
     string         line, chrom;
     int            start, stop;
     double         coverage;
+    double absCoverage;
     vector<string> lineArray;
     segment*       S           = NULL;
     int            EXIT        = 0;
     int            line_number = 0;
+    int fzrCulled=0;
+    int mrCulled=0;
     for (int u = 0; u < FILES.size(); u++) {
         int      INSERT    = 0;
         string   prevChrom = "";
@@ -624,6 +627,19 @@ vector<segment*> load::load_bedgraphs_total(string forward_strand,
                     FOUND    = 1;
                 } else if (chrom.size() > 6) {
                     INSERT = 0;
+                }
+                
+                if(coverage==0 && filterZeroRegions)
+                {
+                    INSERT=0;
+                    //Don't modify the value of FOUND yet.
+                    fzrCulled++;
+                }
+                
+                if(absCoverage>=coverage && filterMinReads)
+                {
+                    INSERT=0;
+                    mrCulled++;
                 }
             }
             if (FOUND and chrom != spec_chrom and spec_chrom != "all") {
@@ -665,6 +681,16 @@ vector<segment*> load::load_bedgraphs_total(string forward_strand,
     if (not FOUND) {
         segments.clear();
         printf("couldn't find chromosome %s in bedgraph files\n", spec_chrom.c_str());
+    }
+    
+    if(filterZeroRegions)
+    {
+        printf("Number of regions with zero coverage filtered out: %d\n", fzrCulled);
+    }
+    
+    if(filterMinReads)
+    {
+        printf("Number of regions with coverage below threshold filtered out: %d\n", mrCulled);
     }
     return segments;
 }
@@ -864,7 +890,7 @@ vector<segment*> load::load_intervals_of_interest_pwrapper(string FILE, map<int,
  * @return Vector of processed segments.
  */
 vector<segment*> load::insert_bedgraph_to_segment_joint(map<string, vector<segment*>> A,
-                                                        string forward, string reverse, string joint, int rank)
+                                                        string forward, string reverse, string joint, int rank, bool filterZeroRegions, bool filterMinReads, double minReads)
 {
     map<string, node>                               NT;
     typedef map<string, vector<segment*>>::iterator it_type_5;
@@ -873,6 +899,7 @@ vector<segment*> load::insert_bedgraph_to_segment_joint(map<string, vector<segme
     }
     int    start, stop, N, j;
     double coverage;
+    double absCoverage;
     N = 0, j = 0;
     int              strand;
     int              o_st, o_sp;
@@ -898,19 +925,28 @@ vector<segment*> load::insert_bedgraph_to_segment_joint(map<string, vector<segme
                 if (lineArray.size() == 4) {
                     chrom = lineArray[0];
                     start = stoi(lineArray[1]), stop = stoi(lineArray[2]), coverage = stod(lineArray[3]);
-                    if (coverage > 0 and i == 0) {
-                        strand = 1;
-                    } else if (coverage < 0 or i == 1) {
-                        strand = -1;
-                    }
-                    center = (stop + start) / 2.;
-                    if (NT.find(chrom) != NT.end()) {
-                        for (int center_2 = start; center_2 < stop; center_2++) {
-                            vector<double> x(2);
-                            x[0] = double(center_2), x[1] = abs(coverage);
-                            NT[chrom].insert_coverage(x, strand);
+                    absCoverage=abs(coverage);
+                    
+                    if((filterMinReads && absCoverage>minReads) || (!filterMinReads))
+                    {
+                        if (coverage > 0 and i == 0) {
+                            strand = 1;
+                        } else if (coverage < 0 or i == 1) {
+                            strand = -1;
+                        }
+                        center = (stop + start) / 2.;
+                        if (NT.find(chrom) != NT.end()) {
+                            if((filterZeroRegions && coverage!=0) || (!filterZeroRegions))
+                            {
+                                for (int center_2 = start; center_2 < stop; center_2++) {
+                                    vector<double> x(2);
+                                    x[0] = double(center_2), x[1] = abs(coverage);
+                                    NT[chrom].insert_coverage(x, strand);
+                                }
+                            }
                         }
                     }
+                    
                 } else {
                     printf("\n***error in line: %s, not bedgraph formatted\n", line.c_str());
                     segments.clear();

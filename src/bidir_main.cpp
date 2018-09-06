@@ -64,7 +64,7 @@ int bidir_run(params* P, int rank, int nprocs, int job_ID, Log_File* LG)
 
         LG->write("inserting coverage data.................................", verbose);
         vector<segment*> integrated_segments = load::insert_bedgraph_to_segment_joint(GG,
-                                                                                      forward_bedgraph, reverse_bedgraph, joint_bedgraph, rank);
+                                                                                      forward_bedgraph, reverse_bedgraph, joint_bedgraph, rank, false, false, 0);
         LG->write("done\n", verbose);
 
         LG->write("Binning/Normalizing TSS intervals.......................", verbose);
@@ -90,8 +90,9 @@ int bidir_run(params* P, int rank, int nprocs, int job_ID, Log_File* LG)
     P->p["-w"]          = to_string(parameters[4]);
 
     LG->write("loading bedgraph files..................................", verbose);
+    //NOTE: this code was modified to include an assumed filterZeroRegions value.
     vector<segment*> segments = load::load_bedgraphs_total(forward_bedgraph, reverse_bedgraph, joint_bedgraph,
-                                                           stoi(P->p["-br"]), stof(P->p["-ns"]), P->p["-chr"], chrom_to_ID, ID_to_chrom);
+                                                           stoi(P->p["-br"]), stof(P->p["-ns"]), P->p["-chr"], chrom_to_ID, ID_to_chrom, false, false, 0);
 
     if (segments.empty()) {
         printf("exiting...\n");
@@ -199,6 +200,14 @@ int bidir_run_pwrapper(ParamWrapper* pw, int rank, int nprocs, int job_ID, Log_F
     double ns = pw->ns;
     sigma = pw->sigma, lambda = pw->lambda;
     foot_print = pw->footPrint, pi = pw->pi, w = pw->w;
+    bool fzr=pw->filterZeroRegions;
+    bool fmr=pw->filterMinReads;
+    double minReads=pw->minReads;
+    
+    if(fzr)
+    {
+        LG->write("NOTE: Experimental zero coverage region filtering support enabled!\n", verbose);
+    }
 
     //(2a) read in bedgraph files
     map<string, int> chrom_to_ID;
@@ -224,7 +233,7 @@ int bidir_run_pwrapper(ParamWrapper* pw, int rank, int nprocs, int job_ID, Log_F
 
         LG->write("inserting coverage data.................................", verbose);
         vector<segment*> integrated_segments = load::insert_bedgraph_to_segment_joint(GG,
-                                                                                      forward_bedgraph, reverse_bedgraph, joint_bedgraph, rank);
+                                                                                      forward_bedgraph, reverse_bedgraph, joint_bedgraph, rank, fzr, fmr, minReads);
         LG->write("done\n", verbose);
 
         LG->write("Binning/Normalizing TSS intervals.......................", verbose);
@@ -258,7 +267,7 @@ int bidir_run_pwrapper(ParamWrapper* pw, int rank, int nprocs, int job_ID, Log_F
 
     LG->write("loading bedgraph files..................................", verbose);
     vector<segment*> segments = load::load_bedgraphs_total(forward_bedgraph, reverse_bedgraph, joint_bedgraph,
-                                                           pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom);
+                                                           pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom, fzr, fmr, minReads);
 
     if (segments.empty()) {
         printf("Could not read segments from file. Exiting...\n");
@@ -384,6 +393,9 @@ int bidir_run_old_long_pwrapper(ParamWrapper* pw, int rank, int nprocs, int job_
     printf("%lf, %lf", lambda, pw->lambda);
     foot_print = pw->footPrint, pi = pw->pi, w = pw->w;
     int modelret;
+    bool fzr=pw->filterZeroRegions;
+    bool fmr=pw->filterMinReads;
+    double minReads=pw->minReads;
 
     modelret = 0;
 
@@ -407,7 +419,7 @@ int bidir_run_old_long_pwrapper(ParamWrapper* pw, int rank, int nprocs, int job_
         LG->write("done\n", verbose);
 
         vector<segment*> integrated_segments = load::insert_bedgraph_to_segment_joint(GG,
-                                                                                      forward_bedgraph, reverse_bedgraph, joint_bedgraph, rank);
+                                                                                      forward_bedgraph, reverse_bedgraph, joint_bedgraph, rank, fzr, fmr, minReads);
         LG->write("Binning/Normalizing TSS intervals.......................", verbose);
         load::BIN(integrated_segments, pw->br, pw->ns, true);
         LG->write("done\n", verbose);
@@ -451,7 +463,7 @@ int bidir_run_old_long_pwrapper(ParamWrapper* pw, int rank, int nprocs, int job_
 
     LG->write("loading bedgraph files..................................", verbose);
     vector<segment*> segments = load::load_bedgraphs_total(forward_bedgraph, reverse_bedgraph, joint_bedgraph,
-                                                           pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom);
+                                                           pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom, fzr, fmr, minReads);
 
     if (segments.empty()) {
         printf("Could not read bedgraphs from file. Exiting...\n");
@@ -532,14 +544,17 @@ int bidir_old_run_pwrapper(ParamWrapper* pw, int rank, int nprocs, int job_ID, L
     string combined_bedgraph = pw->mergedStrand;
     string out_file_dir      = pw->outputDir; //out file directory
     //TODO: copy bedgraph splitting code from Fstitch to accomodate this function.
-
+    bool fzr=pw->filterZeroRegions;
+    bool fmr=pw->filterMinReads;
+    double minReads=pw->minReads;
+    
     //(2a) read in bedgraph files
     map<string, int> chrom_to_ID;
     map<int, string> ID_to_chrom;
     LG->write("loading bedgraph files..................................", verbose);
 
     vector<segment*> segments = load::load_bedgraphs_total(forward_bedgraph, reverse_bedgraph, combined_bedgraph,
-                                                           pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom);
+                                                           pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom, fzr, fmr, minReads);
     LG->write("done\n", verbose);
     //(2b) so segments is indexed by inidividual chromosomes, want to broadcast
     //to sub-processes and have each MPI call run on a subset of segments

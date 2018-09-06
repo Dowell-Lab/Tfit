@@ -15,16 +15,16 @@ using namespace std;
 
 /** Recursively attempts to return a valid output filename.
  * This function is used so that Tfit doesn't overwrite the results returned from prior runs.
- * @param FILE Base filename
+ * @param fname Base filename
  * @param i initial iterator parameter with which to generate a unique filename. 
  */
-string check_file(string FILE, int i)
+string check_file(string fname, int i)
 { //don't want to write over an existing file
-    string   template_file = FILE + to_string(i);
+    string   template_file = fname + to_string(i);
     ifstream FH(template_file);
     if (FH) {
         FH.close();
-        return check_file(FILE, i + 1);
+        return check_file(fname, i + 1);
     }
     return template_file;
 }
@@ -169,6 +169,7 @@ map<int, vector<simple_c_free_mode>> get_max_from_free_mode(map<int, vector<clas
     //get forward and reverse N
     double forward_N = 0, reverse_N = 0;
     for (int i = 0; i < data->XN; i++) {
+        //NOTE: Should these be X[0] and X[1]?
         forward_N += data->X[1][i];
         reverse_N += data->X[2][i];
     }

@@ -78,6 +78,11 @@ public:
     double ct; //default=0.0001
     int    mi; //default=2000
     int    r_mu; //Default=0; undocumented.
+    
+    //Additional parameters added by request:
+    bool filterZeroRegions;
+    bool filterMinReads;
+    double minReads;
 
     //Additional bleeding edge parameters for the model module:
     bool   experimentalValsSpecified;

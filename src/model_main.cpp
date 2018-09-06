@@ -55,7 +55,7 @@ int model_run(params* P, int rank, int nprocs, double density, int job_ID, Log_F
     //(2a) load bedgraph files and insert them into intervals of interest (interval tree...)
     LG->write("inserting bedgraph data.................................", verbose);
     vector<segment*> integrated_segments = load::insert_bedgraph_to_segment_joint(GG,
-                                                                                  forward_bed_graph_file, reverse_bed_graph_file, joint_bed_graph_file, rank);
+                                                                                  forward_bed_graph_file, reverse_bed_graph_file, joint_bed_graph_file, rank, false, false, 0);
     //(2b) for each segment we are going to bin and scale and center, numerical stability
     LG->write("done\n", verbose);
     LG->write("binning, centering, scaling.............................", verbose);
@@ -120,7 +120,9 @@ int model_run_pwrapper(ParamWrapper* pw, int rank, int nprocs, double density, i
     LG->write("\ninitializing model module...............................done\n\n", verbose);
     int    threads  = omp_get_max_threads(); //number of OpenMP threads that are available for use
     string job_name = pw->jobName; //P->p["-N"];
-
+    bool fzr=pw->filterZeroRegions;
+    bool fmr=pw->filterMinReads;
+    double minReads=pw->minReads;
     //=======================================================================================
     //input file paths
     string forward_bed_graph_file = pw->forwardStrand; //P->p["-i"];
@@ -151,7 +153,7 @@ int model_run_pwrapper(ParamWrapper* pw, int rank, int nprocs, double density, i
     //(2a) load bedgraph files and insert them into intervals of interest (interval tree...)
     LG->write("inserting bedgraph data.................................", verbose);
     vector<segment*> integrated_segments = load::insert_bedgraph_to_segment_joint(GG,
-                                                                                  forward_bed_graph_file, reverse_bed_graph_file, joint_bed_graph_file, rank);
+                                                                                  forward_bed_graph_file, reverse_bed_graph_file, joint_bed_graph_file, rank, fzr, fmr, minReads);
     //(2b) for each segment we are going to bin and scale and center, numerical stability
     LG->write("done\n", verbose);
     LG->write("binning, centering, scaling.............................", verbose);

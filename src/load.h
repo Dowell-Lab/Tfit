@@ -108,7 +108,7 @@ namespace load{
 
 
 	vector<segment*> load_bedgraphs_total(string, 
-		string, string, int , double, string,map<string, int>&,map<int, string>&);
+		string, string, int , double, string,map<string, int>&,map<int, string>&, bool, bool, double);
 
 
 	void write_out_bidirs(map<string , vector<vector<double> > >, string, string, int ,params *, int);
@@ -120,7 +120,7 @@ namespace load{
 
 	void collect_all_tmp_files(string , string, int, int );
 	vector<segment* > insert_bedgraph_to_segment_joint(map<string, vector<segment *> >  , 
-		string , string , string ,int);
+		string , string , string ,int, bool, bool, double);
 
 	void write_out_models_from_free_mode(map<int, map<int, vector<simple_c_free_mode>  > >,
 		params *,int,map<int, string>, int, string &);
