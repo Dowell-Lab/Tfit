@@ -897,6 +897,8 @@ vector<segment*> load::insert_bedgraph_to_segment_joint(map<string, vector<segme
     for (it_type_5 c = A.begin(); c != A.end(); c++) {
         NT[c->first] = node(c->second);
     }
+    int mrCulled=0;
+    int fzrCulled=0;
     int    start, stop, N, j;
     double coverage;
     double absCoverage;
@@ -944,7 +946,17 @@ vector<segment*> load::insert_bedgraph_to_segment_joint(map<string, vector<segme
                                     NT[chrom].insert_coverage(x, strand);
                                 }
                             }
+                            
+                            else
+                            {
+                                fzrCulled++;
+                            }
                         }
+                    }
+                    
+                    else
+                    {
+                        mrCulled++;
                     }
                     
                 } else {
@@ -966,6 +978,16 @@ vector<segment*> load::insert_bedgraph_to_segment_joint(map<string, vector<segme
     typedef map<string, node>::iterator it_type_6;
     for (it_type_6 c = NT.begin(); c != NT.end(); c++) {
         c->second.retrieve_nodes(NS);
+    }
+    
+    if(filterZeroRegions)
+    {
+        printf("Number of segments filtered due to nonzero read requirement: %d\n", fzrCulled);
+    }
+    
+    if(filterMinReads)
+    {
+        printf("Number of segments filtered due to min read requirement: %d\n", mrCulled);
     }
 
     return NS;
