@@ -424,9 +424,11 @@ vector<double> compute_average_model_pwrapper(vector<segment*> segments, ParamWr
     double     ll = nINF;
     classifier best_clf;
     for (int r = 0; r < 5; r++) {
+        //NOTE: the last parameter in this constructor was originally set to 0 for some reason.
+        //It *should* be the footprint parameter.
         classifier     clf(1, 0.000001, pw->mi, 0.3,
                        pw->r_mu, 10.0, 10.0, 1.0,
-                       1.0 * segments.size(), 2 * segments.size(), pw->alpha3, 0);
+                       1.0 * segments.size(), 2 * segments.size(), pw->alpha3, pw->footPrint);
         vector<double> centers = { 10 };
         segment*       s       = new segment("chrX", 0, maxX);
         s->X                   = X;

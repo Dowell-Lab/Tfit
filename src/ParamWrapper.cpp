@@ -104,6 +104,7 @@ ParamWrapper::ParamWrapper()
     this->experimentalValsSpecified = false;
     this->alpha0                    = 1;
     this->beta0                     = 1;
+    this->footPrint                 = 86.0;
     //There are no default values for this parameter.
     this->alpha1 = 0;
     this->beta1  = 0;
