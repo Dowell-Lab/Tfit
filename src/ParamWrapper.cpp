@@ -72,7 +72,7 @@ void ParamWrapper::printUsage()
     printf("\t\t\tuseful only when fitting to FStitch[1] or groHMM[2] output intervals\n");
     printf("\nAdditional new testing parameters:\n");
     printf("\t-fzr [0,1] default 0\tFilter out regions with no reads during the bedgraph loading process.\n");
-    printf("\t-mr [value]\tFilter out regions below a certain threshold number of reads (absolute value) during the bedgraph loading process.");
+    printf("\t-mr [value]\tFilter out regions below a certain threshold number of reads (absolute value) during the bedgraph loading process.\n");
 }
 
 /** Sets all values to their defaults as per the old read_in_parameters codebase.
