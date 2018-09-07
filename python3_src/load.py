@@ -72,15 +72,16 @@ def grab_specific_region(chrom_spec,start_spec, stop_spec,
 				if FOUND and start < stop_spec and stop > start_spec:
 					for j in range(int(start), int(stop)):
 						D[i].append((j, coverage))
+	print("D:",D)
 	if bins is None:
 		return D
 	if SHOW:
-		X 	= simulate.BIN(D[0], D[1], 200)
+		X 	= simulate.BIN(D[0], D[1], 200)#might change the 200 to bins
 		plt.title(chrom + ":" + str(start_spec) + "-" + str(stop_spec))
 		plt.bar(X[:,0], X[:,1])
 		plt.bar(X[:,0], -X[:,2])
 		plt.show()
-	X 		= simulate.BIN(D[0], D[1], bins)##
+	X 		= simulate.BIN(D[0], D[1], bins)##different value than the one that is being shown if show is true
 	
 	return X
 
@@ -185,7 +186,7 @@ def filter_single_overlaps(FS, RF):
 def bedGraphFile(forward_file, reverse_file,intervals, write_out=True, test=True,SHOW=False):
 	for s,FILE in enumerate((forward_file, reverse_file)):
 		prev, i 	= "", 0
-		print ("working on"), FILE
+		print ("working on", FILE)
 		with open(FILE) as FH:
 			for line in FH:
 				chrom,start, stop, coverage 	= re.split("\s+", line.strip("\n"))
@@ -216,11 +217,15 @@ def bedGraphFile(forward_file, reverse_file,intervals, write_out=True, test=True
 		out_file 	= model_across.checkFileExists(out_file, 1)
 		print (out_file)
 		FHW			= open(out_file, "w")
+	print(intervals)
 	for chrom in intervals:
+		print("test1")
 		for I in intervals[chrom]:
+			print("test2")
 			if SHOW:
 				I.show()
-			if write_out is not None and I.check():
+			if write_out is not None and I.check():#does not ever go into this 
+				print("test3")
 				FHW.write("#" + chrom + "," + str(I.tot_st) + "," + str(I.tot_sp) + "\n")
 				FHW.write("~forward\n")
 				for x,y in I.forward:
@@ -258,7 +263,7 @@ def formatted_file(FILE, bins, sc):
 			elif "reverse" in line:
 				forward = False
 				reverse = True
-			elif forward and I is not None:#if given data here, foreward is refrenced before assignement also spelled wrong
+			elif forward and I is not None:#if given data here, forward is refrenced before assignement 
 				x,y 	= line.strip("\n").split(",")
 				x,y 	= float(x), float(y)
 				I.insert(x, y, 0)

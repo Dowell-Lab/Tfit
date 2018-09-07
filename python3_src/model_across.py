@@ -70,7 +70,7 @@ if __name__ == "__main__":
 		neg_file="/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/test_j_neg.BedGraph",
 		SHOW 	=False, bins=300)
 		 	
-	shit = wrapper_fit_function(X, k=2, 
+	notShit = wrapper_fit_function(X, k=2, 
 		max_iterations=200, convergence_thresh=0.0001,
 		move_uniform=0)
 	

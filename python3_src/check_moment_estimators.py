@@ -160,8 +160,8 @@ if __name__ == "__main__":
 	#1,243,262-1,251,173
 	#chr1:1,090,956-1,114,133
 	#chr1:1,087,608-1,108,057
-	X 	= load.grab_specific_region("chr1",1087608,1108057, SHOW=False, bins=100,
-		pos_file=IN+"test_i_pos.BedGraph", neg_file=IN+"test_j_neg.BedGraph" )
+	X 	= load.grab_specific_region("chr1",6229893,6303055, SHOW=False, bins=100,
+		pos_file=IN+"chr1_6229860_6303055_SRR1105737.pos.sorted.BedGraph", neg_file=IN+"chr1_6229860_6303055_SRR1105737.minus.sorted.BedGraph" )
 	X[:,0]-=min(X[:,0])
 	scale = 100
 	window = 1000

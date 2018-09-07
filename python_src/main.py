@@ -23,13 +23,13 @@ def hardcode():
 		#BELOW is hardcoding
 		#====================
 		#FILES
-		root 			= "/Users/joeyazo/Desktop/Lab/gro_seq_files"
-		refseqFILE 		= root+"/RefSeqHG19.txt"
-		FS_forward		= root+"/HCT116/FStitch/DMSO2_3.sorted.fiveprime.pos_segs_IGV.bed"
-		FS_reverse  	= root+"/HCT116/FStitch/DMSO2_3.sorted.fiveprime.neg_segs_IGV.bed"
-		forward_file_bg = root+"/HCT116/bed_graph_files/DMSO2_3.pos.BedGraph"
-		reverse_file_bg = root+"/HCT116/bed_graph_files/DMSO2_3.neg.BedGraph"
-		write_out 		= root+"/HCT116/FStitch/single_isoform_FStitch.tsv"
+		root 			= "/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples"
+		refseqFILE 		= root+"/test_ij_joint.BedGraph"
+		FS_forward		= root+"/test_i_pos.BedGraph"
+		FS_reverse  	= root+"/test_j_neg.BedGraph"
+		forward_file_bg = root+"/test_i_pos.BedGraph"
+		reverse_file_bg = root+"/test_j_neg.BedGraph"
+		write_out 		= root+"/single_isoform_FStitch.tsv"
 		#====================
 		#====================
 		#INPUT PARAMETERS

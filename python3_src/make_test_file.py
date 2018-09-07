@@ -1,3 +1,13 @@
+'''
+This file was written by Joey Azofiefa Date unknown
+Edited and translated to python3 by Jack Dempsey Summer/Fall 2018
+
+The run function in theory seems to be taking an input file and writing a new file 
+which contains specified reads form the region and chromisome
+
+The function run2 takes in specified bedgraph files, and will give you reads along the start and stop regions
+'''
+
 import load, simulate
 def run(FILE):
 	FHW 	= open(FILE, "w")
@@ -28,8 +38,8 @@ def run(FILE):
 
 def run2():
 	D 			= "/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/"
-	forward 	= "test_i_pos.BedGraph"
-	reverse 	= "test_j_neg.BedGraph"
+	forward 	= "SRR1105737.pos.sorted.BedGraph"
+	reverse 	= "SRR1105737.minus.sorted.BedGraph"
 	spec_chrom 	= "chr1"
 	start, stop = 6229860,6303055
 	ID 			= spec_chrom+"_"+str(start) + "_" + str(stop) + "_"

@@ -12,6 +12,15 @@
 #(-r) binning resolution; default set to 10
 #(-s) scaling resolution; default set to 200
 #(-p) pad; default set to 0
+#
+#Edited and translated to python3 Summer/Fall 2018 by Jack Dempsey
+#
+#If you wish to run the hardcoded function, you may just execute:$python3 main.py
+#
+#If you wish to have more specific then you may with the added arguements:
+#:$python3 main.py runModel -i /direction/to/input/bedgraph -wo /write/out/directory -sc hg19
+#
+#
 #================================================================================================
 
 import sys, load, parse_argv, model_across
@@ -22,14 +31,14 @@ def hardcode():
 		#union of forward and reverse strand FStitch calls
 		#BELOW is hardcoding
 		#====================
-		#FILES: Jack Needs Files
-		root 			= "/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples"
-		refseqFILE 		= root+"/test_ij_joint.BedGraph"
-		FS_forward		= root+"/test_i_pos.BedGraph"
-		FS_reverse  	= root+"/test_j_neg.BedGraph"
-		forward_file_bg = root+"/test_i_pos.BedGraph"
-		reverse_file_bg = root+"/test_j_neg.BedGraph"
-		write_out 		= root+"/single_isoform_FStitch.tsv"
+		#FILES: 
+		root 			= "/Users/jackdempsey/Desktop/Tfit_All/Tfit/"
+		refseqFILE 		= root+"annotation_files/hg19_TSS.bed"
+		FS_forward		= root+"examples/SRR1105737.pos.sorted.BedGraph"#need output from fstitch .bed files
+		FS_reverse  	= root+"examples/SRR1105737.minus.sorted.BedGraph"#need output from fstitch
+		forward_file_bg = root+"examples/SRR1105737.pos.sorted.BedGraph"
+		reverse_file_bg = root+"examples/SRR1105737.minus.sorted.BedGraph"
+		write_out 		= root+"examples/single_isoform_FStitch.tsv"
 		#====================
 		#====================
 		#INPUT PARAMETERS
@@ -38,6 +47,7 @@ def hardcode():
 
 		RF 		= load.gene_annotations(refseqFILE)
 		FS 		= load.FStitch_annotations(FS_forward, FS_reverse, merge=True)
+		#print("RF: ", RF)# "FS: ", FS)
 		filtered= load.filter_single_overlaps(FS, RF)
 		load.bedGraphFile(forward_file_bg, reverse_file_bg,
 			filtered, SHOW=False, test=False,
@@ -115,7 +125,7 @@ def run(argv):
 
 if __name__ == "__main__":
 
-	#example input: runModel -i /directory/of/input -wo /directory/of/output
+	#example input: runModel -i /Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/SRR1105737.pos.sorted.BedGraph -wo /Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/tests -sc hg19
 	if(len(sys.argv)>1):
 		run(sys.argv)
 	else:

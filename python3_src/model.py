@@ -400,6 +400,7 @@ class EMGU:
 			# print "------------"
 			t+=1
 		self.rvs,self.ll 	= [c for c in components if c.type!="noise"], ll
+		
 	def draw(self, X):
 		assert self.rvs is not None, "need to run fit before drawing"
 		F 			= plt.figure(figsize=(15,10))
@@ -409,12 +410,14 @@ class EMGU:
 		ax.bar(X[:,0],  X[:,1] / float(np.sum(X[:,1:]) ), color="blue", alpha=0.25, width=(X[-1,0]-X[0,0])/X.shape[0])
 		ax.bar(X[:,0], -X[:,2] / float(np.sum(X[:,1:])), color="red", alpha=0.25, width=(X[-1,0]-X[0,0])/X.shape[0])
 		xs 			= np.linspace(X[0,0], X[-1,0], 1000)
-		ys_forward 	= map(lambda x: sum([rv.pdf(x, 1) for rv in self.rvs if rv.type == "EMGU"]) , xs)
-		ys_reverse 	= map(lambda x: -sum([rv.pdf(x, -1) for rv in self.rvs if rv.type == "EMGU"]) , xs)
+		ys_forward 	= list(map(lambda x: sum([rv.pdf(x, 1) for rv in self.rvs if rv.type == "EMGU"]) , xs))#possible generator should return list
+		ys_reverse 	= list(map(lambda x: -sum([rv.pdf(x, -1) for rv in self.rvs if rv.type == "EMGU"]) , xs))
 
-		ax.plot(xs, ys_forward, linewidth=3.5,  color="blue")
+		ax.plot(xs, ys_forward, linewidth=3.5,  color="blue") ##something is input as a generator
 		ax.plot(xs, ys_reverse, linewidth=3.5,  color="red")
 		ax.grid()
+		name = "figure"+str(c)+".png"
+		#plt.savefig(name)
 		plt.show()
 
 
@@ -437,6 +440,7 @@ if __name__ == "__main__":
 	'''
 	clf = EMGU(noise=True, K=1,noise_max=0.1,moveUniformSupport=0,max_it=200, cores=1,
 		seed=True )
+		
 	clf.fit(X)
 
 

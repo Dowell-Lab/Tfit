@@ -1,3 +1,16 @@
+#Writen by Joey Azofiefa date unknown
+#Edited and translated to python3 by Jack Dempsey Summer/Fall 2018
+#
+#Builds a data tree for use in other parts of TFit
+#the main function here tests the build and search of a tree
+#
+#
+#
+#
+#
+#
+#
+
 import time
 class info:
 	def __init__(self, start, stop, info=None):
@@ -110,6 +123,6 @@ class tree:
 
 if __name__ == "__main__":
 	LST 	= [(1,4, True), (3,5, True), (0,7,True), (9,12, True), (11,14, True), (10,15, True), (20, 25, True), (24, 26, True)]
-	T 		= tree(LST)
+	T 		= tree(LST)#list indicies must be integers or floats in python3
 	finds 	= T.searchInterval( (2,4) )
 	print (finds)

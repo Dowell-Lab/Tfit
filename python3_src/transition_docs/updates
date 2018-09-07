@@ -3,8 +3,9 @@ First I changed all of the print statments to have braces
 Functions to look at:
 Display__iterates**Special/non-crucial
 make_test_file
-nodes
-model across
+node
+model**
+model across**
 unstranded_model**
 parse_argv(main is now changed to handle both hardcoded and arguments)-> connect with usage part of readme
 test_new_I_fit **
@@ -15,6 +16,7 @@ template_window_matching**
 Now I have two test files, one in python_src and the other in python3_src, so these two files can test
 the files in each environment respectively. Right now I just pipe outputs to the transition docs folder. Still need
 to get a good way to compare the two different outputs. As of now I will push foreward in comparing the two versions.
+Need to find the large files on fiji so that I can run the two tests to see the difference in versions.
 
 
 
@@ -77,3 +79,14 @@ then I had to create a main function so that I could test it, and since it calls
 this too does not work.
 
 
+General Notes: 
+When trying to find fstich training files I could not find any to run fstitch
+and then could not get those files to run bug python3 test
+
+
+
+
+
+Notes on Generators:
+Many Standard Library functions that return lists in Python 2 have been
+modified to return generators in Python 3 because generators require fewer resources.
