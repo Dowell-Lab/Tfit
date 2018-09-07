@@ -31,7 +31,7 @@ def runOne(mu=0, s=1, l=5, lr=100, ll=-100, we=0.5,wl=0.25, wr=0.25, pie=0.5, pi
 		reverse += list(np.random.uniform(ll-150, lr+150, int(N*0.05) ))
 
 
-	#creates an array of zeros bins=300 long and 3 would be data type but not sure what type it is(jack)
+	#creates an array of zeros bins=300 long and 3 wide
 	X 			= np.zeros((bins, 3))
 	X[:,0] 		= np.linspace(min(reverse), max(forward) ,bins)
 	for j,f in enumerate((forward, reverse)):
@@ -49,15 +49,15 @@ def runOne(mu=0, s=1, l=5, lr=100, ll=-100, we=0.5,wl=0.25, wr=0.25, pie=0.5, pi
 
 
 '''
-
+This function is used in a variety of places in Tfit: directly in load.grab_specific_region
 '''	
 def BIN(forward, reverse, bins, SHOW=False):
-	#when grab specific region cannot get the right region there is an error here
+	#when grab specific region cannot get the right region there it shows an error here
 	start, stop 	= min((min(forward)[0],min(reverse)[0])),max((max(forward)[0],max(reverse)[0]))
 	X 				= np.zeros((bins, 3))
 	X[:,0] 			= np.linspace(start, stop, bins)
 	for j,f in enumerate((forward, reverse)):
-		for x,c in f: #'numpy.float64' object is not iterable error in both pythons
+		for x,c in f: 
 			i  	= 0
 			while i < X.shape[0] and X[i,0] <= x:
 				i+=1
@@ -81,7 +81,7 @@ def BIN(forward, reverse, bins, SHOW=False):
 		plt.bar(X[:,0], -X[:,2], color="red", width = (X[-1,0]- X[0,0]) / bins)
 		plt.show()
 	
-	print(nX)
+	#print(nX)
 	return nX
 	
 	
