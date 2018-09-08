@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import math as m
 import time
+
+
 def resample(X):
 	pass
 def norm(x, mu, si):

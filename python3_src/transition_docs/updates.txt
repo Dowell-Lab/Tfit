@@ -62,9 +62,11 @@ Between runs there is variance as well (due to the simulated natue of the run)
 
 check moment estimators:
 looks good
+also not used anywhere else in the code
 
-bootstrapping:
+bootrapping:
 looks good
+Does not seem to be used anywhere else
 
 template window matching:
 when it calls simulate, there is an error(in py27)
@@ -81,9 +83,13 @@ When I first got to it this file seemed unfinished, with wierd errors, like miss
 then I had to create a main function so that I could test it, and since it calls the same function in model that is broken 
 this too does not work.
 
-find_region_of_interest:
+find_regions_of_interest:
 It does not does not seem that this file is used at all
+Although the window search function seems useful
 
+make_noise_region_file:
+this seems to not work well with bed files. I 
+Annotated my thoughts on line 13
 
 
 

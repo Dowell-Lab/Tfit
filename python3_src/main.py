@@ -98,7 +98,7 @@ def run(argv):
 
 
 
-	else: #run MODEL!
+	else: #run MODEL! actually runs model across
 		#====================================
 		formatted_file 		= aw.G["-i"][0]
 		write_out_dir 		= aw.G["-wo"][0]

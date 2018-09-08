@@ -8,8 +8,9 @@ def refseq(FILE, OUT):
 		header=True
 		for line in FH:
 			if not header:
-				start, stop 	= line.split("\t")[4:6]
-				chrom 			= line.split("\t")[2]
+				start, stop 	= line.split("\t")[0:2]
+				chrom 			= line.split("\t")[0]
+				#Jack is unsure what is happening since chrom is a string e.g. chr1 and cannot trsnlate to an int.
 				if chrom not in G:
 					G[chrom] 	= list()
 				G[chrom].append((int(start)-10000, int(stop)+10000 ))
@@ -146,8 +147,8 @@ def make_gene_bed(FILE,OUT):
 
 if __name__ == "__main__":
 
-	GENE_BED 	= True
-	NOISE_BED 	= False
+	GENE_BED 	= False
+	NOISE_BED 	= True
 	if GENE_BED:
 		FILE = "/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/test_hg19_TSS.bed"
 		OUT  =  "/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/single_isoform_FStitch.tsv/test_hg19_TSS"
@@ -155,8 +156,8 @@ if __name__ == "__main__":
 
 	if NOISE_BED:
 
-		FILE = "/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/test_hg19_TSS.bed"
-		NONE2 	= "/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/single_isoform_FStitch.tsv/test_hg19_TSS.bed"
+		FILE = "/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/chr1_6229860_6303055_SRR1105737.minus.sorted.BedGraph"
+		NONE2 	= "/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/out"
 		refseq(FILE, NONE2)
 		FILE = "/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/test_hg19_TSS.bed"
 		NONE 	= "/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/single_isoform_FStitch.tsv/test_hg19_TSS.bed"
