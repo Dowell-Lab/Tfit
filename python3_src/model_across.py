@@ -66,15 +66,18 @@ def run(D, bic, rounds, max_k,
 if __name__ == "__main__":
 	
 	X	=  load.grab_specific_region("chr1",836835, 843549,
-		pos_file="/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/test_i_pos.BedGraph",
+		pos_file="/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/test_j_neg.BedGraph",
 		neg_file="/Users/jackdempsey/Desktop/Tfit_All/Tfit/examples/test_j_neg.BedGraph",
 		SHOW 	=False, bins=300)
 		 	
-	notShit = wrapper_fit_function(X, k=2, 
-		max_iterations=200, convergence_thresh=0.0001,
-		move_uniform=0)
+	#stuff = wrapper_fit_function(X, k=2, 
+	#	max_iterations=200, convergence_thresh=0.0001,
+	#	move_uniform=0)
 	
-	#run(D, bic, rounds, max_k, 
-	#standardize, convergence_thresh,
-	#		max_iterations, move_uniform, 
-	#		write_out_dir, specific_chromosome)
+	#D 			= load.formatted_file(formatted_file, bins,specific_chromosome)
+	#test = run(D , bic, rounds = 5 , max_k =2 , standardize = 10, convergence_thresh  = 0.0001, max_iterations = 5 , move_uniform = 0 , write_out_dir= "/Users/jackdempsey/Desktop/Tfit_All/Tfit/" , specific_chromosome= "CHR!")
+	
+	
+	
+	
+	

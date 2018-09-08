@@ -17,7 +17,10 @@ Now I have two test files, one in python_src and the other in python3_src, so th
 the files in each environment respectively. Right now I just pipe outputs to the transition docs folder. Still need
 to get a good way to compare the two different outputs. As of now I will push foreward in comparing the two versions.
 Need to find the large files on fiji so that I can run the two tests to see the difference in versions.
-
+When trying to find fstich training files I could not find any to run fstitch
+and then could not get those files to run bug python3 test
+Questions:
+Have they tested the difference in resuts between the two types of code. I feel like there must be some difference
 
 
 In model.py:
@@ -79,9 +82,7 @@ then I had to create a main function so that I could test it, and since it calls
 this too does not work.
 
 
-General Notes: 
-When trying to find fstich training files I could not find any to run fstitch
-and then could not get those files to run bug python3 test
+
 
 
 

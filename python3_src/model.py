@@ -313,15 +313,21 @@ class EMGU:
 		#randomally initialize parameters
 		minX, maxX 	= X[0,0], X[-1,0]
 		self.minX, self.maxX 	= minX, maxX
-
-
+		
+		#from documents for numpy random dirirchlet:
+		# A Dirichlet-distributed random variable can be seen as a multivariate generalization of a Beta distribution
+		#Dirichlet pdf is the conjugate prior of a multinomial in Bayesian inference.	
+		#K={k∈ℕ+:k≤M}
+		#gets a set of dirichlet random variables then makes them into the correct array size 
 		ws 			= np.random.dirichlet([self.alpha_0]*self.K*3).reshape(self.K, 3)
+		#Draw samples from a Beta distribution. Beta is specificied dirichlet
 		pis 		= np.random.beta(self.beta_0, self.beta_0, self.K*3).reshape(self.K,3)
 
 		if self.peaks is None:
 			mus 		=  np.random.uniform(minX, maxX, self.K)
 		else:
 			mus 		= [x for x  in self.peaks]
+		#immediatly makes mus zero after assignment
 		mus 		= [0]
 		sigmas 		= np.random.gamma((maxX-minX)/(35*self.K), 1, self.K)
 		lambdas 	= 1.0/np.random.gamma((maxX-minX)/(25*self.K), 1, self.K)
@@ -330,14 +336,12 @@ class EMGU:
 
 		self.uniform_rate= (maxX-minX)/(1*self.K)
 		fp 			= np.random.uniform(0,2)
-		print ("*********", fp)
+		print ("********* Foot Print: ", fp)
 		#print("K: ",self.K) = 3
-		#I(Jack) dont really get whats happening here, must dig further
-		bidirs 		= [component_bidir(mus[k], sigmas[k], lambdas[k], ws[k][0], pis[k][0],self, foot_print=fp) for k in range(self.K)]#out of range error here
-
+	    #is this recursion here
+		bidirs 		= [component_bidir(mus[k], sigmas[k], lambdas[k], ws[k][0], pis[k][0],self, foot_print=fp) for k in range(self.K)]
 		uniforms    = [component_elongation(minX, mus[k], ws[k][1], 0.5, bidirs[k], "reverse",self ,0 , foot_print=fp) for k in range(self.K)]
 		uniforms   += [component_elongation(mus[k],maxX, ws[k][2], 0.5, bidirs[k], "forward",self, X.shape[0] , foot_print=fp) for k in range(self.K)]
-
 		if self.noise:
 			print ("HERE?")
 			uniforms+=[component_elongation(minX, maxX, 0.1, 0.5, bidirs[0], "noise", self, X.shape[0]) ]
@@ -375,7 +379,7 @@ class EMGU:
 					ll+=math.log(norm_forward)*X[i,1]
 				if norm_reverse:
 					ll+=math.log(norm_reverse)*X[i,2]
-			print (ll)
+			print ("ll: ",ll)
 			#######
 			#M-step
 			#######
@@ -406,6 +410,7 @@ class EMGU:
 		F 			= plt.figure(figsize=(15,10))
 		for c in self.rvs:
 			print(c)
+
 		ax 			= F.add_subplot(111)
 		ax.bar(X[:,0],  X[:,1] / float(np.sum(X[:,1:]) ), color="blue", alpha=0.25, width=(X[-1,0]-X[0,0])/X.shape[0])
 		ax.bar(X[:,0], -X[:,2] / float(np.sum(X[:,1:])), color="red", alpha=0.25, width=(X[-1,0]-X[0,0])/X.shape[0])
@@ -419,7 +424,7 @@ class EMGU:
 		name = "figure"+str(c)+".png"
 		#plt.savefig(name)
 		plt.show()
-
+		
 
 
 if __name__ == "__main__":
@@ -440,7 +445,8 @@ if __name__ == "__main__":
 	'''
 	clf = EMGU(noise=True, K=1,noise_max=0.1,moveUniformSupport=0,max_it=200, cores=1,
 		seed=True )
-		
+
+	
 	clf.fit(X)
 
 
