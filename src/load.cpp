@@ -1118,7 +1118,16 @@ void load::write_out_bidirs_pwrapper(map<string, vector<vector<double>>> G, stri
 {
     typedef map<string, vector<vector<double>>>::iterator it_type;
     ofstream                                              FHW;
-    FHW.open(out_dir + job_name + "-" + to_string(job_ID) + "_prelim_bidir_hits.bed");
+    if(pw->allowOverwrite)
+    {
+        FHW.open(out_dir+job_name+"_prelim_bidir_hits.bed");
+    }
+    
+    else
+    {
+        FHW.open(out_dir + job_name + "-" + to_string(job_ID) + "_prelim_bidir_hits.bed");
+    }
+    
     FHW << pw->getHeader(1);
     int ID = 0;
     for (it_type c = G.begin(); c != G.end(); c++) {
@@ -1261,7 +1270,17 @@ void load::write_out_models_from_free_mode_pwrapper(map<int, map<int, vector<sim
     double   penality = pw->penalty;
     string   out_dir  = pw->outputDir;
     ofstream FHW;
-    file_name = out_dir + pw->jobName + "-" + to_string(job_ID) + "_K_models_MLE.tsv";
+    
+    if(pw->allowOverwrite)
+    {
+        file_name = out_dir + pw->jobName + "_K_models_MLE.tsv";
+    }
+    
+    else
+    {
+        file_name = out_dir + pw->jobName + "-" + to_string(job_ID) + "_K_models_MLE.tsv";
+    }
+    
     FHW.open(file_name);
     FHW << pw->getHeader(2);
 
@@ -1380,7 +1399,16 @@ void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params* P
 void load::write_out_bidirectionals_ms_pen_pwrapper(vector<segment_fits*> fits, ParamWrapper* pw, int job_ID, int noise)
 {
     ofstream FHW;
-    FHW.open(pw->outputDir + pw->jobName + "-" + to_string(job_ID) + "_bidir_predictions.bed");
+    
+    if(pw->allowOverwrite)
+    {
+        FHW.open(pw->outputDir+pw->jobName+"_bidir_predictions.bed");
+    }
+    
+    else
+    {
+        FHW.open(pw->outputDir + pw->jobName + "-" + to_string(job_ID) + "_bidir_predictions.bed");
+    }
     FHW << pw->getHeader(2);
     double penality = pw->penalty;
     for (int i = 0; i < fits.size(); i++) {

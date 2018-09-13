@@ -322,6 +322,7 @@ int bidir_run_pwrapper(ParamWrapper* pw, int rank, int nprocs, int job_ID, Log_F
     //moment estimator and compute BIC ratio (basically penalized LLR)
     LG->write("running template matching algorithm.....................", verbose);
     //NOTE: The only threshold value returned is 1.0. This function only exists to modify segments.
+    //NOTE: out_file_dir isn't actually used by this function.
     double threshold = run_global_template_matching_pwrapper(segments, out_file_dir, pw, SC, 1);
     printf("Threshold obtained from global template matching: %lf", threshold);
     //(3b) now need to send out, gather and write bidirectional intervals

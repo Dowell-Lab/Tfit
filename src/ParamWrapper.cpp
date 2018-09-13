@@ -73,6 +73,7 @@ void ParamWrapper::printUsage()
     printf("\nAdditional new testing parameters:\n");
     printf("\t-fzr [0,1] default 0\tFilter out regions with no reads during the bedgraph loading process.\n");
     printf("\t-mr [value]\tFilter out regions below a certain threshold number of reads (absolute value) during the bedgraph loading process.\n");
+    printf("\t--overwrite\tPrevents tfit from automatically changing output filenames to avoid file collisions.\n");
 }
 
 /** Sets all values to their defaults as per the old read_in_parameters codebase.
@@ -116,6 +117,7 @@ ParamWrapper::ParamWrapper()
     this->filterMinReads=false;
     this->minReads=0;
     this->filterZeroRegions=false;
+    this->allowOverwrite=false;
 }
 
 /** Parses the arguments passed to tfit and attempts to store them internally.
@@ -181,6 +183,7 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
     this->filterMinReads=false;
     this->minReads=0;
     this->filterZeroRegions=false;
+    this->allowOverwrite=false;
 
     if (argc == 1) {
         this->printUsage();
@@ -247,6 +250,12 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
         {
             this->filterZeroRegions=atoi(it->second.c_str());
             printf("NOTE: experimental zero coverage filtering parameter enabled!\n");
+        }
+        
+        //NEWLY ADDED TESTING PARAMETER:
+        else if(it->first=="--overwrite")
+        {
+            this->allowOverwrite=true;
         }
 
         else if (it->first == "-j" || it->first == "--reverse" || it->first == "-neg") {

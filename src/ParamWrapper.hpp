@@ -36,7 +36,7 @@ public:
     bool bidir;
     bool bidirOld; //This will run a quick hackjob of the old bidirectional codebase.
     bool model;
-
+    bool allowOverwrite;
     int cores;
 
     //Set of parameters:
