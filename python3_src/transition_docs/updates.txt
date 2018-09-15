@@ -97,7 +97,8 @@ make_noise_region_file:
 this seems to not work well with bed files. I 
 Annotated my thoughts on line 13
 
-
+make interval file:
+I have not tested this yet
 
 
 

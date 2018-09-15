@@ -1,7 +1,7 @@
 #================================================================================================
 #Author: 		Joey Azofeifa
 #Creation Date: 05/20/2015
-#Last Update:   06/30/2015
+#Last Update:   09/15/2018
 #Input Parameters
 #(-i) annotation file: <strand>\t<chrom>\t<start>\t<stop>\t<info>\n
 #(-j) forward strand genome coverage file: <chrom>\t<start>\t<stop>\t<coverage>\n
