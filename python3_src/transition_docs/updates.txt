@@ -19,6 +19,12 @@ to get a good way to compare the two different outputs. As of now I will push fo
 Need to find the large files on fiji so that I can run the two tests to see the difference in versions.
 When trying to find fstich training files I could not find any to run fstitch
 and then could not get those files to run bug python3 test
+
+My method for testing whether or not th file is used in the core of tfit is:
+I do a file wide search for the title of the program.
+If the file is used in another program than it would be imported at the top of the other file.
+Then I can see what functions are being used.
+
 Questions:
 Have they tested the difference in resuts between the two types of code. I feel like there must be some difference
 
