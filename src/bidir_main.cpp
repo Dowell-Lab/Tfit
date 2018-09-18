@@ -411,6 +411,9 @@ int bidir_run_old_long_pwrapper(ParamWrapper* pw, int rank, int nprocs, int job_
         map<int, string> IDS;
         vector<segment*> tss_intervals = load::load_intervals_of_interest_pwrapper(tss_file,
                                                                                    IDS, pw, 1);
+        //string greatestchrom=determine_tss_greatest_coverage(tss_intervals);
+        pw->greatestchrom=load::determine_tss_greatest_coverage(tss_intervals);
+        cout<<"Chromosome in TSS file with greatest coverage determined to be "<<pw->greatestchrom<<endl;
 
         if (tss_intervals.empty()) {
             LG->write("Could not read TSS intervals from specified file. Exiting...", verbose);

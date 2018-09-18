@@ -1479,6 +1479,45 @@ void load::collect_all_tmp_files(string dir, string job_name, int nprocs, int jo
     }
 }
 
+string load::determine_tss_greatest_coverage(vector<segment*> tss_intervals)
+{
+    int i;
+    map<string, int> counts;
+    segment *seg;
+    int curmax;
+    string curchrom;
+    
+    for(i=0;i<tss_intervals.size();i++)
+    {
+        seg=tss_intervals[i];
+        if(!counts.count(seg->chrom))
+        {
+            counts[seg->chrom]=1;
+        }
+        
+        else
+        {
+            counts[seg->chrom]=counts[seg->chrom]+1;
+        }
+    }
+    
+    //Determine which chromosome has the highest max:
+    auto it=counts.begin();
+    curchrom=it->first;
+    curmax=it->second;
+    
+    for(;it!=counts.end();it++)
+    {
+        if(it->second>curmax)
+        {
+            curmax=it->second;
+            curchrom=it->first;
+        }
+    }
+    
+    return curchrom;
+}
+
 /** Deletes all segments in the specified vector.
  * 
  * @param segments Set of segments to delete.

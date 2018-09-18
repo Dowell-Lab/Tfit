@@ -104,6 +104,7 @@ ParamWrapper::ParamWrapper()
     this->ns                        = 100;
     this->experimentalValsSpecified = false;
     this->alpha0                    = 1;
+    this->greatestchrom             = "chrX";
     this->beta0                     = 1;
     this->footPrint                 = 86.0;
     //There are no default values for this parameter.
@@ -160,6 +161,7 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
     this->alpha0                    = 1;
     this->beta0                     = 1;
     this->ns                        = 100;
+    this->greatestchrom             = "chrX";
     //There are no default values for this parameter.
     this->alpha0    = 1;
     this->beta0     = 1;

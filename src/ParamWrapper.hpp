@@ -79,6 +79,9 @@ public:
     int    mi; //default=2000
     int    r_mu; //Default=0; undocumented.
     
+    //Somewhat hackish way to not change the function signature for compute_average_model_pwrapper:
+    std::string greatestchrom;
+    
     //Additional parameters added by request:
     bool filterZeroRegions;
     bool filterMinReads;

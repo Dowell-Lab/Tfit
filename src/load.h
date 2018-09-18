@@ -113,6 +113,8 @@ namespace load{
 
 	void write_out_bidirs(map<string , vector<vector<double> > >, string, string, int ,params *, int);
     void write_out_bidirs_pwrapper(map<string, vector<vector<double> > >, string, string, int, ParamWrapper *, int);
+    
+    string determine_tss_greatest_coverage(vector<segment*> tss_intervals);
 
 	vector<segment *> load_intervals_of_interest(string,map<int, string>&, params *, int);
     vector<segment *> load_intervals_of_interest_pwrapper(string, map<int, string>&, ParamWrapper *, int);
