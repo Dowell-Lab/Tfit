@@ -314,6 +314,7 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
 
         else if (it->first == "-tss") {
             this->promoterTSS = it->second;
+            printf("Tss file in ParamWrapper: %s\n", this->promoterTSS.c_str());
         }
 
         else if (it->first == "-chr") {
