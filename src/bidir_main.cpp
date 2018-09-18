@@ -230,6 +230,10 @@ int bidir_run_pwrapper(ParamWrapper* pw, int rank, int nprocs, int job_ID, Log_F
             LG->write("Could not read specified TSS interval file. Exiting...", verbose);
             return 1;
         }
+        
+        //string greatestchrom=determine_tss_greatest_coverage(tss_intervals);
+        pw->greatestchrom=load::determine_tss_greatest_coverage(tss_intervals);
+        cout<<"Chromosome in TSS file with greatest coverage determined to be "<<pw->greatestchrom<<endl;
 
         LG->write("inserting coverage data.................................", verbose);
         vector<segment*> integrated_segments = load::insert_bedgraph_to_segment_joint(GG,
