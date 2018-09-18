@@ -1430,6 +1430,7 @@ void load::write_out_bidirectionals_ms_pen_pwrapper(vector<segment_fits*> fits, 
  */
 void load::BIN(vector<segment*> segments, int BINS, double scale, int erase)
 {
+    string FILE;
     for (int i = 0; i < segments.size(); i++) {
         if (segments[i]->forward.size() > 0 or segments[i]->reverse.size() > 0) {
             segments[i]->bin(BINS, scale, erase);

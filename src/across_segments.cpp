@@ -430,7 +430,8 @@ vector<double> compute_average_model_pwrapper(vector<segment*> segments, ParamWr
                        pw->r_mu, 10.0, 10.0, 1.0,
                        1.0 * segments.size(), 2 * segments.size(), pw->alpha3, pw->footPrint);
         vector<double> centers = { 10 };
-        segment*       s       = new segment("chrX", 0, maxX);
+        //Modified from chrX for testing
+        segment*       s       = new segment("chr12", 0, maxX);
         s->X                   = X;
         s->minX = minX, s->maxX = maxX;
         s->XN    = XN;
