@@ -1,5 +1,6 @@
 \documentclass[12pt,letterpaper]{article}
 \usepackage{listings}
+\usepackage{color}
 
 \lstset{breaklines=true, columns=flexible, basicstyle=\small\ttfamily}
 
@@ -10,13 +11,13 @@
 \date{May 21, 2018}
 \maketitle
 
-\abstract{Tfit is a tool that attempts to find useful parameters in sequencing datasets.}
+\abstract{Tfit is a tool that attempts to identify and characterize transcripts within nascent transcription datasets by using a mathematical model RNA polymerase II behavior. }
 
 \section{Building Tfit-revisions}
-In order to start working tiwh Tfit, it is first necessary to build it. Tfit depends on the following libraries to be built:
+In order to start working with Tfit, it is first necessary to build it. Tfit depends on the following libraries to be built:
 
 \begin{enumerate}
-\item MPI (can be provided through OpenMPI)
+\item MPI (can be provided through OpenMPI)  \textcolor{blue}{RDD: I thought the current library dependency is mpich?}
 \item GCC $>=$5.0
 \item mpic++ (provided through OpenMPI)
 \item (optional) docker
@@ -34,72 +35,9 @@ On a personal machine, these requirements can be satisfied through appropriate p
 
 \section{Invoking Tfit}
 Tfit has several modes of operation. Each mode is referred to as a module in all documentation, though they all share a number of input parameters. 
+Invoking Tfit without any parameters will result in the following usage statement: 
 
-Invoking Tfit without any parameters will result in the following:
-\begin{lstlisting}
-Usage: TFit modulename [arguments]
-Where modulename is one of the following:
-        bidir - This module searches the genome for areas resembling bidirectional transcription
-                by comparing a fixed template mixture model to a noise model by a log-likelihood ratio score.
-        bidir_old - This module implements the functionality seen in versions of Tfit used in publications
-        model - This module attempts to generate an optimal set of parameters per region instead 
-                of using a fixed set of parameters for the entire genome
-
-
-Where [arguments] is one or more of the following for the bidir module:
-        -i      Forward bedgraph file
-        -j      Reverse bedgraph file.
-        -ij     Both forward and reverse bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.
-        -N      Job name.
-        -o      Output directory. If it does not exist, it will be created.
-        -log_out        Log file output directory. If it does not exist, it will be created.
-
-Additional (optional) parameters for the bidir module:
-        -tss    Transcription model path. Models are provided for hg19 and mm10 in the annotations directory of this project.
-        -chr    Run bidir only on the specified chromosome by name. The default is, "all"
-        -bct    LLR threshold. Default=1
-
-If -tss is not specified, the values normally specified by the model file can be specified explicitly using the following:
-        -lambda This is the entry length parameter for the EMG density function. default=200 bp
-        -sigma  This is the variance parameter for the EMG density function. default=10bp
-        -pi     This is the strand bias parameter for the EMG density function. default=0.5
-        -w      This is the pausing probability parameter for the EMG denisty function. default=0.5
-        -scores Some form of score output file. This parameter is presently undocumented.
-        -r_mu   Some classification parameter. Default=0. This parameter is presently undocumented.
-        -ms_pen Penalty term for model selection. Default=1.
-        -max_noise      Maximum noise threshold. Default=0.05. This parameter is presently undocumented.
-        -FDR    Generate a likelihood score distribution on the input data. This parameter has yet to be fully documented and tested.
-
-
-Where [arguments] is one or more of the following for the model module:
-        -i      Forward bedgraph file
-        -j      Reverse bedgraph file
-        -ij     Both forward and reverse bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.
-        -k      Bedgraph file containing a set of regions of interest.
-        -N      Job name.
-        -o      Output directory. If it does not exist, it will be created.
-        -log_out        Log file output directory. If it does not exist, it will be created.
-
-Additional (optional) parameters for the model module:
-        -mink   Minimum number of finite mixtures to consider. default=1
-        -maxk   Maximum number of finite mixtures to consider. default=1
-        -rounds Number of random seeds to use in the model. default=5
-        -ct     Convergence threshold after which processing stops. default=0.0001
-        -mi     Maximum number of model iterations after which processing stops. default=2000
-The model module currently has experimental support for parameter inference. Ie. it can attempt to estimate lambda,
-sigma, pi, and w via conjugate priors. These values are specified using the following parameters:
-        -ALPHA_0        Prior parameter 1 for sigma. Recommended value=1
-        -BETA_0 Prior parameter 2 for sigma. Recommended value=1
-        -ALPHA_1        Prior parameter 1 for lambda.
-        -BETA_1 Prior parameter 2 for lambda.
-        -ALPHA_2        Symmetric prior on mixing weights. Higher values=stronger attempt to find components of equal mixing weights.
-                        Recommended value=100
-        -ALPHA_3        Symmetric prior on the strand bias. Higher values=stronger attempt to find bidirectional events with equal strand bias.
-                        Recommended value=100
--elon     : (boolean integer) adjust support of elongation component, (default=0)
-              useful only when fitting to FStitch[1] or groHMM[2] output intervals
-Exiting...
-\end{lstlisting}
+\input{usagestatement} % This permits us to quickly and programmatically update the usage statement as code changes.
 
 The above is Tfit's \textit{usage statement}. This presents a quick overview of all of Tfit's modules and their parameters. From it, we can determine that there are presently three available modules:
 \begin{enumerate}
