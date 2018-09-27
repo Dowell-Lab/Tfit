@@ -98,19 +98,17 @@ If TSS is not provided, the user can manually enter the template parameters of i
 
 In brief, the template mixture model is parameterized by -lambda (entry length or amount of skew), -sigma (variance in loading, error), -pi (strand bias, probability of forward strand data point) and -w (pausing probability, how much bidirectional signal to elongation/noise signal). Neighboring genomic coordinates where the LLR exceeds some user defined threshold (-bct flag) are joined and are returned as a bed file (chrom[tab]start[tab]stop[newline]). An example of a bed file is provided below:
 
-![Alt text](https://github.com/azofeifa/Tfit/blob/master/images/bed_file_example.png)
+![Bed Example](images/bed_file_example.png)
 
 
 Perhaps the most important user input file is the "BedGraph" File corresponding to the forward and reverse strand. This file is simple (chrom[tab]start[tab]stop[tab]coverage[newline]). Importantly, start and stop should be integer valued. Although coverage can be a float, we recommend this to be an integer as well, i.e. normalization by millions mapped for example may lead to numerical degeneracies in the optimization routine. An example bedgraph file is listed below. 
 
-![Alt text](https://github.com/azofeifa/Tfit/blob/master/images/bedgraph_joint_example.png)
-
-
+![BedGraph example](images/bedgraph_joint_example.png)
 
 
 Example of joint forward and reverse strand bedgraph file:
 
-![Alt text](https://github.com/azofeifa/Tfit/blob/master/images/bedgraph_single_example.png)
+![BedGraph both strands](images/bedgraph_single_example.png)
 
 
 After the bidir model finishes a bed file will appear in the user specified output directory called: [-N]_prelim_bidir_hits.bed. This file will contain genomic intervals of interest where divergent transcription is likely occurring. This file may be used for downstream analysis or taken at face value. Last, but not least, the bidir module can be invoked as below:
@@ -121,7 +119,7 @@ $ Tfit bidir \<list of parameters and flags\>
 
 Example output from the bidir module,i.e. [-N]_prelim_bidir_hits.bed, is provided below. 
 
-![Alt text](https://github.com/azofeifa/Tfit/blob/master/images/Prelim_Bidir_Example.png)
+![Bidir Example](images/Prelim_Bidir_Example.png)
 
 
 ##Model Module and List of Parameters
@@ -155,11 +153,11 @@ After the model module has finished, Tfit will output two files in the user spec
 
 The first file, [-N]_K_models_MLE.tsv, gives a detailed account for each interval of interest from -k input parameters, a list for each finite mixture model fits -mink to -maxk, the log-likelihood score, and MLE estimates for the center of the bidirectional transcript (mu), variance in mu (sigma), entry length (lambda), strand bias (pi), distance between bidirectional peaks (foot print) and all the associated mixture weights (basically w). In addition, stats on the number of reads over that interval etc. This can be used for manual Bayesian Information Criterion (BIC) calculations. An example output of this file where -mink = 1 and -maxk = 10 is given below:
 
-![Alt text](https://github.com/azofeifa/Tfit/blob/master/images/K_models_example.png)
+![K models Example](images/K_models_example.png)
 
 The second file,[-N]_divergent_classifications.bed, provides a new bed file, where the center of each bed interval corresponds to the center of the bidirectional peak and the width corresponds the estimated standard deviation around that estimate (essentially sigma + lambda) following BIC model comparison. This again can be used for downstream analysis and comprises the most accurate set of bidirectional prediction centers that Tfit can currently offer. An example output of this file is given below.
 
-![Alt text](https://github.com/azofeifa/Tfit/blob/master/images/Divergent_Example.png)
+![Divergent Example](images/Divergent_Example.png)
 
 ##Chaining the bidir and model module
 Discussed thus far, profiling for divergent or bidirectional transcription events may be achieved by first running the bidir module and then using the output (_prelim_bidir_hits.bed) as input to the model module. For convenience, these modules can be chained and all three files (_prelim_bidir_hits.bed, _divergent_classifications.bed, _K_models_MLE.tsv) will output from one single call. This is invoked like below:
@@ -177,7 +175,7 @@ $ Tfit bidir -config \</path/to/config/file.txt
 
 An example of the config file is below. 
 
-![Alt text](https://github.com/azofeifa/Tfit/blob/master/images/config_file_example.png)
+![Config File](images/config_file_example.png)
 
 The structure of the config file should remain this way (i.e. "-flag = value"). Statements following a # sign are appropriately ignored.    
 
@@ -200,7 +198,7 @@ Please keep in mind that if you are running on a single node machine. mpirun wil
 
 If your institution has a compute cluster, please consult your IT staff about the specific job allocation software. If you are using Torque/Maui where computation resources can be specified by PBS directives, then the below job script is sufficient to run Tfit across multiple nodes. 
 
-![Alt text](https://github.com/azofeifa/Tfit/blob/master/images/JobSubmissionExample.png)
+![Job Submission Torque](images/JobSubmissionExample.png)
 
 Again, this highly system dependent. But openMPI is a well maintained library with lots of resources to help aid in getting Tfit up and running on your compute cluster, please consult https://www.open-mpi.org/faq/ for further reference. 
 
