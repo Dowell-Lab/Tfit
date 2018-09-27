@@ -1,7 +1,7 @@
 # Tfit
 Transcription fit (or Tfit) implements a finite mixture model to identify sites of bidirectional or divergent transcription in nascent transcription assays such as Global Run-On (GRO) and Precision Run-on (PRO) followed by sequencing data. Tfit is separated by two modules: (1) bidir and (2) model. Output from these modules can be exported to any genome browser, bed file examples are provided below.  
 
-![Alt text](https://github.com/azofeifa/Tfit/blob/master/images/Example_Snapshot.png)
+![Screenshot of data](https://biof-git.colorado.edu/migo0123/tfit-revisions/blob/master/images/Example_Snapshot.png)
 
 The bidir module will compute local likelihood statistics given a fixed template mixture model (estimated either from promoter associated transcription) or specified explicitly by the user (the former is encouraged). This method is fast and will finish in about 30 minutes on a single node single CPU machine. The output will be a bed file corresponding to areas of possible bidirectional transcription. This output is discussed heavily in later sections
 
