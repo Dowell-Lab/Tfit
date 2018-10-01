@@ -50,6 +50,7 @@ def runOne(mu=0, s=1, l=5, lr=100, ll=-100, we=0.5,wl=0.25, wr=0.25, pie=0.5, pi
 
 '''
 This function is used in a variety of places in Tfit: directly in load.grab_specific_region
+also in info.self.X
 '''	
 def BIN(forward, reverse, bins, SHOW=False):
 	#when grab specific region cannot get the right region there it shows an error here

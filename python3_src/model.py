@@ -3,14 +3,14 @@ from scipy.special import erf, erfc
 from scipy.stats import invgamma
 import simulate
 import math as m
-import math
+import math #not sure why its double imported, probabyl used as both m. and math.
 import matplotlib.pyplot as plt
 import time
 import multiprocessing as mp
 import matplotlib as mpl
 import matplotlib.cm as cm
 import load
-import template_window_matching as twm
+import template_window_matching as twm #never used in document
 import func_test3 as ft
 
 class component_elongation:
@@ -29,7 +29,8 @@ class component_elongation:
 		self.foot_print = foot_print
 
 	def __str__(self):
-		return "U: " + str(self.a) + "," + str(self.b) + "," + str(self.w) + "," + str(self.pi)
+		#prints this when returns, want to print/pipe to an output file
+		return "Component Elongation U: " + str(self.a) + "," + str(self.b) + "," + str(self.w) + "," + str(self.pi)
 
 
 	def eval(self, z, forward_ct, reverse_ct):
@@ -120,8 +121,8 @@ class component_bidir:
 
 
 	def __str__(self):
-		return "N: " + str(self.mu) + "," +str(self.si) + "," +str(self.l) + "," + str(self.w) + "," + str(self.pi)
-		return ("N: " + str(self.mu) + "," +str(self.si) + "," +str(self.l) + "," + str(self.w) + "," + str(self.pi) + "\n" +
+		return "Component Bidir N: " + str(self.mu) + "," +str(self.si) + "," +str(self.l) + "," + str(self.w) + "," + str(self.pi)
+		return ("component bidir N: " + str(self.mu) + "," +str(self.si) + "," +str(self.l) + "," + str(self.w) + "," + str(self.pi) + "\n" +
 			self.forward.__str__() + "\n" +
 			self.reverse.__str__())
 
@@ -171,6 +172,7 @@ class component_bidir:
 		step 	= 0
 
 		return p*self.w*pow(self.pi, max(0, s) )*pow(1-self.pi, max(0, -s) )
+		
 	def check(self):
 		if self.remove:
 			self.forward.remove, self.reverse.remove 	= True, True
@@ -304,7 +306,7 @@ class EMGU:
 		return m.log(x)
 
 
-
+	#this is the math meat of tfit
 	def fit(self, X):
 
 
@@ -319,6 +321,7 @@ class EMGU:
 		#Dirichlet pdf is the conjugate prior of a multinomial in Bayesian inference.	
 		#K={k∈ℕ+:k≤M}
 		#gets a set of dirichlet random variables then makes them into the correct array size 
+		#look to equation 4 in the paper
 		ws 			= np.random.dirichlet([self.alpha_0]*self.K*3).reshape(self.K, 3)
 		#Draw samples from a Beta distribution. Beta is specificied dirichlet
 		pis 		= np.random.beta(self.beta_0, self.beta_0, self.K*3).reshape(self.K,3)
@@ -327,8 +330,9 @@ class EMGU:
 			mus 		=  np.random.uniform(minX, maxX, self.K)
 		else:
 			mus 		= [x for x  in self.peaks]
-		#immediatly makes mus zero after assignment
+		#immediatly makes mus zero after assignment, so above doesnt seem to matter
 		mus 		= [0]
+		#look to equation 1-2 in paper:
 		sigmas 		= np.random.gamma((maxX-minX)/(35*self.K), 1, self.K)
 		lambdas 	= 1.0/np.random.gamma((maxX-minX)/(25*self.K), 1, self.K)
 		#=======================================
@@ -338,14 +342,19 @@ class EMGU:
 		fp 			= np.random.uniform(0,2)
 		print ("********* Foot Print: ", fp)
 		#print("K: ",self.K) = 3
-	    #is this recursion here
+	    #Component_bidirs(line 97 above)
 		bidirs 		= [component_bidir(mus[k], sigmas[k], lambdas[k], ws[k][0], pis[k][0],self, foot_print=fp) for k in range(self.K)]
+		#component elognation is line 16 above
 		uniforms    = [component_elongation(minX, mus[k], ws[k][1], 0.5, bidirs[k], "reverse",self ,0 , foot_print=fp) for k in range(self.K)]
 		uniforms   += [component_elongation(mus[k],maxX, ws[k][2], 0.5, bidirs[k], "forward",self, X.shape[0] , foot_print=fp) for k in range(self.K)]
 		if self.noise:
 			print ("HERE?")
 			uniforms+=[component_elongation(minX, maxX, 0.1, 0.5, bidirs[0], "noise", self, X.shape[0]) ]
-		components 			= bidirs + uniforms
+		#components stores all of the bidirs and uniforms __str__ returns in a list 0-3
+		components 		= bidirs + uniforms
+		
+		#print("Components: ",components[4],"NewShit:\n")#this will print an out of range, try 0-3
+		
 		N_f, N_r 			= sum(X[:,1]), sum(X[:,2])
 		t,converged 		= 0 , False
 		ll, prevll 			= 0., -np.inf

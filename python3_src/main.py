@@ -44,7 +44,7 @@ def hardcode():
 		#INPUT PARAMETERS
 		bins 	= 300
 
-
+		#right now this just runs as if flags where: formatData, and FstitchSingleIsoform
 		RF 		= load.gene_annotations(refseqFILE)
 		FS 		= load.FStitch_annotations(FS_forward, FS_reverse, merge=True)
 		#print("RF: ", RF)# "FS: ", FS)
@@ -57,6 +57,7 @@ def hardcode():
 
 def run(argv):
 
+	#Flag and file handling
 	aw 		= parse_argv.run(argv)
 	if aw.exit:
 		aw.printErrors()
@@ -73,16 +74,26 @@ def run(argv):
 			write_out_dir 	= aw.G["-wo"][0]
 			pad 			= float(aw.G["-pad"][0])
 			#====================================
+			#right now gene_annotations(line 108) has flag SI=True which means that it filters for single isoform genes only
+			#takes arguments:(FILE, SI=True, pad=0)
+			#Gene_anoations returns a list of the chroms as a hash list
 			RF 		= load.gene_annotations(refseqFILE)
+			#Fstitch_annotation Takes arguments:(forward, reverse, merge=True, pad=0)(line 139)
+			#Returns all "on" genes within the fstitch file as hash list uses info class
 			FS 		= load.FStitch_annotations(FS_forward, FS_reverse, merge=True)
+			#filter_signle_overlap(line 158) takes the outouts of gene_annotations and Fstitch annotations
+			#returns a hash list of final genes uses info class
 			filtered= load.filter_single_overlaps(FS, RF)
+			#(line 189): Takes (forward_file, reverse_file,intervals, write_out=True, test=True,SHOW=False)
+			#gives a bedgraph file with Rf, Fs and foreward and revers files given
 			load.bedGraphFile(forward_file_bg, reverse_file_bg,
 				filtered, SHOW=False, test=False,
 				write_out=write_out_dir)
 
 		elif aw.mod2=="RefSeqOnly":
 			print("RefSeq only option not supported yet")
-
+		
+		#returns the data from fstitch doc as bedgraph 
 		elif aw.mod2=="FStitchMerged":
 			FS_forward 		= aw.G["-ffs"][0]
 			FS_reverse 		= aw.G["-rfs"][0]
@@ -90,6 +101,8 @@ def run(argv):
 			reverse_file_bg = aw.G["-rbg"][0]
 			write_out_dir 	= aw.G["-wo"][0]
 			pad 			= float(aw.G["-pad"][0])
+			#Fstitch_annotation Takes arguments:(forward, reverse, merge=True, pad=0)(line 139)
+			#Returns all "on" genes within the fstitch file as hash list uses info class
 			FS 				= load.FStitch_annotations(FS_forward, FS_reverse,
 				merge=True, pad=pad)
 			load.bedGraphFile(forward_file_bg, reverse_file_bg,
@@ -112,7 +125,11 @@ def run(argv):
 		max_iterations 		= int(aw.G["-mt"][0])
 		move_uniform 		= int(aw.G["-mu"][0])
 		#====================================
+		#(line 245) takes : all that is there
+		#returns hash list of genes with info class
 		D 					= load.formatted_file(formatted_file, bins,specific_chromosome)
+		#
+		#
 		model_across.run(D, bic, rounds,
 			max_k, standardize, convergence_thresh,
 			max_iterations,move_uniform, write_out_dir, specific_chromosome)

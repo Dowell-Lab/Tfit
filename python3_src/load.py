@@ -85,7 +85,7 @@ def grab_specific_region(chrom_spec,start_spec, stop_spec,
 	
 	return X
 
-def merge_intervals(G):
+def merge_intervals(G):#checks if the genes are nested then puts them together I beleive
 	IS 				= {}
 	for chrom in G:
 		G[chrom].sort()
@@ -121,7 +121,7 @@ def gene_annotations(FILE, SI=True, pad=0):
 			else:
 				header=False
 	#merge?
-	IS 		= merge_intervals(G)
+	IS 		= merge_intervals(G) #line 88
 	if SI: #filter for only single isoform genes
 		single 	= {}
 		N 		= sum([len(ISS) for ISS in IS.values()])
@@ -135,6 +135,7 @@ def gene_annotations(FILE, SI=True, pad=0):
 					t+=1
 
 	return IS
+	
 def FStitch_annotations(forward, reverse, merge=True, pad=0):
 	G 	= {}
 	for i,f in enumerate((forward, reverse)):
@@ -183,6 +184,8 @@ def filter_single_overlaps(FS, RF):
 			elif i!=filtered[chrom][j-1][1] and i!=filtered[chrom][j+1]:
 				final[chrom].append(I)
 	return final
+	
+	
 def bedGraphFile(forward_file, reverse_file,intervals, write_out=True, test=True,SHOW=False):
 	for s,FILE in enumerate((forward_file, reverse_file)):
 		prev, i 	= "", 0
@@ -213,19 +216,19 @@ def bedGraphFile(forward_file, reverse_file,intervals, write_out=True, test=True
 		print ("writing out intervals/data for future parsing")
 		print (write_out)
 		out_file 	= write_out+"/out_format_file_"
-
+		#simple check if file exists
 		out_file 	= model_across.checkFileExists(out_file, 1)
 		print (out_file)
 		FHW			= open(out_file, "w")
 	print(intervals)
 	for chrom in intervals:
-		print("test1")
+		#print("test1")
 		for I in intervals[chrom]:
-			print("test2")
+			#print("test2")
 			if SHOW:
 				I.show()
-			if write_out is not None and I.check():#does not ever go into this 
-				print("test3")
+			if write_out is not None and I.check():
+				#print("test3")
 				FHW.write("#" + chrom + "," + str(I.tot_st) + "," + str(I.tot_sp) + "\n")
 				FHW.write("~forward\n")
 				for x,y in I.forward:
@@ -236,6 +239,9 @@ def bedGraphFile(forward_file, reverse_file,intervals, write_out=True, test=True
 
 	if write_out is not None:
 		FHW.close()
+	
+
+
 def formatted_file(FILE, bins, sc):
 	I  	= None
 	D 	= list()
@@ -263,7 +269,7 @@ def formatted_file(FILE, bins, sc):
 			elif "reverse" in line:
 				forward = False
 				reverse = True
-			elif forward and I is not None:#if given data here, forward is refrenced before assignement 
+			elif forward and I is not None:
 				x,y 	= line.strip("\n").split(",")
 				x,y 	= float(x), float(y)
 				I.insert(x, y, 0)
