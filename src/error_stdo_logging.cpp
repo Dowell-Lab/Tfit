@@ -16,6 +16,7 @@ Log_File::Log_File(int R, int JI, string JN, string OUT)
     FHW.open(log_out);
     FHW << "Application out and error file for processes: " + to_string(rank) + "\n";
 }
+
 /** Writes the specified message to the log file.
  * If verbose is set, then the output will also be written to stdout.
  * This check prevents unnecessary messages from being generated while Tfit runs.

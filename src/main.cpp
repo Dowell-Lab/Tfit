@@ -63,10 +63,10 @@ int main(int argc, char* argv[])
     MPI_Finalize();
     return 0;
   }*/
-    int job_ID = MPI_comm::get_job_ID(pw.logDir, pw.jobName, rank, nprocs); //P->p["-log_out"], P->p["-N"], rank, nprocs);
+    int job_ID = MPI_comm::get_job_ID(pw.tmpdir, pw.jobName, rank, nprocs); //P->p["-log_out"], P->p["-N"], rank, nprocs);
 
     int       verbose = pw.verbose; //stoi(//P->p["-v"]);
-    Log_File* LG      = new Log_File(rank, job_ID, pw.jobName, pw.logDir); //new  Log_File(rank, job_ID, P->p["-N"], P->p["-log_out"]);
+    Log_File* LG      = new Log_File(rank, job_ID, pw.jobName, pw.tmpdir); //new  Log_File(rank, job_ID, P->p["-N"], P->p["-log_out"]);
     if (verbose and rank == 0) {
         pw.display(nprocs, threads);
         //P->display(nprocs,threads);

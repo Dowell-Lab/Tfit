@@ -1,0 +1,30 @@
+Application out and error file for processes: 0
+#----------------------------------------------------
+#Date Time    : 10/02/2018 13:06:46
+#-N           : EMG
+#-ij          : /home/mgohde/tfitoutputs/B2B10GROseq-D2.tri.BedGraph
+#-o           : /home/mgohde/tfitoutputs/
+#-br          : 25
+#-bct         : 0
+#-pad         : 2000
+#-sigma       : 123
+#-lambda      : 2000
+#-foot_print  : 86
+#-pi          : 0.5
+#-w           : 0.9
+#----------------------------------------------------
+
+initializing bidir module...............................done
+loading TSS intervals...................................done
+inserting coverage data.................................done
+Binning/Normalizing TSS intervals.......................done
+Computing Average Model.................................done
+
+Average Model Parameters
+-sigma      : 124.034735
+-lambda     : 2000.000000
+-foot_print : 8600.000000
+-pi         : 0.500000
+-w          : 0.324234
+
+loading bedgraph files..................................

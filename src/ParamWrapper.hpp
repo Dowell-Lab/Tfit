@@ -30,6 +30,7 @@ private:
 public:
     bool exit;
     bool verbose;
+    bool debug;
 
     //Use a set of booleans like read_in_parameters to represent modules for ease of porting:
     bool select;
@@ -95,6 +96,13 @@ public:
     double beta1; //prior 2 for lambda. No recommendation or default given.
     double alpha2; //symmetric prior on mixing weights (higher values=more thorough attempt to ... "components of equal mixing weights". default=100
     double alpha3; //symmetric prior on the strand bias (higher value=more thorough attempt to find bidirectional events with equal strand bias. default=100
+    
+    //Parameters for file name output control:
+    std::string prelimhits;
+    std::string models;
+    std::string bidirpreds;
+    std::string logfile;
+    std::string tmpdir; //We'll just set this to /tmp and call it a day.
 
     //Additional parameters that came up when modifying existing code to support ParamWrappers:
     std::string scores;

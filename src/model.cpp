@@ -10,6 +10,8 @@
 #include <random>
 #include <unistd.h>
 
+#define MODEL_DEBUG 0
+
 //=============================================
 //Helper functions
 /** Computes the probability density at a given point for a standard distribution.
@@ -1106,7 +1108,10 @@ int classifier::fit2(segment* data, vector<double> mu_seeds, int topology,
 
         u++;
         t++;
-        printf("Iteration %d ll=%lf\n", t, ll);
+        if(MODEL_DEBUG)
+        {
+            printf("Iteration %d ll=%lf\n", t, ll);
+        }
         prevll = ll;
     }
 

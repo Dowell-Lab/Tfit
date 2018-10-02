@@ -119,6 +119,13 @@ ParamWrapper::ParamWrapper()
     this->minReads=0;
     this->filterZeroRegions=false;
     this->allowOverwrite=false;
+    this->debug=false;
+    //File control values:
+    this->tmpdir="/tmp"; //We won't let the user set this yet. 
+    this->prelimhits="prelim_hits.bed";
+    this->models="models.tsv";
+    this->bidirpreds="bidir_preds.bed";
+    this->logfile="log.log";
 }
 
 /** Parses the arguments passed to tfit and attempts to store them internally.
@@ -179,6 +186,7 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
     this->penalty  = 1; //There's documentation, but only in read_in_parameters.
     this->maxNoise = 0.05; //This seems to only be used in across_segments.
     this->mle      = 0; //This parameter runs the model module after bidir, IIRC.
+    this->debug=false;
     this->elon     = 0;
     
     //Additional new parameters:
@@ -186,6 +194,12 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
     this->minReads=0;
     this->filterZeroRegions=false;
     this->allowOverwrite=false;
+    //File control parameters:
+    this->tmpdir="/tmp"; //We won't let the user set this yet. 
+    this->prelimhits="prelim_hits.bed";
+    this->models="models.tsv";
+    this->bidirpreds="bidir_preds.bed";
+    this->logfile="log.log";
 
     if (argc == 1) {
         this->printUsage();
@@ -226,6 +240,11 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
                 this->exit = true;
                 return;
             }
+            
+            else if(!strcmp(prevCmd, "-debug"))
+            {
+                this->debug=true;
+            }
         }
 
         else {
@@ -258,6 +277,32 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
         else if(it->first=="--overwrite")
         {
             this->allowOverwrite=true;
+        }
+        
+        else if(it->first=="--tmpdir")
+        {
+            this->tmpdir=it->second;
+        }
+        
+        else if(it->first=="--prelimhits")
+        {
+            this->prelimhits=it->second;
+        }
+        
+        else if(it->first=="--models")
+        {
+            this->models=it->second;
+        }
+        
+        else if(it->first=="--bidirpreds")
+        {
+            this->bidirpreds=it->second;
+        }
+        
+        //This most likely won't be used.
+        else if(it->first=="--logfile")
+        {
+            this->logfile=it->second;
         }
 
         else if (it->first == "-j" || it->first == "--reverse" || it->first == "-neg") {

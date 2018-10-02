@@ -1118,6 +1118,7 @@ void load::write_out_bidirs_pwrapper(map<string, vector<vector<double>>> G, stri
 {
     typedef map<string, vector<vector<double>>>::iterator it_type;
     ofstream                                              FHW;
+    /**
     if(pw->allowOverwrite)
     {
         FHW.open(out_dir+job_name+"_prelim_bidir_hits.bed");
@@ -1126,7 +1127,9 @@ void load::write_out_bidirs_pwrapper(map<string, vector<vector<double>>> G, stri
     else
     {
         FHW.open(out_dir + job_name + "-" + to_string(job_ID) + "_prelim_bidir_hits.bed");
-    }
+    }*/
+    
+    FHW.open(pw->prelimhits);
     
     FHW << pw->getHeader(1);
     int ID = 0;
@@ -1271,6 +1274,7 @@ void load::write_out_models_from_free_mode_pwrapper(map<int, map<int, vector<sim
     string   out_dir  = pw->outputDir;
     ofstream FHW;
     
+    /*
     if(pw->allowOverwrite)
     {
         file_name = out_dir + pw->jobName + "_K_models_MLE.tsv";
@@ -1279,7 +1283,9 @@ void load::write_out_models_from_free_mode_pwrapper(map<int, map<int, vector<sim
     else
     {
         file_name = out_dir + pw->jobName + "-" + to_string(job_ID) + "_K_models_MLE.tsv";
-    }
+    }*/
+    
+    file_name=pw->models;
     
     FHW.open(file_name);
     FHW << pw->getHeader(2);
@@ -1400,15 +1406,7 @@ void load::write_out_bidirectionals_ms_pen_pwrapper(vector<segment_fits*> fits, 
 {
     ofstream FHW;
     
-    if(pw->allowOverwrite)
-    {
-        FHW.open(pw->outputDir+pw->jobName+"_bidir_predictions.bed");
-    }
-    
-    else
-    {
-        FHW.open(pw->outputDir + pw->jobName + "-" + to_string(job_ID) + "_bidir_predictions.bed");
-    }
+    FHW.open(pw->bidirpreds);
     FHW << pw->getHeader(2);
     double penality = pw->penalty;
     for (int i = 0; i < fits.size(); i++) {
@@ -1430,7 +1428,6 @@ void load::write_out_bidirectionals_ms_pen_pwrapper(vector<segment_fits*> fits, 
  */
 void load::BIN(vector<segment*> segments, int BINS, double scale, int erase)
 {
-    string FILE;
     for (int i = 0; i < segments.size(); i++) {
         if (segments[i]->forward.size() > 0 or segments[i]->reverse.size() > 0) {
             segments[i]->bin(BINS, scale, erase);
@@ -1445,7 +1442,7 @@ void load::BIN(vector<segment*> segments, int BINS, double scale, int erase)
  * @param nprocs Number of workers obtained from the MPI runtime.
  * @param job_ID Job identifier likely obtained from the MPI runtime.
  */
-void load::collect_all_tmp_files(string dir, string job_name, int nprocs, int job_ID)
+void load::collect_all_tmp_files(string dir, string logfile, int nprocs, int job_ID)
 {
     int       c   = 0;
     time_t    now = time(0);
@@ -1454,12 +1451,14 @@ void load::collect_all_tmp_files(string dir, string job_name, int nprocs, int jo
     tstruct = *localtime(&now);
     // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
     // for more information about date/time format
-    strftime(buf, sizeof(buf), "%m_%d_%H_%M", &tstruct);
-    string   DT  = buf;
-    string   OUT = dir + job_name + "-" + to_string(job_ID) + "_" + DT + ".log";
+    //strftime(buf, sizeof(buf), "%m_%d_%H_%M", &tstruct);
+    //string   DT  = buf;
+    //string   OUT = dir + job_name + "-" + to_string(job_ID) + "_" + DT + ".log";
+    string OUT=dir+logfile; //The user is responsible for extensions. 
     ofstream FHW(OUT);
     for (int rank = 0; rank < nprocs; rank++) {
-        string   FILE = dir + "tmp_" + job_name + "-" + to_string(job_ID) + "_" + to_string(rank) + ".log";
+        //string   FILE = dir + "tmp_" + job_name + "-" + to_string(job_ID) + "_" + to_string(rank) + ".log";
+        string FILE=dir+"tmp_"+to_string(job_ID)+"_"+to_string(rank)+".log";
         string   line;
         ifstream FH(FILE);
         if (FH) {
