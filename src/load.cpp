@@ -485,7 +485,7 @@ string segment_fits::write()
             if (std < 5000 and lam < 20000 and w > 0.05 and pi > 0.05 and pi < 0.95) {
                 line += chrom + "\t" + to_string(start) + "\t" + to_string(stop) + "\t";
                 line += ID + "\t"; //"|"; Changed to tab character to make output compliant with IGV.
-                line += to_string(BIC_ratio) + "," + to_string(N_pos) + "," + to_string(N_neg) + "\n";
+                line += to_string(BIC_ratio) + "\t" + to_string(mu) + "\t" + to_string(w) + "\t" + to_string(lam)+"\n";//to_string(N_pos) + "," + to_string(N_neg) + "\n";
             }
         }
     }
