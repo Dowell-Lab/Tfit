@@ -12,7 +12,7 @@
  */
 void ParamWrapper::printUsage()
 {
-    printf("Usage: TFit modulename [arguments] [outputarguments]\n");
+    printf("Usage: Tfit modulename [arguments] [outputarguments]\n");
     printf("Where modulename is one of the following:\n");
     printf("\tbidir - This module searches the genome for areas resembling bidirectional transcription\n");
     printf("\t\tby comparing a fixed template mixture model to a noise model by a log-likelihood ratio score.\n");
@@ -78,7 +78,7 @@ void ParamWrapper::printUsage()
 
 void ParamWrapper::printUsageShort()
 {
-    printf("Usage: TFit modulename [arguments] [outputarguments]\n");
+    printf("Usage: Tfit modulename [arguments] [outputarguments]\n");
     printf("Where modulename is one of the following:\n");
     printf("\tbidir - This module searches the genome for areas resembling bidirectional transcription\n");
     printf("\t\tby comparing a fixed template mixture model to a noise model by a log-likelihood ratio score.\n");
@@ -241,6 +241,16 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
         this->exit = true;
         return;
     }
+    
+    // Special case for users who want a long usage statement:
+    this->module=std::string(argv[1]);
+    
+    if(this->module=="-h" || this->module=="--help")
+    {
+        this->printUsage();
+        this->exit=true;
+        return;
+    }
 
     else if (argc == 2) {
         printf("Error: no arguments specified for module %s\n", argv[1]);
@@ -248,8 +258,6 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
         this->exit = true;
         return;
     }
-
-    this->module = std::string(argv[1]);
 
     if (this->module != "bidir" && this->module != "select" && this->module != "model" && this->module != "bidir_old") {
         printf("Invalid module specification: %s\n", argv[1]);
