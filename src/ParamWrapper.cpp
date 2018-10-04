@@ -12,7 +12,7 @@
  */
 void ParamWrapper::printUsage()
 {
-    printf("Usage: TFit modulename [arguments]\n");
+    printf("Usage: TFit modulename [arguments] [outputarguments]\n");
     printf("Where modulename is one of the following:\n");
     printf("\tbidir - This module searches the genome for areas resembling bidirectional transcription\n");
     printf("\t\tby comparing a fixed template mixture model to a noise model by a log-likelihood ratio score.\n");
@@ -24,9 +24,6 @@ void ParamWrapper::printUsage()
     printf("\t-i\tForward bedgraph file\n");
     printf("\t-j\tReverse bedgraph file.\n");
     printf("\t-ij\tBoth forward and reverse bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.\n");
-    printf("\t-N\tJob name.\n");
-    printf("\t-o\tOutput directory. If it does not exist, it will be created.\n");
-    printf("\t-log_out\tLog file output directory. If it does not exist, it will be created.\n");
     printf("\nAdditional (optional) parameters for the bidir module:\n");
     printf("\t-tss\tTranscription model path. Models are provided for hg19 and mm10 in the annotations directory of this project.\n");
     printf("\t-chr\tRun bidir only on the specified chromosome by name. The default is, \"all\"\n");
@@ -48,9 +45,6 @@ void ParamWrapper::printUsage()
     printf("\t-j\tReverse bedgraph file\n");
     printf("\t-ij\tBoth forward and reverse bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.\n");
     printf("\t-k\tBedgraph file containing a set of regions of interest.\n");
-    printf("\t-N\tJob name.\n");
-    printf("\t-o\tOutput directory. If it does not exist, it will be created.\n");
-    printf("\t-log_out\tLog file output directory. If it does not exist, it will be created.\n");
     printf("\nAdditional (optional) parameters for the model module:\n");
     printf("\t-mink\tMinimum number of finite mixtures to consider. default=1\n");
     printf("\t-maxk\tMaximum number of finite mixtures to consider. default=1\n");
@@ -73,7 +67,48 @@ void ParamWrapper::printUsage()
     printf("\nAdditional new testing parameters:\n");
     printf("\t-fzr [0,1] default 0\tFilter out regions with no reads during the bedgraph loading process.\n");
     printf("\t-mr [value]\tFilter out regions below a certain threshold number of reads (absolute value) during the bedgraph loading process.\n");
-    printf("\t--overwrite\tPrevents tfit from automatically changing output filenames to avoid file collisions.\n");
+    
+    printf("\n\nWhere [outputarguments] is ALL of the following:\n");
+    printf("\t--prelimhits, -ph\tOutput file for preliminary filtering in the bidir module.\n");
+    printf("\t--models, -m\tOutput file for models computed in the model module OR bidir module with the -mle parameter set to 1.\n");
+    printf("\t--bidirpreds,-bp\tBidirectional predictions file (used to represent \"regions of interest\" for the model module.\n");
+    printf("\t--logfile,-lf\tLog file in which to write error and message output.\n");
+    
+}
+
+void ParamWrapper::printUsageShort()
+{
+    printf("Usage: TFit modulename [arguments] [outputarguments]\n");
+    printf("Where modulename is one of the following:\n");
+    printf("\tbidir - This module searches the genome for areas resembling bidirectional transcription\n");
+    printf("\t\tby comparing a fixed template mixture model to a noise model by a log-likelihood ratio score.\n");
+    printf("\tbidir_old - This module attempts to behave as documented in published versions of Tfit\n");
+    printf("\tmodel - This module attempts to generate an optimal set of parameters per region instead \n");
+    printf("\t\tof using a fixed set of parameters for the entire genome\n");
+
+    printf("\n\nWhere [arguments] is one or more of the following for the bidir or bidir_old modules:\n");
+    printf("\t-i\tForward bedgraph file\n");
+    printf("\t-j\tReverse bedgraph file.\n");
+    printf("\t-ij\tJoint (both forward and negative) bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.\n");
+    printf("\nAdditional (optional) parameters for the bidir module:\n");
+    printf("\t-tss\tTranscription model path. Models are provided for hg19 and mm10 in the annotations directory of this project.\n");
+    printf("\t-chr\tRun bidir only on the specified chromosome by name. The default is, \"all\"\n");
+    printf("\t-fdr\tGenerate a likelihood score distribution on the input data. This parameter has yet to be fully documented and tested.\n");
+    printf("\t-mle [0, 1]\tAutomatically invoke the model module after generating preliminary bidirectional predictions.\n");
+
+    printf("\n\nWhere [arguments] is one or more of the following for the model module:\n");
+    printf("\t-i\tForward bedgraph file\n");
+    printf("\t-j\tReverse bedgraph file\n");
+    printf("\t-ij\tBoth forward and reverse bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.\n");
+    printf("\t-k\tBedgraph file containing a set of regions of interest.\n");
+    
+    printf("\n\nWhere [outputarguments] is ALL of the following:\n");
+    printf("\t--prelimhits, -ph\tOutput file for preliminary filtering in the bidir module.\n");
+    printf("\t--models, -m\tOutput file for models computed in the model module OR bidir module with the -mle parameter set to 1.\n");
+    printf("\t--bidirpreds,-bp\tBidirectional predictions file (used to represent \"regions of interest\" for the model module.\n");
+    printf("\t--logfile,-lf\tLog file in which to write error and message output.\n");
+    
+    printf("\n\n(To get a full usage statement, run TFit with the -h parameter.)");
 }
 
 /** Sets all values to their defaults as per the old read_in_parameters codebase.
@@ -202,14 +237,14 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
     this->logfile="log.log";
 
     if (argc == 1) {
-        this->printUsage();
+        this->printUsageShort();
         this->exit = true;
         return;
     }
 
     else if (argc == 2) {
         printf("Error: no arguments specified for module %s\n", argv[1]);
-        this->printUsage();
+        this->printUsageShort();
         this->exit = true;
         return;
     }
@@ -279,28 +314,28 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
             this->allowOverwrite=true;
         }
         
-        else if(it->first=="--tmpdir")
+        else if(it->first=="--tmpdir" || it->first=="-td")
         {
             this->tmpdir=it->second;
         }
         
-        else if(it->first=="--prelimhits")
+        else if(it->first=="--prelimhits" || it->first=="-ph")
         {
             this->prelimhits=it->second;
         }
         
-        else if(it->first=="--models")
+        else if(it->first=="--models" || it->first=="-m")
         {
             this->models=it->second;
         }
         
-        else if(it->first=="--bidirpreds")
+        else if(it->first=="--bidirpreds" || it->first=="-bp")
         {
             this->bidirpreds=it->second;
         }
         
         //This most likely won't be used.
-        else if(it->first=="--logfile")
+        else if(it->first=="--logfile" || it->first=="-lf")
         {
             this->logfile=it->second;
         }

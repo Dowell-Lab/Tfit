@@ -113,6 +113,7 @@ public:
     ParamWrapper();
     ParamWrapper(int argc, char** argv);
     void printUsage();
+    void printUsageShort();
 
     void        display(int nodes, int cores);
     std::string getHeader(int id);
