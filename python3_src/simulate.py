@@ -1,9 +1,8 @@
-#Written by Joey Azofiefa date unknown
-#
-#Edited and translated to python3 by Jack Dempsey Summer/Fall 2018
+#Written by Joey Azofiefa 
 #
 #
-#simulate.bin is used in multiple places in Tfit***Find and list those places
+#
+#simulate.bin is used in multiple places in Tfit*
 #
 #run one 
 #
@@ -54,15 +53,18 @@ also in info.self.X
 '''	
 def BIN(forward, reverse, bins, SHOW=False):
 	#when grab specific region cannot get the right region there it shows an error here
-	start, stop 	= min((min(forward)[0],min(reverse)[0])),max((max(forward)[0],max(reverse)[0]))
+	#there are also problems with iterations when unit testing originally there was [0] after each eg: max(forward)
+	start, stop 	= min((min(forward),min(reverse))),max((max(forward),max(reverse)))
 	X 				= np.zeros((bins, 3))
 	X[:,0] 			= np.linspace(start, stop, bins)
 	for j,f in enumerate((forward, reverse)):
+		
 		for x,c in f: 
 			i  	= 0
 			while i < X.shape[0] and X[i,0] <= x:
 				i+=1
 			X[i-1, j+1]+=c
+			
 	#want to filter out the zeros
 	N 				= 0
 	for i in range(X.shape[0]):
@@ -110,10 +112,10 @@ def weird_variance(x,y,mu,direct):#x is start, y is end, direc is direction
 
 if __name__=="__main__":
 
-	#X 	= runOne(
-	mu=0; s=20; l=5; lr=100; ll=-100; we=0.5;wl=0.25; wr=0.25; pie=0.5; pil=0.1; pir=0.9; N=10000; SHOW=False ; bins=200; noise=False ; foot_print = 0;
-	#mu 	= 0.5*(weighted_mean(X[:,0], X[:,1])+weighted_mean(X[:,0], X[:,2]))
-	#l 	= 0.5*(weighted_mean(X[:,0], X[:,1])-weighted_mean(X[:,0], X[:,2]))
+	X 	= runOne(
+	mu=0; s=20; l=5; lr=100; ll=-100; we=0.5;wl=0.25; wr=0.25; pie=0.5; pil=0.1; pir=0.9; N=10000; SHOW=True ; bins=200; noise=False ; foot_print = 0;)
+	mu 	= 0.5*(weighted_mean(X[:,0], X[:,1])+weighted_mean(X[:,0], X[:,2]))
+	l 	= 0.5*(weighted_mean(X[:,0], X[:,1])-weighted_mean(X[:,0], X[:,2]))
 	#print ("Mu: ",mu,"l: ", l)
 	#print ("Some Var1: ",m.sqrt(weird_variance(X[:,0], X[:,1], mu, 1)))
 	#print ("Some Var2: ",m.sqrt(weird_variance(X[:,0], X[:,2], mu, -1)))
@@ -124,8 +126,8 @@ if __name__=="__main__":
 	reverse 	 = list(np.random.normal(mu-foot_print, s, int(N*we*(1-pie))) - np.random.exponential(l, int(N*we*(1-pie) )))
 	reverse 	+= list(np.random.uniform(ll, mu-foot_print, int(N*wl*(1-pil))))
 	
-	D 		= (list(), list())
-	BIN(D[0],D[1],300,SHOW )
+	D 		= (forward, reverse)
+	BIN(D[0],D[1],3,SHOW )
 	'''
 	bins 	= len(X)
 

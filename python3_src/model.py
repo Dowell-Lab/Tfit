@@ -3,14 +3,14 @@ from scipy.special import erf, erfc
 from scipy.stats import invgamma
 import simulate
 import math as m
-import math #not sure why its double imported, probabyl used as both m. and math.
+import math #not sure why its double imported, probably pytused as both m. and math.
 import matplotlib.pyplot as plt
 import time
 import multiprocessing as mp
 import matplotlib as mpl
 import matplotlib.cm as cm
 import load
-import template_window_matching as twm #never used in document
+#import template_window_matching as twm #never used in document
 import func_test3 as ft
 
 class component_elongation:
@@ -30,7 +30,7 @@ class component_elongation:
 
 	def __str__(self):
 		#prints this when returns, want to print/pipe to an output file
-		return "Component Elongation U: " + str(self.a) + "," + str(self.b) + "," + str(self.w) + "," + str(self.pi)
+		return "Component Elongation a: " + str(self.a) + " b: " + str(self.b) + " w: " + str(self.w) + " pi: " + str(self.pi)
 
 
 	def eval(self, z, forward_ct, reverse_ct):
@@ -46,14 +46,18 @@ class component_elongation:
 		self.r[-1]+=self.ri[-1]
 
 		return self.ri[1], self.ri[-1]
+		
+		
 	def get_current_r(self):
 		return self.ri[1] + self.ri[-1]
+		
+		
 	def set_new_parameters(self, N):
 		r 				= (self.r[1] + self.r[-1])
 		self.pi, self.w =(self.r[1] + self.c.beta_0) / (r+ self.c.beta_0*2), (r + self.c.alpha_0)  / (N+self.c.alpha_0*self.c.K*3 + self.c.K*3 )
 		if self.type=="noise":
 			self.w 		= min(self.c.noise_max, self.w)
-			print ("HERE", self.w)
+			print (" w HERE: ", self.w)
 		#====================================================
 		self.r[1], self.r[-1] 			= 0,0
 		self.ri[1], self.ri[-1] 		= 0,0
@@ -121,13 +125,15 @@ class component_bidir:
 
 
 	def __str__(self):
-		return "Component Bidir N: " + str(self.mu) + "," +str(self.si) + "," +str(self.l) + "," + str(self.w) + "," + str(self.pi)
-		return ("component bidir N: " + str(self.mu) + "," +str(self.si) + "," +str(self.l) + "," + str(self.w) + "," + str(self.pi) + "\n" +
-			self.forward.__str__() + "\n" +
+		return "Component Bidir mu: " + str(self.mu) + " si: " +str(self.si) + " l: " +str(self.l) + " w: " + str(self.w) + " pi: " + str(self.pi)
+		return ("component bidir mu: " + str(self.mu) + " si " +str(self.si) + " l: " +str(self.l) + " w: " + str(self.w) + " pi: " + str(self.pi) + "\n foreward string: " +
+			self.forward.__str__() + "\n reverse string: " +
 			self.reverse.__str__())
 
 	def IN(self, x):
 		return m.exp(-pow(x,2)*0.5)/m.sqrt(2*m.pi)
+		
+		
 	def IC(self, x):
 		return 0.5*(1+erf(x/m.sqrt(2.)))
 
@@ -135,9 +141,10 @@ class component_bidir:
 		if x > 5:
 			return 1.0 / x
 		N,D 	= self.IC(x), self.IN(x)
-		if D < m.pow(10,-15): #python machine epsilon
+		if D < m.pow(10,-15): #python machine epsilon= 1e-15
 			return 1.0 / m.pow(10,-15)
 		return m.exp(m.log(1. - N)-m.log(D))
+		
 	def EY(self, z, s):
 		if s==1:
 			z-=self.foot_print
@@ -226,7 +233,7 @@ class component_bidir:
 
 
 	def set_new_parameters(self, N): #M-step
-		print (self.c.alpha_1)
+		print ("alpha1: ",self.c.alpha_1)
 
 		r  								= self.r[1] + self.r[-1]
 		self.pi, self.w 				=(self.r[1] + self.c.beta_0) / (r+ self.c.beta_0*2), (r + self.c.alpha_0)  / (N+self.c.alpha_0*self.c.K*3 + self.c.K*3 )
@@ -235,7 +242,7 @@ class component_bidir:
 		self.l 							= 1.0 /(((self.EY_f+self.EY_r) + self.c.beta_2) / (r + self.c.alpha_2))
 		self.l 							= min(2,self.l)
 		self.foot_print 				= min((self.C / (r+0.1)), 20)
-		print (self.foot_print, "****")
+		print ("SNP foot_print: ",self.foot_print, "****")
 		#====================================================
 		self.r[1], self.r[-1] 			= 0,0
 		self.ri[1], self.ri[-1] 		= 0,0
@@ -266,7 +273,7 @@ class component_bidir:
 
 
 
-
+#main math of the code
 class EMGU:
 	def __init__(self, max_ct=pow(10, -4), max_it=200, K=2, bayes=False, noise=True,
 		noise_max=0.1, moveUniformSupport=5, cores=1,
@@ -294,12 +301,16 @@ class EMGU:
 		self.uniform_rate 			= None
 		#=================================
 		self.rvs,self.ll 			= None, None #final group of components
+		
+	#takes x,s returns the sum of x and s
 	def pdf(self, x,s):
 		assert self.rvs is not None, "need to running fit before evalauting mixture pdf"
+		#makes an array out of sum of x,s then sums them
 		vl 	= sum([rv.pdf(x, s) for rv in self.rvs ])
+	
 		return vl
 
-
+	#takes x returns the log of x
 	def LOG(self, x):
 		if x == 0:
 			return -np.inf
@@ -321,7 +332,7 @@ class EMGU:
 		#Dirichlet pdf is the conjugate prior of a multinomial in Bayesian inference.	
 		#K={k∈ℕ+:k≤M}
 		#gets a set of dirichlet random variables then makes them into the correct array size 
-		#look to equation 4 in the paper
+		#look to equation 1-2 in the paper
 		ws 			= np.random.dirichlet([self.alpha_0]*self.K*3).reshape(self.K, 3)
 		#Draw samples from a Beta distribution. Beta is specificied dirichlet
 		pis 		= np.random.beta(self.beta_0, self.beta_0, self.K*3).reshape(self.K,3)
@@ -332,7 +343,8 @@ class EMGU:
 			mus 		= [x for x  in self.peaks]
 		#immediatly makes mus zero after assignment, so above doesnt seem to matter
 		mus 		= [0]
-		#look to equation 1-2 in paper:
+		#look below equation 1-2 in paper:
+		#Draw samples from a Gamma distribution
 		sigmas 		= np.random.gamma((maxX-minX)/(35*self.K), 1, self.K)
 		lambdas 	= 1.0/np.random.gamma((maxX-minX)/(25*self.K), 1, self.K)
 		#=======================================
@@ -343,6 +355,7 @@ class EMGU:
 		print ("********* Foot Print: ", fp)
 		#print("K: ",self.K) = 3
 	    #Component_bidirs(line 97 above)
+	    #equation 3 in the paper
 		bidirs 		= [component_bidir(mus[k], sigmas[k], lambdas[k], ws[k][0], pis[k][0],self, foot_print=fp) for k in range(self.K)]
 		#component elognation is line 16 above
 		uniforms    = [component_elongation(minX, mus[k], ws[k][1], 0.5, bidirs[k], "reverse",self ,0 , foot_print=fp) for k in range(self.K)]
@@ -353,14 +366,14 @@ class EMGU:
 		#components stores all of the bidirs and uniforms __str__ returns in a list 0-3
 		components 		= bidirs + uniforms
 		
-		#print("Components: ",components[4],"NewShit:\n")#this will print an out of range, try 0-3
+		#print("Components: ",components[4],"New:\n")#this will print an out of range, try 0-3
 		
 		N_f, N_r 			= sum(X[:,1]), sum(X[:,2])
 		t,converged 		= 0 , False
 		ll, prevll 			= 0., -np.inf
 		st 					= time.clock()
 		iter_parameters 	= list()
-
+		
 		while t < self.max_it and not converged:
 			self.rvs 		= [c for c in components ]
 			self.draw(X)
@@ -390,7 +403,7 @@ class EMGU:
 					ll+=math.log(norm_reverse)*X[i,2]
 			print ("ll: ",ll)
 			#######
-			#M-step
+			#M-step equation 6 in paper
 			#######
 
 			N 	= sum([sum(c.r.values()) for c in components])
@@ -412,6 +425,7 @@ class EMGU:
 			# 	print c
 			# print "------------"
 			t+=1
+		#fills array with none noise components	
 		self.rvs,self.ll 	= [c for c in components if c.type!="noise"], ll
 		
 	def draw(self, X):
@@ -454,10 +468,9 @@ if __name__ == "__main__":
 	'''
 	clf = EMGU(noise=True, K=1,noise_max=0.1,moveUniformSupport=0,max_it=200, cores=1,
 		seed=True )
-
 	
 	clf.fit(X)
-
+	
 
 	# # #make test_file
 	# FHW_f 	= open("three_prime_forward.bedgraph", "w")

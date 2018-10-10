@@ -1,3 +1,9 @@
+##Author: 		Joey Azofeifa
+#model_across is essentially the file handler for model.
+#model.py is the heavy lifiting of "math"
+#model_across takes model and parallelizes it
+#
+#
 import multiprocessing as mp
 import model
 import os
@@ -19,6 +25,7 @@ move_uniform=0):
 ##Important stuff right here##
 #https://www1.udel.edu/biology/rosewc/kaap686/notes/EMG%20analysis.pdf
 #link might have some explination of EMG or be totally wrong
+
 def run(D, bic, rounds, max_k, 
 	standardize, convergence_thresh,
 			max_iterations, move_uniform, 
@@ -30,20 +37,21 @@ def run(D, bic, rounds, max_k,
 	FHW 	= open(FILE, "w")
 	for d in D:
 		d.X[:,0]-=min(d.X[:,0])
-		d.X[:,0]/=standardize #devide equals
+		d.X[:,0]/=standardize #devide everything by 10 
 		if move_uniform == 0: #lets parrallelize the rest of this
 			models 	= list()
 			for k in range(max_k):
 				output 	= mp.Queue()#multiprocessing function
-				#actually defining a function within a for loop
+				#defining a function within a for loop
 				def wrapper_fit_function_pp(X, k, output,
 					max_iterations=max_iterations, convergence_thresh=convergence_thresh,
 					move_uniform=move_uniform):
-					#(line 268) 
+					#(line 270) 
 					clf 	= model.EMGU(max_ct=convergence_thresh, max_it=max_iterations, K=k, bayes=False, noise=True, 
 							noise_max=0.1, moveUniformSupport=0, cores=4)
 					clf.fit(X)
 					output.put((clf.ll , clf.rvs, clf.converged, clf.resets, clf))
+				#runs EMGU in mulitprocessing here 
 				processes 		= [mp.Process(target=wrapper_fit_function_pp, args=(d.X, k,output) )for i in range(rounds)]
 				for p in processes:
 				    p.start()
