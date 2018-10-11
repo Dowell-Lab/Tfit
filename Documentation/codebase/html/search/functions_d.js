@@ -8,5 +8,6 @@ var searchData=
   ['print',['print',['../class_u_n_i.html#aa81fb633fc2d933a4e9a9c366dbde894',1,'UNI::print()'],['../class_e_m_g.html#aabb73fa212c764f68eae9013be73af88',1,'EMG::print()'],['../classcomponent.html#a1d525e2d2c985ed0da4f7f13b22f453d',1,'component::print()'],['../class_n_l_r.html#a337ea9143c1d3e1443d81d3c5bf149a7',1,'NLR::print()']]],
   ['print_5fout_5fcomponents',['print_out_components',['../classclassifier.html#aa25fb1f7e1fb549f18d77e7f2de0093b',1,'classifier']]],
   ['printusage',['printUsage',['../class_param_wrapper.html#abf11ce4b3de81b55633b9dc55ff9d6eb',1,'ParamWrapper']]],
+  ['printusageshort',['printUsageShort',['../class_param_wrapper.html#a5baa28bc6d44a29c34852712c8a42d6a',1,'ParamWrapper']]],
   ['pvalue',['pvalue',['../classslice__ratio.html#a71b0b76b6b13aed8a6eb6afc250478e6',1,'slice_ratio']]]
 ];

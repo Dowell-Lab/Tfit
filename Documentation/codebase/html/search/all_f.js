@@ -18,10 +18,12 @@ var searchData=
   ['penalty',['penalty',['../class_param_wrapper.html#a33694c0732588b0ade0a76ad39e18a9f',1,'ParamWrapper']]],
   ['pi',['pi',['../class_u_n_i.html#a29c3916b81f537e6f27d57dc1298239d',1,'UNI::pi()'],['../class_e_m_g.html#a7631847822c74eac7c4cde60374a678e',1,'EMG::pi()'],['../class_n_o_r_m_a_l.html#a8be7f1b134897727f926ab4491bdf0af',1,'NORMAL::pi()'],['../class_n_o_i_s_e.html#a1b73b243304b7f97b464af0b3697d92e',1,'NOISE::pi()'],['../classclassifier.html#a4a4768a423b3ff0f7310b0a74dca78d7',1,'classifier::pi()'],['../class_n_l_r.html#aa0ea4fa6db8a48c9473186ac27a44018',1,'NLR::pi()'],['../class_param_wrapper.html#a05af00abd5e25ca1c7e74fce05dd3d69',1,'ParamWrapper::pi()']]],
   ['pos',['pos',['../class_u_n_i.html#a857cc0a11eca91c8802e5bec23e95f26',1,'UNI']]],
+  ['prelimhits',['prelimhits',['../class_param_wrapper.html#ac990f3cfd321a85bdb65df9af77ffc6b',1,'ParamWrapper']]],
   ['prev_5fmu',['prev_mu',['../class_e_m_g.html#a13f4b5307252b3d1382e93e811885796',1,'EMG']]],
   ['print',['print',['../class_u_n_i.html#aa81fb633fc2d933a4e9a9c366dbde894',1,'UNI::print()'],['../class_e_m_g.html#aabb73fa212c764f68eae9013be73af88',1,'EMG::print()'],['../classcomponent.html#a1d525e2d2c985ed0da4f7f13b22f453d',1,'component::print()'],['../class_n_l_r.html#a337ea9143c1d3e1443d81d3c5bf149a7',1,'NLR::print()']]],
   ['print_5fout_5fcomponents',['print_out_components',['../classclassifier.html#aa25fb1f7e1fb549f18d77e7f2de0093b',1,'classifier']]],
   ['printusage',['printUsage',['../class_param_wrapper.html#abf11ce4b3de81b55633b9dc55ff9d6eb',1,'ParamWrapper']]],
+  ['printusageshort',['printUsageShort',['../class_param_wrapper.html#a5baa28bc6d44a29c34852712c8a42d6a',1,'ParamWrapper']]],
   ['promotertss',['promoterTSS',['../class_param_wrapper.html#a2f0aa376d1ac377a238f6ac03d851e4b',1,'ParamWrapper']]],
   ['ps',['ps',['../structsimple__c.html#a4f105618b635f30407ef8327bee385d1',1,'simple_c::ps()'],['../structsimple__c__free__mode.html#a0caf1e0bde492a588bc3d092b8820710',1,'simple_c_free_mode::ps()'],['../structsingle__simple__c.html#a9496d44f7319b2b2e980f6ac927467e8',1,'single_simple_c::ps()']]],
   ['pvalue',['pvalue',['../classslice__ratio.html#a71b0b76b6b13aed8a6eb6afc250478e6',1,'slice_ratio']]]

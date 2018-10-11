@@ -105,7 +105,6 @@ int model_run(params* P, int rank, int nprocs, double density, int job_ID, Log_F
  * information collected by the bidir module and yields a ser of transcription calls over the desired region.
  * This function makes use of a depreciated params object.
  * 
- * @depreciated
  * @param pw ParamWrapper object from which to read command line parameters.
  * @param rank rank parameter obtained from the MPI runtime.
  * @param nprocs worker count obtained from the MPI runtime.

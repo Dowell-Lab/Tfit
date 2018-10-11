@@ -8,6 +8,8 @@ var searchData=
   ['fill_5fin_5fconfig_5ffile',['fill_in_config_file',['../read__in__parameters_8cpp.html#a032ed6dd9900c4883b47c00dfc8b4289',1,'read_in_parameters.cpp']]],
   ['fill_5fin_5foptions',['fill_in_options',['../read__in__parameters_8cpp.html#abd8da77aa70261e5264cefdaa1f4d091',1,'read_in_parameters.cpp']]],
   ['fillinoptions',['fillInOptions',['../read__in__parameters_8h.html#ae73a357f24133df7d840c95afa1e2bdd',1,'read_in_parameters.h']]],
+  ['filterminreads',['filterMinReads',['../class_param_wrapper.html#ae9d2598f9d384cf4ead77f2eea638638',1,'ParamWrapper']]],
+  ['filterzeroregions',['filterZeroRegions',['../class_param_wrapper.html#a42c14af196d59ff584609688d853500c',1,'ParamWrapper']]],
   ['fit',['fit',['../classclassifier.html#a4a82faca1efb03f3f9407a9e271256f7',1,'classifier::fit()'],['../classclassifier__single.html#aef238e489bef379a33f4977e9f2ef070',1,'classifier_single::fit()']]],
   ['fit2',['fit2',['../classclassifier.html#a018b1ccaacadb221606da92a112c8075',1,'classifier']]],
   ['fit_5funiform_5fonly',['fit_uniform_only',['../classclassifier.html#a119c0277192a8839ddc0fb2129149b02',1,'classifier']]],

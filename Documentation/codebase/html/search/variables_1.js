@@ -13,6 +13,7 @@ var searchData=
   ['bidirectional_5fdata',['bidirectional_data',['../classsegment.html#abdfa65dd0668e80971df19911fb3a262',1,'segment']]],
   ['bidirectional_5fn',['bidirectional_N',['../classsegment.html#ad548d3c438966ccc9c376051ae703b29',1,'segment']]],
   ['bidirold',['bidirOld',['../class_param_wrapper.html#ade6ac380bd770cef8a5fb093679fb018',1,'ParamWrapper']]],
+  ['bidirpreds',['bidirpreds',['../class_param_wrapper.html#a01d4df16c899d0991328176fa2805b02',1,'ParamWrapper']]],
   ['bins',['bins',['../classslice__ratio.html#a9908939e1b3f54a5a172c4379f60d277',1,'slice_ratio']]],
   ['br',['br',['../class_param_wrapper.html#a0d830174db9d08dbcc1a0b21320e2b6a',1,'ParamWrapper']]]
 ];

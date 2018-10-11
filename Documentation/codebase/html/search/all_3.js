@@ -1,9 +1,11 @@
 var searchData=
 [
+  ['debug',['debug',['../class_param_wrapper.html#a7cda8f96bf82ee4db949dffcb4e210c6',1,'ParamWrapper']]],
   ['delta_5fa',['delta_a',['../class_u_n_i.html#a9138d539cdb5a82fa50a05636d943d33',1,'UNI']]],
   ['delta_5fb',['delta_b',['../class_u_n_i.html#a784de60b06a3b52b3ce7446fcc61b267',1,'UNI']]],
   ['density_5fprofiler_2ecpp',['density_profiler.cpp',['../density__profiler_8cpp.html',1,'']]],
   ['density_5fprofiler_2eh',['density_profiler.h',['../density__profiler_8h.html',1,'']]],
+  ['determine_5ftss_5fgreatest_5fcoverage',['determine_tss_greatest_coverage',['../namespaceload.html#ab29e0514f03e8b051b57184480dc5b49',1,'load']]],
   ['display',['display',['../class_param_wrapper.html#a76817b8a807cdbefcdd34dacb92f5b02',1,'ParamWrapper::display()'],['../classparams.html#a95ce7b8d859c34db0d2e795e04c840b2',1,'params::display()']]],
   ['dump',['dump',['../classnormal.html#a54dbf32194329a34ea453e9e26e1808a',1,'normal::dump()'],['../classslice__ratio.html#af79edfe2d2e59a53f25e0cb438529e11',1,'slice_ratio::dump()']]]
 ];

@@ -89,26 +89,26 @@ $(document).ready(function(){initNavTree('bootstrap_8cpp.html','');});
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="bootstrap_8h_source.html">bootstrap.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="load_8h_source.html">load.h</a>&quot;</code><br />
-<code>#include &lt;vector&gt;</code><br />
-<code>#include &quot;<a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="model_8h_source.html">model.h</a>&quot;</code><br />
-<code>#include &lt;random&gt;</code><br />
-<code>#include &lt;iostream&gt;</code><br />
+<code>#include &quot;<a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>&quot;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
-<code>#include &lt;omp.h&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;random&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 <code>#include &quot;<a class="el" href="template__matching_8h_source.html">template_matching.h</a>&quot;</code><br />
+<code>#include &lt;omp.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for bootstrap.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="bootstrap_8cpp__incl.png" border="0" usemap="#_2home_2mgohde_2dworkspace_2tfit-revisions_2src_2bootstrap_8cpp" alt=""/></div>
 <map name="_2home_2mgohde_2dworkspace_2tfit-revisions_2src_2bootstrap_8cpp" id="_2home_2mgohde_2dworkspace_2tfit-revisions_2src_2bootstrap_8cpp">
-<area shape="rect" id="node2" href="bootstrap_8h.html" title="bootstrap.h" alt="" coords="139,244,226,271"/>
-<area shape="rect" id="node3" href="load_8h.html" title="load.h" alt="" coords="849,319,906,345"/>
-<area shape="rect" id="node7" href="read__in__parameters_8h.html" title="read_in_parameters.h" alt="" coords="444,393,591,420"/>
-<area shape="rect" id="node16" href="model_8h.html" title="model.h" alt="" coords="1291,244,1359,271"/>
-<area shape="rect" id="node19" href="template__matching_8h.html" title="template_matching.h" alt="" coords="563,95,706,121"/>
-<area shape="rect" id="node11" href="_param_wrapper_8hpp.html" title="ParamWrapper.hpp" alt="" coords="1330,393,1465,420"/>
-<area shape="rect" id="node21" href="_f_d_r_8h.html" title="FDR.h" alt="" coords="945,169,1007,196"/>
+<area shape="rect" id="node2" href="bootstrap_8h.html" title="bootstrap.h" alt="" coords="134,244,221,271"/>
+<area shape="rect" id="node3" href="load_8h.html" title="load.h" alt="" coords="786,319,843,345"/>
+<area shape="rect" id="node7" href="read__in__parameters_8h.html" title="read_in_parameters.h" alt="" coords="397,393,544,420"/>
+<area shape="rect" id="node16" href="model_8h.html" title="model.h" alt="" coords="1229,244,1297,271"/>
+<area shape="rect" id="node18" href="template__matching_8h.html" title="template_matching.h" alt="" coords="491,95,634,121"/>
+<area shape="rect" id="node11" href="_param_wrapper_8hpp.html" title="ParamWrapper.hpp" alt="" coords="1213,393,1347,420"/>
+<area shape="rect" id="node20" href="_f_d_r_8h.html" title="FDR.h" alt="" coords="959,169,1020,196"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -118,8 +118,8 @@ Functions</h2></td></tr>
 <tr class="separator:a8e0438bed616a95ab145e44df133370e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab31d7a9a391bd223c2f5ca0663619221"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bootstrap_8cpp.html#ab31d7a9a391bd223c2f5ca0663619221">subsample</a> (<a class="el" href="classsegment.html">segment</a> *S, <a class="el" href="classsegment.html">segment</a> *NS)</td></tr>
 <tr class="separator:ab31d7a9a391bd223c2f5ca0663619221"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0b062862f7a0eaf5d55393b7aabd2c1"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="classsegment.html">segment</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bootstrap_8cpp.html#ac0b062862f7a0eaf5d55393b7aabd2c1">make_bootstraps</a> (<a class="el" href="classsegment.html">segment</a> *S, <a class="el" href="classparams.html">params</a> *P)</td></tr>
-<tr class="separator:ac0b062862f7a0eaf5d55393b7aabd2c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9321e753747d23c6d60c11ddd0b5e0e"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="classsegment.html">segment</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bootstrap_8cpp.html#ac9321e753747d23c6d60c11ddd0b5e0e">make_bootstraps</a> (<a class="el" href="classsegment.html">segment</a> *S, <a class="el" href="classparams.html">params</a> *P)</td></tr>
+<tr class="separator:ac9321e753747d23c6d60c11ddd0b5e0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a168e576d8cb0a45fa96a0be7969682ee"><td class="memItemLeft" align="right" valign="top">vector&lt; vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bootstrap_8cpp.html#a168e576d8cb0a45fa96a0be7969682ee">sort_bootstrap_parameters</a> (vector&lt; vector&lt; double &gt;&gt; X)</td></tr>
 <tr class="separator:a168e576d8cb0a45fa96a0be7969682ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9340181751efd21b5d5d6d49b0a682a"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="bootstrap_8cpp.html#aa9340181751efd21b5d5d6d49b0a682a">get_mean</a> (vector&lt; double &gt; X)</td></tr>
@@ -146,14 +146,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ac0b062862f7a0eaf5d55393b7aabd2c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac0b062862f7a0eaf5d55393b7aabd2c1">&#9670;&nbsp;</a></span>make_bootstraps()</h2>
+<a id="ac9321e753747d23c6d60c11ddd0b5e0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9321e753747d23c6d60c11ddd0b5e0e">&#9670;&nbsp;</a></span>make_bootstraps()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt;<a class="el" href="classsegment.html">segment</a> *&gt; make_bootstraps </td>
+          <td class="memname">vector&lt;<a class="el" href="classsegment.html">segment</a>*&gt; make_bootstraps </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classsegment.html">segment</a> *&#160;</td>
           <td class="paramname"><em>S</em>, </td>

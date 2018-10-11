@@ -87,48 +87,48 @@ $(document).ready(function(){initNavTree('across__segments_8cpp.html','');});
 <div class="title">across_segments.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;mpi.h&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="across__segments_8h_source.html">across_segments.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="error__stdo__logging_8h_source.html">error_stdo_logging.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="load_8h_source.html">load.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="across__segments_8h_source.html">across_segments.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="model_8h_source.html">model.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="template__matching_8h_source.html">template_matching.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="model__single_8h_source.html">model_single.h</a>&quot;</code><br />
-<code>#include &lt;iostream&gt;</code><br />
-<code>#include &lt;fstream&gt;</code><br />
-<code>#include &lt;map&gt;</code><br />
-<code>#include &lt;time.h&gt;</code><br />
 <code>#include &quot;omp.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="read__in__parameters_8h_source.html">read_in_parameters.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="error__stdo__logging_8h_source.html">error_stdo_logging.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="template__matching_8h_source.html">template_matching.h</a>&quot;</code><br />
+<code>#include &lt;fstream&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;map&gt;</code><br />
+<code>#include &lt;mpi.h&gt;</code><br />
+<code>#include &lt;time.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for across_segments.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="across__segments_8cpp__incl.png" border="0" usemap="#_2home_2mgohde_2dworkspace_2tfit-revisions_2src_2across__segments_8cpp" alt=""/></div>
 <map name="_2home_2mgohde_2dworkspace_2tfit-revisions_2src_2across__segments_8cpp" id="_2home_2mgohde_2dworkspace_2tfit-revisions_2src_2across__segments_8cpp">
-<area shape="rect" id="node3" href="load_8h.html" title="load.h" alt="" coords="509,333,567,360"/>
-<area shape="rect" id="node7" href="read__in__parameters_8h.html" title="read_in_parameters.h" alt="" coords="1126,408,1273,435"/>
-<area shape="rect" id="node16" href="across__segments_8h.html" title="across_segments.h" alt="" coords="370,184,506,211"/>
-<area shape="rect" id="node17" href="model_8h.html" title="model.h" alt="" coords="288,259,356,285"/>
-<area shape="rect" id="node18" href="error__stdo__logging_8h.html" title="error_stdo_logging.h" alt="" coords="1410,408,1549,435"/>
-<area shape="rect" id="node19" href="template__matching_8h.html" title="template_matching.h" alt="" coords="875,109,1017,136"/>
-<area shape="rect" id="node27" href="model__single_8h.html" title="model_single.h" alt="" coords="186,184,295,211"/>
-<area shape="rect" id="node11" href="_param_wrapper_8hpp.html" title="ParamWrapper.hpp" alt="" coords="424,408,559,435"/>
-<area shape="rect" id="node21" href="_f_d_r_8h.html" title="FDR.h" alt="" coords="915,184,977,211"/>
+<area shape="rect" id="node2" href="across__segments_8h.html" title="across_segments.h" alt="" coords="280,184,416,211"/>
+<area shape="rect" id="node3" href="load_8h.html" title="load.h" alt="" coords="811,333,869,360"/>
+<area shape="rect" id="node7" href="read__in__parameters_8h.html" title="read_in_parameters.h" alt="" coords="543,408,689,435"/>
+<area shape="rect" id="node16" href="model_8h.html" title="model.h" alt="" coords="499,259,567,285"/>
+<area shape="rect" id="node17" href="error__stdo__logging_8h.html" title="error_stdo_logging.h" alt="" coords="161,408,300,435"/>
+<area shape="rect" id="node18" href="model__single_8h.html" title="model_single.h" alt="" coords="541,184,651,211"/>
+<area shape="rect" id="node20" href="template__matching_8h.html" title="template_matching.h" alt="" coords="757,109,899,136"/>
+<area shape="rect" id="node11" href="_param_wrapper_8hpp.html" title="ParamWrapper.hpp" alt="" coords="1030,408,1165,435"/>
+<area shape="rect" id="node22" href="_f_d_r_8h.html" title="FDR.h" alt="" coords="993,184,1055,211"/>
 </map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a6ac35181865c80ec4432884a653f90c5"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="across__segments_8cpp.html#a6ac35181865c80ec4432884a653f90c5">check_file</a> (string FILE, int i)</td></tr>
-<tr class="separator:a6ac35181865c80ec4432884a653f90c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05aba25df76f70af878b54de84035067"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="across__segments_8cpp.html#a05aba25df76f70af878b54de84035067">check_file</a> (string fname, int i)</td></tr>
+<tr class="separator:a05aba25df76f70af878b54de84035067"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af775d431cd471475ca6198e993785f70"><td class="memItemLeft" align="right" valign="top">map&lt; int, vector&lt; <a class="el" href="classclassifier.html">classifier</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="across__segments_8cpp.html#af775d431cd471475ca6198e993785f70">make_classifier_struct_free_model</a> (<a class="el" href="classparams.html">params</a> *P, <a class="el" href="classsegment.html">segment</a> *data)</td></tr>
 <tr class="separator:af775d431cd471475ca6198e993785f70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae7404cd5dc3289c195bf40de30cb1fa5"><td class="memItemLeft" align="right" valign="top">map&lt; int, vector&lt; <a class="el" href="classclassifier.html">classifier</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="across__segments_8cpp.html#ae7404cd5dc3289c195bf40de30cb1fa5">make_classifier_struct_free_model_pwrapper</a> (<a class="el" href="class_param_wrapper.html">ParamWrapper</a> *pw, <a class="el" href="classsegment.html">segment</a> *data)</td></tr>
 <tr class="separator:ae7404cd5dc3289c195bf40de30cb1fa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27cd3262c84030b418d8f7dc659e49d5"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="across__segments_8cpp.html#a27cd3262c84030b418d8f7dc659e49d5">transform_free_mode</a> (bool FOUND, double ll, <a class="el" href="classcomponent.html">component</a> *components, int K, <a class="el" href="classsegment.html">segment</a> *data, int i, double forward_N, double reverse_N)</td></tr>
 <tr class="separator:a27cd3262c84030b418d8f7dc659e49d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60a0de42566f30e53e555cc5c9b1580b"><td class="memItemLeft" align="right" valign="top">map&lt; int, vector&lt; <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="across__segments_8cpp.html#a60a0de42566f30e53e555cc5c9b1580b">get_max_from_free_mode</a> (map&lt; int, vector&lt; <a class="el" href="classclassifier.html">classifier</a> &gt; &gt; A, <a class="el" href="classsegment.html">segment</a> *data, int i)</td></tr>
-<tr class="separator:a60a0de42566f30e53e555cc5c9b1580b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76cf9410b7ca7ee14644f0a603420b0e"><td class="memItemLeft" align="right" valign="top">map&lt; int, vector&lt; <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="across__segments_8cpp.html#a76cf9410b7ca7ee14644f0a603420b0e">get_max_from_free_mode</a> (map&lt; int, vector&lt; <a class="el" href="classclassifier.html">classifier</a> &gt;&gt; A, <a class="el" href="classsegment.html">segment</a> *data, int i)</td></tr>
+<tr class="separator:a76cf9410b7ca7ee14644f0a603420b0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac983391d8779c7bf60c7e922e118adeb"><td class="memItemLeft" align="right" valign="top">vector&lt; map&lt; int, vector&lt; <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="across__segments_8cpp.html#ac983391d8779c7bf60c7e922e118adeb">run_model_across_free_mode</a> (vector&lt; <a class="el" href="classsegment.html">segment</a> *&gt; FSI, <a class="el" href="classparams.html">params</a> *P, <a class="el" href="class_log___file.html">Log_File</a> *LG)</td></tr>
 <tr class="separator:ac983391d8779c7bf60c7e922e118adeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0c15e7209a353baa41dfcc9bbe4675c"><td class="memItemLeft" align="right" valign="top">vector&lt; map&lt; int, vector&lt; <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="across__segments_8cpp.html#ac0c15e7209a353baa41dfcc9bbe4675c">run_model_across_free_mode_pwrapper</a> (vector&lt; <a class="el" href="classsegment.html">segment</a> *&gt; FSI, <a class="el" href="class_param_wrapper.html">ParamWrapper</a> *pw, <a class="el" href="class_log___file.html">Log_File</a> *LG)</td></tr>
@@ -139,8 +139,8 @@ Functions</h2></td></tr>
 <tr class="separator:a769b16369d6e60e2010e1436f447ee54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a6ac35181865c80ec4432884a653f90c5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ac35181865c80ec4432884a653f90c5">&#9670;&nbsp;</a></span>check_file()</h2>
+<a id="a05aba25df76f70af878b54de84035067"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05aba25df76f70af878b54de84035067">&#9670;&nbsp;</a></span>check_file()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -149,7 +149,7 @@ Functions</h2></td></tr>
           <td class="memname">string check_file </td>
           <td>(</td>
           <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>FILE</em>, </td>
+          <td class="paramname"><em>fname</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -166,7 +166,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Recursively attempts to return a valid output filename. This function is used so that Tfit doesn't overwrite the results returned from prior runs. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">FILE</td><td>Base filename </td></tr>
+    <tr><td class="paramname">fname</td><td>Base filename </td></tr>
     <tr><td class="paramname">i</td><td>initial iterator parameter with which to generate a unique filename. </td></tr>
   </table>
   </dd>
@@ -246,8 +246,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a60a0de42566f30e53e555cc5c9b1580b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60a0de42566f30e53e555cc5c9b1580b">&#9670;&nbsp;</a></span>get_max_from_free_mode()</h2>
+<a id="a76cf9410b7ca7ee14644f0a603420b0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76cf9410b7ca7ee14644f0a603420b0e">&#9670;&nbsp;</a></span>get_max_from_free_mode()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -255,7 +255,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">map&lt;int, vector&lt;<a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a>&gt; &gt; get_max_from_free_mode </td>
           <td>(</td>
-          <td class="paramtype">map&lt; int, vector&lt; <a class="el" href="classclassifier.html">classifier</a> &gt; &gt;&#160;</td>
+          <td class="paramtype">map&lt; int, vector&lt; <a class="el" href="classclassifier.html">classifier</a> &gt;&gt;&#160;</td>
           <td class="paramname"><em>A</em>, </td>
         </tr>
         <tr>
@@ -402,7 +402,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A set of optimal <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> maps as obtained from <a class="el" href="across__segments_8cpp.html#a60a0de42566f30e53e555cc5c9b1580b">get_max_from_free_mode()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A set of optimal <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> maps as obtained from <a class="el" href="across__segments_8cpp.html#a76cf9410b7ca7ee14644f0a603420b0e">get_max_from_free_mode()</a>. </dd></dl>
 
 </div>
 </div>
@@ -446,7 +446,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>A set of optimal <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> maps as obtained from <a class="el" href="across__segments_8cpp.html#a60a0de42566f30e53e555cc5c9b1580b">get_max_from_free_mode()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>A set of optimal <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> maps as obtained from <a class="el" href="across__segments_8cpp.html#a76cf9410b7ca7ee14644f0a603420b0e">get_max_from_free_mode()</a>. </dd></dl>
 
 </div>
 </div>

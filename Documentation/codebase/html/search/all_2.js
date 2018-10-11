@@ -7,7 +7,7 @@ var searchData=
   ['center',['center',['../classnode.html#a35c18f924b650dd518c0f9976edcc85a',1,'node']]],
   ['centers',['centers',['../classsegment.html#add3d9a2aea3157f6583b29c6a0e198eb',1,'segment']]],
   ['check_5felongation_5fsupport',['check_elongation_support',['../classcomponent.html#a3bf44734f602db521492483908c65ae4',1,'component']]],
-  ['check_5ffile',['check_file',['../across__segments_8cpp.html#a6ac35181865c80ec4432884a653f90c5',1,'check_file(string FILE, int i):&#160;across_segments.cpp'],['../across__segments_8h.html#a697451c9a3c2d1f9e025b20692af3552',1,'check_file(string, int):&#160;across_segments.cpp']]],
+  ['check_5ffile',['check_file',['../across__segments_8cpp.html#a05aba25df76f70af878b54de84035067',1,'check_file(string fname, int i):&#160;across_segments.cpp'],['../across__segments_8h.html#a697451c9a3c2d1f9e025b20692af3552',1,'check_file(string, int):&#160;across_segments.cpp']]],
   ['check_5fhit',['check_hit',['../template__matching_8cpp.html#ae0026a99f6987dc0b4f3038f88a9d2bc',1,'template_matching.cpp']]],
   ['check_5fid_5fname',['check_ID_name',['../load_8cpp.html#a8e7a6cc96b1553f086dd55249a0f6674',1,'load.cpp']]],
   ['check_5fvalue',['check_value',['../_f_d_r_8cpp.html#a23353810519101d97c54ef92633dc8e1',1,'FDR.cpp']]],

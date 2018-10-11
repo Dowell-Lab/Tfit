@@ -1,13 +1,22 @@
 var searchData=
 [
-  ['n',['N',['../classsegment.html#aed6b3a9fe78278ff06ad6a5ba14f5b03',1,'segment::N()'],['../classsegment__fits.html#a10dfe24fcd30683468137b5d2e313682',1,'segment_fits::N()'],['../classparams.html#a3184d5ddb84359b2a4afde94b511d61e',1,'params::N()']]],
-  ['n_5fneg',['N_neg',['../classsegment__fits.html#ad9e100ede7d852381143bfba26b900fc',1,'segment_fits']]],
-  ['n_5fpos',['N_pos',['../classsegment__fits.html#a19e3628bef60e64d4e6dec5962b01fa1',1,'segment_fits']]],
-  ['ninf',['nINF',['../template__matching_8cpp.html#ad546e3844e51ebe032db5725cf9aff25',1,'nINF():&#160;template_matching.cpp'],['../template__matching_8h.html#ad546e3844e51ebe032db5725cf9aff25',1,'nINF():&#160;template_matching.cpp']]],
-  ['noise',['noise',['../classcomponent.html#a0fd6ac6d8c979f0748f96802bd41ffd5',1,'component']]],
-  ['noise_5fll',['noise_ll',['../structsimple__c.html#a42070613be680ba543f0520e3adbc6db',1,'simple_c']]],
-  ['noise_5fmax',['noise_max',['../classclassifier.html#ada3d50168da44190a811f876d847d844',1,'classifier']]],
-  ['norm_5fall',['norm_all',['../classslice__ratio.html#a4878e0340ad980f5b9c5e607c365dd79',1,'slice_ratio']]],
-  ['norms',['NORMS',['../classslice__ratio.html#a96cb00ba2f2dfc860af8b67a104bb686',1,'slice_ratio']]],
-  ['ns',['ns',['../class_param_wrapper.html#a5c75cbd856823423358c6c83536bdc2c',1,'ParamWrapper']]]
+  ['m',['M',['../classsegment__fits.html#a8fdbe85cbb17dda9a2f308b384913ef8',1,'segment_fits']]],
+  ['max_5fiterations',['max_iterations',['../classclassifier.html#a751d46bfee175986639e636e3c3feaa0',1,'classifier::max_iterations()'],['../classclassifier__single.html#abca14b551b24d7c74668768466004d3d',1,'classifier_single::max_iterations()']]],
+  ['maxk',['maxk',['../class_param_wrapper.html#aa88689fae5680178e670ce840d001d9c',1,'ParamWrapper']]],
+  ['maxnoise',['maxNoise',['../class_param_wrapper.html#ac3f9b8d14e3092c01d8ea3973b15ec96',1,'ParamWrapper']]],
+  ['maxx',['maxX',['../classsegment.html#a1f0610df4dba6a6ed9e72560bc9bf909',1,'segment']]],
+  ['mean',['mean',['../classnormal.html#a845e5b1b428bbe7730bfc22e5cbc1dfb',1,'normal::mean()'],['../classslice__ratio.html#a4ca3bbb795fd77efcb9ba91147a2c5ae',1,'slice_ratio::mean()']]],
+  ['mergedstrand',['mergedStrand',['../class_param_wrapper.html#ac16c0bb5551ff02292c5a88a680ef3dd',1,'ParamWrapper']]],
+  ['mi',['mi',['../class_param_wrapper.html#adfefc9abfc93bc4da9205fedbb074aaf',1,'ParamWrapper']]],
+  ['mink',['mink',['../class_param_wrapper.html#ab6bae621f15d8f92cd5ffc91896efdf2',1,'ParamWrapper']]],
+  ['minreads',['minReads',['../class_param_wrapper.html#a1d5f68d4aabe37891913e66b2280f217',1,'ParamWrapper']]],
+  ['minx',['minX',['../classsegment.html#ab60728122c45e71688463351dfad9d4f',1,'segment']]],
+  ['mle',['mle',['../class_param_wrapper.html#a56b7e06b57b0c0b830cddae96418d1f1',1,'ParamWrapper']]],
+  ['model',['model',['../classsegment__fits.html#a9cd15eff2a2567e1073e658a9d8c35f0',1,'segment_fits::model()'],['../class_param_wrapper.html#afe719664e76a8c9886f14f883b35dd61',1,'ParamWrapper::model()'],['../classparams.html#af69bd59bd2d65e2ad6937488109db2b4',1,'params::model()']]],
+  ['models',['models',['../class_param_wrapper.html#aba1ca3acfecc44fcdd4d08a8b803bd29',1,'ParamWrapper']]],
+  ['module',['module',['../class_param_wrapper.html#a564bf31e85b35bf57874d070e55ed3de',1,'ParamWrapper::module()'],['../classparams.html#a373bd462f28e8f111e3a02822159acd5',1,'params::module()']]],
+  ['move',['move',['../classclassifier.html#abf008d9385bdcbdb8ff07b5f66d5a1fc',1,'classifier']]],
+  ['move_5ffp',['move_fp',['../class_e_m_g.html#afc8c2a9319d3778375e0d10b3269a316',1,'EMG']]],
+  ['move_5fl',['move_l',['../classclassifier.html#ae9c147685a991525372e1d99afacf289',1,'classifier']]],
+  ['mu',['mu',['../classexponential.html#a4d11943dd365c850bc6cbad1872b67d4',1,'exponential::mu()'],['../classpareto.html#a338dca033c27b2994739b639b6662755',1,'pareto::mu()'],['../class_e_m_g.html#a0201ca849872d7dd62db3e6a4ad9ce5d',1,'EMG::mu()'],['../class_n_o_r_m_a_l.html#a88e995a32daf2d71ba28aeaf8de79410',1,'NORMAL::mu()'],['../class_n_l_r.html#aa48ec77eea0ad1d172e7632bc923c75e',1,'NLR::mu()']]]
 ];

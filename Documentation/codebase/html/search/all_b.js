@@ -11,7 +11,7 @@ var searchData=
   ['load',['load',['../namespaceload.html',1,'']]],
   ['load_2ecpp',['load.cpp',['../load_8cpp.html',1,'']]],
   ['load_2eh',['load.h',['../load_8h.html',1,'']]],
-  ['load_5fbedgraphs_5ftotal',['load_bedgraphs_total',['../namespaceload.html#aa6f82fdd973a3d8ce198ac2ce002a04d',1,'load']]],
+  ['load_5fbedgraphs_5ftotal',['load_bedgraphs_total',['../namespaceload.html#a380af57d49ba2bc90f692ffa2094ecdd',1,'load']]],
   ['load_5fintervals_5fof_5finterest',['load_intervals_of_interest',['../namespaceload.html#af4d8153e9750dfa035d663f256b752dd',1,'load']]],
   ['load_5fintervals_5fof_5finterest_5fpwrapper',['load_intervals_of_interest_pwrapper',['../namespaceload.html#a3ccc6b7dff822b2b17151c5e099a422b',1,'load']]],
   ['load_5fk_5fmodels_5fout',['load_K_models_out',['../namespaceload.html#a8d1565eba2a7d4d4348e985b88a5d2e2',1,'load']]],
@@ -19,5 +19,6 @@ var searchData=
   ['log_5ffile',['Log_File',['../class_log___file.html',1,'Log_File'],['../class_log___file.html#af08d95bdd5250a29b8f4389b96f189dc',1,'Log_File::Log_File()'],['../class_log___file.html#abb763ee573bf87b227ba337f9de075b5',1,'Log_File::Log_File(int, int, string, string)']]],
   ['log_5fout_5fdir',['log_out_dir',['../class_log___file.html#a02b01fbc2e62c67b650a8fca39196c2f',1,'Log_File']]],
   ['logdir',['logDir',['../class_param_wrapper.html#a228e1d6a0abf8f9d82cd33165d23512b',1,'ParamWrapper']]],
+  ['logfile',['logfile',['../class_param_wrapper.html#a3f6f76ee43b917d6eda3d7a17c8f0e9d',1,'ParamWrapper']]],
   ['lower_5fupper',['lower_upper',['../structbounds.html#a7567aad043e1bed2a99142f3296384e7',1,'bounds']]]
 ];

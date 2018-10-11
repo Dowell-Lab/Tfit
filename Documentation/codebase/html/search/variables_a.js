@@ -1,20 +1,14 @@
 var searchData=
 [
-  ['m',['M',['../classsegment__fits.html#a8fdbe85cbb17dda9a2f308b384913ef8',1,'segment_fits']]],
-  ['max_5fiterations',['max_iterations',['../classclassifier.html#a751d46bfee175986639e636e3c3feaa0',1,'classifier::max_iterations()'],['../classclassifier__single.html#abca14b551b24d7c74668768466004d3d',1,'classifier_single::max_iterations()']]],
-  ['maxk',['maxk',['../class_param_wrapper.html#aa88689fae5680178e670ce840d001d9c',1,'ParamWrapper']]],
-  ['maxnoise',['maxNoise',['../class_param_wrapper.html#ac3f9b8d14e3092c01d8ea3973b15ec96',1,'ParamWrapper']]],
-  ['maxx',['maxX',['../classsegment.html#a1f0610df4dba6a6ed9e72560bc9bf909',1,'segment']]],
-  ['mean',['mean',['../classnormal.html#a845e5b1b428bbe7730bfc22e5cbc1dfb',1,'normal::mean()'],['../classslice__ratio.html#a4ca3bbb795fd77efcb9ba91147a2c5ae',1,'slice_ratio::mean()']]],
-  ['mergedstrand',['mergedStrand',['../class_param_wrapper.html#ac16c0bb5551ff02292c5a88a680ef3dd',1,'ParamWrapper']]],
-  ['mi',['mi',['../class_param_wrapper.html#adfefc9abfc93bc4da9205fedbb074aaf',1,'ParamWrapper']]],
-  ['mink',['mink',['../class_param_wrapper.html#ab6bae621f15d8f92cd5ffc91896efdf2',1,'ParamWrapper']]],
-  ['minx',['minX',['../classsegment.html#ab60728122c45e71688463351dfad9d4f',1,'segment']]],
-  ['mle',['mle',['../class_param_wrapper.html#a56b7e06b57b0c0b830cddae96418d1f1',1,'ParamWrapper']]],
-  ['model',['model',['../classsegment__fits.html#a9cd15eff2a2567e1073e658a9d8c35f0',1,'segment_fits::model()'],['../class_param_wrapper.html#afe719664e76a8c9886f14f883b35dd61',1,'ParamWrapper::model()'],['../classparams.html#af69bd59bd2d65e2ad6937488109db2b4',1,'params::model()']]],
-  ['module',['module',['../class_param_wrapper.html#a564bf31e85b35bf57874d070e55ed3de',1,'ParamWrapper::module()'],['../classparams.html#a373bd462f28e8f111e3a02822159acd5',1,'params::module()']]],
-  ['move',['move',['../classclassifier.html#abf008d9385bdcbdb8ff07b5f66d5a1fc',1,'classifier']]],
-  ['move_5ffp',['move_fp',['../class_e_m_g.html#afc8c2a9319d3778375e0d10b3269a316',1,'EMG']]],
-  ['move_5fl',['move_l',['../classclassifier.html#ae9c147685a991525372e1d99afacf289',1,'classifier']]],
-  ['mu',['mu',['../classexponential.html#a4d11943dd365c850bc6cbad1872b67d4',1,'exponential::mu()'],['../classpareto.html#a338dca033c27b2994739b639b6662755',1,'pareto::mu()'],['../class_e_m_g.html#a0201ca849872d7dd62db3e6a4ad9ce5d',1,'EMG::mu()'],['../class_n_o_r_m_a_l.html#a88e995a32daf2d71ba28aeaf8de79410',1,'NORMAL::mu()'],['../class_n_l_r.html#aa48ec77eea0ad1d172e7632bc923c75e',1,'NLR::mu()']]]
+  ['l',['l',['../class_u_n_i.html#a763c3c71eae142a2b8f880137fb3b99a',1,'UNI::l()'],['../class_e_m_g.html#a35a34caa5b411655c328b23e5b627a14',1,'EMG::l()'],['../class_n_l_r.html#a8d23682fb1b53ac504a38d710af00db9',1,'NLR::l()']]],
+  ['lambda',['lambda',['../classexponential.html#adcadb1a779915370d184603017850911',1,'exponential::lambda()'],['../class_param_wrapper.html#ac2a5b621f7cb9925c21e1baafdba536f',1,'ParamWrapper::lambda()']]],
+  ['last_5fdiff',['last_diff',['../classclassifier.html#a2d1c46215d26a06d8707c946f0390ecf',1,'classifier']]],
+  ['left',['left',['../classnode.html#a7cbff55ff448f557223f79299056e9b1',1,'node']]],
+  ['left_5fsum',['left_SUM',['../class_u_n_i.html#a82a87f0b842cb8e3b33d021b5496715e',1,'UNI']]],
+  ['ll',['ll',['../structsimple__c.html#a4a5e703ba1d6473e1597cbd920350469',1,'simple_c::ll()'],['../classclassifier.html#a8e0fa3aae4b64c381d5251654eb237af',1,'classifier::ll()'],['../classclassifier__single.html#a893db23ae1299ac1149ca21dece02c7e',1,'classifier_single::ll()']]],
+  ['llrthresh',['llrthresh',['../class_param_wrapper.html#a58f51c52161cba9c85411394457326fe',1,'ParamWrapper']]],
+  ['log_5fout_5fdir',['log_out_dir',['../class_log___file.html#a02b01fbc2e62c67b650a8fca39196c2f',1,'Log_File']]],
+  ['logdir',['logDir',['../class_param_wrapper.html#a228e1d6a0abf8f9d82cd33165d23512b',1,'ParamWrapper']]],
+  ['logfile',['logfile',['../class_param_wrapper.html#a3f6f76ee43b917d6eda3d7a17c8f0e9d',1,'ParamWrapper']]],
+  ['lower_5fupper',['lower_upper',['../structbounds.html#a7567aad043e1bed2a99142f3296384e7',1,'bounds']]]
 ];

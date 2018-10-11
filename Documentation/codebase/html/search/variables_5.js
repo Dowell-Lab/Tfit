@@ -2,6 +2,8 @@ var searchData=
 [
   ['fdr',['fdr',['../class_param_wrapper.html#a88f697abf861cbd723f9e1cfc3f0d311',1,'ParamWrapper']]],
   ['fhw',['FHW',['../class_log___file.html#aef7b054218f0c1d063c6db711f9afd69',1,'Log_File']]],
+  ['filterminreads',['filterMinReads',['../class_param_wrapper.html#ae9d2598f9d384cf4ead77f2eea638638',1,'ParamWrapper']]],
+  ['filterzeroregions',['filterZeroRegions',['../class_param_wrapper.html#a42c14af196d59ff584609688d853500c',1,'ParamWrapper']]],
   ['fitted_5fbidirs',['fitted_bidirs',['../classsegment.html#ac0299fdcf01f5cdafaa2e6f7572af19d',1,'segment']]],
   ['fn',['fN',['../classsegment.html#a9f8280c8f515ad85e703c7e0ce2125f6',1,'segment']]],
   ['foot_5fprint',['foot_print',['../class_e_m_g.html#a4bcb4c27b836baef438532f20e22d239',1,'EMG::foot_print()'],['../classcomponent.html#ab9128aac5d4b3bb45c009a475856cd69',1,'component::foot_print()'],['../classclassifier.html#abdd5d321fd3369ab19567cf7b33cb8d5',1,'classifier::foot_print()']]],

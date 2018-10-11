@@ -12,7 +12,7 @@ var searchData=
   ['initialize_5fwith_5fparameters',['initialize_with_parameters',['../classcomponent.html#ac22d049b9d03980baa245f162750988e',1,'component']]],
   ['initialize_5fwith_5fparameters2',['initialize_with_parameters2',['../classcomponent.html#a2ee012ada01a9115e10853e6dcc1c847',1,'component']]],
   ['insert',['insert',['../classslice__ratio.html#a49c0d0a018def8e7f9a36085890dea70',1,'slice_ratio']]],
-  ['insert_5fbedgraph_5fto_5fsegment_5fjoint',['insert_bedgraph_to_segment_joint',['../namespaceload.html#aeafb606232c3e26ad1640ab8e031a5e1',1,'load']]],
+  ['insert_5fbedgraph_5fto_5fsegment_5fjoint',['insert_bedgraph_to_segment_joint',['../namespaceload.html#a4a16236cc9e31fd89b87a59cb52bbd0f',1,'load']]],
   ['insert_5fcoverage',['insert_coverage',['../classnode.html#a40828800304ce45629816da3ee88f4f4',1,'node']]],
   ['is_5fdecimal',['is_decimal',['../read__in__parameters_8cpp.html#a3c21cc5510c2c0b7bf26c45a4fb2c748',1,'read_in_parameters.cpp']]],
   ['is_5finteger',['is_integer',['../read__in__parameters_8cpp.html#a8839a372a694a80d2781b2821c8d627a',1,'read_in_parameters.cpp']]],

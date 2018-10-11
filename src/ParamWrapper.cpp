@@ -90,6 +90,7 @@ void ParamWrapper::printUsageShort()
     printf("\t-i\tForward bedgraph file\n");
     printf("\t-j\tReverse bedgraph file.\n");
     printf("\t-ij\tJoint (both forward and negative) bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.\n");
+    printf("\t\tPlease note that bedgraphs used by Tfit should be produced using \"bedtools genomecoverage\" or equivalent.\n");
     printf("\nAdditional (optional) parameters for the bidir module:\n");
     printf("\t-tss\tTranscription model path. Models are provided for hg19 and mm10 in the annotations directory of this project.\n");
     printf("\t-chr\tRun bidir only on the specified chromosome by name. The default is, \"all\"\n");
@@ -108,7 +109,7 @@ void ParamWrapper::printUsageShort()
     printf("\t--bidirpreds,-bp\tBidirectional predictions file (used to represent \"regions of interest\" for the model module.\n");
     printf("\t--logfile,-lf\tLog file in which to write error and message output.\n");
     
-    printf("\n\n(To get a full usage statement, run TFit with the -h parameter.)");
+    printf("\n\n(To get a full usage statement, run TFit with the -h parameter.)\n");
 }
 
 /** Sets all values to their defaults as per the old read_in_parameters codebase.

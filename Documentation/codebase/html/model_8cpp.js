@@ -1,5 +1,6 @@
 var model_8cpp =
 [
+    [ "MODEL_DEBUG", "model_8cpp.html#a228fdc62738f019b7b51c9d6cfc4a95b", null ],
     [ "checkNumber", "model_8cpp.html#a47dfd9748f503130c181ade7f00b2b3e", null ],
     [ "get_nearest_position", "model_8cpp.html#a82095a2edcf2a6e2eb7b76cef1dff08f", null ],
     [ "get_sum", "model_8cpp.html#a681b30de4bc697a89205a6da56e767ac", null ],

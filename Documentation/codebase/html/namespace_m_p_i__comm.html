@@ -100,8 +100,8 @@ Functions</h2></td></tr>
 <tr class="separator:a68ba1c1f22ca2ac77d46ee54971b5dc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a120c858dcf19dcbf073f9a6620c6e7ea"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_p_i__comm.html#a120c858dcf19dcbf073f9a6620c6e7ea">get_job_ID</a> (string, string, int, int)</td></tr>
 <tr class="separator:a120c858dcf19dcbf073f9a6620c6e7ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b549f5e72c609b5c6e20b7e4328e61d"><td class="memItemLeft" align="right" valign="top">map&lt; int, map&lt; int, vector&lt; <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_p_i__comm.html#a8b549f5e72c609b5c6e20b7e4328e61d">gather_all_simple_c_free_mode</a> (vector&lt; map&lt; int, vector&lt; <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> &gt; &gt;&gt;, int, int)</td></tr>
-<tr class="separator:a8b549f5e72c609b5c6e20b7e4328e61d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbeb1ff66749d894f90bb1d838914463"><td class="memItemLeft" align="right" valign="top">map&lt; int, map&lt; int, vector&lt; <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_p_i__comm.html#adbeb1ff66749d894f90bb1d838914463">gather_all_simple_c_free_mode</a> (vector&lt; map&lt; int, vector&lt; <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> &gt; &gt;&gt;, int, int)</td></tr>
+<tr class="separator:adbeb1ff66749d894f90bb1d838914463"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a047453d07874e2a1e1b042c095302c09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_p_i__comm.html#a047453d07874e2a1e1b042c095302c09">wait_on_root</a> (int, int)</td></tr>
 <tr class="separator:a047453d07874e2a1e1b042c095302c09"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a770dbcede25b8424ca1f1cf6e2f106e5"><td class="memItemLeft" align="right" valign="top">vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_m_p_i__comm.html#a770dbcede25b8424ca1f1cf6e2f106e5">send_out_parameters</a> (vector&lt; double &gt;, int, int)</td></tr>
@@ -305,29 +305,29 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8b549f5e72c609b5c6e20b7e4328e61d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b549f5e72c609b5c6e20b7e4328e61d">&#9670;&nbsp;</a></span>gather_all_simple_c_free_mode()</h2>
+<a id="adbeb1ff66749d894f90bb1d838914463"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbeb1ff66749d894f90bb1d838914463">&#9670;&nbsp;</a></span>gather_all_simple_c_free_mode()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">map&lt; int, map&lt; int, vector&lt; <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> &gt; &gt; &gt; MPI_comm::gather_all_simple_c_free_mode </td>
+          <td class="memname">map&lt;int, map&lt;int, vector&lt;<a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a>&gt; &gt; &gt; MPI_comm::gather_all_simple_c_free_mode </td>
           <td>(</td>
           <td class="paramtype">vector&lt; map&lt; int, vector&lt; <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> &gt; &gt;&gt;&#160;</td>
-          <td class="paramname"><em>FITS</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>rank</em>, </td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>nprocs</em>&#160;</td>
+          <td class="paramname">&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -336,14 +336,6 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Distributes <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> objects among worker processes. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">FITS</td><td>set of <a class="el" href="structsimple__c__free__mode.html">simple_c_free_mode</a> objects to distribute </td></tr>
-    <tr><td class="paramname">rank</td><td>rank parameter obtained from the MPI runtime. </td></tr>
-    <tr><td class="paramname">nprocs</td><td>worker count obtained from the MPI runtime. </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>
