@@ -3,7 +3,7 @@ from scipy.special import erf, erfc
 from scipy.stats import invgamma
 import simulate
 import math as m
-import math #not sure why its double imported, probably pytused as both m. and math.
+#import math #Used as both math and m.
 import matplotlib.pyplot as plt
 import time
 import multiprocessing as mp
@@ -72,7 +72,7 @@ class component_elongation:
 				self.a 			= self.b - min(np.random.gamma(self.c.uniform_rate, 1), self.c.maxX)
 
 	def check(self):
-		if math.isnan(self.w) or math.isnan(self.a) or math.isnan(self.b):
+		if m.isnan(self.w) or m.isnan(self.a) or m.isnan(self.b):
 			return True
 		return False
 	def reset(self):
@@ -184,7 +184,7 @@ class component_bidir:
 		if self.remove:
 			self.forward.remove, self.reverse.remove 	= True, True
 			return True
-		if math.isnan(self.mu) or math.isnan(self.l) or math.isnan(self.si):
+		if ma.isnan(self.mu) or m.isnan(self.l) or m.isnan(self.si):
 			self.forward.remove, self.reverse.remove 	= True, True
 			return True
 		return False
@@ -398,9 +398,9 @@ class EMGU:
 				for c in components: #add sufficient stats
 					c.add_stats(X[i,0],X[i,1],X[i,2], norm_forward, norm_reverse)
 				if norm_forward:
-					ll+=math.log(norm_forward)*X[i,1]
+					ll+=m.log(norm_forward)*X[i,1]
 				if norm_reverse:
-					ll+=math.log(norm_reverse)*X[i,2]
+					ll+=m.log(norm_reverse)*X[i,2]
 			print ("ll: ",ll)
 			#######
 			#M-step equation 6 in paper

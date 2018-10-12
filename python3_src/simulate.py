@@ -112,8 +112,10 @@ def weird_variance(x,y,mu,direct):#x is start, y is end, direc is direction
 
 if __name__=="__main__":
 
-	X 	= runOne(
-	mu=0; s=20; l=5; lr=100; ll=-100; we=0.5;wl=0.25; wr=0.25; pie=0.5; pil=0.1; pir=0.9; N=10000; SHOW=True ; bins=200; noise=False ; foot_print = 0;)
+	X 	= runOne(mu=0,
+		s=20, l=5, lr=100, ll=-100, we=0.5, wl=0.25, wr=0.25, pie=0.5, 
+		pil=0.1, pir=0.9, N=10000, SHOW=True, bins=200, noise=False, foot_print = 0)
+		
 	mu 	= 0.5*(weighted_mean(X[:,0], X[:,1])+weighted_mean(X[:,0], X[:,2]))
 	l 	= 0.5*(weighted_mean(X[:,0], X[:,1])-weighted_mean(X[:,0], X[:,2]))
 	#print ("Mu: ",mu,"l: ", l)
