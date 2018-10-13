@@ -30,8 +30,8 @@ Have they tested the difference in resuts between the two types of code(C++ and 
 Answer: No, but I can start on doing some of that.
 
 In model.py:
-This error is given for python3: matplotlib does not support generators as input
-fixed in python2
+Fixed 
+
 
 simulate.py:
 uppon review there are changes from run to run, however the difference between py3-py2 doesnt seem to have a big difference
@@ -86,8 +86,8 @@ The problem is that some of the math gets hung up with zeros/floats. Not always 
 
 Model Across:
 When I first got to it this file seemed unfinished, with wierd errors, like missing imports and declarations
-then I had to create a main function so that I could test it, and since it calls the same function in model that is broken 
-this too does not work.
+then I had to create a main function so that I could test it. 
+
 
 find_regions_of_interest:
 It does not does not seem that this file is used at all
