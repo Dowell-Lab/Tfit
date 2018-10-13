@@ -33,6 +33,7 @@ class component_elongation:
 		return "Component Elongation a: " + str(self.a) + " b: " + str(self.b) + " w: " + str(self.w) + " pi: " + str(self.pi)
 
 
+	#compute the pdf for each foreward or reverse and add to pos/minus strands
 	def eval(self, z, forward_ct, reverse_ct):
 		if forward_ct :
 			self.ri[1] 	= self.pdf(z, 1)
@@ -47,7 +48,7 @@ class component_elongation:
 
 		return self.ri[1], self.ri[-1]
 		
-		
+	#returns the two foreward and reverse strands
 	def get_current_r(self):
 		return self.ri[1] + self.ri[-1]
 		
@@ -57,13 +58,14 @@ class component_elongation:
 		self.pi, self.w =(self.r[1] + self.c.beta_0) / (r+ self.c.beta_0*2), (r + self.c.alpha_0)  / (N+self.c.alpha_0*self.c.K*3 + self.c.K*3 )
 		if self.type=="noise":
 			self.w 		= min(self.c.noise_max, self.w)
-			print (" w HERE: ", self.w)
-		#====================================================
+			print (" Noise w HERE: ", self.w)
+		#====================================================This just clears all data?
 		self.r[1], self.r[-1] 			= 0,0
 		self.ri[1], self.ri[-1] 		= 0,0
 
 		if self.type=="forward" :
 			self.a 			= self.bidir.mu +self.foot_print
+			#if too close resets b to be within gamma
 			if abs(self.b - self.a) < 2:
 				self.b 		= self.a + min(np.random.gamma(self.c.uniform_rate, 1), self.c.maxX)
 		elif self.type=="reverse" :
@@ -72,9 +74,11 @@ class component_elongation:
 				self.a 			= self.b - min(np.random.gamma(self.c.uniform_rate, 1), self.c.maxX)
 
 	def check(self):
+		#if a,w,b are not a number return true
 		if m.isnan(self.w) or m.isnan(self.a) or m.isnan(self.b):
 			return True
 		return False
+		
 	def reset(self):
 		self.remove 		= False
 
@@ -86,7 +90,8 @@ class component_elongation:
 		if reverse_ct and norm_reverse and (self.type=="reverse" or self.type=="noise"):
 			r 	= reverse_ct*(self.ri[-1]/norm_reverse)
 			self.r[-1]+=r
-
+	
+	#standard pdf computationss
 	def pdf(self, z,s,move_a=0, move_b=0):
 		if s== 1:
 			PI 	= self.pi
@@ -129,12 +134,15 @@ class component_bidir:
 		return ("component bidir mu: " + str(self.mu) + " si " +str(self.si) + " l: " +str(self.l) + " w: " + str(self.w) + " pi: " + str(self.pi) + "\n foreward string: " +
 			self.forward.__str__() + "\n reverse string: " +
 			self.reverse.__str__())
-
+	
+	#a normal curve with peak at .4 with 99% wihtin (-4 4)
 	def IN(self, x):
 		return m.exp(-pow(x,2)*0.5)/m.sqrt(2*m.pi)
 		
 		
 	def IC(self, x):
+		#erf returns the error function of complex argument
+		#when x>5 will return ~1
 		return 0.5*(1+erf(x/m.sqrt(2.)))
 
 	def R(self, x):
@@ -143,16 +151,21 @@ class component_bidir:
 		N,D 	= self.IC(x), self.IN(x)
 		if D < m.pow(10,-15): #python machine epsilon= 1e-15
 			return 1.0 / m.pow(10,-15)
-		return m.exp(m.log(1. - N)-m.log(D))
+		#return m.exp(m.log(1. - N)-m.log(D))#same as (1-N)/D even if D is zero both cases get undefined
+		#after running some sims between the two computations the two calculations greatest differences is 3e-17
+		#possible speed up here, also my gut is that dividing is more accurate
+		return (1. - N)/D
 		
-	def EY(self, z, s):
+	def EY(self, z, s):#handling foreward and reverse strings
 		if s==1:
 			z-=self.foot_print
 		else:
 			z+=self.foot_print
 
-		return max((s*(z-self.mu) -self.l*pow(self.si,2) + self.si / (self.R(self.l*self.si - s*((z-self.mu)/ self.si))),0.))
-
+		return max(s*(z-self.mu) -self.l*pow(self.si,2) + self.si / (self.R(self.l*self.si - s*((z-self.mu)/ self.si))),0.)
+#notes on both EY and EY2: both have the same R-function output input that devides at the end.
+#EY is much simpliler than EY2. I dont recognize either function though 
+#find where each is used and list:
 
 
 	def EY2(self, z, s):
@@ -171,6 +184,7 @@ class component_bidir:
 			z+=self.foot_print
 		vl 		= (self.l /2.)* (s*2*(self.mu-z) + self.l*self.si**2. )
 		if vl > 200: #overflow error, try this one...
+			print("overflow on model.bidir.pdf")
 			p 	= self.l*self.IN((z-self.mu)/self.si)*self.R(self.l*self.si - s*((z - self.mu)/self.si))
 		try:
 			p 		= (self.l / 2.)*m.exp( vl )*erfc( (s*(self.mu- z) + self.l*self.si**2. ) / (m.sqrt(2)*self.si) )
@@ -189,7 +203,7 @@ class component_bidir:
 			return True
 		return False
 
-
+	#handler for the class
 	def add_stats(self, z, forward_ct, reverse_ct, norm_forward, norm_reverse):
 
 		if forward_ct and norm_forward:
