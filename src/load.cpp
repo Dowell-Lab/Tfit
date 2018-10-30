@@ -1358,9 +1358,9 @@ void load::collect_all_tmp_files(string dir, string job_name, int nprocs, int jo
    tstruct = *localtime(&now);
    // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
    // for more information about date/time format
-   strftime(buf, sizeof(buf), "%m_%d_%H_%M", &tstruct);
-   //string DT   = buf;
-   string OUT    = dir + job_name + "-" + to_string(job_ID) + ".log";
+   strftime(buf, sizeof(buf), "%m%d", &tstruct);
+   string DT     = buf;
+   string OUT    = dir + job_name + "-" + to_string(job_ID) + "_" + DT + ".log";
    ofstream FHW(OUT);
    for (int rank = 0; rank < nprocs; rank++) {
       string FILE   = dir + "tmp_" + job_name + "-" + to_string(job_ID) + "_" + to_string(rank) + ".log";

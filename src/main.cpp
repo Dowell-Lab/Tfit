@@ -72,14 +72,16 @@ int main(int argc, char* argv[]){
     LG->write(pw.getHeader(1), 0);
   }
   //The code seems to be breaking riiiight here.
-  if (pw.bidir){
+  if (pw.bidirOld){
       printf("About to launch bidir module.\n");
     //bidir_run(P, rank, nprocs, job_ID,LG);
     bidir_run_pwrapper(&pw, 0, nprocs, job_ID, LG);
   }
-  else if(pw.bidirOld)
+    
+  // Switched bidir and bidir_old modules -- we can keep bidir_old (Joey's last version before leaving) for troubleshooting, but bidir will      be the release
+  else if(pw.bidir)
   {
-      printf("About to launch bidir module with older behavior.\n");
+      printf("Launching bidir module to generate preliminary regions of interest in modeling bidirectionals.\n");
       //bidir_old_run_pwrapper(&pw, rank, nprocs, job_ID, LG);
       bidir_run_old_long_pwrapper(&pw, rank, nprocs, job_ID, LG);
   }
