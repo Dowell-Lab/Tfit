@@ -253,20 +253,21 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
         
         else if(it->first=="-o")
         {
-            if(it->second.back()!='/')
-            {
-                if(this->verbose)
-                {
-                    printf("Appending slash to end of output path.\n");
-                }
+// For sake of user friendliness, we're just going to run the bidir and model moduels separately, so we don't need this anymore
+            //if(it->second.back()!='/')
+            //{
+                //if(this->verbose)
+                //{
+                //    printf("Appending slash to end of output path.\n");
+                //}
                 
-                this->outputDir=it->second+"\n";
-            }
-            
-            else
-            {
                 this->outputDir=it->second;
-            }
+            //}
+            //
+            //else
+            //{
+            //    this->outputDir=it->second;
+            //}
         }
         
         else if(it->first=="-fdr" || it->first=="-FDR")

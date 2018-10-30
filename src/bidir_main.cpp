@@ -163,7 +163,7 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	//(4) if MLE option was provided than need to run the model_main::run()
 	//
 	if (stoi(P->p["-MLE"])){
-		P->p["-k"] 	= P->p["-o"]+ job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
+		P->p["-k"] 	= P->p["-o"];
 		model_run(P, rank, nprocs,0, job_ID, LG);
 		
 	}
@@ -341,7 +341,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	//(4) if MLE option was provided than need to run the model_main::run()
 	//
 	if (pw->mle){
-		pw->regionsOfInterest 	= pw->outputDir+job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
+		pw->regionsOfInterest 	= pw->outputDir;
         printf("Regions of interest file..............................%s\n", pw->regionsOfInterest.c_str());
         
 		model_run_pwrapper(pw, rank, nprocs,0, job_ID, LG);
@@ -490,7 +490,7 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
 	//(4) if MLE option was provided than need to run the model_main::run()
 	//
 	if (pw->mle){
-		pw->regionsOfInterest 	= pw->outputDir+job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
+		pw->regionsOfInterest 	= pw->outputDir;
         printf("Regions of interest file..............................%s\n", pw->regionsOfInterest.c_str());
         
 		model_run_pwrapper(pw, rank, nprocs,0, job_ID, LG);

@@ -1025,7 +1025,7 @@ void load::write_out_bidirs(map<string , vector<vector<double> > > G, string out
                             string job_name, int job_ID, params * P, int noise) {
    typedef map<string , vector<vector<double> > >::iterator it_type;
    ofstream FHW;
-   FHW.open(out_dir + job_name + "-" + to_string(job_ID) + "_prelim_bidir_hits.bed");
+   FHW.open(out_dir);
    FHW << P->get_header(1);
    int ID  = 0;
    for (it_type c = G.begin(); c != G.end(); c++) {
@@ -1053,7 +1053,7 @@ void load::write_out_bidirs_pwrapper(map<string , vector<vector<double> > > G, s
                             string job_name, int job_ID, ParamWrapper *pw, int noise) {
    typedef map<string , vector<vector<double> > >::iterator it_type;
    ofstream FHW;
-   FHW.open(out_dir + job_name + "-" + to_string(job_ID) + "_prelim_bidir_hits.bed");
+   FHW.open(out_dir);
    FHW << pw->getHeader(1);
    int ID  = 0;
    for (it_type c = G.begin(); c != G.end(); c++) {
@@ -1296,7 +1296,7 @@ void load::write_out_models_from_free_mode_pwrapper(map<int, map<int, vector<sim
  */
 void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params * P, int job_ID, int noise ) {
    ofstream FHW;
-   FHW.open(P->p["-o"] +  P->p["-N"] + "-" + to_string(job_ID) +  "_bidir_predictions.bed");
+   FHW.open(P->p["-o"]);
    FHW << P->get_header(2);
    double penality   = stod(P->p["-ms_pen"]);
    for (int i = 0; i < fits.size(); i++) {
@@ -1315,7 +1315,7 @@ void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params * 
  */
 void load::write_out_bidirectionals_ms_pen_pwrapper(vector<segment_fits*> fits, ParamWrapper * pw, int job_ID, int noise ) {
    ofstream FHW;
-   FHW.open(pw->outputDir + pw->jobName + "-" + to_string(job_ID) +  "_bidir_predictions.bed");
+   FHW.open(pw->outputDir);
    FHW << pw->getHeader(2);
    double penality   = pw->penalty;
    for (int i = 0; i < fits.size(); i++) {
@@ -1359,8 +1359,8 @@ void load::collect_all_tmp_files(string dir, string job_name, int nprocs, int jo
    // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
    // for more information about date/time format
    strftime(buf, sizeof(buf), "%m_%d_%H_%M", &tstruct);
-   string DT   = buf;
-   string OUT    = dir + job_name + "-" + to_string(job_ID) + "_" + DT + ".log";
+   //string DT   = buf;
+   string OUT    = dir + job_name + "-" + to_string(job_ID) + ".log";
    ofstream FHW(OUT);
    for (int rank = 0; rank < nprocs; rank++) {
       string FILE   = dir + "tmp_" + job_name + "-" + to_string(job_ID) + "_" + to_string(rank) + ".log";
