@@ -107,6 +107,7 @@ ParamWrapper::ParamWrapper()
     this->alpha3=100;
     this->br=25;
     this->fdr=0;
+    this->debug=false;
 }
 
 /** Parses the arguments passed to tfit and attempts to store them internally.

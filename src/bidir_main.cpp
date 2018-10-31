@@ -262,7 +262,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 		pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom );
 
 	if (segments.empty()){
-		printf("exiting...\n");
+		printf("Could not read segments from file. Exiting...\n");
 		return 1;
 	}
 	LG->write("done\n", verbose);
