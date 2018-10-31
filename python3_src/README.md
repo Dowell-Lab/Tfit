@@ -11,7 +11,7 @@ Edits would need to be made to the source directories and the files that are bei
 
 To run this code direcectly in the command line:
 
-' $python3 main.py runModel -i /path/to/BedGraph -wo /path/to/out/dir -sc hg19 '
+` $python3 main.py runModel -i /path/to/BedGraph -wo /path/to/out/dir -sc hg19 `
 
 This runs "model across" on the BedGraph fiel, with refrence genome hg19
 
