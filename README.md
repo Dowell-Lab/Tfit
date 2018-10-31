@@ -163,7 +163,7 @@ The second file,[-N]_divergent_classifications.bed, provides a new bed file, whe
 
 ![Alt text](https://github.com/azofeifa/Tfit/blob/master/images/Divergent_Example.png)
 
-##Chaining the bidir and model module
+## Chaining the bidir and model module
 Discussed thus far, profiling for divergent or bidirectional transcription events may be achieved by first running the bidir module and then using the output (_prelim_bidir_hits.bed) as input to the model module. For convenience, these modules can be chained and all three files (_prelim_bidir_hits.bed, _divergent_classifications.bed, _K_models_MLE.tsv) will output from one single call. This is invoked like below:
 
 ```
@@ -185,7 +185,7 @@ The structure of the config file should remain this way (i.e. "-flag = value"). 
 
 Please keep in mind that any parameters specified after the -config flag will overwrite those parameters specified in the -config file. Similarly, any parameters and flags specified before the -config flag will overwrite the config file.
 
-##Utilizing openMP and MPI
+## Utilizing openMP and MPI
 Tfit is written using openMP and MPI to perform massive parallelization. If your institution has a large compute cluster, than Tfit will operate well across multiple cores and nodes. To invoke 4 MPI processes run:
 
 ```
