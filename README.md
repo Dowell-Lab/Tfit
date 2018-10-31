@@ -9,7 +9,7 @@ The model module will compute full MLE estimates of the mixture model at user sp
 
 Please note that for both the bidir and model module computation time will decrease linearly with the number of available CPUs. Computation time is discussed throughout the below sections.  
 
-##System Requirements and Makefile
+## System Requirements and Makefile
 Transcription Fit (Tfit) is written in the C/C++ programming language that requires GNU compilers 4.7.3 or greater. Tfit uses the popular openMPI framework to perform massive parallelization via multithreading on multiple core, single node systems or multiple core, multiple node compute clusters. 
 
 After cloning this repo, please change directory into /where/you/clone/this/repo/Tfit/src/ and run make.  Note: That if you are a University of Colorado user and are running Pando Compute cluster through the BioFrontiers institute you need to module load both GNU compilers and mpich wrapper, i.e. module load gcc_4.9.2, module load mpich_3.1.4!
@@ -47,7 +47,7 @@ In short, the make file requires the path to mpic++ (install and config openMPI)
 2. https://www.cyberciti.biz/faq/howto-apple-mac-os-x-install-gcc-compiler/
 
 
-##Running and Installing Through Docker Container
+## Running and Installing Through Docker Container
 Running Tfit via a Docker container requires that Docker is installed and running. In Windows and Mac OSX you must run the Docker/Tfit script from the Docker Quickstart Terminal (https://www.docker.com/products/docker-toolbox).
 
 To run Tfit via docker, simply run the Docker/Tfit script with the same arguments and options as you would use when running the standard Tfit program. This script will check if you have the biofrontiers/fstitch_tfit:latest image and download it if you do not. It will then pass the arguments you provide to the Tfit program inside the container and output the results and logs to the location you specify.
@@ -64,7 +64,7 @@ And alter the Docker/Tfit script, changing the REPOSITORY and TAG variables so t
 
 
 
-##Bidir Module
+## Bidir Module
 The bidir module scans across the genome for areas resembling bidirectional transcription by comparing a fixed template mixture model (user provided parameters or parameters estimated from promoter regions) to a noise model (uniform distribution) by a Likelihood ratio score (LLR). 
 
 The critical input parameters below:
@@ -116,15 +116,17 @@ Example of joint forward and reverse strand bedgraph file:
 After the bidir model finishes a bed file will appear in the user specified output directory called: [-N]_prelim_bidir_hits.bed. This file will contain genomic intervals of interest where divergent transcription is likely occurring. This file may be used for downstream analysis or taken at face value. Last, but not least, the bidir module can be invoked as below:
 
 ```
+
 $ Tfit bidir \<list of parameters and flags\>
-```
+
+
 
 Example output from the bidir module,i.e. [-N]_prelim_bidir_hits.bed, is provided below. 
 
 ![Alt text](https://github.com/azofeifa/Tfit/blob/master/images/Prelim_Bidir_Example.png)
 
 
-##Model Module and List of Parameters
+## Model Module and List of Parameters
 Unlike the "bidir" module which utilizes an average or template version of the mixture model to scan the entire genome quickly, the "model" module will attempt to find (by maximum likelihood estimation, MLE) the best set of parameters (sigma,lambda, pi, w) on a per region of interest basis. Such a routine is especially valuable if it is believed that pausing or strand bias is changing following experimental perturbation. In addition, running the model module on the prelim_bidir_hits.bed file will greatly decrease the number of false positives as the MLE estimates will more accurately reflect the underlying structure of the region of interest rather than a static template model. 
 
 In short, MLE estimates are computed by the EM algorithm which is a convergent optimization method found commonly in gaussian mixture modeling and cluster analysis. Given this, the user may specify sets of parameters that are specific to the EM routine such as number of random seeds (-rounds), maximum number of iterations (-mi) and convergence threshold (-ct). A list of critical and non-critical parameters are given below.   
@@ -205,7 +207,7 @@ If your institution has a compute cluster, please consult your IT staff about th
 Again, this highly system dependent. But openMPI is a well maintained library with lots of resources to help aid in getting Tfit up and running on your compute cluster, please consult https://www.open-mpi.org/faq/ for further reference. 
 
 
-##Bleeding Edge Parameters 
+## Bleeding Edge Parameters 
 Tfit is on going effort in development both in terms of software and additions to the mathematics behind the mixture model inference procedure. Currently, I have two additions to the model that have led to better performance. However unlike the methodology we have outlined above, these additions are not published (paper in preparation).  
 
 The first addition is maximum a-posteriori estimation of the parameters lambda, sigma, pi and w. These are achieved in the normal fashion by conjugate priors. These are given below and are only utilized in the "model" module. 
@@ -223,7 +225,7 @@ Please note that the priors for sigma and lambda relate to Gamma distribution pa
 
 The second addition is estimation for the distance between the two radiating peaks of the bidirectional, informally at this point called the foot print parameter. This is currently integrated into the EM algorithm but will be ignored if -foot_print is not invoked or set to zero in either the call to the bidir or model module. 
 
-#Advanced HPC usage
+# Advanced HPC usage
 Those using compute cluster may find this below qsub script useful!
 
 
@@ -253,12 +255,12 @@ $cmd $src <module> <parameter flags and values>
 ```
 
 
-##Questions and Comments
+## Questions and Comments
 Please email me at joseph[dot]azofeifa[at]colorado[dot]edu with questions and comments! Or additionally open an "issue" through the GitHub site. 
 
 
 
-##References
+## References
 If you find Tfit useful in your analysis please cite:
 
 J. Azofeifa and R. Dowell A generative model for the behavior of RNA polymerase Bioinformatics 2016 
