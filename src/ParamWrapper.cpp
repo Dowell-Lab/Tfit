@@ -16,7 +16,7 @@ void ParamWrapper::printUsage()
     printf("Where modulename is one of the following:\n");
     printf("\tbidir - This module searches the genome for areas resembling bidirectional transcription\n");
     printf("\t\tby comparing a fixed template mixture model to a noise model by a log-likelihood ratio score.\n");
-    printf("\tbidir_old - This module implements the functionality seen in versions of Tfit used in publications\n");
+    //printf("\tbidir_old - This module implements the functionality seen in versions of Tfit used in publications\n");
     printf("\tmodel - This module attempts to generate an optimal set of parameters per region instead \n");
     printf("\t\tof using a fixed set of parameters for the entire genome\n");
     
@@ -121,6 +121,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     std::map<std::string, std::string>::iterator it;
     
     //NOTE: Parameters were changed to the defaults seen in read_in_parameters.cpp, rather than the documented defaults.
+    this->debug=false;
     this->exit=false;
     this->verbose=true;//false;
     this->module="";
@@ -171,6 +172,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     
     if(argc==1)
     {
+        printf("Error: no arguments specified for module %s\n", argv[1]);
         this->printUsage();
         this->exit=true;
         return;
@@ -178,7 +180,6 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     
     else if(argc==2)
     {
-        printf("Error: no arguments specified for module %s\n", argv[1]);
         this->printUsage();
         this->exit=true;
         return;
@@ -215,6 +216,12 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
                 this->exit=true;
                 return;
             }
+            
+            else if(!strcmp(prevCmd, "-debug"))
+            {
+                this->debug=true;
+            }
+
         }
         
         else
@@ -226,17 +233,17 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     
     for(it=paramMap.begin();it!=paramMap.end();it++)
     {
-        if(it->first=="-i" || it->first=="--forward" || it->first=="-pos")
+        if(it->first=="-bgf" || it->first=="--forward" || it->first=="-pos")
         {
             this->forwardStrand=it->second;
         }
         
-        else if(it->first=="-j" || it->first=="--reverse" || it->first=="-neg")
+        else if(it->first=="-bgr" || it->first=="--reverse" || it->first=="-neg")
         {
             this->reverseStrand=it->second;
         }
         
-        else if(it->first=="-ij" || it->first=="-bed" || it->first=="--combined")
+        else if(it->first=="-bg" || it->first=="--bedgraph" || it->first=="--combined")
         {
             this->mergedStrand=it->second;
         }
@@ -251,7 +258,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
             this->ns=atoi(it->second.c_str());
         }
         
-        else if(it->first=="-o")
+        else if(it->first=="-o" || it->first=="--output")
         {
 // For sake of user friendliness, we're just going to run the bidir and model moduels separately, so we don't need this anymore
             //if(it->second.back()!='/')
@@ -275,7 +282,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
             this->fdr=atoi(it->second.c_str());
         }
         
-        else if(it->first=="-log_out")
+        else if(it->first=="--logOut" || it->first=="-l")
         {
             if(it->second.back()!='/')
             {
@@ -298,7 +305,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
             this->penalty=atof(it->second.c_str());
         }
         
-        else if(it->first=="-tss")
+        else if(it->first=="-bd" || it->first=="--bidirectionals")
         {
             this->promoterTSS=it->second;
         }
@@ -427,7 +434,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
             this->elon=atoi(it->second.c_str());
         }
         
-        else if(it->first=="-k")
+        else if(it->first=="-s" || it->first=="--segment")
         {
             printf("Setting regions of interest to %s\n", it->second.c_str());
             this->regionsOfInterest=it->second;
@@ -439,7 +446,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
             this->r_mu=atoi(it->second.c_str());
         }
         
-        else if(it->first=="-threads")
+        else if(it->first=="--threads" || it->first=="-n")
         {
             this->cores=atoi(it->second.c_str());
         }
@@ -447,7 +454,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     
     if((this->forwardStrand=="" || this->reverseStrand=="") && this->mergedStrand=="")
     {
-        printf("Either i or j empty. Please specify i or j.\n");
+        printf("Either arguments bgr or bgf empty or specified files do not exist. Please specify both forward AND revese strand if the bedGraph has not been concatenated.\n");
         this->exit=true;
     }
     
@@ -476,9 +483,9 @@ void ParamWrapper::display(int nodes, int cores){
 	//bool SELECT = stoi(p["-select"]);
 	std::string header 	= "";
 	header+="----------------------------------------------------------------\n";
-	header+="             transcriptional inference (tINF)                   \n";
+	header+="             Transcription Fit (Tfit)                   \n";
 	if (bidir){
-	header+="               ...bidirectional scanner...     \n";
+	header+="            Preliminary bidirectionals     \n";
 	}//if (this->module=="bidir" and MLE){
 	//header+="             ....coupled to mixture model....     \n";
 	//}
@@ -492,21 +499,21 @@ void ParamWrapper::display(int nodes, int cores){
 	header+="            ....BIC penalty optimization....                      \n";		
 	}
 	printf("%s\n",header.c_str() );
-	printf("-N         : %s\n", this->jobName.c_str());
+	printf("Job Name          : %s\n", this->jobName.c_str());
 	if (this->mergedStrand!=""){
-		printf("-ij        : %s\n", this->mergedStrand.c_str());
+		printf("bedGraph          : %s\n", this->mergedStrand.c_str());
 	}else{
-		printf("-i         : %s\n", this->forwardStrand.c_str());
-		printf("-j         : %s\n", this->reverseStrand.c_str());
+		printf("-Forward bedGraph : %s\n", this->forwardStrand.c_str());
+		printf("-Reverse bedGraph : %s\n", this->reverseStrand.c_str());
 	}
 	//if (model or MLE){
 	//printf("-k         : %s\n", p["-k"].c_str()  );
 	//}
 	if (this->promoterTSS!=""){
-		printf("-tss       : %s\n", promoterTSS.c_str()  );
+		printf("Bidirectionals    : %s\n", this->promoterTSS.c_str());
 	}
-	printf("-o         : %s\n", this->outputDir.c_str()  );
-	printf("-log_out   : %s\n", this->logDir.c_str()  );
+	printf("Output Dir        : %s\n", this->outputDir.c_str()  );
+	printf("Log Out Dir       : %s\n", this->logDir.c_str()  );
 	printf("-MLE       : %d\n", this->mle);
 	printf("-chr       : %s\n", this->chromosome.c_str());	
 	printf("-br        : %d\n", this->br);	
@@ -522,9 +529,9 @@ void ParamWrapper::display(int nodes, int cores){
 		printf("-minK      : %d\n", this->mink);
 		printf("-maxK      : %d\n", this->maxk);
 	}
-	printf("-threads   : %d\n",  cores);
-	printf("-MPI_np    : %d\n",  nodes);
-	printf("\nQuestions/Bugs? joseph[dot]azofeifa[at]colorado[dot]edu\n" );
+	printf("--threads  : %d\n",  cores);
+	printf("--MPI_np    : %d\n",  nodes);
+	printf("\nQuestions/Bugs? https://github.com/Dowell-Lab/Tfit" );
     printf("\nRevisions made by michael[dot]gohde[at]colorado[dot]edu\n");
 	printf("----------------------------------------------------------------\n" );
 	

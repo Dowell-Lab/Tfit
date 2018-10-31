@@ -26,7 +26,7 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	int verbose 	= stoi(P->p["-v"]);
 	P->p["-merge"] 	= "1";
 	
-	LG->write("\ninitializing bidir module...............................done\n", verbose);
+	LG->write("\nInitializing bidir module...............................done\n", verbose);
 	int threads 	= omp_get_max_threads();//number of OpenMP threads that are available for use
 	
 	//===========================================================================
@@ -38,7 +38,7 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	string forward_bedgraph 	= P->p["-i"]; //forward strand bedgraph file
 	string reverse_bedgraph 	= P->p["-j"]; //reverse strand bedgraph file
 	string joint_bedgraph 		= P->p["-ij"]; //joint forward and reverse strand bedgraph file
-	string tss_file 		= P->p["-tss"];
+	string promoterTSS 		= P->p["-bd"];
 	string out_file_dir 		= P->p["-o"] ;//out file directory
 	//===========================================================================
 	//template searching parameters
@@ -52,11 +52,11 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	map<int, string> ID_to_chrom;
        
 	vector<double> parameters 	= {sigma, lambda, foot_print,pi, w};
-	if (not tss_file.empty() and rank == 0){
+	if (not promoterTSS.empty() and rank == 0){
 		vector<segment *> FSI;
-		LG->write("loading TSS intervals...................................",verbose);
+		LG->write("Loading TSS intervals...................................",verbose);
 		map<int, string> IDS;
-		vector<segment *> tss_intervals 	= load::load_intervals_of_interest(tss_file, 
+		vector<segment *> tss_intervals 	= load::load_intervals_of_interest(promoterTSS, 
 			IDS, P, 1 );
 		map<string, vector<segment *>> GG 	= MPI_comm::convert_segment_vector(tss_intervals);
 		LG->write("done\n", verbose);
@@ -197,7 +197,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	string forward_bedgraph 	= pw->forwardStrand; //forward strand bedgraph file
 	string reverse_bedgraph 	= pw->reverseStrand; //reverse strand bedgraph file
 	string joint_bedgraph 		= pw->mergedStrand; //joint forward and reverse strand bedgraph file
-	string tss_file 		= pw->promoterTSS;
+	string promoterTSS 		= pw->promoterTSS;
 	string out_file_dir 		= pw->outputDir;//out file directory
 	//===========================================================================
 	//template searching parameters
@@ -212,18 +212,18 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
     printf("Start footprint: %f\n", pw->footPrint);
        
 	vector<double> parameters 	= {sigma, lambda, foot_print,pi, w};
-    printf("Value of not tss_file.empty: %d\n", !tss_file.empty());
-    printf("Tss filename: %s\n", tss_file.c_str());
-	if (tss_file!="" and rank == 0){
+    printf("Value of not promoterTSS.empty: %d\n", !promoterTSS.empty());
+    printf("Tss filename: %s\n", promoterTSS.c_str());
+	if (promoterTSS!="" and rank == 0){
 		vector<segment *> FSI;
 		LG->write("loading TSS intervals...................................",verbose);
 		map<int, string> IDS;
-		vector<segment *> tss_intervals 	= load::load_intervals_of_interest_pwrapper(tss_file, 
+		vector<segment *> tss_intervals 	= load::load_intervals_of_interest_pwrapper(promoterTSS, 
 			IDS, pw, 1 );
 		map<string, vector<segment *>> GG 	= MPI_comm::convert_segment_vector(tss_intervals);
 		LG->write("done\n", verbose);
 		
-		LG->write("inserting coverage data.................................",verbose);
+		LG->write("Inserting coverage data.................................",verbose);
 		vector<segment*> integrated_segments= load::insert_bedgraph_to_segment_joint(GG, 
 			forward_bedgraph, reverse_bedgraph, joint_bedgraph, rank);
 		LG->write("done\n", verbose);
@@ -315,7 +315,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	//moment estimator and compute BIC ratio (basically penalized LLR)
 	LG->write("running template matching algorithm.....................", verbose);
     //NOTE: The only threshold value returned is 1.0. This function only exists to modify segments.
-	double threshold 	= run_global_template_matching_pwrapper(segments, out_file_dir, pw, SC, 1);
+	double threshold 	= run_global_template_matching_pwrapper(segments, out_file_dir, pw, SC, pw->debug);
     printf("Threshold obtained from global template matching: %lf", threshold);
 	//(3b) now need to send out, gather and write bidirectional intervals 
 	LG->write("done\n", verbose);
@@ -367,7 +367,7 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
 
 	int verbose 	= pw->verbose;
 	//P->p["-merge"] 	= "1";
-	LG->write("\ninitializing bidir module...............................done\n", verbose);
+	LG->write("\nInitializing bidir module...............................done\n", verbose);
 	int threads 	= omp_get_max_threads();//number of OpenMP threads that are available for use
 	
 	//===========================================================================
@@ -379,14 +379,14 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
 	string forward_bedgraph 	= pw->forwardStrand; //forward strand bedgraph file
 	string reverse_bedgraph 	= pw->reverseStrand; //reverse strand bedgraph file
 	string joint_bedgraph 		= pw->mergedStrand; //joint forward and reverse strand bedgraph file
-	string tss_file 		= pw->promoterTSS;
+	string promoterTSS  		= pw->promoterTSS;
 	string out_file_dir 		= pw->outputDir;//out file directory
 	//===========================================================================
 	//template searching parameters
 	double sigma, lambda, foot_print, pi, w;
 	double ns 	= pw->ns;
 	sigma 		= pw->sigma, lambda=(double)pw->lambda;
-    printf("%lf, %lf", lambda, pw->lambda);
+//   printf("%lf, %lf", lambda, pw->lambda);
 	foot_print 	= pw->footPrint, pi=pw->pi, w=pw->w;
 
 
@@ -395,19 +395,19 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
 	map<string, int> chrom_to_ID;
 	map<int, string> ID_to_chrom;
 	vector<double> parameters;
-	if (tss_file!="" and rank == 0){
-        printf("tss_file: %s\n", tss_file.c_str());
+	if (promoterTSS!="" and rank == 0){
+        printf("Bidirectional file:q:q: %s\n", promoterTSS.c_str());
 		vector<segment *> FSI;
-		LG->write("loading TSS intervals...................................",verbose);
+		LG->write("Loading bidirectionals...................................",verbose);
 		map<int, string> IDS;
-		vector<segment *> tss_intervals 	= load::load_intervals_of_interest_pwrapper(tss_file, 
+		vector<segment *> tss_intervals 	= load::load_intervals_of_interest_pwrapper(promoterTSS, 
 			IDS, pw, 1 );
 		map<string, vector<segment *>> GG 	= MPI_comm::convert_segment_vector(tss_intervals);
 		LG->write("done\n", verbose);
 	
 		vector<segment*> integrated_segments= load::insert_bedgraph_to_segment_joint(GG, 
 			forward_bedgraph, reverse_bedgraph, joint_bedgraph, rank);
-		LG->write("Binning/Normalizing TSS intervals.......................",verbose);
+		LG->write("Binning/Normalizing bidirectionals.......................",verbose);
 		load::BIN(integrated_segments, pw->br, pw->ns,true);	
 		LG->write("done\n", verbose);
 		
@@ -448,7 +448,7 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
 	pw->w=w;
 	MPI_comm::send_out_parameters( parameters, rank, nprocs);
 
-	LG->write("loading bedgraph files..................................", verbose);
+	LG->write("Loading bedgraph files..................................", verbose);
 	vector<segment *> 	segments 	= load::load_bedgraphs_total(forward_bedgraph, reverse_bedgraph, joint_bedgraph,
 		pw->br, pw->ns, pw->chromosome, chrom_to_ID, ID_to_chrom );
 
@@ -460,18 +460,18 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
 	//(2b) so segments is indexed by inidividual chromosomes, want to broadcast 
 	//to sub-processes and have each MPI call run on a subset of segments
 	vector<segment*> all_segments  	= segments;
-	LG->write("slicing segments........................................", verbose);
+	LG->write("Slicing segments........................................", verbose);
 	segments 						= MPI_comm::slice_segments(segments, rank, nprocs);	
 	LG->write("done\n", verbose);
 	//===========================================================================
 	//(3a) now going to run the template matching algorithm based on pseudo-
 	//moment estimator and compute BIC ratio (basically penalized LLR)
 
-	LG->write("running moment estimator algorithm......................", verbose);
+	LG->write("Running moment estimator algorithm......................", verbose);
 	run_global_template_matching_old_long(segments, out_file_dir, pw);	
 	//(3b) now need to send out, gather and write bidirectional intervals 
 	LG->write("done\n", verbose);
-	LG->write("scattering predictions to other MPI processes...........", verbose);
+	LG->write("Scattering predictions to other MPI processes...........", verbose);
 	int total =  MPI_comm::gather_all_bidir_predicitions_pwrapper(all_segments, 
 			segments , rank, nprocs, out_file_dir, job_name, job_ID,pw,0);
 	MPI_Barrier(MPI_COMM_WORLD); //make sure everybody is caught up!
@@ -495,7 +495,7 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
         
 		model_run_pwrapper(pw, rank, nprocs,0, job_ID, LG);
 	}
-	LG->write("exiting bidir module....................................done\n\n", verbose);
+	LG->write("Exiting bidir module....................................done\n\n", verbose);
 	return 1;
 }
 

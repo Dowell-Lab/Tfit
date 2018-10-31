@@ -95,6 +95,7 @@ void BIC_template(segment * data,  double * BIC_values, double * densities, doub
                   double sigma, double lambda, double foot_print, double pi, double w) {
    double vl;
    int NN        = int(data->XN);
+   //Is this where we can change the number of threads specified to the user specified value bu changing the value to "cores" from PW...?
    int threads   = omp_get_max_threads();
    int counts    = NN / threads;
 
@@ -278,10 +279,10 @@ double run_global_template_matching_pwrapper(vector<segment*> segments,
       double stdf   = sqrt(ef * (1 - (  2 * (window * ns) * 0.05 / (l * ns )  ) )  );
       double stdr   = sqrt(er * (1 - (  2 * (window * ns) * 0.05 / (l * ns ) ) )  );
       BIC_template(segments[i],  BIC_values, densities, densities_r, window, sigma, lambda, foot_print, pi, w);
-      if(debug)
+      if (debug)
       {
         double avgbic=0;
-        printf("Number of segments passed to run_global_template_matching_pwrapper: %ld\n", segments.size());
+        printf("\nNumber of segments passed to run_global_template_matching_pwrapper: %ld\n", segments.size());
         printf("Initial round of BIC values:\n");
         for(int j=0;j<(int) segments[i]->XN;j++)
         {

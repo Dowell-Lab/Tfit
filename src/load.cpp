@@ -478,7 +478,7 @@ string segment_fits::write () {
          if (std  < 5000 and lam < 20000 and w > 0.05 and pi > 0.05 and pi < 0.95  ) {
             line += chrom + "\t" + to_string(start) + "\t" + to_string(stop) + "\t";
             line += ID + "|";
-            line += to_string(BIC_ratio) + "," + to_string(N_pos) + "," + to_string(N_neg) + "\n";
+            line += to_string(BIC_ratio) + "\t" + to_string(mu) + "\t" + to_string(w) + "\t" + to_string(lam)+"\n";//to_string(N_pos) + "," + to_string(N_neg) + "\n";
          }
       }
    }
@@ -1085,9 +1085,9 @@ void load::write_out_models_from_free_mode(map<int, map<int, vector<simple_c_fre
    //write out each model parameter estimates
    double scale  = stof(P->p["-ns"]);
    double penality = stof(P->p["-ms_pen"]) ;
-   string out_dir  = P->p["-o"];
+   string dir  = P->p["-l"];
    ofstream FHW;
-   file_name   = out_dir +  P->p["-N"] + "-" + to_string(job_ID) +  "_K_models_MLE.tsv";
+   file_name   = dir +  P->p["-N"] + "-" + to_string(job_ID) +  "_K_models_MLE.tsv";
    FHW.open(file_name);
    FHW << P->get_header(2);
 
@@ -1358,7 +1358,7 @@ void load::collect_all_tmp_files(string dir, string job_name, int nprocs, int jo
    tstruct = *localtime(&now);
    // Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
    // for more information about date/time format
-   strftime(buf, sizeof(buf), "%m%d", &tstruct);
+   strftime(buf, sizeof(buf), "%m%d_%H%M", &tstruct);
    string DT     = buf;
    string OUT    = dir + job_name + "-" + to_string(job_ID) + "_" + DT + ".log";
    ofstream FHW(OUT);
@@ -1400,9 +1400,9 @@ void load::clear_segments(vector<segment *> segments) {
  * @param query_fits Set of segment_fits to match against the given TSS inputs.
  * @return New set of segment_fits with TSS values inserted.
  */
-vector<segment_fits *> load::label_tss(string tss_file, vector<segment_fits *> query_fits ) {
+vector<segment_fits *> load::label_tss(string promoterTSS, vector<segment_fits *> query_fits ) {
    vector<segment_fits *> new_fits;
-   ifstream FH(tss_file);
+   ifstream FH(promoterTSS);
    string line;
    map<string, vector<segment *> >G;
    map<string, node> T;
@@ -1434,7 +1434,7 @@ vector<segment_fits *> load::label_tss(string tss_file, vector<segment_fits *> q
       }
 
    } else {
-      printf("couldn't open tss file %s... weird error\n", tss_file.c_str() );
+      printf("Couldn't open bidirectional file %s. Check that file exists and is in standard BED format (chr, start, end).\n", promoterTSS.c_str() );
    }
    return new_fits;
 }

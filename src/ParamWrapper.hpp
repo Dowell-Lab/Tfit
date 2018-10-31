@@ -31,6 +31,7 @@ private:
 public:
     bool exit;
     bool verbose;
+    bool debug;
     
     //Use a set of booleans like read_in_parameters to represent modules for ease of porting:
     bool select;
