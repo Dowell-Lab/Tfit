@@ -119,7 +119,7 @@ After the bidir model finishes a bed file will appear in the user specified outp
 
 $ Tfit bidir \<list of parameters and flags\>
 
-
+```
 
 Example output from the bidir module,i.e. [-N]_prelim_bidir_hits.bed, is provided below. 
 
