@@ -164,16 +164,65 @@ ParamWrapper::ParamWrapper()
     this->logfile="log.log";
 }
 
+std::pair<int, char**> *ParamWrapper::readConfig(char *fileName)
+{
+    FILE *f=fopen(fileName, "r");
+    char **args;
+    int argc;
+    std::vector<char*> argSet;
+    char *buf;
+    char *buftok;
+    int i;
+    
+    if(!f)
+    {
+        return NULL;
+    }
+    
+    buf=(char*) malloc(sizeof(char)*500);
+    
+    while(fgets(buf, sizeof(char)*500, f))
+    {
+        //If this isn't a comment line:
+        if(buf[0]!='#')
+        {
+            //Attempt to tokenize it:
+            buftok=strtok(buf, " \t\n");
+            
+            while(buftok)
+            {
+                argSet.push_back(strdup(buftok));
+                buftok=strtok(NULL, " \t\n");
+            }
+        }
+    }
+    
+    delete[] buf;
+    
+    //Now that we have a set of arguments:
+    argc=argSet.size();
+    args=(char**) malloc(sizeof(char*)*argc);
+    for(i=0;i<argc;i++)
+    {
+        args[i]=argSet[i];
+    }
+    
+    argSet.clear();
+    
+    return new std::pair<int, char**>(argc, args);
+}
+
 /** Parses the arguments passed to tfit and attempts to store them internally.
  * @param argc The number of command line arguments (first parameter to main())
  * @param argv The command line arguments array (second parameter to main())
  */
-ParamWrapper::ParamWrapper(int argc, char** argv)
+ParamWrapper::ParamWrapper(int argc, char** argv, bool checkForModule)
 {
     int                                          i;
     std::map<std::string, std::string>           paramMap;
     char*                                        prevCmd;
     std::map<std::string, std::string>::iterator it;
+    std::pair<int, char**> *configFile;
 
     //NOTE: Parameters were changed to the defaults seen in read_in_parameters.cpp, rather than the documented defaults.
     this->exit    = false;
@@ -237,14 +286,22 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
     this->bidirpreds="bidir_preds.bed";
     this->logfile="log.log";
 
-    if (argc == 1) {
+    if (argc == 1 && checkForModule) {
         this->printUsageShort();
         this->exit = true;
         return;
     }
     
     // Special case for users who want a long usage statement:
-    this->module=std::string(argv[1]);
+    if(checkForModule)
+    {
+        this->module=std::string(argv[1]);
+    }
+    
+    else
+    {
+        this->module="";
+    }
     
     if(this->module=="-h" || this->module=="--help")
     {
@@ -253,14 +310,14 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
         return;
     }
 
-    else if (argc == 2) {
+    else if (argc == 2 && checkForModule) {
         printf("Error: no arguments specified for module %s\n", argv[1]);
         this->printUsageShort();
         this->exit = true;
         return;
     }
 
-    if (this->module != "bidir" && this->module != "select" && this->module != "model" && this->module != "bidir_old") {
+    if (this->module != "bidir" && this->module != "select" && this->module != "model" && this->module != "bidir_old" && checkForModule) {
         printf("Invalid module specification: %s\n", argv[1]);
         this->exit = true;
         return;
@@ -271,7 +328,7 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
     this->model    = this->module == "model";
     this->select   = this->module == "select";
 
-    for (i = 2; i < argc; i++) {
+    for (i = checkForModule ? 2:0; i < argc; i++) {
         if (argv[i][0] == '-' && strlen(argv[i]) != 1) {
             prevCmd = argv[i];
             //Check to ensure that the argument is supposed to be able to work without additional parameters:
@@ -298,8 +355,80 @@ ParamWrapper::ParamWrapper(int argc, char** argv)
     }
 
     for (it = paramMap.begin(); it != paramMap.end(); it++) {
-        if (it->first == "-i" || it->first == "--forward" || it->first == "-pos") {
+        if (it->first == "-i" || it->first == "--forward" || it->first == "-pos") 
+        {
             this->forwardStrand = it->second;
+        }
+        
+        else if(it->first=="-config")
+        {
+            configFile=readConfig((char*) it->second.c_str());
+            ParamWrapper *p=new ParamWrapper(configFile->first, configFile->second, false);
+            
+            //Now we get to copy everything over:
+            this->forwardStrand     = p->forwardStrand;
+            this->reverseStrand     = p->reverseStrand;
+            this->mergedStrand      = p->mergedStrand;
+            this->jobName           = p->jobName; //"";
+            this->outputDir         = p->outputDir;
+            this->logDir            = p->logDir;
+            this->regionsOfInterest = p->regionsOfInterest;
+            this->promoterTSS       = p->promoterTSS;
+            this->chromosome        = p->chromosome; //"";
+            this->llrthresh         = p->llrthresh; //1;
+            //These parameters were modified given the behavior of stock Tfit:
+            this->lambda                    = p->lambda;
+            this->sigma                     = p->sigma;
+            this->pi                        = p->pi;
+            this->w                         = p->w;
+            this->mink                      = p->maxk;
+            this->maxk                      = p->mink; //1;
+            this->rounds                    = p->rounds; //5;
+            this->ct                        = p->ct;
+            this->mi                        = p->mi;
+            this->experimentalValsSpecified = p->experimentalValsSpecified;
+            this->alpha0                    = p->alpha0;
+            this->beta0                     = p->beta0;
+            this->ns                        = p->ns;
+            this->greatestchrom             = p->greatestchrom;
+            //There are no default values for this parameter.
+            this->alpha1    = p->alpha1;
+            this->beta1     = p->beta1;
+            this->alpha2    = p->alpha2; //100;
+            this->alpha3    = p->alpha3; //100;
+            this->br        = p->br;
+            this->pad       = p->pad;
+            this->footPrint = p->footPrint;
+            this->fdr       = p->fdr; //This parameter appears to change how this software computes prior distributions in the bidir module.
+                //When set to 0, Tfit will use a shortcut and/or precomputed model.
+            this->scores   = p->scores; //This is another undocumented parameter.
+            this->r_mu     = p->r_mu; //yet another undocumented parameter.
+            this->penalty  = p->penalty; //There's documentation, but only in read_in_parameters.
+            this->maxNoise = p->maxNoise; //This seems to only be used in across_segments.
+            this->mle      = p->mle; //This parameter runs the model module after bidir, IIRC.
+            this->debug=p->debug;
+            this->elon     = p->elon;
+            
+            //Additional new parameters:
+            this->filterMinReads=p->filterMinReads;
+            this->minReads=p->minReads;
+            this->filterZeroRegions=p->filterZeroRegions;
+            this->allowOverwrite=p->allowOverwrite;
+            //File control parameters:
+            this->tmpdir=p->tmpdir; //We won't let the user set this yet. 
+            this->prelimhits=p->prelimhits;
+            this->models=p->models;
+            this->bidirpreds=p->bidirpreds;
+            this->logfile=p->logfile;
+            
+            delete p;
+            for(i=0;i<configFile->first;i++)
+            {
+                free(configFile->second[i]);
+            }
+            
+            free(configFile->second);
+            delete configFile;
         }
         
         //NEWLY ADDED TESTING PARAMETER:

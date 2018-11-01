@@ -27,6 +27,7 @@
 
 class ParamWrapper {
 private:
+    static std::pair<int, char**> *readConfig(char *fileName);
 public:
     bool exit;
     bool verbose;
@@ -111,7 +112,7 @@ public:
 
     //Methods:
     ParamWrapper();
-    ParamWrapper(int argc, char** argv);
+    ParamWrapper(int argc, char** argv, bool checkForModule=true);
     void printUsage();
     void printUsageShort();
 
