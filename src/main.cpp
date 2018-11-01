@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
     
     //We will set nprocs to the minimum of the detected number of processors and the specified thread count.
     //NOTE: the "threads" variable here is ignored because it should be called within a parallel region.
-    if(nprocs>pw.threads)
+    if(nprocs>pw.threads && pw.threads>0)
     {
         nprocs=pw.threads;
         threads=pw.threads;

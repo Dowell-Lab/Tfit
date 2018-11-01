@@ -289,11 +289,15 @@ double run_global_template_matching_pwrapper(vector<segment*> segments,
             double avgbic = 0;
             printf("Number of segments passed to run_global_template_matching_pwrapper: %ld\n", segments.size());
             printf("Initial round of BIC values:\n");
+            printf("segments[i]->XN=%d\n", int(segments[i]->XN));
+            
+            printf("segments[i] start and stop position: %d, %d\n", segments[i]->start, segments[i]->stop);
+            /*
             for (int j = 0; j < (int)segments[i]->XN; j++) {
                 avgbic += BIC_values[j];
                 printf("BIC_values[%d]=%f\n", j, BIC_values[j]);
             }
-
+            */
             avgbic = avgbic / segments[i]->XN;
             printf("Mean BIC score: %f\n", avgbic);
         }

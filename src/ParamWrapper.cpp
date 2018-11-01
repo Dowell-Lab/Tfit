@@ -274,6 +274,8 @@ ParamWrapper::ParamWrapper(int argc, char** argv, bool checkForModule)
     this->debug=false;
     this->elon     = 0;
     
+    this->threads=-1;
+    
     //Additional new parameters:
     this->filterMinReads=false;
     this->minReads=0;
@@ -733,7 +735,7 @@ void ParamWrapper::display(int nodes, int cores)
         printf("-minK      : %d\n", this->mink);
         printf("-maxK      : %d\n", this->maxk);
     }
-    printf("-threads   : %d\n", cores);
+    printf("--threads   : %d\n", cores);
     printf("-MPI_np    : %d\n", nodes);
     printf("\nQuestions/Bugs? joseph[dot]azofeifa[at]colorado[dot]edu\n");
     printf("\nRevisions made by michael[dot]gohde[at]colorado[dot]edu\n");

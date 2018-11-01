@@ -7,6 +7,8 @@
 #include "ParamWrapper.hpp"
 using namespace std;
 
+#define PRINT_NUM_CONTIGS_READ 1
+
 /** This class appears to encapsulate an individual set of parameters and related model data such that it
  * can be esaily summarized and dumped to a file.
  */

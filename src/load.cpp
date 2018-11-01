@@ -572,6 +572,7 @@ int check_ID_name(string& INFO)
 vector<segment*> load::load_bedgraphs_total(string forward_strand,
                                             string reverse_strand, string joint_bedgraph, int BINS, double scale, string spec_chrom, map<string, int>& chromosomes, map<int, string>& ID_to_chrom, bool filterZeroRegions, bool filterMinReads, double minReads)
 {
+    size_t numRead=0;
     int FOUND = 0;
     if (spec_chrom == "all") {
         FOUND = 1;
@@ -661,6 +662,9 @@ vector<segment*> load::load_bedgraphs_total(string forward_strand,
                         G[chrom]->add2(-1, double(xx), abs(coverage));
                     }
                 }
+                
+                //Increment the insert counter:
+                numRead++;
             }
             prevChrom = chrom;
         }
@@ -691,6 +695,11 @@ vector<segment*> load::load_bedgraphs_total(string forward_strand,
     if(filterMinReads)
     {
         printf("Number of regions with coverage below threshold filtered out: %d\n", mrCulled);
+    }
+    
+    if(PRINT_NUM_CONTIGS_READ)
+    {
+        printf("[DEBUG] Total number of contigs read and inserted: %lu\n", numRead);
     }
     return segments;
 }

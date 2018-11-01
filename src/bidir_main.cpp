@@ -339,7 +339,7 @@ int bidir_run_pwrapper(ParamWrapper* pw, int rank, int nprocs, int job_ID, Log_F
 
     LG->write("done\n", verbose);
     if (rank == 0) {
-        LG->write("\nThere were " + to_string(total) + " prelimary bidirectional predictions\n\n", verbose);
+        LG->write("\nThere were " + to_string(total) + " preliminary bidirectional predictions\n\n", verbose);
     }
 
     //===========================================================================
