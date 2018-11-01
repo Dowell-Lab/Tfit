@@ -21,7 +21,7 @@ using namespace std;
 int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_File * LG){
 	int verbose 	= stoi(P->p["-v"]);
 	LG->write("\ninitializing model module...............................done\n\n",verbose);
-	int threads 	= omp_get_max_threads();//number of OpenMP threads that are available for use	
+	int threads 	= omp_get_num_threads();//number of OpenMP threads that are available for use	
 	string job_name = P->p["-N"];
 
 	//=======================================================================================
@@ -120,7 +120,7 @@ int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_
 int model_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, double density, int job_ID, Log_File * LG){
 	int verbose 	= pw->verbose;//stoi(P->p["-v"]);
 	LG->write("\ninitializing model module...............................done\n\n",verbose);
-	int threads 	= omp_get_max_threads();//number of OpenMP threads that are available for use	
+	int threads 	= pw->cores;//number of OpenMP threads that are available for use	
 	string job_name = pw->jobName;//P->p["-N"];
 
 	//=======================================================================================

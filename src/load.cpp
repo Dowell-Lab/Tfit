@@ -1194,9 +1194,9 @@ void load::write_out_models_from_free_mode_pwrapper(map<int, map<int, vector<sim
    //write out each model parameter estimates
    double scale  = pw->ns;
    double penality = pw->penalty;
-   string out_dir  = pw->outputDir;
+   string dir  = pw->logDir;
    ofstream FHW;
-   file_name   = out_dir + pw->jobName + "-" + to_string(job_ID) +  "_K_models_MLE.tsv";
+   file_name   = dir + pw->jobName + "-" + to_string(job_ID) +  "_MLE.tsv";
    FHW.open(file_name);
    FHW << pw->getHeader(2);
 

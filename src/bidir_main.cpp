@@ -38,7 +38,7 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	string forward_bedgraph 	= P->p["-i"]; //forward strand bedgraph file
 	string reverse_bedgraph 	= P->p["-j"]; //reverse strand bedgraph file
 	string joint_bedgraph 		= P->p["-ij"]; //joint forward and reverse strand bedgraph file
-	string promoterTSS 		= P->p["-bd"];
+	string promoterTSS  		= P->p["-bd"];
 	string out_file_dir 		= P->p["-o"] ;//out file directory
 	//===========================================================================
 	//template searching parameters
@@ -186,7 +186,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	//pw->merge 	= "1";
 	
 	LG->write("\ninitializing bidir module...............................done\n", verbose);
-	int threads 	= omp_get_max_threads();//number of OpenMP threads that are available for use
+	int threads 	= pw->cores;//number of OpenMP threads that are available for use
 	
 	//===========================================================================
 	//get job_ID and open file handle for log files
@@ -197,7 +197,7 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	string forward_bedgraph 	= pw->forwardStrand; //forward strand bedgraph file
 	string reverse_bedgraph 	= pw->reverseStrand; //reverse strand bedgraph file
 	string joint_bedgraph 		= pw->mergedStrand; //joint forward and reverse strand bedgraph file
-	string promoterTSS 		= pw->promoterTSS;
+	string promoterTSS  		= pw->promoterTSS;
 	string out_file_dir 		= pw->outputDir;//out file directory
 	//===========================================================================
 	//template searching parameters
@@ -210,13 +210,19 @@ int bidir_run_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_ID, Log_F
 	map<string, int> chrom_to_ID;
 	map<int, string> ID_to_chrom;
     printf("Start footprint: %f\n", pw->footPrint);
-       
+
+/* There's something weird going on here... I'm not sure what intervals of interest are supposed to be. Is this supposed to be the "TSS file" or the segmentation file from FStitch?
+ * regionsofInterest = FStitch (BED4)
+ * promoterTSS = regions of bidirectionals file (originally refseq gene TSS annotations) in BED format
+ * We need to trace all of these vectors (FSI, IDS, GG) to the MPI_comm file to see what was supposed to actually be happening here...
+ */
+    
 	vector<double> parameters 	= {sigma, lambda, foot_print,pi, w};
     printf("Value of not promoterTSS.empty: %d\n", !promoterTSS.empty());
     printf("Tss filename: %s\n", promoterTSS.c_str());
 	if (promoterTSS!="" and rank == 0){
 		vector<segment *> FSI;
-		LG->write("loading TSS intervals...................................",verbose);
+		LG->write("Loading bidirectional intervals.........................",verbose);
 		map<int, string> IDS;
 		vector<segment *> tss_intervals 	= load::load_intervals_of_interest_pwrapper(promoterTSS, 
 			IDS, pw, 1 );
@@ -368,7 +374,7 @@ int bidir_run_old_long_pwrapper(ParamWrapper *pw, int rank, int nprocs, int job_
 	int verbose 	= pw->verbose;
 	//P->p["-merge"] 	= "1";
 	LG->write("\nInitializing bidir module...............................done\n", verbose);
-	int threads 	= omp_get_max_threads();//number of OpenMP threads that are available for use
+	int threads 	= pw->cores;//number of OpenMP threads that are available for use
 	
 	//===========================================================================
 	//get job_ID and open file handle for log files
@@ -517,7 +523,7 @@ int bidir_old_run_pwrapper(ParamWrapper * pw, int rank, int nprocs, int job_ID, 
 	int verbose 	= pw->verbose;
 	//P->p["-merge"] 	= "1";
 	LG->write("\ninitializing bidir module...............................done\n", verbose);
-	int threads 	= omp_get_max_threads();//number of openMP threads that are available for use
+	int threads 	= pw->cores;//number of openMP threads that are available for use
 	
 	//===========================================================================
 	//get job_ID and open file handle for log files

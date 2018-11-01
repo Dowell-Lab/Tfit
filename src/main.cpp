@@ -35,7 +35,7 @@ int main(int argc, char* argv[]){
   MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
   
   
-  int threads  	= omp_get_max_threads();
+  int threads  	= omp_get_num_threads();
 
   //Todo: consider adding a rank parameter, since it appears to change how error messages are generated.
   ParamWrapper pw(argc, argv);

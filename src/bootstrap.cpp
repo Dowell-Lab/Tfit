@@ -88,7 +88,7 @@ void subsample(segment * S, segment * NS ){
 vector<segment *> make_bootstraps(segment * S, params * P){
 	int rounds 	= stoi(P->p6["-rounds"]);
 	int brounds = stoi(P->p6["-brounds"]);
-	int np 		= omp_get_max_threads();
+	int np 		= omp_get_num_threads();
 	//make segmnets
 	vector<segment *> segments(brounds);
 	// NS->minX = S->minX, NS->maxX = S->maxX;
@@ -139,7 +139,7 @@ double get_mean(vector<double> X){
 void run_bootstrap_across(vector<segment *> segments, params * P, ofstream& log_file){
 	int rounds 		= stoi(P->p6["-rounds"]);
 	double scale 	= stod(P->p6["-ns"]);
-	int np 			= omp_get_max_threads();
+	int np 			= omp_get_num_threads();
 	int res 	= stoi(P->p6["-foot_res"]);
 	double lower=0, upper=500, delta= 0;
 	log_file<<"(across_segments) model progress...";

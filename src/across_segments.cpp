@@ -208,7 +208,7 @@ vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<
 	vector<map<int, vector<simple_c_free_mode> >> D;
 	typedef map<int, vector<classifier> > ::iterator it_type;
 	double scale 	= stof(P->p["-ns"]);
-	int num_proc 				= omp_get_max_threads();
+	int num_proc 				= omp_get_num_threads();
 	int verbose 	= stoi(P->p["-v"]);
 	LG->write("(EM) running model across provided intervals...........\n", verbose);
 	double N 		= FSI.size();
@@ -254,7 +254,7 @@ vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode_pwrappe
 	vector<map<int, vector<simple_c_free_mode> >> D;
 	typedef map<int, vector<classifier> > ::iterator it_type;
 	double scale 	= pw->ns;
-	int num_proc 				= omp_get_max_threads();
+	int num_proc 				= pw->cores;
 	int verbose 	= pw->verbose;
 	LG->write("(EM) running model across provided intervals...........\n", verbose);
 	double N 		= FSI.size();

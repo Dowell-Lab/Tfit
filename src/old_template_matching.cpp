@@ -210,7 +210,7 @@ void BIC_template(segment * data, double * avgLL, double * BIC_values, double * 
 	double * variances,double * lambdas, double ** skews ,double window, int np, int single,double foot_res,double scale){
 	double vl;
 	int NN 	= int(data->XN);
-	int threads  	= omp_get_max_threads();
+	int threads  	= omp_get_num_threads();
 	int counts 		= NN / threads;
 	#pragma omp parallel num_threads(threads)
 	{
@@ -519,7 +519,7 @@ void BIC_template_old_long(segment * data, double * avgLL, double * BIC_values, 
 	double sigma, double lambda, double foot_print, double pi, double w){
 	double vl;
 	int NN 	= int(data->XN);
-	int threads  	= omp_get_max_threads();
+	int threads  	= omp_get_num_threads();
 	int counts 		= NN / threads;
 	#pragma omp parallel num_threads(threads)
 	{
