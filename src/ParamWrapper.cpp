@@ -595,6 +595,11 @@ ParamWrapper::ParamWrapper(int argc, char** argv, bool checkForModule)
             this->experimentalValsSpecified = true;
             this->alpha0                    = atof(it->second.c_str());
         }
+        
+        else if(it->first=="--threads")
+        {
+            this->threads=atoi(it->second.c_str());
+        }
 
         else if (it->first == "-BETA_0") {
             this->experimentalValsSpecified = true;

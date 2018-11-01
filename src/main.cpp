@@ -41,8 +41,15 @@ int main(int argc, char* argv[])
 
     //Todo: consider adding a rank parameter, since it appears to change how error messages are generated.
     ParamWrapper pw(argc, argv);
-    //rank=0;
-
+    
+    //We will set nprocs to the minimum of the detected number of processors and the specified thread count.
+    //NOTE: the "threads" variable here is ignored because it should be called within a parallel region.
+    if(nprocs>pw.threads)
+    {
+        nprocs=pw.threads;
+        threads=pw.threads;
+    }
+    
     if (pw.exit) {
         if (rank == 0) {
             printf("Exiting...\n");

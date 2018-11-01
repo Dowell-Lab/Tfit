@@ -109,6 +109,9 @@ public:
     std::string scores;
     int         penalty;
     double      maxNoise;
+    
+    //Allows the user to specify maximum thread count on each MPI node.
+    int threads;
 
     //Methods:
     ParamWrapper();
