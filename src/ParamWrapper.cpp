@@ -129,6 +129,7 @@ ParamWrapper::ParamWrapper()
     this->br=25;
     this->fdr=0;
     this->debug=false;
+    this->cores=1;
 }
 
 /** Parses the arguments passed to tfit and attempts to store them internally.
@@ -190,6 +191,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     this->maxNoise=0.05; //This seems to only be used in across_segments.
     this->mle=0; //This parameter runs the model module after bidir, IIRC.
     this->elon=0;
+    this->cores=1;
     
     
     if(argc==1)

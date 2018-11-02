@@ -41,6 +41,15 @@ int main(int argc, char* argv[]){
   ParamWrapper pw(argc, argv);
   //rank=0;
   
+  //We will set nprocs to the minimum of the detected number of processors and the specified thread count.
+  //NOTE: the "threads" variable here is ignored because it should be called within a parallel region.
+  if(nprocs>pw.cores)
+  {
+      nprocs=pw.cores;
+      threads=pw.cores;
+  }
+  
+    
   if(pw.exit)
   {
       if(rank==0)
