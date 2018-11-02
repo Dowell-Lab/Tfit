@@ -12,63 +12,84 @@
  */
 void ParamWrapper::printUsage()
 {
-    printf("Usage: TFit modulename [arguments]\n");
+    printf("\n==================================================================================================================\n");
+    printf("Transcription Fit (Tfit)\n\n");
+    printf("A tool for modeling RNAPII behavior and annotating bidirectionals in nascent transcription data.\n\n");
+    printf("For a full description, questions, and error reporting, see:\n");
+    printf("\tDowell Lab @ https://github.com/Dowell-Lab/Tfit\n\n");
+    printf("==================================================================================================================\n");
+    printf("Usage: TFit [modulename] [arguments]\n\n");
     printf("Where modulename is one of the following:\n");
-    printf("\tbidir - This module searches the genome for areas resembling bidirectional transcription\n");
+    printf("\tbidir - This module searches the genome for regions resembling bidirectional transcription (active RNAPII)\n");
     printf("\t\tby comparing a fixed template mixture model to a noise model by a log-likelihood ratio score.\n");
     //printf("\tbidir_old - This module implements the functionality seen in versions of Tfit used in publications\n");
-    printf("\tmodel - This module attempts to generate an optimal set of parameters per region instead \n");
-    printf("\t\tof using a fixed set of parameters for the entire genome\n");
-    
-    printf("\n\nWhere [arguments] is one or more of the following for the bidir module:\n");
-    printf("\t-i\tForward bedgraph file\n");
-    printf("\t-j\tReverse bedgraph file.\n");
-    printf("\t-ij\tBoth forward and reverse bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.\n");
-    printf("\t-N\tJob name.\n");
-    printf("\t-o\tOutput directory. If it does not exist, it will be created.\n");
-    printf("\t-log_out\tLog file output directory. If it does not exist, it will be created.\n");
-    printf("\nAdditional (optional) parameters for the bidir module:\n");
-    printf("\t-tss\tTranscription model path. Models are provided for hg19 and mm10 in the annotations directory of this project.\n");
-    printf("\t-chr\tRun bidir only on the specified chromosome by name. The default is, \"all\"\n");
-    printf("\t-bct\tLLR threshold. Default=1\n");
-    printf("\nIf -tss is not specified, the values normally specified by the model file can be specified explicitly using the following:\n");
-    printf("\t-lambda\tThis is the entry length parameter for the EMG density function. default=200 bp\n");
-    printf("\t-sigma\tThis is the variance parameter for the EMG density function. default=10bp\n");
-    printf("\t-pi\tThis is the strand bias parameter for the EMG density function. default=0.5\n");
-    printf("\t-w\tThis is the pausing probability parameter for the EMG denisty function. default=0.5\n");
-    printf("\t-scores\tSome form of score output file. This parameter is presently undocumented.\n");
-    printf("\t-r_mu\tSome classification parameter. Default=0. This parameter is presently undocumented.\n");
-    printf("\t-ms_pen\tPenalty term for model selection. Default=1.\n");
-    printf("\t-max_noise\tMaximum noise threshold. Default=0.05. This parameter is presently undocumented.\n");
-    printf("\t-fdr\tGenerate a likelihood score distribution on the input data. This parameter has yet to be fully documented and tested.\n");
-    
-    printf("\n\nWhere [arguments] is one or more of the following for the model module:\n");
-    printf("\t-i\tForward bedgraph file\n");
-    printf("\t-j\tReverse bedgraph file\n");
-    printf("\t-ij\tBoth forward and reverse bedgraph file. This parameter may be used in place of -i and -j if reads are in one bedgraph file.\n");
-    printf("\t-k\tBedgraph file containing a set of regions of interest.\n");
-    printf("\t-N\tJob name.\n");
-    printf("\t-o\tOutput directory. If it does not exist, it will be created.\n");
-    printf("\t-log_out\tLog file output directory. If it does not exist, it will be created.\n");
+    printf("\tmodel - This module models RNAPII behavior given the segment regions obtained from the bidir module.\n");
+    printf("==================================================================================================================\n\n");
+    printf("Where [arguments] is one or more of the following for the `bidir` module:\n\n");
+    printf("Required arguments:\n");
+    printf("\t-bgf \t--forward   \t<FILE.pos.bedGraph> \t Forward bedgraph file (only required if -bg unused).\n");
+    printf("\t-bgr \t--reverse   \t<FILE.neg.bedGraph> \t Reverse bedgraph file (only required if -bg unused).\n");
+    printf("\t-bg  \t--bedgraph  \t<FILE.cat.bedGraph> \t Concatenated forward and reverse bedgraph file.\n");
+    printf("\t-N   \t--jobName   \t<MYJOB>             \t Job name for log output (no extensions).\n"); 
+    printf("\t-o   \t--output    \t</project/FILE.bed> \t Output file name (.bed) with directory extension.\n");
+    printf("\t-l   \t--logOut    \t</projects/logs/>   \t Log file output directory.\n");
+    printf("\nAdditional (optional) arguments for the bidir module:\n");
+    //This only has an effect (now option -bd) if the -mle is run. We will not give this option yet
+    //printf("\t-tss\tTranscription model path. Models are provided for hg19 and mm10 in the annotations directory of this project.\n");
+    printf("\t-s   \t--segment   \t<SEGFILE.bed>       \t BED file that specifies sample regions of interest (e.g. FStitch output)\n");
+    printf("\t-chr \t--chromosome\t<chrX>              \t Run bidir only on the specified chromosome. Default = all\n");
+    printf("\t-n   \t--threads   \t<integer>           \t Number of threads to run the job on. Default=1\n");
+    //printf("\t-bct\tLLR threshold. Default=1\n");
+    //printf("\nIf -tss is not specified, the values normally specified by the model file can be specified explicitly using the following:\n");
+    //printf("\t-lambda\tThis is the entry length parameter for the EMG density function. default=200 bp\n");
+    //printf("\t-sigma\tThis is the variance parameter for the EMG density function. default=10bp\n");
+    //printf("\t-pi\tThis is the strand bias parameter for the EMG density function. default=0.5\n");
+    //printf("\t-w\tThis is the pausing probability parameter for the EMG denisty function. default=0.5\n");
+    //printf("\t-scores\tSome form of score output file. This parameter is presently undocumented.\n");
+    //printf("\t-r_mu\tSome classification parameter. Default=0. This parameter is presently undocumented.\n");
+    //printf("\t-ms_pen\tPenalty term for model selection. Default=1.\n");
+    //printf("\t-max_noise\tMaximum noise threshold. Default=0.05. This parameter is presently undocumented.\n");
+    //printf("\t-fdr\tGenerate a likelihood score distribution on the input data. This parameter has yet to be fully documented and tested.\n");
+    printf("==================================================================================================================\n\n");
+    printf("Where [arguments] is one or more of the following for the `model` module:\n\n");
+    printf("Required arguments:\n");
+    printf("\t-bgf \t--forward   \t<FILE.pos.bedGraph> \t Forward bedgraph file (only required if -bg unused).\n");
+    printf("\t-bgr \t--reverse   \t<FILE.neg.bedGraph> \t Reverse bedgraph file (only required if -bg unused).\n");
+    printf("\t-bg  \t--bedgraph  \t<FILE.cat.bedGraph> \t Concatenated forward and reverse bedgraph file.\n");
+    printf("\t-N   \t--jobName   \t<MYJOB>             \t Job name for log and model output files (no extensions).\n"); 
+    printf("\t-o   \t--output    \t<OUT.bed>           \t Output file name (.bed extension).\n");
+    printf("\t-l   \t--logOut    \t</projects/logs/>   \t Log file output directory.\n");
     printf("\nAdditional (optional) parameters for the model module:\n");
-    printf("\t-mink\tMinimum number of finite mixtures to consider. default=1\n");
-    printf("\t-maxk\tMaximum number of finite mixtures to consider. default=1\n");
-    printf("\t-rounds\tNumber of random seeds to use in the model. default=5\n");
-    printf("\t-ct\tConvergence threshold after which processing stops. default=0.0001\n");
-    printf("\t-mi\tMaximum number of model iterations after which processing stops. default=2000\n");
-    printf("The model module currently has experimental support for parameter inference. Ie. it can attempt to estimate lambda,\n");
-    printf("sigma, pi, and w via conjugate priors. These values are specified using the following parameters:\n");
-    printf("\t-ALPHA_0\tPrior parameter 1 for sigma. Recommended value=1\n");
-    printf("\t-BETA_0\tPrior parameter 2 for sigma. Recommended value=1\n");
-    printf("\t-ALPHA_1\tPrior parameter 1 for lambda.\n");
-    printf("\t-BETA_1\tPrior parameter 2 for lambda.\n");
-    printf("\t-ALPHA_2\tSymmetric prior on mixing weights. Higher values=stronger attempt to find components of equal mixing weights.\n");
-    printf("\t\t\tRecommended value=100\n");
-    printf("\t-ALPHA_3\tSymmetric prior on the strand bias. Higher values=stronger attempt to find bidirectional events with equal strand bias.\n");
-    printf("\t\t\tRecommended value=100\n");
+    printf("\t-s   \t--segment   \t<SEGFILE.bed>       \t BED file that specifies sample regions of interest (e.g. bidir output)\n");
+    printf("\t-bd  \t--bidirs    \t<FILE.bed>          \t Regions of bidirectionals for fine-tuning parameters.\n");
+    printf("\t-chr \t--chromosome\t<chrX>              \t Run model only on the specified chromosome. Default = all\n");
+    printf("\t-n   \t--threads   \t<integer>           \t Number of threads to run the job on. Default=1\n");
+    printf("==================================================================================================================\n\n");
+    printf("\t-h   \t--help      \t Usage information\n");
+ 
+/* None of these seem to work appropriately and are also very confusing for the typical user. Instead, I have made it such that similar 
+ * to the bidir module, we can input a "training" to fine-tune these parameters (to an extent... some are still hard-coded and I'm not sure
+ * where). That said, it seems to work "ok" and we can still make the config file an option for fine-tuning maybe.
+ */
+    //printf("\t-mink\tMinimum number of finite mixtures to consider. default=1\n");
+    //printf("\t-maxk\tMaximum number of finite mixtures to consider. default=1\n");
+    //printf("\t-rounds\tNumber of random seeds to use in the model. default=5\n");
+    //printf("\t-ct\tConvergence threshold after which processing stops. default=0.0001\n");
+    //printf("\t-mi\tMaximum number of model iterations after which processing stops. default=2000\n");
+// This is not currently true. It looks like it tries an then defaults back to 2000
+    //printf("The model module currently has experimental support for parameter inference. Ie. it can attempt to estimate lambda,\n");
+    //printf("sigma, pi, and w via conjugate priors. These values are specified using the following parameters:\n");
+    //printf("\t-ALPHA_0\tPrior parameter 1 for sigma. Recommended value=1\n");
+    //printf("\t-BETA_0\tPrior parameter 2 for sigma. Recommended value=1\n");
+    //printf("\t-ALPHA_1\tPrior parameter 1 for lambda.\n");
+    //printf("\t-BETA_1\tPrior parameter 2 for lambda.\n");
+    //printf("\t-ALPHA_2\tSymmetric prior on mixing weights. Higher values=stronger attempt to find components of equal mixing weights.\n");
+    //printf("\t\t\tRecommended value=100\n");
+    //printf("\t-ALPHA_3\tSymmetric prior on the strand bias. Higher values=stronger attempt to find bidirectional events with equal strand bias.\n");
+    //printf("\t\t\tRecommended value=100\n");
     
-    printf("-elon     : (boolean integer) adjust support of elongation component, (default=0)\n");
-	printf("              useful only when fitting to FStitch[1] or groHMM[2] output intervals\n");
+    //printf("-elon     : (boolean integer) adjust support of elongation component, (default=0)\n");
+	//printf("              useful only when fitting to FStitch[1] or groHMM[2] output intervals\n");
 }
 
 /** Sets all values to their defaults as per the old read_in_parameters codebase.
@@ -306,12 +327,12 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
             this->penalty=atof(it->second.c_str());
         }
         
-        else if(it->first=="-bd" || it->first=="--bidirectionals")
+        else if(it->first=="-bd" || it->first=="--bidirs")
         {
             this->promoterTSS=it->second;
         }
         
-        else if(it->first=="-chr")
+        else if(it->first=="-chr" || it->first=="--chromosome")
         {
             this->chromosome=it->second;
         }
