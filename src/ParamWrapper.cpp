@@ -60,7 +60,7 @@ void ParamWrapper::printUsage()
     printf("\t-o   \t--output    \t<FINALHITS.bed>     \t Output file name (.bed extension).\n");
     printf("\t-l   \t--logOut    \t</projects/logs/>   \t Log file output directory.\n");
     printf("\nAdditional (optional) parameters for the model module:\n");
-    printf("\t-s   \t--segment   \t<SEGFILE.bed>       \t BED file that specifies sample regions of interest (e.g. bidir output)\n");
+    printf("\t-s   \t--segment   \t<PRELIMHITS.bed>    \t BED file that specifies sample regions of interest (e.g. bidir output)\n");
     printf("\t-bd  \t--bidirs    \t<FILE.bed>          \t Regions of bidirectionals for fine-tuning parameters.\n");
     printf("\t-chr \t--chromosome\t<chrX>              \t Run model only on the specified chromosome. Default = all\n");
     printf("\t-n   \t--threads   \t<integer>           \t Number of threads to run the job on. Default=1\n");
@@ -502,63 +502,64 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
  * @param cores Number of cores on which Tfit is to run. This is obtained from the MPI runtime.
  */
 void ParamWrapper::display(int nodes, int cores){
-	//We have no analogs, since these parameters aren't in the repo documentation:
+    //We have no analogs, since these parameters aren't in the repo documentation:
     //bool MLE 	= stoi(p["-MLE"]);
-	//bool SELECT = stoi(p["-select"]);
-	std::string header 	= "";
-	header+="----------------------------------------------------------------\n";
-	header+="             Transcription Fit (Tfit)                   \n";
-	if (bidir){
-	header+="            Preliminary bidirectionals     \n";
-	}//if (this->module=="bidir" and MLE){
-	//header+="             ....coupled to mixture model....     \n";
-	//}
-	if (bidir and select){
-	header+="       ....coupled to BIC penalty optimization....     \n";
-	}
-	if (model){
-	header+="               ...running mixture model...                      \n";
-	}
-	if (select){
-	header+="            ....BIC penalty optimization....                      \n";		
-	}
-	printf("%s\n",header.c_str() );
-	printf("Job Name          : %s\n", this->jobName.c_str());
-	if (this->mergedStrand!=""){
-		printf("bedGraph          : %s\n", this->mergedStrand.c_str());
-	}else{
-		printf("-Forward bedGraph : %s\n", this->forwardStrand.c_str());
-		printf("-Reverse bedGraph : %s\n", this->reverseStrand.c_str());
-	}
-	//if (model or MLE){
-	//printf("-k         : %s\n", p["-k"].c_str()  );
-	//}
-	if (this->promoterTSS!=""){
-		printf("Bidirectionals    : %s\n", this->promoterTSS.c_str());
-	}
-	printf("Output Dir        : %s\n", this->outputDir.c_str()  );
-	printf("Log Out Dir       : %s\n", this->logDir.c_str()  );
-	printf("-MLE       : %d\n", this->mle);
-	printf("-chr       : %s\n", this->chromosome.c_str());	
-	printf("-br        : %d\n", this->br);	
-	printf("-rounds    : %d\n", this->rounds);
-	if (this->elon){
-		printf("-elon      : %d\n", this->elon);
-	}
-	printf("-pad       : %lf\n", this->pad);
-	if (!model){
-	printf("-bct       : %d\n", this->llrthresh);
-	}
-	if (model){
-		printf("-minK      : %d\n", this->mink);
-		printf("-maxK      : %d\n", this->maxk);
-	}
-	printf("--threads  : %d\n",  cores);
-	printf("--MPI_np    : %d\n",  nodes);
-	printf("\nQuestions/Bugs? https://github.com/Dowell-Lab/Tfit" );
+    //bool SELECT = stoi(p["-select"]);
+    std::string header 	= "";
+    header+="----------------------------------------------------------------\n";
+    header+="             Transcription Fit (Tfit)                   \n";
+    if (bidir){
+    header+="            Preliminary bidirectionals     \n";
+    }
+    //if (this->module=="bidir" and MLE){
+    //header+="             ....coupled to mixture model....     \n";
+    //}
+    if (bidir and select){
+    header+="       ....coupled to BIC penalty optimization....     \n";
+    }
+    if (model){
+    header+="               ...running mixture model...                      \n";
+    }
+    if (select){
+    header+="            ....BIC penalty optimization....                      \n";		
+    }
+    printf("%s\n",header.c_str() );
+    printf("Job Name          : %s\n", this->jobName.c_str());
+    if (this->mergedStrand!=""){
+        printf("bedGraph          : %s\n", this->mergedStrand.c_str());
+    }else{
+        printf("Forward bedGraph : %s\n", this->forwardStrand.c_str());
+        printf("Reverse bedGraph : %s\n", this->reverseStrand.c_str());
+    }
+    //if (model or MLE){
+    //printf("-k         : %s\n", p["-k"].c_str()  );
+    //}
+    if (this->promoterTSS!=""){
+        printf("Bidirectionals    : %s\n", this->promoterTSS.c_str());
+    }
+    printf("Output Dir        : %s\n", this->outputDir.c_str()  );
+    printf("Log Out Dir       : %s\n", this->logDir.c_str()  );
+    printf("-MLE       : %d\n", this->mle);
+    printf("-chr       : %s\n", this->chromosome.c_str());	
+    printf("-br        : %d\n", this->br);	
+    printf("-rounds    : %d\n", this->rounds);
+    if (this->elon){
+        printf("-elon      : %d\n", this->elon);
+    }
+    printf("-pad       : %lf\n", this->pad);
+    if (!model){
+    printf("-bct       : %d\n", this->llrthresh);
+    }
+    if (model){
+        printf("-minK      : %d\n", this->mink);
+        printf("-maxK      : %d\n", this->maxk);
+    }
+    printf("--threads  : %d\n",  cores);
+    printf("--MPI_np    : %d\n",  nodes);
+    printf("\nQuestions/Bugs? https://github.com/Dowell-Lab/Tfit" );
     printf("\nRevisions made by michael[dot]gohde[at]colorado[dot]edu\n");
-	printf("----------------------------------------------------------------\n" );
-	
+    printf("----------------------------------------------------------------\n" );
+    
 }
 
 /** Returns the date and time as a C++ string.
@@ -584,46 +585,47 @@ const std::string cdt() {
  */
 std::string ParamWrapper::getHeader(int ID){
     std::ostringstream os;
-	os<<"#----------------------------------------------------\n";
-	os<<"#Date Time    : "<<cdt()<<"\n";
-	os<<"#-N           : "<<this->jobName<<"\n";
-	if (this->mergedStrand==""){
-		os<<"#-i           : "<<this->forwardStrand<<"\n";
-		os<<"#-j           : "<<this->reverseStrand<<"\n";
-	}else{
-		os<<"#-ij          : "<<this->mergedStrand<<"\n";
-	}
-	if (ID!=1){
-		os<<"#-k           : "<<this->regionsOfInterest<<"\n";
-	}
-	os<<"#-o           : "<<this->outputDir<<"\n";
-	os<<"#-br          : "<<this->br<<"\n";
-	if (ID==1){
-		os<<"#-bct         : "<<this->llrthresh<<"\n";
-        os<<"#-pad         : "<<this->pad<<"\n";
-	}
-	if (ID!=1){
-		os<<"#-elon        : "<<this->elon<<"\n";
-		os<<"#-minK        : "<<this->mink<<"\n";
-		os<<"#-maxK        : "<<this->maxk<<"\n";
-		os<<"#-mi          : "<<this->mi<<"\n";
-		os<<"#-ct          : "<<this->ct<<"\n";
-		os<<"#-rounds      : "<<this->rounds<<"\n";
-	}
-	if (ID!=1){
-		os<<"#-ALPHA_0     : "<<this->alpha0<<"\n";	
-		os<<"#-BETA_0      : "<<this->beta0<<"\n";	
-		os<<"#-BETA_1      : "<<this->beta1<<"\n";	
-		os<<"#-ALPHA_2     : "<<this->alpha2<<"\n";	
-		os<<"#-ALPHA_3     : "<<this->alpha3<<"\n";	
-	}
-	if (ID==1){
-		os<<"#-sigma       : "<< this->sigma <<"\n";
-		os<<"#-lambda      : "<< this->lambda<<"\n";
-		os<<"#-foot_print  : "<< this->footPrint<<"\n";
-		os<<"#-pi          : "<< this->pi<<"\n";
-		os<<"#-w           : "<< this->w<<"\n";
-	}
-	os<<"#----------------------------------------------------\n";
-	return os.str();
+    os<<"#----------------------------------------------------\n";
+    os<<"#Date Time      : "<<cdt()<<"\n";
+    os<<"#-N --jobName   : "<<this->jobName<<"\n";
+    if (this->mergedStrand==""){
+        os<<"#-f --forward   : "<<this->forwardStrand<<"\n";
+        os<<"#-r --reverse   : "<<this->reverseStrand<<"\n";
+    }else{
+        os<<"#-bg --bedgraph : "<<this->mergedStrand<<"\n";
+    }
+    if (ID!=1){
+        os<<"#-s --segment   : "<<this->regionsOfInterest<<"\n";
+    }
+    os<<"#-o --output      : "<<this->outputDir<<"\n";
+    os<<"#-l --logOut      : "<<this->logDir<<"\n";    
+    os<<"#-br            : "<<this->br<<"\n";
+    if (ID==1){
+        os<<"#-bct           : "<<this->llrthresh<<"\n";
+        os<<"#-pad           : "<<this->pad<<"\n";
+    }
+    if (ID!=1){
+        os<<"#-elon          : "<<this->elon<<"\n";
+        os<<"#-minK          : "<<this->mink<<"\n";
+        os<<"#-maxK          : "<<this->maxk<<"\n";
+        os<<"#-mi            : "<<this->mi<<"\n";
+        os<<"#-ct            : "<<this->ct<<"\n";
+        os<<"#-rounds        : "<<this->rounds<<"\n";
+    }
+    if (ID!=1){
+        os<<"#-ALPHA_0     : "<<this->alpha0<<"\n";
+        os<<"#-BETA_0      : "<<this->beta0<<"\n";
+        os<<"#-BETA_1      : "<<this->beta1<<"\n";
+        os<<"#-ALPHA_2     : "<<this->alpha2<<"\n";
+        os<<"#-ALPHA_3     : "<<this->alpha3<<"\n";
+    }
+    if (ID==1){
+        os<<"#-sigma       : "<< this->sigma <<"\n";
+        os<<"#-lambda      : "<< this->lambda<<"\n";
+        os<<"#-foot_print  : "<< this->footPrint<<"\n";
+        os<<"#-pi          : "<< this->pi<<"\n";
+        os<<"#-w           : "<< this->w<<"\n";
+    }
+    os<<"#----------------------------------------------------\n";
+    return os.str();
 }

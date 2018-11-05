@@ -474,6 +474,8 @@ string segment_fits::write () {
          double pi   = stod(split_by_comma(params[3], "")[i]);
          double w  = stod(split_by_comma(split_by_bar(params[5], "")[i] , "" )[0] );
 
+// Seems that this might be where we could be losing some bidirectionals...?          
+          
          int start   = max(mu - (std + lam), 0.0), stop = mu + (std + lam);
          if (std  < 5000 and lam < 20000 and w > 0.05 and pi > 0.05 and pi < 0.95  ) {
             line += chrom + "\t" + to_string(start) + "\t" + to_string(stop) + "\t";
@@ -1032,7 +1034,7 @@ void load::write_out_bidirs(map<string , vector<vector<double> > > G, string out
       vector<vector<double>> data_intervals   =  bubble_sort_alg(c->second);
 
       for (int i = 0; i < data_intervals.size(); i++) {
-         FHW << c->first << "\t" << to_string(int(data_intervals[i][0])) << "\t" << to_string(int(data_intervals[i][1])) << "\tME_" << to_string(ID) << "\t";
+         FHW << c->first << "\t" << to_string(int(data_intervals[i][0])) << "\t" << to_string(int(data_intervals[i][1])) << "\tBIDIR_" << to_string(ID) << "\t";
          FHW << to_string(data_intervals[i][2] ) + "," + to_string(int(data_intervals[i][3] )) + "," + to_string(int(data_intervals[i][4]) ) << endl;
          ID++;
       }
