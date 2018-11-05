@@ -1042,7 +1042,6 @@ void load::write_out_bidirs(map<string , vector<vector<double> > > G, string out
 
 /** Dumps a set of bidirectional predictions and fits to the specified output file.
  * 
- * @depreciated
  * @param G Chromosome-indexed map of (what appear to be?) model parameters.
  * @param out_dir Directory in which to write all of the bidirectional output files.
  * @param job_name Job name prefix with which to name the output files.
@@ -1060,8 +1059,8 @@ void load::write_out_bidirs_pwrapper(map<string , vector<vector<double> > > G, s
       vector<vector<double>> data_intervals   =  bubble_sort_alg(c->second);
 
       for (int i = 0; i < data_intervals.size(); i++) {
-         FHW << c->first << "\t" << to_string(int(data_intervals[i][0])) << "\t" << to_string(int(data_intervals[i][1])) << "\tME_" << to_string(ID) << "\t";
-         FHW << to_string(data_intervals[i][2] ) + "," + to_string(int(data_intervals[i][3] )) + "," + to_string(int(data_intervals[i][4]) ) << endl;
+         FHW << c->first << "\t" << to_string(int(data_intervals[i][0])) << "\t" << to_string(int(data_intervals[i][1])) << "\tPRELIM_" << to_string(ID) << endl;
+//         FHW << to_string(data_intervals[i][2] ) + "," + to_string(int(data_intervals[i][3] )) + "," + to_string(int(data_intervals[i][4]) ) << endl;
          ID++;
       }
    }
