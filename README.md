@@ -151,8 +151,8 @@ In short, the `bidir` will output putitive regions of RNAPII transcriptional act
 
 **Required Arguments:**
 
-| Flag           | Type | Description |
-|----------------|------|-------------|
+| Flag                | Type | Description |
+|---------------------|------|-------------|
 | -f     --forward    | \<FILE.pos.bedGraph>      | Forward (positive) strand bedGraph file (***Required only if -bg not specified***)
 | -r     --reverse    | \<FILE.neg.bedGraph>      | Reverse (negative) strand bedGraph file (***Required only if -bg not specified***)
 | -bg    --bedgraph   | \<FILE.cat.bedGraph>      | Concatenated pos/neg bedGraph file (***Required only if -f and -r not specified***) 
@@ -163,8 +163,8 @@ In short, the `bidir` will output putitive regions of RNAPII transcriptional act
 
 **Optional Arguments:**
 
-| Flag           | Type | Description |
-|----------------|------|-------------|
+| Flag                | Type | Description |
+|---------------------|------|-------------|
 | -s     --segment    | \<SEGFILE.bed>            | BED file that specifies sample regions of interest (e.g. FStitch output)
 | -chr   --chromosome | \<chrX>                   | Run bidir only on the specified chromosome. Default = all
 | -n     --threads    | \<integer>                | Number of threads to run the job on; 16 recommended. Default=1
@@ -210,8 +210,8 @@ The `model` module is therefore meant as an extension of the `bidir` module and 
 
 **Required Arguments:**
 
-| Flag           | Type | Description |
-|----------------|------|-------------|
+| Flag                | Type | Description |
+|---------------------|------|-------------|
 | -f     --forward    | \<FILE.pos.bedGraph>      | Forward (positive) strand bedGraph file (***Required only if -bg not specified***)
 | -r     --reverse    | \<FILE.neg.bedGraph>      | Reverse (negative) strand bedGraph file (***Required only if -bg not specified***)
 | -bg    --bedgraph   | \<FILE.cat.bedGraph>      | Concatenated pos/neg bedGraph file (***Required only if -f and -r not specified***) 
@@ -221,8 +221,8 @@ The `model` module is therefore meant as an extension of the `bidir` module and 
 
 **Optional Arguments:**
 
-| Flag           | Type | Description |
-|----------------|------|-------------|
+| Flag                | Type | Description |
+|---------------------|------|-------------|
 | -bd    --bidirs     | \<BIDIRS.bed>             | BED file with either TSS's or annotated bidirectionals from your sample
 | -s     --segment    | \<PRELIMHITS.bed>         | BED file that specifies sample regions of interest (e.g. FStitch output)
 | -chr   --chromosome | \<chrX>                   | Run bidir only on the specified chromosome. Default = all
@@ -275,7 +275,7 @@ chr1    376808  377436  BIDIR_13|1.433726  377122.645102   0.380428        275.0
 chr1    377247  377484  BIDIR_13|1.433726  377366.182346   0.436560        59.999043
 ```
 
-The first three columns are the same as most standard BED files (chr, start, stop) for regions of interest. The fourth column is the annotation for the predicted bidirectional. The integer following BIDIR_ tells you which prediction region from PRELIMHITS.bed that that bidirectional was called from. The floating point following BIDIR_X|\<FLOAT> is the BIC model estimate value. Columns 5, 6, and 7 are &#924, w, and &#955 respectively (polymerase loading, pausing ratio, and exponential decay).
+The first three columns are the same as most standard BED files (chr, start, stop) for regions of interest. The fourth column is the annotation for the predicted bidirectional. The integer following BIDIR_ tells you which prediction region from PRELIMHITS.bed that that bidirectional was called from. The floating point following BIDIR_X|\<FLOAT> is the BIC model estimate value. Columns 5, 6, and 7 are mu, w, and lambda respectively (polymerase loading, pausing ratio, and exponential decay).
 
 
 ## Questions and Comments
