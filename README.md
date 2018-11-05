@@ -1,5 +1,10 @@
 # Tfit
-Transcription fit (or Tfit) implements a finite mixture model to identify signatures of RNA Polymerase II (RNAPII) activity through the identification of bidirectional or divergent transcription in nascent transcription assays such as Global Run-On (GRO) and Precision Run-on (PRO) followed by sequencing data. Tfit is separated into two modules: (1) `bidir` and (2) `model`. Output from these modules can be imported into any genome browser. An example bed file is shown below.  
+Transcription fit (or Tfit) implements a finite mixture model to identify signatures of RNA Polymerase II (RNAPII) activity through the identification of bidirectional or divergent transcription in nascent transcription assays such as Global Run-On (GRO) and Precision Run-on (PRO) followed by sequencing data. Tfit is separated into two modules:
+
+1. `bidir` which generates calls for preliminary regions of interest 
+2. `model` which attempts to model RNAPII behavior for the preliminary outputs and make refined predictions for activity
+
+Output from these modules can be imported into any genome browser. An example bed file is shown below.  
 
 ![Screenshot of data output](images/Example_Snapshot.png)
 
@@ -8,13 +13,13 @@ The `bidir` module will compute local likelihood statistics given a fixed templa
 The `model` module will compute full MLE estimates of the mixture model at user specified regions of the genome provided as a bed file. This bed file may be the output from the bidir module. It is recommended that users fit MLE estimates to the output of the bidir module as this will decrease false positives. Three files will output from this module:
 
 * Full MLE output description (\<jobName\>.tsv) containing information about pausing, spreading, and strand probability of each predicted region
+* A BED7 file contianing predicted regions of activity (\<outFile\>.bed); the first three columns are the standard chr, start, end, columns 4-7 contain model information for each region
 * Stanard output with detailed job run information (\<jobName\>.log)
-* A BED4 file contianing predicted regions of activity (\<outFile\>.bed); the first three columns are the standard chr, start, end, and the fourth contain basic stats for each region
 
 This module is much more computationally expensive than `bidir` and can take up to 10-12 hours depending on sample size.
 
 ### System Requirements and Makefile
-Transcription Fit (TFit) is written in the C/C++ programming language that requires GNU compilers >4.7.3 and =< 7.1.0. Tfit uses the popular openMPI framework to perform massive parallelization via multithreading on multiple core, single node systems or multiple core, multiple node compute clusters and therefore also has an MPI dependency requiring a verion >3.0. After cloning this repo, please change directory into /where/you/clone/this/repo/Tfit/src/ and run make clean followed by make.
+Transcription Fit (TFit) is written in the C/C++ programming language that requires GNU compilers >4.7.3 and =< 7.1.0. Tfit uses the popular openMPI framework to perform massive parallelization via multithreading on multiple core, single node systems or multiple core, multiple node compute clusters and therefore also has an MPI dependency requiring a verion >3.0. After cloning this repo, please change directory into /where/you/clone/this/repo/Tfit/src/ and run make clean (removing any existing binaries) followed by make.
 
 
 ```
@@ -27,7 +32,7 @@ Successfully removed binaries!
 $ make
 ```
 
-If the program compiled successfully you should see the below output.
+If the program compiles successfully you should see the following output.
 
 ```
 =========================================
@@ -67,7 +72,7 @@ If your program, did not compile properly it is likely that you do not have the 
 In short, the make file requires the path to mpic++ (install and config openMPI) to be in your PATH.
 
 ### Utilizing openMP and MPI
-Tfit is written using openMP and MPI to perform massive parallelization. If your institution has a large compute cluster, than Tfit will operate well across multiple cores and nodes. The `bidir` module runs relatively quickly, so this is only recommended for the `model` module. To invoke 4 MPI processes run:
+Tfit is written using openMP and MPI to perform massive parallelization. If your institution has a large compute cluster, than Tfit will operate well across multiple cores and nodes. The `bidir` module runs relatively quickly, so this is only recommended for the `model` module. To invoke 4 MPI processes (i.e. run across 4 nodes) run:
 
 ```
 $ mpirun -np 4 Tfit model [arguments]
@@ -95,9 +100,9 @@ $ export OMP_NUM_THREADS=16
 
 $ Tfit [module] [arguments]
 ```
-In order to properly allocate the number of cores using MPI, ***you must include the first command above***! 
+***In order to properly allocate the number of cores used in MPI, you must include the first command above in bash***! 
 
-To view the usage statement, use following standard arguments (must be compiled!):
+To view the usage statement, use following standard arguments (*must be compiled*):
 ```
 $ /src/Tfit -h 
 
@@ -114,9 +119,7 @@ chr    start    end    coverage
 1      107      117     1
 ```
 
-***IMPORTANT***
-
-Your .bedGraph file **should not contain 0 values** and should be **non-normalized**. FStitch performs an internal normalization.
+***IMPORTANT:*** Your bedGraph file **should not contain 0 values** and should be **non-normalized**. FStitch performs an internal normalization.
 
 There are two main tools for generating bedGraph coverage files from BAM files, deepTools and BEDTools. By default, deepTools bamCoverage will have discrete bins (50bp) and will therefore calculate average coverage over regions, rather that contigs of regions with equal read coverage, and "smooth" the data. While this is not a problem for visualizaiton at smaller bins, it will conflict with normalization. Therefore, we recommend using default BEDtools<sup>3</sup> genomecov settings:
     
@@ -139,18 +142,18 @@ cat \
  > ROOTNAME.sort.cat.bedGraph
 ```
 
-Note that the last command, sortBed, will require BEDTools. This is not required for Tfit, but is good practice as it will process the data quicker and is required for conversion to TDF if so desired.
+Note that the last command, sortBed, will require that BEDTools be specified in your PATH. Sorting is not required for Tfit, but is good practice as it will expedite daa processing and is required for conversion to TDF (for visualization in IGV) if so desired.
 
-## Bidir Module
+## Tfit bidir
 The bidir module scans across the genome for areas resembling bidirectional transcription by comparing a fixed template mixture model (user provided parameters or parameters estimated from promoter regions) to a noise model (uniform distribution) by a Likelihood ratio score (LLR).
 
 In short, the `bidir` will output putitive regions of RNAPII transcriptional activity. ***This is only intended as a pre-filter to the `model` module!***
 
 **Required Arguments:**
 
-| Flag | Type | Description |
-|------|------|-------------|
-| -f     --forward    | \<FILE.pos.bedGraph>       Forward (positive) strand bedGraph file (***Required only if -bg not specified***)
+| Flag           | Type | Description |
+|----------------|------|-------------|
+| -f     --forward    | \<FILE.pos.bedGraph>      | Forward (positive) strand bedGraph file (***Required only if -bg not specified***)
 | -r     --reverse    | \<FILE.neg.bedGraph>      | Reverse (negative) strand bedGraph file (***Required only if -bg not specified***)
 | -bg    --bedgraph   | \<FILE.cat.bedGraph>      | Concatenated pos/neg bedGraph file (***Required only if -f and -r not specified***) 
 | -N     --jobName    | \<MYJOB>                  | Job name for log output (no extensions).
@@ -160,8 +163,8 @@ In short, the `bidir` will output putitive regions of RNAPII transcriptional act
 
 **Optional Arguments:**
 
-| Flag | Type | Description |
-|------|------|-------------|
+| Flag           | Type | Description |
+|----------------|------|-------------|
 | -s     --segment    | \<SEGFILE.bed>            | BED file that specifies sample regions of interest (e.g. FStitch output)
 | -chr   --chromosome | \<chrX>                   | Run bidir only on the specified chromosome. Default = all
 | -n     --threads    | \<integer>                | Number of threads to run the job on; 16 recommended. Default=1
@@ -198,7 +201,7 @@ chr1    347779  352229  PRELIM_9
 chr1    358204  360304  PRELIM_10
 ```
 
-## Model Module
+## Tfit model
 Unlike the `bidir` module which utilizes an average or template version of the mixture model to scan the entire genome quickly, the `model` module will attempt to find (by maximum likelihood estimation, MLE) the best set of parameters (sigma,lambda, pi, w) on a per region of interest basis. Such a routine is especially valuable if it is believed that pausing or strand bias is changing following experimental perturbation. In addition, running the model module on the PRELIMHITS.bed file will greatly decrease the number of false positives as the MLE estimates will more accurately reflect the underlying structure of the region of interest rather than a static template model.  In short, MLE estimates are computed by the EM algorithm which is a convergent optimization method found commonly in gaussian mixture modeling and cluster analysis. 
 
 The `model` module is therefore meant as an extension of the `bidir` module and as such should always be run in succession.
@@ -207,9 +210,9 @@ The `model` module is therefore meant as an extension of the `bidir` module and 
 
 **Required Arguments:**
 
-| Flag | Type | Description |
-|------|------|-------------|
-| -f     --forward    | \<FILE.pos.bedGraph>       Forward (positive) strand bedGraph file (***Required only if -bg not specified***)
+| Flag           | Type | Description |
+|----------------|------|-------------|
+| -f     --forward    | \<FILE.pos.bedGraph>      | Forward (positive) strand bedGraph file (***Required only if -bg not specified***)
 | -r     --reverse    | \<FILE.neg.bedGraph>      | Reverse (negative) strand bedGraph file (***Required only if -bg not specified***)
 | -bg    --bedgraph   | \<FILE.cat.bedGraph>      | Concatenated pos/neg bedGraph file (***Required only if -f and -r not specified***) 
 | -N     --jobName    | \<MYJOB>                  | Job name for log output (no extensions).
@@ -218,8 +221,8 @@ The `model` module is therefore meant as an extension of the `bidir` module and 
 
 **Optional Arguments:**
 
-| Flag | Type | Description |
-|------|------|-------------|
+| Flag           | Type | Description |
+|----------------|------|-------------|
 | -bd    --bidirs     | \<BIDIRS.bed>             | BED file with either TSS's or annotated bidirectionals from your sample
 | -s     --segment    | \<PRELIMHITS.bed>         | BED file that specifies sample regions of interest (e.g. FStitch output)
 | -chr   --chromosome | \<chrX>                   | Run bidir only on the specified chromosome. Default = all
@@ -272,7 +275,7 @@ chr1    376808  377436  BIDIR_13|1.433726  377122.645102   0.380428        275.0
 chr1    377247  377484  BIDIR_13|1.433726  377366.182346   0.436560        59.999043
 ```
 
-The first three columns are the same as most standard BED files (chr, start, stop) for regions of interest. The fourth column is the annotation for the predicted bidirectional. The integer following BIDIR_ tells you which prediction region from PRELIMHITS.bed that that bidirectional was called from. The floating point following BIDIR_X|\<FLOAT> is the BIC model estimate value. Columns 5, 6, and 7 are mu, w, and lambda respectively (polymerase loading, pausing ratio, and exponential decay).
+The first three columns are the same as most standard BED files (chr, start, stop) for regions of interest. The fourth column is the annotation for the predicted bidirectional. The integer following BIDIR_ tells you which prediction region from PRELIMHITS.bed that that bidirectional was called from. The floating point following BIDIR_X|\<FLOAT> is the BIC model estimate value. Columns 5, 6, and 7 are <mu>, <w>, and <lambda> respectively (polymerase loading, pausing ratio, and exponential decay).
 
 
 ## Questions and Comments
