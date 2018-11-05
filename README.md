@@ -275,7 +275,7 @@ chr1    376808  377436  BIDIR_13|1.433726  377122.645102   0.380428        275.0
 chr1    377247  377484  BIDIR_13|1.433726  377366.182346   0.436560        59.999043
 ```
 
-The first three columns are the same as most standard BED files (chr, start, stop) for regions of interest. The fourth column is the annotation for the predicted bidirectional. The integer following BIDIR_ tells you which prediction region from PRELIMHITS.bed that that bidirectional was called from. The floating point following BIDIR_X|\<FLOAT> is the BIC model estimate value. Columns 5, 6, and 7 are \mu, w, and \lambda respectively (polymerase loading, pausing ratio, and exponential decay).
+The first three columns are the same as most standard BED files (chr, start, stop) for regions of interest. The fourth column is the annotation for the predicted bidirectional. The integer following BIDIR_ tells you which prediction region from PRELIMHITS.bed that that bidirectional was called from. The floating point following BIDIR_X|\<FLOAT> is the BIC model estimate value. Columns 5, 6, and 7 are &#924, w, and &#955 respectively (polymerase loading, pausing ratio, and exponential decay).
 
 
 ## Questions and Comments
