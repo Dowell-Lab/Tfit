@@ -151,14 +151,14 @@ In short, the `bidir` will output putitive regions of RNAPII transcriptional act
 
 **Required Arguments:**
 
-| Flag                     | Type | Description |
-|--------------------------|------|-------------|
-| -f     --forward         | \<FILE.pos.bedGraph>      | Forward (positive) strand bedGraph file (***Required only if -bg not specified***)
-| -r     --reverse         | \<FILE.neg.bedGraph>      | Reverse (negative) strand bedGraph file (***Required only if -bg not specified***)
-| -bg    --bedgraph        | \<FILE.cat.bedGraph>      | Concatenated pos/neg bedGraph file (***Required only if -f and -r not specified***) 
-| -N     --jobName         | \<MYJOB>                  | Job name for log output (no extensions).
-| -o     --output          | \<PRELIMHITS.bed>         | User specified output name and directory for BED file (.bed extension)
-| -l     --logOut          | \</project/logs/>         | Log file output directory. Will contain stdout (.log) with run specifications with --jobName as the rootname.
+| Flag                         | Type | Description |
+|------------------------------|------|-------------|
+| -f     --forward             | \<FILE.pos.bedGraph>      | Forward (positive) strand bedGraph file (***Required only if -bg not specified***)
+| -r     --reverse             | \<FILE.neg.bedGraph>      | Reverse (negative) strand bedGraph file (***Required only if -bg not specified***)
+| -bg    --bedgraph            | \<FILE.cat.bedGraph>      | Concatenated pos/neg bedGraph file (***Required only if -f and -r not specified***) 
+| -N     --jobName             | \<MYJOB>                  | Job name for log output (no extensions).
+| -o     --output              | \<PRELIMHITS.bed>         | User specified output name and directory for BED file (.bed extension)
+| -l     --logOut              | \</project/logs/>         | Log file output directory. Will contain stdout (.log) with run specifications with --jobName as the rootname.
 
 
 **Optional Arguments:**
@@ -210,14 +210,14 @@ The `model` module is therefore meant as an extension of the `bidir` module and 
 
 **Required Arguments:**
 
-| Flag                     | Type | Description |
-|--------------------------|------|-------------|
-| -f     --forward         | \<FILE.pos.bedGraph>      | Forward (positive) strand bedGraph file (***Required only if -bg not specified***)
-| -r     --reverse         | \<FILE.neg.bedGraph>      | Reverse (negative) strand bedGraph file (***Required only if -bg not specified***)
-| -bg    --bedgraph        | \<FILE.cat.bedGraph>      | Concatenated pos/neg bedGraph file (***Required only if -f and -r not specified***) 
-| -N     --jobName         | \<MYJOB>                  | Job name for log output (no extensions).
-| -o     --output          | \<FINALHITS.bed>          | User specified output name and directory for BED file (.bed extension)
-| -l     --logOut          | \</project/logs/>         | Log file output directory. Will contain stdout (.log) with run specifications with --jobName as the rootname.
+| Flag                         | Type | Description |
+|------------------------------|------|-------------|
+| -f     --forward             | \<FILE.pos.bedGraph>      | Forward (positive) strand bedGraph file (***Required only if -bg not specified***)
+| -r     --reverse             | \<FILE.neg.bedGraph>      | Reverse (negative) strand bedGraph file (***Required only if -bg not specified***)
+| -bg    --bedgraph            | \<FILE.cat.bedGraph>      | Concatenated pos/neg bedGraph file (***Required only if -f and -r not specified***) 
+| -N     --jobName             | \<MYJOB>                  | Job name for log output (no extensions).
+| -o     --output              | \<FINALHITS.bed>          | User specified output name and directory for BED file (.bed extension)
+| -l     --logOut              | \</project/logs/>         | Log file output directory. Will contain stdout (.log) with run specifications with --jobName as the rootname.
 
 **Optional Arguments:**
 
