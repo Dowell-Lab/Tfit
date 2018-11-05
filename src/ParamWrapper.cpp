@@ -27,8 +27,8 @@ void ParamWrapper::printUsage()
     printf("==================================================================================================================\n\n");
     printf("Where [arguments] is one or more of the following for the `bidir` module:\n\n");
     printf("Required arguments:\n");
-    printf("\t-bgf \t--forward   \t<FILE.pos.bedGraph> \t Forward bedgraph file (only required if -bg unused).\n");
-    printf("\t-bgr \t--reverse   \t<FILE.neg.bedGraph> \t Reverse bedgraph file (only required if -bg unused).\n");
+    printf("\t-f   \t--forward   \t<FILE.pos.bedGraph> \t Forward (positive) bedGraph file (only required if -bg unused).\n");
+    printf("\t-r   \t--reverse   \t<FILE.neg.bedGraph> \t Reverse (negative) bedGraph file (only required if -bg unused).\n");
     printf("\t-bg  \t--bedgraph  \t<FILE.cat.bedGraph> \t Concatenated forward and reverse bedgraph file.\n");
     printf("\t-N   \t--jobName   \t<MYJOB>             \t Job name for log output (no extensions).\n"); 
     printf("\t-o   \t--output    \t</project/FILE.bed> \t Output file name (.bed) with directory extension.\n");
@@ -53,8 +53,8 @@ void ParamWrapper::printUsage()
     printf("==================================================================================================================\n\n");
     printf("Where [arguments] is one or more of the following for the `model` module:\n\n");
     printf("Required arguments:\n");
-    printf("\t-bgf \t--forward   \t<FILE.pos.bedGraph> \t Forward bedgraph file (only required if -bg unused).\n");
-    printf("\t-bgr \t--reverse   \t<FILE.neg.bedGraph> \t Reverse bedgraph file (only required if -bg unused).\n");
+    printf("\t-f   \t--forward   \t<FILE.pos.bedGraph> \t Forward (positive) bedGraph file (only required if -bg unused).\n");
+    printf("\t-r   \t--reverse   \t<FILE.neg.bedGraph> \t Reverse (negative) bedGraph file (only required if -bg unused).\n");
     printf("\t-bg  \t--bedgraph  \t<FILE.cat.bedGraph> \t Concatenated forward and reverse bedgraph file.\n");
     printf("\t-N   \t--jobName   \t<MYJOB>             \t Job name for log and model output files (no extensions).\n"); 
     printf("\t-o   \t--output    \t<OUT.bed>           \t Output file name (.bed extension).\n");
@@ -257,12 +257,12 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     
     for(it=paramMap.begin();it!=paramMap.end();it++)
     {
-        if(it->first=="-bgf" || it->first=="--forward" || it->first=="-pos")
+        if(it->first=="-f" || it->first=="--forward" || it->first=="-pos")
         {
             this->forwardStrand=it->second;
         }
         
-        else if(it->first=="-bgr" || it->first=="--reverse" || it->first=="-neg")
+        else if(it->first=="-r" || it->first=="--reverse" || it->first=="-neg")
         {
             this->reverseStrand=it->second;
         }
