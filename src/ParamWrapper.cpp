@@ -32,7 +32,7 @@ void ParamWrapper::printUsage()
     printf("\t-bg  \t--bedgraph  \t<FILE.cat.bedGraph> \t Concatenated forward and reverse bedgraph file.\n");
     printf("\t-N   \t--jobName   \t<MYJOB>             \t Job name for log output (no extensions).\n"); 
     printf("\t-o   \t--output    \t</project/FILE.bed> \t Output file name (.bed) with directory extension.\n");
-    printf("\t-l   \t--logOut    \t</projects/logs/>   \t Log file output directory.\n");
+    printf("\t-l   \t--logOut    \t</project/logs/>    \t Log file output directory.\n");
     printf("\nAdditional (optional) arguments for the bidir module:\n");
     //This only has an effect (now option -bd) if the -mle is run. We will not give this option yet
     //printf("\t-tss\tTranscription model path. Models are provided for hg19 and mm10 in the annotations directory of this project.\n");
