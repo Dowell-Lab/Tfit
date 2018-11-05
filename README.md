@@ -63,11 +63,11 @@ Successfully compiled!
 
 If your program, did not compile properly it is likely that you do not have the correct dependencies. The three significant dependencies are listed below. 
 
-1) **c++11** (this ships with most recent versions of GCC, please visit https://gcc.gnu.org/install/)
+1.**c++11** (this ships with most recent versions of GCC, please visit https://gcc.gnu.org/install/)
 
-2) **openmp** (this ships with most recent versions of GCC, please visit https://gcc.gnu.org/install/)
+2. **openmp** (this ships with most recent versions of GCC, please visit https://gcc.gnu.org/install/)
 
-3) **MPI** (this needs to installed and configured and serves as a wrapper for GCC, please visit https://www.open-mpi.org/faq/)
+3. **MPI** (this needs to installed and configured and serves as a wrapper for GCC, please visit https://www.open-mpi.org/faq/)
 
 In short, the make file requires the path to mpic++ (install and config openMPI) to be in your PATH.
 
@@ -206,8 +206,6 @@ Unlike the `bidir` module which utilizes an average or template version of the m
 
 The `model` module is therefore meant as an extension of the `bidir` module and as such should always be run in succession.
 
-***IMPORTANT***: The PRELIMHITS.bed is listed as an optional argument, but is highly recommended to reduce false positives and reduce overall runtime. That said, Tfit `model` will run without this argument specified across the entire genome and may be a useful diagnostic tool.
-
 **Required Arguments:**
 
 | Flag                         | Type | Description |
@@ -228,14 +226,18 @@ The `model` module is therefore meant as an extension of the `bidir` module and 
 | -chr   --chromosome | \<chrX>                   | Run bidir only on the specified chromosome. Default = all
 | -n     --threads    | \<integer>                | Number of threads to run the job on; 16 recommended. Default=1
 
-One of the most important optional options above is the -bd || --bidirs flag. This flag will attempt to fine-tune the default modeling parameters to the regions of interest that it is provided. This can be either a RefSeq type file of transcriptional start sites (which will bias your results towards robust bidirectionals) or a user-provided annotation BED file similar to that used in FStitch (see https://github.com/Dowell-Lab/FStitch for more details). Only a BED3 is required in Tfit (chr, start, end). This is useful if your data is of lower complexity than what is ideal for Tfit modeling.
+***IMPORTANT***: The -s --segment <PRELIMHITS.bed> is listed as an optional argument, but is highly recommended to reduce false positives and reduce overall runtime for bidirectional modeling. That said, Tfit `model` will run without this argument specified across the entire genome and may be a useful diagnostic tool.
+
+Alternatively, you could specify FStitch output (see https://github.com/Dowell-Lab/FStitch for more details) to model over entire gene bodies.
+
+Another important optional options above is the -bd || --bidirs flag. This flag will attempt to fine-tune the default modeling parameters to the regions of interest that it is provided. This can be either a RefSeq type file of transcriptional start sites (which will bias your results towards robust bidirectionals) or a user-provided annotation BED file similar to that used in FStitch (see https://github.com/Dowell-Lab/FStitch for more details). Only a BED3 is required in Tfit (chr, start, end). This is useful if your data is of lower complexity than what is ideal for Tfit modeling.
 
 Putting these arguments together, the following is an example run:
 
 ```
 $ export OMP_NUM_THREADS=16
 
-$ mpirun -np 4 Tfit bidir \
+$ mpirun -np 4 Tfit model \
     -bg <FILE.cat.bedGraph> \
     -N <MYJOB> \
     -o <FINALHITS.bed> \
