@@ -31,7 +31,7 @@ void ParamWrapper::printUsage()
     printf("\t-r   \t--reverse   \t<FILE.neg.bedGraph> \t Reverse (negative) bedGraph file (only required if -bg unused).\n");
     printf("\t-bg  \t--bedgraph  \t<FILE.cat.bedGraph> \t Concatenated forward and reverse bedgraph file.\n");
     printf("\t-N   \t--jobName   \t<MYJOB>             \t Job name for log output (no extensions).\n"); 
-    printf("\t-o   \t--output    \t</project/FILE.bed> \t Output file name (.bed) with directory extension.\n");
+    printf("\t-o   \t--output    \t<PRELIMHITS.bed>    \t Output file name (.bed) with directory extension.\n");
     printf("\t-l   \t--logOut    \t</project/logs/>    \t Log file output directory.\n");
     printf("\nAdditional (optional) arguments for the bidir module:\n");
     //This only has an effect (now option -bd) if the -mle is run. We will not give this option yet
@@ -57,7 +57,7 @@ void ParamWrapper::printUsage()
     printf("\t-r   \t--reverse   \t<FILE.neg.bedGraph> \t Reverse (negative) bedGraph file (only required if -bg unused).\n");
     printf("\t-bg  \t--bedgraph  \t<FILE.cat.bedGraph> \t Concatenated forward and reverse bedgraph file.\n");
     printf("\t-N   \t--jobName   \t<MYJOB>             \t Job name for log and model output files (no extensions).\n"); 
-    printf("\t-o   \t--output    \t<OUT.bed>           \t Output file name (.bed extension).\n");
+    printf("\t-o   \t--output    \t<FINALHITS.bed>     \t Output file name (.bed extension).\n");
     printf("\t-l   \t--logOut    \t</projects/logs/>   \t Log file output directory.\n");
     printf("\nAdditional (optional) parameters for the model module:\n");
     printf("\t-s   \t--segment   \t<SEGFILE.bed>       \t BED file that specifies sample regions of interest (e.g. bidir output)\n");
