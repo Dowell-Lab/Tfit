@@ -27,6 +27,21 @@ So it is equal to this:
 ``` 
 $python3 main.py formatData FStitchSingleIsoform -ref annotation_files/hg19_TSS.bed \\
 -ffs examples/SRR1105737.pos.sorted.BedGraph -rfs examples/SRR1105737.minus.sorted.BedGraph \\
--fbg examples/SRR1105737.pos.sorted.BedGraph -rbg examples/SRR1105737.minus.sorted.BedGraph - \\
-wo examples/single_isoform_FStitch.tsv
+-fbg examples/SRR1105737.pos.sorted.BedGraph -rbg examples/SRR1105737.minus.sorted.BedGraph \\
+-wo examples/single_isoform_FStitch.tsv
 ```
+
+There is also a FStitchMerged option, which has the same flags as FStitchSingleIsoform,
+and looks like:
+
+```
+$python3 main.py formatData FStitchMerged -ref annotation_files/hg19_TSS.bed \\
+-ffs examples/SRR1105737.pos.sorted.BedGraph -rfs examples/SRR1105737.minus.sorted.BedGraph \\
+-fbg examples/SRR1105737.pos.sorted.BedGraph -rbg examples/SRR1105737.minus.sorted.BedGraph \\
+-wo examples/single_isoform_FStitch.tsv
+```
+
+There is a RefSeqOnly option, that is not supported in this version.
+
+
+
