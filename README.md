@@ -142,7 +142,7 @@ cat \
  > ROOTNAME.sort.cat.bedGraph
 ```
 
-Note that the last command, sortBed, will require that BEDTools be specified in your PATH. Sorting is not required for Tfit, but is good practice as it will expedite daa processing and is required for conversion to TDF (for visualization in IGV) if so desired.
+Note that the last command, sortBed, will require that BEDTools be specified in your PATH. Sorting is not required for Tfit, but is good practice as it will expedite data processing and is required for conversion to TDF (for visualization in IGV) if so desired.
 
 ## Tfit bidir
 The bidir module scans across the genome for areas resembling bidirectional transcription by comparing a fixed template mixture model (user provided parameters or parameters estimated from promoter regions) to a noise model (uniform distribution) by a Likelihood ratio score (LLR).
