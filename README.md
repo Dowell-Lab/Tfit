@@ -228,11 +228,11 @@ The `model` module is therefore meant as an extension of the `bidir` module and 
 
 ***IMPORTANT***: The -s --segment <PRELIMHITS.bed> is listed as an optional argument, but is highly recommended to reduce false positives and reduce overall runtime for bidirectional modeling. That said, Tfit `model` will run without this argument specified across the entire genome and may be a useful diagnostic tool.
 
-Alternatively, you could specify FStitch output (see https://github.com/Dowell-Lab/FStitch for more details) to model over entire gene bodies.
+Alternatively, you could specify FStitch segment output (see https://github.com/Dowell-Lab/FStitch for more details) to model over entire gene bodies.
 
 Another important optional options above is the -bd || --bidirs flag. This flag will attempt to fine-tune the default modeling parameters to the regions of interest that it is provided. This can be either a RefSeq type file of transcriptional start sites (which will bias your results towards robust bidirectionals) or a user-provided annotation BED file similar to that used in FStitch (see https://github.com/Dowell-Lab/FStitch for more details). Only a BED3 is required in Tfit (chr, start, end). This is useful if your data is of lower complexity than what is ideal for Tfit modeling.
 
-Putting these arguments together, the following is an example run:
+Putting these arguments together, the following is an example run using MPI on 4 nodes:
 
 ```
 $ export OMP_NUM_THREADS=16
@@ -247,7 +247,7 @@ $ mpirun -np 4 Tfit model \
     -n 16
 ```
 
-Which will attempt to model the preliminary calls output by invoking the `bidir` module and adjust the modeling parameters to the user-specified bidirectional file.
+which will attempt to model the preliminary calls output by invoking the `bidir` module and adjust the modeling parameters to the user-specified bidirectional file. The -np flag specifies the number of nodes while the number provided OMP_NUM_THREADS and -n should match. Together, this run will use 64 threads/cores across 4 nodes.
 
 After the model module has finished, Tfit will output two files in the user specified output directories: 
 1. Full model estimates: \<jobName>\_models_MLE.tsv
