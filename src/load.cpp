@@ -463,6 +463,7 @@ void segment_fits::get_model(double ms_pen) {
  */
 string segment_fits::write () {
    string line         = "";
+   int tag = 0;
    if (model > 0) {
       string forward_N = to_string(N_pos), reverse_N = to_string(N_neg);
       vector<string> params     = split_by_tab(parameters[model], "");
@@ -474,14 +475,15 @@ string segment_fits::write () {
          double pi   = stod(split_by_comma(params[3], "")[i]);
          double w  = stod(split_by_comma(split_by_bar(params[5], "")[i] , "" )[0] );
 
-// Seems that this might be where we could be losing some bidirectionals...?          
+// Seems that this might be where we could be losing some bidirectionals...?
+// Changed std to 10k from 5k, lam to 30k from 20k, w to 0.01 from 0.05 -- believe this increases the number of calls, but for the best...?
           
          int start   = max(mu - (std + lam), 0.0), stop = mu + (std + lam);
-         if (std  < 5000 and lam < 20000 and w > 0.05 and pi > 0.05 and pi < 0.95  ) {
+         if (std  < 10000 and lam < 30000 and w > 0.01 and pi > 0.05 and pi < 0.95 ) {
             line += chrom + "\t" + to_string(start) + "\t" + to_string(stop) + "\t";
-            line += ID + "|";
-            line += to_string(BIC_ratio) + "\t" + to_string(mu) + "\t" + to_string(w) + "\t" + to_string(lam)+"\n";//to_string(N_pos) + "," + to_string(N_neg) + "\n";
-         }
+            line += "\t" + ID + "." + to_string(++tag) + "|" + to_string(BIC_ratio);
+            line += "\t" + to_string(lround(mu)) + "\t" + to_string(lround(std)) + "\t" + to_string(w) + "\t" + to_string(lround(lam)) + "\t" + to_string(lround(N_pos)) + "\t" + to_string(lround(N_neg)) + "\n";
+         } 
       }
    }
    return line;
