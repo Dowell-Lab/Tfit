@@ -1320,6 +1320,7 @@ void load::write_out_bidirectionals_ms_pen_pwrapper(vector<segment_fits*> fits, 
    ofstream FHW;
    FHW.open(pw->outputDir);
    FHW << pw->getHeader(2);
+   FHW << "#chrom\tstart\tend\tbidir\tmu\tsigma\tomega\tlamdba\tcov_pos\tcov_neg" << endl;
    double penality   = pw->penalty;
    for (int i = 0; i < fits.size(); i++) {
       fits[i]->get_model(penality);
