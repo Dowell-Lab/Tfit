@@ -181,8 +181,8 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     this->alpha2=1;//100;
     this->alpha3=1;//100;
     this->br=25;
-    this->pad=2000;
-    this->footPrint=86;
+    this->pad=500; // 2000 was default -- seemed to be too large for most regions provided and results in a lot of type I and II error
+    this->footPrint=100;
     this->fdr=0; //This parameter appears to change how this software computes prior distributions in the bidir module. 
                  //When set to 0, Tfit will use a shortcut and/or precomputed model. 
     this->scores=""; //This is another undocumented parameter.
