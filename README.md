@@ -267,17 +267,15 @@ The first file, \<jobName>\_models_MLE.tsv, gives a detailed account for each in
 The second file, FINALHITS.bed, provides a new bed file, where the center of each bed interval corresponds to the center of the bidirectional peak and the width corresponds the estimated standard deviation around that estimate following BIC model comparison. This again can be used for downstream analysis and comprises the most accurate set of bidirectional prediction centers that Tfit can currently offer. An example output of this file is given below.
 
 ```
-chr1    28764   29839   BIDIR_2|1.191337   29302.207103    0.362018        425.818173
-chr1    96496   96833   BIDIR_4|1.697595   96665.182490    0.678465        91.942768
-chr1    197298  201275  BIDIR_7|1.152818   199287.083530   0.094496        1935.048257
-chr1    199335  200287  BIDIR_7|1.152818   199811.534585   0.248295        379.689945
-chr1    259282  260470  BIDIR_8|1.171639   259876.693769   0.907025        571.777800
-chr1    368477  368553  BIDIR_12|4.583669  368515.378599   0.487298        20.000000
-chr1    376808  377436  BIDIR_13|1.433726  377122.645102   0.380428        275.047612
-chr1    377247  377484  BIDIR_13|1.433726  377366.182346   0.436560        59.999043
+chr1    199187  200344          PRELIM_7.1|1.224067     199766  116     0.335978        463     61978   333726
+chr1    258733  260804          PRELIM_8.1|1.032527     259769  17      0.871628        1019    3330    5081
+chr1    275049  275118          PRELIM_9.1|1.149008     275084  14      0.109856        20      1623    5421
+chr1    348688  350067          PRELIM_11.1|1.065027    349378  199     0.816884        490     2622    5007
+chr1    376831  377405          PRELIM_16.1|1.471837    377118  34      0.325725        253     5570    17166
+chr1    377201  377467          PRELIM_16.2|1.471837    377334  59      0.479234        74      5570    17166
 ```
 
-The first three columns are the same as most standard BED files (chr, start, stop) for regions of interest. The fourth column is the annotation for the predicted bidirectional. The integer following BIDIR_ tells you which prediction region from PRELIMHITS.bed that that bidirectional was called from. The floating point following BIDIR_X|\<FLOAT> is the BIC model estimate value. Columns 5, 6, and 7 are mu, w, and lambda respectively (polymerase loading, pausing ratio, and exponential decay).
+The first three columns are the same as most standard BED files (chr, start, stop) for regions of interest. The fourth column is the annotation for the predicted bidirectional. The integer following PRELIM_ in the example above tells you which prediction region from PRELIMHITS.bed that that bidirectional was called from. Because each provided preliminary region can be modeled as either 1, 2, or 3 bidirectionals, this value is followed by a floating point which will have a value of either 1, 2, or 3. The value following PRELIM_X.{1,2,3}|\<VALUE> is the BIC model estimate value. Columns 5, 6, and 7, 8, 9, and 10 are mu (polymerase loading), sigma (standard deviation from mu), w (pausing index), lambda (expontential decay) positive strand coverage, and negative strand coverage respectively.
 
 
 ## Questions and Comments
