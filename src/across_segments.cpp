@@ -83,7 +83,7 @@ map<int, vector<classifier> > make_classifier_struct_free_model_pwrapper(ParamWr
 			pw->r_mu, pw->alpha0, pw->beta0, pw->alpha1, 
 			pw->beta1, pw->alpha2, pw->alpha3, 0));
 	double scale 	= pw->ns;
-	if(pw->bidir){
+	if(pw->prelim){
 		min_k 	= data->counts;
 		max_k 	= data->counts;
 	}

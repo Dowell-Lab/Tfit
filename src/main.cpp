@@ -88,7 +88,7 @@ int main(int argc, char* argv[]){
   }
     
   // Switched bidir and bidir_old modules -- we can keep bidir_old (Joey's last version before leaving) for troubleshooting, but bidir will      be the release
-  else if(pw.bidir)
+  else if(pw.prelim)
   {
       printf("Running bidir module to generate preliminary regions of interest in modeling bidirectionals.\n");
       //bidir_old_run_pwrapper(&pw, rank, nprocs, job_ID, LG);

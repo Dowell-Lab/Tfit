@@ -20,7 +20,7 @@ void ParamWrapper::printUsage()
     printf("==================================================================================================================\n");
     printf("Usage: TFit [modulename] [arguments]\n\n");
     printf("Where modulename is one of the following:\n");
-    printf("\tbidir - This module searches the genome for regions resembling bidirectional transcription (active RNAPII)\n");
+    printf("\tprelim - This module searches the genome for regions resembling bidirectional transcription (active RNAPII)\n");
     printf("\t\tby comparing a fixed template mixture model to a noise model by a log-likelihood ratio score.\n");
     //printf("\tbidir_old - This module implements the functionality seen in versions of Tfit used in publications\n");
     printf("\tmodel - This module models RNAPII behavior given the segment regions obtained from the bidir module.\n");
@@ -211,14 +211,14 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     
     this->module=std::string(argv[1]);
     
-    if(this->module!="bidir" && this->module!="select" && this->module!="model" && this->module!="bidir_old")
+    if(this->module!="prelim" && this->module!="select" && this->module!="model" && this->module!="bidir_old")
     {
         printf("Invalid module specification: %s\n", argv[1]);
         this->exit=true;
         return;
     }
     
-    this->bidir=this->module=="bidir";
+    this->prelim=this->module=="prelim";
     this->bidirOld=this->module=="bidir_old";
     this->model=this->module=="model";
     this->select=this->module=="select";
@@ -508,13 +508,12 @@ void ParamWrapper::display(int nodes, int cores){
     std::string header 	= "";
     header+="----------------------------------------------------------------\n";
     header+="             Transcription Fit (Tfit)                   \n";
-    if (bidir){
-    header+="            Preliminary bidirectionals     \n";
+    if (prelim){
     }
     //if (this->module=="bidir" and MLE){
     //header+="             ....coupled to mixture model....     \n";
     //}
-    if (bidir and select){
+    if (prelim and select){
     header+="       ....coupled to BIC penalty optimization....     \n";
     }
     if (model){
