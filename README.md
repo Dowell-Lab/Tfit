@@ -25,7 +25,7 @@ Transcription Fit (TFit) is written in the C/C++ programming language that requi
 $ sh setup.sh
 ```
 
-which will simply run 'make clean' and 'make in the src/ subdirectory. If the program compiles successfully you should see the following output.
+which will simply run 'make clean' and 'make' in the src/ subdirectory. If the program compiles successfully you should see the following output.
 
 ```
 =========================================
