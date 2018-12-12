@@ -63,13 +63,13 @@ Successfully compiled!
 
 If your program, did not compile properly it is likely that you do not have the correct dependencies. The three significant dependencies are listed below. 
 
-1.**c++11** (this ships with most recent versions of GCC, please visit https://gcc.gnu.org/install/)
+1. **c++11** (this ships with most recent versions of GCC, please visit https://gcc.gnu.org/install/)
 
 2. **openmp** (this ships with most recent versions of GCC, please visit https://gcc.gnu.org/install/)
 
 3. **MPI** (this needs to installed and configured and serves as a wrapper for GCC, please visit https://www.open-mpi.org/faq/)
 
-In short, the make file requires the path to mpic++ (install and config openMPI) to be in your PATH.
+In short, the make file requires the path to mpic++ (install and config openMPI) to be in your PATH. For many \*nix users, this will require you to module load mpi/mpich-x86_64 and ensure that libstdc++ (libstdc++-static for Fedora) is installed.
 
 ### Utilizing openMP and MPI
 Tfit is written using openMP and MPI to perform massive parallelization. If your institution has a large compute cluster, than Tfit will operate well across multiple cores and nodes. The `prelim` module runs relatively quickly, so this is only recommended for the `model` module. To invoke 4 MPI processes (i.e. run across 4 nodes) run:
