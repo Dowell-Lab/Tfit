@@ -36,7 +36,7 @@ If the program compiles successfully you should see the following output.
 
 ```
 =========================================
-GCC version: 7.1.0
+GCC version: 8
 main                  : done
 load                  : done
 split                 : done
@@ -58,7 +58,7 @@ ParamWrapper          : done
 old_template_matching : done
 linking               : done
 =========================================
-Successfully compiled!
+Successfully compiled! 
 ```
 
 If your program, did not compile properly it is likely that you do not have the correct dependencies. The three significant dependencies are listed below. 
