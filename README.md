@@ -1,14 +1,14 @@
 # Tfit
 Transcription fit (or Tfit) implements a finite mixture model to identify signatures of RNA Polymerase II (RNAPII) activity through the identification of bidirectional or divergent transcription in nascent transcription assays such as Global Run-On (GRO) and Precision Run-on (PRO) followed by sequencing data. Tfit is separated into two modules:
 
-1. `bidir` which generates calls for preliminary regions of interest 
+1. `prelim` which generates calls for preliminary regions of interest 
 2. `model` which attempts to model RNAPII behavior for the preliminary outputs and make refined predictions for activity
 
 Output from these modules can be imported into any genome browser. An example bed file is shown below.  
 
 ![Screenshot of data output](images/Example_Snapshot.png)
 
-The `bidir` module will compute local likelihood statistics given a fixed template mixture model (estimated either from promoter associated transcription) or specified explicitly by the user (the former is encouraged). This method is fast and will finish in about 30 minutes on a single node single CPU machine. The output will be a bed file corresponding to areas of possible bidirectional transcription. This output is discussed more in later sections.
+The `prelim` module will compute local likelihood statistics given a fixed template mixture model (estimated either from promoter associated transcription) or specified explicitly by the user (the former is encouraged). This method is fast and will finish in about 30 minutes on a single node single CPU machine. The output will be a bed file corresponding to areas of possible bidirectional transcription. This output is discussed more in later sections.
 
 The `model` module will compute full MLE estimates of the mixture model at user specified regions of the genome provided as a bed file. This bed file may be the output from the bidir module. It is recommended that users fit MLE estimates to the output of the bidir module as this will decrease false positives. Three files will output from this module:
 
@@ -16,7 +16,7 @@ The `model` module will compute full MLE estimates of the mixture model at user 
 * A BED7 file contianing predicted regions of activity (\<outFile\>.bed); the first three columns are the standard chr, start, end, columns 4-7 contain model information for each region
 * Stanard output with detailed job run information (\<jobName\>.log)
 
-This module is much more computationally expensive than `bidir` and can take up to 10-12 hours depending on sample size.
+This module is much more computationally expensive than `prelim` and can take up to 10-12 hours depending on sample size.
 
 ### System Requirements and Makefile
 Transcription Fit (TFit) is written in the C/C++ programming language that requires GNU compilers >4.7.3 and =< 7.1.0. Tfit uses the popular openMPI framework to perform massive parallelization via multithreading on multiple core, single node systems or multiple core, multiple node compute clusters and therefore also has an MPI dependency requiring a verion >3.0. After cloning this repo, please change directory into /where/you/clone/this/repo/Tfit/src/ and run make clean (removing any existing binaries) followed by make.
@@ -144,10 +144,10 @@ cat \
 
 Note that the last command, sortBed, will require that BEDTools be specified in your PATH. Sorting is not required for Tfit, but is good practice as it will expedite data processing and is required for conversion to TDF (for visualization in IGV) if so desired.
 
-## Tfit bidir
+## Tfit prelim
 The bidir module scans across the genome for areas resembling bidirectional transcription by comparing a fixed template mixture model (user provided parameters or parameters estimated from promoter regions) to a noise model (uniform distribution) by a Likelihood ratio score (LLR).
 
-In short, the `bidir` will output putitive regions of RNAPII transcriptional activity. ***This is only intended as a pre-filter to the `model` module!***
+In short, the `prelim` will output putitive regions of RNAPII transcriptional activity. ***This is only intended as a pre-filter to the `model` module!***
 
 **Required Arguments:**
 
@@ -176,7 +176,7 @@ Putting these arguments together, an example command is as follows:
 ```
 $ export OMP_NUM_THREADS=16
 
-$ Tfit bidir \
+$ Tfit prelim \
     -bg <FILE.cat.bedGraph> \
     -N <MYJOB> \
     -o <PRELIMHITS.bed> \
@@ -204,7 +204,7 @@ chr1    358204  360304  PRELIM_10
 ## Tfit model
 Unlike the `bidir` module which utilizes an average or template version of the mixture model to scan the entire genome quickly, the `model` module will attempt to find (by maximum likelihood estimation, MLE) the best set of parameters (sigma,lambda, pi, w) on a per region of interest basis. Such a routine is especially valuable if it is believed that pausing or strand bias is changing following experimental perturbation. In addition, running the model module on the PRELIMHITS.bed file will greatly decrease the number of false positives as the MLE estimates will more accurately reflect the underlying structure of the region of interest rather than a static template model.  In short, MLE estimates are computed by the EM algorithm which is a convergent optimization method found commonly in gaussian mixture modeling and cluster analysis. 
 
-The `model` module is therefore meant as an extension of the `bidir` module and as such should always be run in succession.
+The `model` module is therefore meant as an extension of the `prelim` module or the FStitch `bidir` python3 module and as such should always be run in succession.
 
 **Required Arguments:**
 
@@ -228,7 +228,7 @@ The `model` module is therefore meant as an extension of the `bidir` module and 
 
 ***IMPORTANT***: The -s --segment <PRELIMHITS.bed> is listed as an optional argument, but is highly recommended to reduce false positives and reduce overall runtime for bidirectional modeling. That said, Tfit `model` will run without this argument specified across the entire genome and may be a useful diagnostic tool.
 
-Alternatively, you could specify FStitch segment output (see https://github.com/Dowell-Lab/FStitch for more details) to model over entire gene bodies.
+Alternatively, you could specify FStitch `segment` or `bidir` output (see https://github.com/Dowell-Lab/FStitch for more details) to model over bidirectionals (alternative to `prelim` module) or entire gene bodies.
 
 Another important optional options above is the -bd || --bidirs flag. This flag will attempt to fine-tune the default modeling parameters to the regions of interest that it is provided. This can be either a RefSeq type file of transcriptional start sites (which will bias your results towards robust bidirectionals) or a user-provided annotation BED file similar to that used in FStitch (see https://github.com/Dowell-Lab/FStitch for more details). Only a BED3 is required in Tfit (chr, start, end). This is useful if your data is of lower complexity than what is ideal for Tfit modeling.
 
