@@ -165,7 +165,7 @@ In short, the `prelim` will output putitive regions of RNAPII transcriptional ac
 
 | Flag                | Type | Description |
 |---------------------|------|-------------|
-| -s     --segment    | \<SEGFILE.bed>            | BED file that specifies sample regions of interest (e.g. FStitch output)
+| -s     --segment    | \<SEGFILE.bed>            | BED file that specifies regions of interest (e.g. FStitch segment output).
 | -chr   --chromosome | \<chrX>                   | Run bidir only on the specified chromosome. Default = all
 | -n     --threads    | \<integer>                | Number of threads to run the job on; 16 recommended. Default=1
 
