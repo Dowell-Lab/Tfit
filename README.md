@@ -19,7 +19,7 @@ The `model` module will compute full MLE estimates of the mixture model at user 
 This module is much more computationally expensive than `prelim` and can take up to 10-12 hours depending on sample size.
 
 ### System Requirements and Makefile
-Transcription Fit (TFit) is written in the C/C++ programming language that requires GNU compilers >5.4.0. Tfit uses the popular openMPI framework to perform massive parallelization via multithreading on multiple core, single node systems or multiple core, multiple node compute clusters and therefore also has an MPI dependency requiring a verion >3.0. After cloning this repo, Tfit can be compied as follows:
+Transcription fit (Tfit) is written in the C/C++ programming language that requires GNU compilers >5.4.0. Tfit uses the popular openMPI framework to perform massive parallelization via multithreading on multiple core, single node systems or multiple core, multiple node compute clusters and therefore also has an MPI dependency requiring a verion >3.0. After cloning this repo, Tfit can be compied as follows:
 
 ```
 $ sh setup.sh
@@ -195,7 +195,7 @@ chr1    358204  360304  PRELIM_10
 ```
 
 ## Tfit model
-Unlike the `bidir` module which utilizes an average or template version of the mixture model to scan the entire genome quickly, the `model` module will attempt to find (by maximum likelihood estimation, MLE) the best set of parameters (sigma,lambda, pi, w) on a per region of interest basis. Such a routine is especially valuable if it is believed that pausing or strand bias is changing following experimental perturbation. In addition, running the model module on the PRELIMHITS.bed file will greatly decrease the number of false positives as the MLE estimates will more accurately reflect the underlying structure of the region of interest rather than a static template model.  In short, MLE estimates are computed by the EM algorithm which is a convergent optimization method found commonly in gaussian mixture modeling and cluster analysis. 
+Unlike the `prelim` module which utilizes an average or template version of the mixture model to scan the entire genome quickly, the `model` module will attempt to find (by maximum likelihood estimation, MLE) the best set of parameters (sigma,lambda, pi, w) on a per region of interest basis. Such a routine is especially valuable if it is believed that pausing or strand bias is changing following experimental perturbation. In addition, running the model module on the PRELIMHITS.bed file will greatly decrease the number of false positives as the MLE estimates will more accurately reflect the underlying structure of the region of interest rather than a static template model.  In short, MLE estimates are computed by the EM algorithm which is a convergent optimization method found commonly in gaussian mixture modeling and cluster analysis. 
 
 The `model` module is therefore meant as an extension of the `prelim` module or the FStitch `bidir` python3 module and as such should always be run in succession.
 
@@ -240,7 +240,7 @@ $ mpirun -np 4 Tfit model \
     -n 16
 ```
 
-which will attempt to model the preliminary calls output by invoking the `bidir` module and adjust the modeling parameters to the user-specified bidirectional file. The -np flag specifies the number of nodes while the number provided OMP_NUM_THREADS and -n should match. Together, this run will use 64 threads/cores across 4 nodes.
+which will attempt to model the regions provided. The -np flag specifies the number of nodes while the number provided OMP_NUM_THREADS and -n should match. Together, this run will use 64 threads/cores across 4 nodes.
 
 After the model module has finished, Tfit will output two files in the user specified output directories: 
 1. Full model estimates: \<jobName>\_models_MLE.tsv
