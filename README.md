@@ -185,7 +185,7 @@ $ Tfit prelim \
     -n 16
 ```
 
-The output BED file will contain 5 columns: chr, start, end, identifier (ME_X), and the MLE estimates for the predicted region.
+The output BED file will contain 4 columns: chr, start, end, identifier (ME_X). These regions can then be used in the `model` module.
 
 ```
 chr1    11179   18104   PRELIM_0
