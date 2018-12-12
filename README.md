@@ -19,7 +19,7 @@ The `model` module will compute full MLE estimates of the mixture model at user 
 This module is much more computationally expensive than `prelim` and can take up to 10-12 hours depending on sample size.
 
 ### System Requirements and Makefile
-Transcription Fit (TFit) is written in the C/C++ programming language that requires GNU compilers >4.7.3 and =< 7.1.0. Tfit uses the popular openMPI framework to perform massive parallelization via multithreading on multiple core, single node systems or multiple core, multiple node compute clusters and therefore also has an MPI dependency requiring a verion >3.0. After cloning this repo, please change directory into /where/you/clone/this/repo/Tfit/src/ and run make clean (removing any existing binaries) followed by make.
+Transcription Fit (TFit) is written in the C/C++ programming language that requires GNU compilers >5.4.0. Tfit uses the popular openMPI framework to perform massive parallelization via multithreading on multiple core, single node systems or multiple core, multiple node compute clusters and therefore also has an MPI dependency requiring a verion >3.0. After cloning this repo, please change directory into /where/you/clone/this/repo/Tfit/src/ and run make clean (removing any existing binaries) followed by make.
 
 
 ```
