@@ -1,4 +1,4 @@
-#include "bidir_main.h"
+#include "prelim_main.h"
 #include "template_matching.h"
 #include "density_profiler.h"
 #include "MPI_comm.h"

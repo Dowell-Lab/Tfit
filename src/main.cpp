@@ -19,7 +19,7 @@
 #include "bootstrap.h"
 #include "density_profiler.h"
 #include <omp.h>
-#include "bidir_main.h"
+#include "prelim_main.h"
 #include "model_main.h"
 #include "select_main.h"
 using namespace std;

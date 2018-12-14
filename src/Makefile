@@ -15,14 +15,14 @@ CPP_FLAGS_64  	= -D64_BIT
 GCCVERSION 	= $(shell ${CXX} -dumpversion)
 NU_FIT: main.o load.o split.o model.o across_segments.o template_matching.o \
 	read_in_parameters.o model_selection.o error_stdo_logging.o \
-	MPI_comm.o  density_profiler.o bootstrap.o bidir_main.o model_main.o select_main.o FDR.o BIC.o ParamWrapper.o old_template_matching.o
+	MPI_comm.o  density_profiler.o bootstrap.o prelim_main.o model_main.o select_main.o FDR.o BIC.o ParamWrapper.o old_template_matching.o
 	@printf "linking               : "
 	@${CXX} ${CXXFLAGS}  ${PWD}/main.o ${PWD}/load.o ${PWD}/model_selection.o \
 	${PWD}/split.o ${PWD}/model.o ${PWD}/across_segments.o  \
 	${PWD}/template_matching.o ${PWD}/read_in_parameters.o  \
 	${PWD}/MPI_comm.o   \
 	${PWD}/bootstrap.o ${PWD}/density_profiler.o \
-	${PWD}/bidir_main.o ${PWD}/model_main.o ${PWD}/BIC.o ${PWD}/FDR.o  \
+	${PWD}/prelim_main.o ${PWD}/model_main.o ${PWD}/BIC.o ${PWD}/FDR.o  \
 	${PWD}/select_main.o  ${PWD}/error_stdo_logging.o ${PWD}/ParamWrapper.o ${PWD}/old_template_matching.o -o ${EXEC} -lmpi
 	@cp ${PWD}/Tfit ${PWD}/EMGU
 	@printf "done\n"
@@ -57,9 +57,9 @@ model_main.o: model_main.cpp
 	@${CXX} -c ${CXXFLAGS} ${PWD}/model_main.cpp 
 	@printf "done\n"
 
-bidir_main.o: bidir_main.cpp
-	@printf "biPWD_main            : "
-	@${CXX} -c ${CXXFLAGS} ${PWD}/bidir_main.cpp 
+prelim_main.o: prelim_main.cpp
+	@printf "prelim_main            : "
+	@${CXX} -c ${CXXFLAGS} ${PWD}/prelim_main.cpp 
 	@printf "done\n"
 
 bootstrap.o: bootstrap.cpp
