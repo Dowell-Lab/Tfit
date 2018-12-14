@@ -59,6 +59,16 @@ int main(int argc, char* argv[]){
       MPI_Finalize();
       return 0;
   }
+    
+  if(pw.version)
+  {
+      if(rank==0)
+      {
+          printf("1.1\n");
+      }
+      MPI_Finalize();
+      return 0;
+  }
   
   /*
   params * P 	= new params();

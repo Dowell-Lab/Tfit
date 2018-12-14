@@ -38,6 +38,7 @@ public:
     bool prelim;
     bool bidirOld; //This will run a quick hackjob of the old bidirectional codebase.
     bool model;
+    bool version;
     
     int cores;
     

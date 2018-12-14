@@ -66,6 +66,7 @@ void ParamWrapper::printUsage()
     printf("\t-n   \t--threads   \t<integer>           \t Number of threads to run the job on. Default=1\n");
     printf("==================================================================================================================\n\n");
     printf("\t-h   \t--help      \t Usage information\n");
+    printf("\t--version        \t Print version.\n");
  
 /* None of these seem to work appropriately and are also very confusing for the typical user. Instead, I have made it such that similar 
  * to the bidir module, we can input a "training" to fine-tune these parameters (to an extent... some are still hard-coded and I'm not sure
@@ -130,6 +131,7 @@ ParamWrapper::ParamWrapper()
     this->fdr=0;
     this->debug=false;
     this->cores=1;
+    this->version=false;
 }
 
 /** Parses the arguments passed to tfit and attempts to store them internally.
@@ -192,6 +194,7 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
     this->mle=0; //This parameter runs the model module after bidir, IIRC.
     this->elon=0;
     this->cores=1;
+    this->version=false;
     
     
     if(argc==1)
@@ -244,6 +247,12 @@ ParamWrapper::ParamWrapper(int argc, char **argv)
             else if(!strcmp(prevCmd, "-debug"))
             {
                 this->debug=true;
+            }
+            
+            else if((!strcmp(prevCmd, "-v"))||(!strcmp(prevCmd, "--version")))
+            {
+                this->version=true;
+                return;
             }
 
         }
