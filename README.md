@@ -218,6 +218,8 @@ The `model` module is therefore meant as an extension of the `prelim` module or 
 | -s     --segment    | \<PRELIMHITS.bed>         | BED file that specifies sample regions of interest (e.g. FStitch output)
 | -chr   --chromosome | \<chrX>                   | Run bidir only on the specified chromosome. Default = all
 | -n     --threads    | \<integer>                | Number of threads to run the job on; 16 recommended. Default=1
+| -mink               | \<integer>                | Minimum number of finite mixtures to consider. Default=1
+| -maxk               | \<integer>                | Maximum number of finite mixtures to consider. Default=3
 
 ***IMPORTANT***: The -s --segment <PRELIMHITS.bed> is listed as an optional argument, but is highly recommended to reduce false positives and reduce overall runtime for bidirectional modeling. That said, Tfit `model` will run without this argument specified across the entire genome and may be a useful diagnostic tool.
 
