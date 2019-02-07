@@ -72,10 +72,10 @@ void ParamWrapper::printUsage()
  * to the bidir module, we can input a "training" to fine-tune these parameters (to an extent... some are still hard-coded and I'm not sure
  * where). That said, it seems to work "ok" and we can still make the config file an option for fine-tuning maybe.
  */
-    //printf("\t-mink\tMinimum number of finite mixtures to consider. default=1\n");
-    //printf("\t-maxk\tMaximum number of finite mixtures to consider. default=1\n");
+    printf("\t-mink\tMinimum number of finite mixtures to consider. default=1\n");
+    printf("\t-maxk\tMaximum number of finite mixtures to consider. default=3\n");
     //printf("\t-rounds\tNumber of random seeds to use in the model. default=5\n");
-    //printf("\t-ct\tConvergence threshold after which processing stops. default=0.0001\n");
+    printf("\t-ct\tConvergence threshold after which processing stops. default=0.0001\n");
     //printf("\t-mi\tMaximum number of model iterations after which processing stops. default=2000\n");
 // This is not currently true. It looks like it tries an then defaults back to 2000
     //printf("The model module currently has experimental support for parameter inference. Ie. it can attempt to estimate lambda,\n");
@@ -114,7 +114,7 @@ ParamWrapper::ParamWrapper()
     this->pi=0.5;
     this->w=0.5;
     this->mink=1;
-    this->maxk=1;
+    this->maxk=3;
     this->rounds=5;
     this->ct=0.0001;
     this->mi=2000;
