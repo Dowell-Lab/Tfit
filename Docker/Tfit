@@ -14,7 +14,7 @@ if ! $(eval $image_check); then
 fi
 
 #Define available flags and function to check if item is in options array 
-options=("-i" "-j" "-ij" "-o" "-log_out" "-N" "-tss" "-chr" "-bct" "-lambda" "-sigma" "-pi" "-w" "-mink" "-maxk" "-rounds" "-ct" "-mi" "-config" "-k" "-MLE" "-br")
+options=("-f" "--forward" "r" "--reverse" "bg" "--bedgraph" "N" "--jobName" "-o" "--output" "-l" "--logOut" "-s" "--segment" "-mink" "-maxk" "--verson" "-chr" "--chromosome" "-n" "--threads" "-bd" "--bidirs" "-h" "--help")
 array_contains () {
     local seeking=$1; shift
     local in=1
@@ -74,37 +74,35 @@ docker_command="docker run -ti --name=tfit"
 tfit_module=$1
 tfit_command="Tfit $tfit_module"
 
-#Add -MLE flag if used after bidir module specification
-add_tfit_flag -MLE $MLE
-
 # Set input directories
-add_file_flag -i "$i" i_dir
-add_file_flag -j "$j" j_dir
-add_file_flag -ij "$ij" ij_dir
+add_file_flag -f "$f" f_dir
+add_file_flag --forward "$forward" forward_dir
+add_file_flag -r "$r" r_dir
+add_file_flag --reverse "$reverse" reverse_dir
+add_file_flag -bg "$bg" bg_dir
+add_file_flag --bg "$bedgraph" bedgraph_dir
 
 #Set output directories
 add_directory_flag -o "$o" output
-add_directory_flag -log_out "$log_out" log_out
+add_directory_flag --o "$output" output_dir
+add_directory_flag -l "$l" logOut
+add_directory_flag --logOut "$logOut" logOut_dir
 
 #Add optional input files
-add_file_flag -config "$config" config
-add_file_flag -tss "$tss" tss_dir
-add_file_flag -k "$k" k_dir
+add_file_flag -s "$s" seg_file
+add_file_flag --segment "$segment" segment_file
+add_file_flag -bd "$bd" bd_file
+add_file_flag --bidirs "$bidirs" bidirs_file
 
 #Add additional required and optional flags if present
 add_tfit_flag -N $N
+add_tfit_flag --jobName $jobName
 add_tfit_flag -chr $chr
-add_tfit_flag -bct $bct
-add_tfit_flag -lambda $lambda
-add_tfit_flag -sigma $sigma
-add_tfit_flag -pi $pi
-add_tfit_flag -w $w
+add_tfit_flag --chromosome $chromosome
+add_tfit_flag -n $n
+add_tfit_flag --threads $threads
 add_tfit_flag -mink $mink
 add_tfit_flag -maxk $maxk
-add_tfit_flag -rounds $rounds
-add_tfit_flag -ct $ct
-add_tfit_flag -mi $mi
-add_tfit_flag -br $br
 
 # Upon construction, run docker command
 docker_command="$docker_command $REPOSITORY:$TAG $tfit_command" 
