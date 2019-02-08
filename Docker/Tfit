@@ -103,6 +103,10 @@ add_tfit_flag -n $n
 add_tfit_flag --threads $threads
 add_tfit_flag -mink $mink
 add_tfit_flag -maxk $maxk
+add_tfit_flag --version $version
+add_tfit_flag -h $h
+add_tfit_flag --help $help
+
 
 # Upon construction, run docker command
 docker_command="$docker_command $REPOSITORY:$TAG $tfit_command" 
