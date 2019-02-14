@@ -480,7 +480,7 @@ string segment_fits::write () {
           
          int start   = max(mu - (std + lam), 0.0), stop = mu + (std + lam);
          if (std  < 10000 and lam < 30000 and w > 0.01 and pi > 0.05 and pi < 0.95 ) {
-            line += chrom + "\t" + to_string(start) + "\t" + to_string(stop) + "\t";
+            line += chrom + "\t" + to_string(start) + "\t" + to_string(stop);
             line += "\t" + ID + "." + to_string(++tag) + "|" + to_string(BIC_ratio);
             line += "\t" + to_string(lround(mu)) + "\t" + to_string(lround(std)) + "\t" + to_string(w) + "\t" + to_string(lround(lam)) + "\t" + to_string(lround(N_pos)) + "\t" + to_string(lround(N_neg)) + "\n";
          } 
@@ -1064,7 +1064,6 @@ void load::write_out_bidirs_pwrapper(map<string , vector<vector<double> > > G, s
 
       for (int i = 0; i < data_intervals.size(); i++) {
          FHW << c->first << "\t" << to_string(int(data_intervals[i][0])) << "\t" << to_string(int(data_intervals[i][1])) << "\tPRELIM_" << to_string(ID) << endl;
-//         FHW << to_string(data_intervals[i][2] ) + "," + to_string(int(data_intervals[i][3] )) + "," + to_string(int(data_intervals[i][4]) ) << endl;
          ID++;
       }
    }
