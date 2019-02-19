@@ -479,7 +479,7 @@ string segment_fits::write () {
 // Changed std to 10k from 5k, lam to 30k from 20k, w to 0.01 from 0.05 -- believe this increases the number of calls, but for the best...?
           
          int start   = max(mu - (std + lam), 0.0), stop = mu + (std + lam);
-         if (std  < 10000 and lam < 30000 and w > 0.01 and pi > 0.05 and pi < 0.95 ) {
+         if (std  < 5000 and lam < 20000 and w > 0.05 and pi > 0.05 and pi < 0.95 ) {
             line += chrom + "\t" + to_string(start) + "\t" + to_string(stop);
             line += "\t" + ID + "." + to_string(++tag) + "|" + to_string(BIC_ratio);
             line += "\t" + to_string(lround(mu)) + "\t" + to_string(lround(std)) + "\t" + to_string(w) + "\t" + to_string(lround(lam)) + "\t" + to_string(lround(N_pos)) + "\t" + to_string(lround(N_neg)) + "\n";
