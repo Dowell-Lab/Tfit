@@ -482,7 +482,7 @@ string segment_fits::write () {
          if (std  < 5000 and lam < 20000 and w > 0.05 and pi > 0.05 and pi < 0.95 ) {
             line += chrom + "\t" + to_string(start) + "\t" + to_string(stop);
             line += "\t" + ID + "." + to_string(++tag) + "|" + to_string(BIC_ratio);
-            line += "\t" + to_string(lround(mu)) + "\t" + to_string(lround(std)) + "\t" + to_string(w) + "\t" + to_string(lround(lam)) + "\t" + to_string(lround(N_pos)) + "\t" + to_string(lround(N_neg)) + "\n";
+            line += "\t" + to_string(lround(mu)) + "\t" + to_string(lround(std)) + "\t" + to_string(w) + "\t" + to_string(lround(lam)) + "\t" + to_string(pi) + "\t" + to_string(lround(N_pos)) + "\t" + to_string(lround(N_neg)) + "\n";
          } 
       }
    }
