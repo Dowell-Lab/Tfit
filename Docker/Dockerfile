@@ -1,5 +1,3 @@
-FROM fedora:29
-
 # This file was created by Cassidy Thompson of the BioFrontiers IT department as part of a collaboration between BioFrontiers IT and the Dowell Lab. It is now currently maintained by Margaret Gruca of the Dowell Lab.
 
 MAINTAINER "Margaret Gruca"
