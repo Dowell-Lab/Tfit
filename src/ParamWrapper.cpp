@@ -602,7 +602,7 @@ std::string ParamWrapper::getHeader(int ID){
     }else{
         os<<"#-bg --bedgraph : "<<this->mergedStrand<<"\n";
     }
-    if (ID==1){
+    if (this->regionsOfInterest!=""){
         os<<"#-s --segment   : "<<this->regionsOfInterest<<"\n";
     }
     os<<"#-o --output      : "<<this->outputDir<<"\n";
