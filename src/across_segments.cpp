@@ -143,6 +143,7 @@ vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<
 	double N 		= FSI.size();
 	double percent 	= 0;
 	int elon_move 	= stoi(P->p["-elon"]);
+	//printf("FSI.size: %d\n", FSI.size());
 	for (int i = 0 ; i < FSI.size(); i++){
 		if ((i / N) > (percent+0.05)){
 			LG->write(to_string(int((i / N)*100))+"%,", verbose);

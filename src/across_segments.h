@@ -11,6 +11,7 @@ void run_model_accross_segments(vector<segment*>,
 	params *);
 void free_segments(vector<segment*>);
 
+/***
 struct simple_c{
 	double ll; //loglikelihood of bidirectional(s) 
 	
@@ -26,7 +27,7 @@ struct simple_c{
 //	string write_out();
 
 };
-
+***/
 
 struct simple_c_free_mode{
 	double SS[3];	//log-likelihood, N_forward, N_reverse
@@ -37,6 +38,8 @@ struct simple_c_free_mode{
 		int, segment *, int, double, double);
 	simple_c_free_mode();
 };
+
+/**
 struct single_simple_c{
 	char chrom[6];
 	int st_sp[3];
@@ -47,11 +50,11 @@ vector<simple_c> run_model_accross_segments_template(vector<segment*>,
 	params *);
 vector<simple_c> run_model_accross_segments_to_simple_c(vector<segment *>, params *, ofstream&);
 string get_header(params *);
-
 vector<simple_c> move_elongation_support(vector<segment *>, params *);
 vector<single_simple_c> run_single_model_across_segments(vector<segment *> , params *, ofstream& );
-vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<segment *> , params *, Log_File * );
+**/
 
+vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<segment *> , params *, Log_File * );
 vector<double> compute_average_model(vector<segment *> , params * );
 
 #endif

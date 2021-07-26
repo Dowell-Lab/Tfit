@@ -123,10 +123,25 @@ bool check_hit(double a, double b, double c, double x, double y, double z){
   return false;
 } 
 
+//================================================================================================
+/* Function: run_global_template_matching
+ *
+ * Purpose: 
+ *
+ * Args:
+ *   segments
+ *   out_dir
+ *   P      parameters for this run
+ *   SC     slice_ratio ?!?!
+ *
+ * Assumptions:
+ *
+ * Returns: 
+ */
 double run_global_template_matching(vector<segment*> segments, 
 				    string out_dir,  params * P, slice_ratio SC){
 	
-  double CTT                    = 5; //filters for low coverage regions
+  double CTT                    = 5; //filters for low coverage regions, WHY hard coded?!!?
 
   double ns 			= stod(P->p["-ns"]);
   double window 		= stod(P->p["-pad"])/ns;
@@ -140,20 +155,17 @@ double run_global_template_matching(vector<segment*> segments,
   
   ofstream FHW_scores;
   
-  if (SCORES){
-    FHW_scores.open(P->p["-scores"]);
-  }
+  if (SCORES){ FHW_scores.open(P->p["-scores"]); }
   string annotation;
   int prev, prev_start, stop;
   int N;
   int start, center;
-  
-  
+
   for (int i = 0; i < segments.size(); i++){
     double * BIC_values 	= new double[int(segments[i]->XN)];
     double * densities 		= new double[int(segments[i]->XN)];
     double * densities_r 	= new double[int(segments[i]->XN)];
-    
+
     double l 		=  segments[i]->maxX-segments[i]->minX;
     double ef 		= segments[i]->fN*( 2*(window*ns)*0.05  /(l*ns ));
     double er 		= segments[i]->rN*( 2*(window*ns)*0.05 /(l*ns ));
@@ -164,24 +176,24 @@ double run_global_template_matching(vector<segment*> segments,
     vector<vector<double>> HITS;
     for (int j = 1; j<segments[i]->XN-1; j++){
       if (SCORES){
-	double vl 	= BIC_values[j];
-	if (std::isnan(double(vl))){
-	  vl 		= 0;
-	}
-	FHW_scores<<segments[i]->chrom<<"\t"<<to_string(int(segments[i]->X[0][j-1]*ns+segments[i]->start))<<"\t";
-	FHW_scores<<to_string(int(segments[i]->X[0][j]*ns+segments[i]->start ))<<"\t" <<to_string(vl)<<endl;
+        double vl 	= BIC_values[j];
+        if (std::isnan(double(vl))){
+          vl 		= 0;
+        }
+        FHW_scores<<segments[i]->chrom<<"\t"<<to_string(int(segments[i]->X[0][j-1]*ns+segments[i]->start))<<"\t";
+        FHW_scores<<to_string(int(segments[i]->X[0][j]*ns+segments[i]->start ))<<"\t" <<to_string(vl)<<endl;
       }
       bool HIT = check_hit(BIC_values[j], densities[j], densities_r[j], SC.threshold, ef + CTT*stdf, er + CTT*stdr  );
       if ( HIT ) {
-	if (start < 0){
-	  start = segments[i]->X[0][j-1]*ns+segments[i]->start;
-	}
-	start+=1, rN+=1 , rF+=densities[j], rR+=densities_r[j], rB+=log10( SC.pvalue(BIC_values[j]) + pow(10,-20)) ;	
+        if (start < 0){
+          start = segments[i]->X[0][j-1]*ns+segments[i]->start;
+        }
+        start+=1, rN+=1 , rF+=densities[j], rR+=densities_r[j], rB+=log10( SC.pvalue(BIC_values[j]) + pow(10,-20)) ;	
       } 
       if(not HIT and start > 0 ){
-	vector<double> row = {start , segments[i]->X[0][j-1]*ns+segments[i]->start, rB/rN , rF/rN, rR/rN  };
-	HITS.push_back(row);
-	start=-1, rN=0.0 , rF=0.0, rR=0.0, rB=0.0;
+        vector<double> row = {start , segments[i]->X[0][j-1]*ns+segments[i]->start, rB/rN , rF/rN, rR/rN  };
+        HITS.push_back(row);
+        start=-1, rN=0.0 , rF=0.0, rR=0.0, rB=0.0;
       } 		
     }
     for (int j = 0; j < HITS.size();j++){

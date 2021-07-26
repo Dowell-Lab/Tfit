@@ -9,7 +9,6 @@
 #include <map>
 using namespace std;
 
-
 class params{
 public:
 	map<string, string> p;

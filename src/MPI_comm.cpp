@@ -147,13 +147,25 @@ struct simple_seg_struct{
 };
 
 
+/* Function: MPI_comm::send_out_single_fit_assignments
+ *
+ * Purpose: 
+ *
+ * Args:
+ *   FSI  a list of intervals/regions
+ *   rank   MPI process identifier
+ *   nprocs MPI total processes available
+ *
+ * Assumptions:
+ *
+ * Returns: a mapping of X to segments
+ */
 map<string, vector<segment *> > MPI_comm::send_out_single_fit_assignments(vector<segment *> FSI, int rank, int nprocs ){
+  bool debug = false;
 	map<string, vector<segment *> > GG;
 	int N 		= FSI.size();
 	int count 	= N / nprocs;
-	if (count == 0){
-		count 	= 1;
-	}
+	if (count == 0){ count 	= 1; }
 	simple_seg_struct sss;
 	MPI_Datatype mystruct;
 	
@@ -163,7 +175,6 @@ map<string, vector<segment *> > MPI_comm::send_out_single_fit_assignments(vector
 	displacements[0] 	= offsetof(simple_seg_struct, chrom);
 	displacements[1] 	= offsetof(simple_seg_struct, strand);
 	displacements[2] 	= offsetof(simple_seg_struct, st_sp);
-	
 	
 	MPI_Type_create_struct( 3, blocklens, displacements, old_types, &mystruct );
 	MPI_Type_commit( &mystruct );
@@ -229,7 +240,6 @@ map<string, vector<segment *> > MPI_comm::send_out_single_fit_assignments(vector
 	}
 
 	typedef map<string, vector<segment *> >::iterator it_type;
-
 
 	return GG;
 }

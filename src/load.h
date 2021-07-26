@@ -7,56 +7,83 @@
 using namespace std;
 class simple_c_free_mode;
 
-
-
-
 class classifier; //forward declare
 
-
-
+/* Class: The primary data class, which represents
+ * a genomic segment of data.  
+ */
 class segment{
 public:
-	string chrom; 
-	int start, stop, ID, chrom_ID;
-	double minX, maxX;
-	vector< vector<double> > forward;
-	vector< vector<double> > reverse;
-	string strand ;
-	int counts;
+	string chrom; 	// identifier for chromosome 
+	int start, stop;  // genomic coordinates of start/stop
+	double minX, maxX;   // min and max coordinate, scaled
+
+	string strand; // strand information, unspecified = "."
+	// these two are vectors of vectors where the inner vector is two doubles
+	// Expected to be [ x y ] with x being a coordinate [0th item] and y [1st item] being a value (reads?)
+	vector< vector<double> > forward; // corresponds to strand == 1
+	vector< vector<double> > reverse; // corresponds to strand == -1
+
+	int ID, chrom_ID;  // when are these used? (set to 0 in constructors)
+	int counts; // when is this used? (set to 1 in constructor)
+
 	vector<double> centers;
 	vector<vector<double>> parameters; //for bootstrapping
 	map<int, vector<double> > variances;
-	segment(string, int , int);
-	segment(string, int , int, int);
-	segment(string, int , int, int,string);
-	segment();
-	string write_out();
-	void bin(double, double, bool);
-	void add2(int, double, double);
-	double N;
-	double fN;
-	double rN;
-	double XN;
-	double ** X;
-	double SCALE;
+
+	// Reality is that input data is binned into a smoothed representation
+	// This is the smoothed representation of the data (X) which is a 3 dimensional vector
+	// Vector[0] is coordinate (possibly scaled); [1] is forward (summed for bin)
+	// [2] is reverse (summed for bin)
+	double ** X;  // Smoothed data inner is [3] dimensions
+	double XN; // total number of bins
+	double SCALE;  // scaling factor
+
+	double N;	// Total sum of values 
+	double fN;	// Sum of forward values 
+	double rN;	// Sum of reverse values 
+
 	vector<vector<double> > bidirectional_bounds;
 	vector<segment *> bidirectional_data;
 	vector<int>  bidir_counts; //used for optimization of BIC?
 	vector<int> bidirectional_N;
 	vector<vector<double>> fitted_bidirs; //mu, si, l,pi
+
+	// Constructors
+	segment(string, int , int);
+	segment(string, int , int, int);
+	segment(string, int , int, int, string);
+	segment();
+
+	/* FUNCTIONS: */
+	// Reporting out (currently unused)
+	string write_out();
+
+	// bin does the scaling and smoothing of input data (builds X)
+	void bin(double, double, bool); // delta, scale, erase
+
+	// add2 appears to add a single data point (coord) to an interval
+	void add2(int, double, double); // strand, x, y 
 };
 
+/* Class:  A node within the interval tree.
+ * Interval tree allows for rapid searching based on coordinates.
+ */
 class node{
 public:
 	double center;
 	int start, stop;
-	node * left;
-	node * right;
-	vector<segment * > current;
+	node * left;  // All intervals fully to left of center
+	node * right; // All intervals fully to the right of center
+	vector<segment * > current;	// All intervals overlapping center
+
 	void retrieve_nodes(vector<segment * >&);
 	void insert_coverage(vector<double>, int);
-	node();
+
+	// Constructors
+	node();	// empty constructor
 	node(vector<segment *>);
+
 	void searchInterval(int, int, vector<int> &) ;
 };
 
@@ -82,18 +109,13 @@ public:
 namespace load{
 
 	vector<segment_fits *> label_tss(string , vector<segment_fits *>   );
-
 	void BIN(vector<segment*>, int, double, bool);
-
 
 	vector<segment*> load_bedgraphs_total(string, 
 		string, string, int , double, string,map<string, int>&,map<int, string>&);
 
-
 	void write_out_bidirs(map<string , vector<vector<double> > >, string, string, int ,params *, int);
-
 	vector<segment *> load_intervals_of_interest(string,map<int, string>&, params *, bool);
-
 
 	void collect_all_tmp_files(string , string, int, int );
 	vector<segment* > insert_bedgraph_to_segment_joint(map<string, vector<segment *> >  , 

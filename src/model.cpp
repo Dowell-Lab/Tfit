@@ -682,6 +682,8 @@ classifier::classifier(){};
 //this IS the EM...estimate away
 int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 	 int elon_move ){
+
+	// printf("topology: %d elon_move %d K %d \n", topology, elon_move, K);
 	//=========================================================================
 	//compute just a uniform model...no need for the EM
 	if (K == 0){

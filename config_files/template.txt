@@ -4,6 +4,13 @@
 -v     	       	      	= 1 #verbose output
 #===========================================================================
 #input file parameters and output directories
+-i			= /path/to/
+-j 	  		= /path/to/
+-ij			= /path/to/
+-k 			= /path/to/
+-tss 			= /path/to/
+-o 	  		= /path/to/
+-log_out                = /path/to/
 
 #===========================================================================
 #house keeping parameters
@@ -27,15 +34,15 @@
 #EM algorithm specific parameters
 -r_mu 			= 1 #seed EM randomly from the peak finder
 -minK 			= 1 #min model complexity to consider
--maxK 			= 10 #
+-maxK 			= 1 #
 -rounds                 = 63 #number of random EM initializations
 -ct                     = 0.0001 #EM convergence threshold difference
--mi                     = 4000 #Number of EM iterations before it is aborted
+-mi                     = 2000 #Number of EM iterations before it is aborted
 -max_noise              = 0.05 #weight of the random/uniform noise component
 #===========================================================================
 #Map Estimation Parameters, note setting to zero recoverse MLE
 #>1 for all is recomended for numerical stability
--ALPHA_0 		= 100 #prior for sigma
+-ALPHA_0 		= 10 #prior for sigma
 -BETA_0 		= 10 #prior for sigma
 -ALPHA_1 		= 50 #prior for lambda
 -BETA_1 		= 100 #prior for lambda

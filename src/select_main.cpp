@@ -103,5 +103,5 @@ int select_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 
 	// MPI_comm::wait_on_root(rank, nprocs);
 
-	
+      return 1;	
 }

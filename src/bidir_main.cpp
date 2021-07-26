@@ -12,7 +12,6 @@
 using namespace std;
 int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 
-
 	int verbose 	= stoi(P->p["-v"]);
 	P->p["-merge"] 	= "1";
 	
@@ -78,17 +77,15 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	P->p["-w"] 	       = to_string(parameters[4]);
 
 	LG->write("loading bedgraph files..................................", verbose);
-	vector<segment *> 	segments 	= load::load_bedgraphs_total(forward_bedgraph, reverse_bedgraph, joint_bedgraph,
-		stoi(P->p["-br"]), stof(P->p["-ns"]), P->p["-chr"], chrom_to_ID, ID_to_chrom );
+	vector<segment *> 	segments 	= load::load_bedgraphs_total(forward_bedgraph, 
+			reverse_bedgraph, joint_bedgraph, stoi(P->p["-br"]), stof(P->p["-ns"]), 
+			P->p["-chr"], chrom_to_ID, ID_to_chrom );
 
 	if (segments.empty()){
 		printf("exiting...\n");
 		return 1;
 	}
 	LG->write("done\n", verbose);
-
-
-
 
 	slice_ratio SC;
 	if (stoi(P->p["-FDR"] ) ){
@@ -120,7 +117,7 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	//to sub-processes and have each MPI call run on a subset of segments
 	vector<segment*> all_segments  	= segments;
 	LG->write("slicing segments........................................", verbose);
-	segments 						= MPI_comm::slice_segments(segments, rank, nprocs);	
+	segments = MPI_comm::slice_segments(segments, rank, nprocs);	
 	LG->write("done\n", verbose);
 
 	//===========================================================================
@@ -131,11 +128,9 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	//(3b) now need to send out, gather and write bidirectional intervals 
 	LG->write("done\n", verbose);
 	
-
-
 	LG->write("scattering predictions to other MPI processes...........", verbose);
-	int total =  MPI_comm::gather_all_bidir_predicitions(all_segments, 
-							     segments , rank, nprocs, out_file_dir, job_name, job_ID,P,0);
+	int total =  MPI_comm::gather_all_bidir_predicitions(all_segments, segments , 
+			rank, nprocs, out_file_dir, job_name, job_ID,P,0);
 	MPI_Barrier(MPI_COMM_WORLD); //make sure everybody is caught up!
 
 	LG->write("done\n", verbose);

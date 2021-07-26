@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 using namespace std;
+
 class Log_File{
 public:
 	int job_ID;

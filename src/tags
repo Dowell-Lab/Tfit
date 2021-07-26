@@ -1,0 +1,443 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ALPHA_0	model.h	/^	double ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3;$/;"	m	class:classifier
+ALPHA_0	model.h	/^	double ALPHA_0, BETA_0;$/;"	m	class:component
+ALPHA_1	model.h	/^	double ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3;$/;"	m	class:classifier
+ALPHA_1	model.h	/^	double ALPHA_1, BETA_1;$/;"	m	class:component
+ALPHA_2	model.h	/^	double ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3;$/;"	m	class:classifier
+ALPHA_2	model.h	/^	double ALPHA_2;$/;"	m	class:component
+ALPHA_3	model.h	/^	double ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3;$/;"	m	class:classifier
+ALPHA_3	model.h	/^	double ALPHA_3;$/;"	m	class:component
+ARCH	Makefile	/^ARCH  		= getconf LONG_BIT$/;"	m
+BETA_0	model.h	/^	double ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3;$/;"	m	class:classifier
+BETA_0	model.h	/^	double ALPHA_0, BETA_0;$/;"	m	class:component
+BETA_1	model.h	/^	double ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3;$/;"	m	class:classifier
+BETA_1	model.h	/^	double ALPHA_1, BETA_1;$/;"	m	class:component
+BIC	model_selection.cpp	/^int BIC(double penality, segment_fits * S){$/;"	f
+BIC3	BIC.cpp	/^double BIC3(double ** X, int j, int k, int i,$/;"	f
+BIC_ratio	load.h	/^	double BIC_ratio;$/;"	m	class:segment_fits
+BIC_template	template_matching.cpp	/^void BIC_template(segment * data,  double * BIC_values, double * densities, double * densities_r, double window, $/;"	f
+BIN	load.cpp	/^void load::BIN(vector<segment*> segments, int BINS, double scale, bool erase){$/;"	f	class:load
+C	model.h	/^	double C;$/;"	m	class:EMG
+CONFIG	read_in_parameters.h	/^	bool CONFIG;$/;"	m	class:params
+CPP_FLAGS_32	Makefile	/^CPP_FLAGS_32  	= -D32_BIT$/;"	m
+CPP_FLAGS_64	Makefile	/^CPP_FLAGS_64  	= -D64_BIT$/;"	m
+CXX	Makefile	/^CXX             = mpic++$/;"	m
+CXXFLAGS	Makefile	/^CXXFLAGS        = -Wno-unused-variable -Wno-non-virtual-dtor -std=c++11 -fopenmp -Wno-write-strings -Wno-literal-suffix $/;"	m
+EM	FDR.cpp	/^bool EM(vector<vector<double>> X , double & mean, double & sigma, double & w, double & c , bool EXP ){$/;"	f
+EMG	model.cpp	/^EMG::EMG(){} \/\/empty constructor$/;"	f	class:EMG
+EMG	model.cpp	/^EMG::EMG(double MU, double SI, double L, double W, double PI ){$/;"	f	class:EMG
+EMG	model.h	/^class EMG{$/;"	c
+EPI	model_single.h	/^	double EX, EX2, EY, EPI, EPIN,   WE, WF, WR;$/;"	m	class:NLR
+EPIN	model_single.h	/^	double EX, EX2, EY, EPI, EPIN,   WE, WF, WR;$/;"	m	class:NLR
+EX	model_single.h	/^	double EX, EX2, EY, EPI, EPIN,   WE, WF, WR;$/;"	m	class:NLR
+EX2	model_single.h	/^	double EX, EX2, EY, EPI, EPIN,   WE, WF, WR;$/;"	m	class:NLR
+EXEC	Makefile	/^EXEC            = ${PWD}\/Tfit$/;"	m
+EXIT	model.h	/^	bool EXIT;$/;"	m	class:component
+EXIT	read_in_parameters.h	/^	bool EXIT;$/;"	m	class:params
+EY	model.cpp	/^double EMG::EY(double z, int s){$/;"	f	class:EMG
+EY	model_single.h	/^	double EX, EX2, EY, EPI, EPIN,   WE, WF, WR;$/;"	m	class:NLR
+EY2	model.cpp	/^double EMG::EY2(double z, int s){$/;"	f	class:EMG
+FDR_H	FDR.h	2;"	d
+FHW	error_stdo_logging.h	/^	ofstream FHW;$/;"	m	class:Log_File
+GCCVERSION	Makefile	/^GCCVERSION 	= $(shell ${CXX} -dumpversion)$/;"	m
+IC	model.cpp	/^double IC(double x){ \/\/Standard Normal CDF$/;"	f
+ID	across_segments.h	/^	int ID[5] ;  \/\/index of the segment that this belongs,start, stop, converged?$/;"	m	struct:simple_c_free_mode
+ID	load.h	/^	int ID, chrom_ID;  \/\/ when are these used? (set to 0 in constructors)$/;"	m	class:segment
+ID	load.h	/^	string ID;$/;"	m	class:segment_fits
+IN	model.cpp	/^double IN(double x){ \/\/Standard Normal PDF $/;"	f
+INF	template_matching.cpp	/^double INF 	= exp(1000);$/;"	v
+K	model.h	/^	int K; \/\/number of components$/;"	m	class:classifier
+K	model_single.h	/^	int K, type;$/;"	m	class:classifier_single
+LOG	model.cpp	/^double LOG(double x){$/;"	f
+Log_File	error_stdo_logging.cpp	/^Log_File::Log_File(){}$/;"	f	class:Log_File
+Log_File	error_stdo_logging.cpp	/^Log_File::Log_File(int R, int JI, string JN, string OUT){$/;"	f	class:Log_File
+Log_File	error_stdo_logging.h	/^class Log_File{$/;"	c
+M	load.h	/^	map<int, double> M;$/;"	m	class:segment_fits
+MPI_comm	MPI_comm.h	/^namespace MPI_comm {$/;"	n
+MPI_comm_H	MPI_comm.h	2;"	d
+N	load.h	/^	double N;	\/\/ Total sum of values $/;"	m	class:segment
+N	load.h	/^	double N;$/;"	m	class:segment_fits
+N	read_in_parameters.h	/^	int N;$/;"	m	class:params
+NLR	model_single.cpp	/^NLR::NLR(){}$/;"	f	class:NLR
+NLR	model_single.h	/^class NLR{$/;"	c
+NOISE	model.cpp	/^NOISE::NOISE(){} \/\/empty constructor$/;"	f	class:NOISE
+NOISE	model.cpp	/^NOISE::NOISE(double A, double B, double W, double PI){$/;"	f	class:NOISE
+NOISE	model.h	/^class NOISE{$/;"	c
+NORMS	FDR.h	/^  vector<normal> NORMS;$/;"	m	class:slice_ratio
+N_neg	load.h	/^	double N_pos, N_neg;$/;"	m	class:segment_fits
+N_pos	load.h	/^	double N_pos, N_neg;$/;"	m	class:segment_fits
+OBJ	Makefile	/^OBJ = load.o split.o model.o across_segments.o template_matching.o \\$/;"	m
+PROGS	Makefile	/^PROGS = Tfit$/;"	m
+R	model.cpp	/^double R(double x){ \/\/Mills Ratio$/;"	f
+ROC	model_selection.cpp	/^double ROC(vector<segment_fits *> noise_fits, vector<segment_fits *> query_fits, $/;"	f
+SCALE	load.h	/^	double SCALE;  \/\/ scaling factor$/;"	m	class:segment
+SRC	Makefile	/^SRC = $(OBJ:.o=.cpp)$/;"	m
+SS	across_segments.h	/^	double SS[3];	\/\/log-likelihood, N_forward, N_reverse$/;"	m	struct:simple_c_free_mode
+TSS	load.h	/^	int start, stop, TSS;$/;"	m	class:segment_fits
+UNI	model.cpp	/^UNI::UNI(){} \/\/empty constructor$/;"	f	class:UNI
+UNI	model.cpp	/^UNI::UNI(double start, double stop, double w_i, int strand, int POS, double Pi){$/;"	f	class:UNI
+UNI	model.h	/^class UNI{$/;"	c
+VDATE	Makefile	/^VDATE = JUL 2021$/;"	m
+VERSION	Makefile	/^VERSION = 1.0$/;"	m
+WE	model_single.h	/^	double EX, EX2, EY, EPI, EPIN,   WE, WF, WR;$/;"	m	class:NLR
+WF	model_single.h	/^	double EX, EX2, EY, EPI, EPIN,   WE, WF, WR;$/;"	m	class:NLR
+WR	model_single.h	/^	double EX, EX2, EY, EPI, EPIN,   WE, WF, WR;$/;"	m	class:NLR
+X	density_profiler.h	/^	vector<double> X;$/;"	m	class:gap_interval
+X	load.h	/^	double ** X;  \/\/ Smoothed data inner is [3] dimensions$/;"	m	class:segment
+XN	load.h	/^	double XN; \/\/ total number of bins$/;"	m	class:segment
+XY	FDR.h	/^  vector<vector<double> > XY ; \/\/bins X 3$/;"	m	class:slice_ratio
+Y	density_profiler.h	/^	vector<double> Y;$/;"	m	class:gap_interval
+a	model.h	/^	double a, b, w, pi;$/;"	m	class:NOISE
+a	model.h	/^	double a,b,w,pi;$/;"	m	class:UNI
+across_segments_H	across_segments.h	2;"	d
+add2	load.cpp	/^void segment::add2(int strand, double x, double y){$/;"	f	class:segment
+addSS	model_single.cpp	/^double NLR::addSS(double x, double y, double norm){$/;"	f	class:NLR
+add_stats	model.cpp	/^void component::add_stats(double x, double y, int st, double normalize){$/;"	f	class:component
+alpha	FDR.h	/^  double alpha,mu;$/;"	m	class:pareto
+alpha_0	model.h	/^	double alpha_0, alpha_1, alpha_2, beta_0, beta_1, beta_2;$/;"	m	class:component
+alpha_1	model.h	/^	double alpha_0, alpha_1, alpha_2, beta_0, beta_1, beta_2;$/;"	m	class:component
+alpha_1	model_single.h	/^	double alpha_1, beta_1, alpha_2, beta_2, alpha_3;$/;"	m	class:NLR
+alpha_1	model_single.h	/^	double alpha_1, beta_1, alpha_2, beta_2, alpha_3;$/;"	m	class:classifier_single
+alpha_2	model.h	/^	double alpha_0, alpha_1, alpha_2, beta_0, beta_1, beta_2;$/;"	m	class:component
+alpha_2	model_single.h	/^	double alpha_1, beta_1, alpha_2, beta_2, alpha_3;$/;"	m	class:NLR
+alpha_2	model_single.h	/^	double alpha_1, beta_1, alpha_2, beta_2, alpha_3;$/;"	m	class:classifier_single
+alpha_3	model_single.h	/^	double alpha_1, beta_1, alpha_2, beta_2, alpha_3;$/;"	m	class:NLR
+alpha_3	model_single.h	/^	double alpha_1, beta_1, alpha_2, beta_2, alpha_3;$/;"	m	class:classifier_single
+b	model.h	/^	double a, b, w, pi;$/;"	m	class:NOISE
+b	model.h	/^	double a,b,w,pi;$/;"	m	class:UNI
+beta_0	model.h	/^	double alpha_0, alpha_1, alpha_2, beta_0, beta_1, beta_2;$/;"	m	class:component
+beta_1	model.h	/^	double alpha_0, alpha_1, alpha_2, beta_0, beta_1, beta_2;$/;"	m	class:component
+beta_1	model_single.h	/^	double alpha_1, beta_1, alpha_2, beta_2, alpha_3;$/;"	m	class:NLR
+beta_1	model_single.h	/^	double alpha_1, beta_1, alpha_2, beta_2, alpha_3;$/;"	m	class:classifier_single
+beta_2	model.h	/^	double alpha_0, alpha_1, alpha_2, beta_0, beta_1, beta_2;$/;"	m	class:component
+beta_2	model_single.h	/^	double alpha_1, beta_1, alpha_2, beta_2, alpha_3;$/;"	m	class:NLR
+beta_2	model_single.h	/^	double alpha_1, beta_1, alpha_2, beta_2, alpha_3;$/;"	m	class:classifier_single
+bidir	model.h	/^	EMG bidir;$/;"	m	class:component
+bidir	model_single.h	/^	EMG bidir;$/;"	m	class:NLR
+bidir	read_in_parameters.h	/^	bool bidir;$/;"	m	class:params
+bidir_counts	load.h	/^	vector<int>  bidir_counts; \/\/used for optimization of BIC?$/;"	m	class:segment
+bidir_main_H	bidir_main.h	2;"	d
+bidir_run	bidir_main.cpp	/^int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){$/;"	f
+bidirectional_N	load.h	/^	vector<int> bidirectional_N;$/;"	m	class:segment
+bidirectional_bounds	load.h	/^	vector<vector<double> > bidirectional_bounds;$/;"	m	class:segment
+bidirectional_data	load.h	/^	vector<segment *> bidirectional_data;$/;"	m	class:segment
+bin	load.cpp	/^void segment::bin(double delta, double scale, bool erase){$/;"	f	class:segment
+bins	FDR.h	/^  int bins ; \/\/the number of segments$/;"	m	class:slice_ratio
+bootstrap_H	bootstrap.h	2;"	d
+bounds	MPI_comm.cpp	/^struct bounds{$/;"	s	file:
+bubble_sort3	template_matching.cpp	/^vector<vector<double>> bubble_sort3(vector<vector<double>> X){ \/\/sort vector of vectors by second$/;"	f
+bubble_sort_alg	load.cpp	/^vector<vector<double>> bubble_sort_alg(vector<vector<double>> X){$/;"	f
+c	FDR.h	/^  double mean , std , w,c,threshold ;$/;"	m	class:slice_ratio
+c2	FDR.h	/^  double mean, std, x,threshold, c2;$/;"	m	class:normal
+cdf	FDR.cpp	/^double normal::cdf(double x){$/;"	f	class:normal
+center	load.h	/^	double center;$/;"	m	class:node
+centers	load.h	/^	vector<double> centers;$/;"	m	class:segment
+checkNumber	model.cpp	/^bool checkNumber(double x){$/;"	f
+check_ID_name	load.cpp	/^bool check_ID_name(string & INFO){$/;"	f
+check_file	across_segments.cpp	/^string check_file(string FILE, int i){ \/\/don't want to write over an existing file$/;"	f
+check_hit	template_matching.cpp	/^bool check_hit(double a, double b, double c, double x, double y, double z){$/;"	f
+check_value	FDR.cpp	/^bool check_value(float x){$/;"	f
+chrom	MPI_comm.cpp	/^	char chrom[6];$/;"	m	struct:simple_seg_struct	file:
+chrom	across_segments.h	/^	char chrom[6];$/;"	m	struct:simple_c_free_mode
+chrom	load.h	/^	string chrom; 	\/\/ identifier for chromosome $/;"	m	class:segment
+chrom	load.h	/^	string chrom;$/;"	m	class:segment_fits
+chrom_ID	load.h	/^	int ID, chrom_ID;  \/\/ when are these used? (set to 0 in constructors)$/;"	m	class:segment
+classifier	model.cpp	/^classifier::classifier(){}; $/;"	f	class:classifier
+classifier	model.cpp	/^classifier::classifier(double ct, int mi, double nm,$/;"	f	class:classifier
+classifier	model.cpp	/^classifier::classifier(int k, double ct, int mi, double nm,$/;"	f	class:classifier
+classifier	model.h	/^class classifier{$/;"	c
+classifier_single	model_single.cpp	/^classifier_single::classifier_single(){}$/;"	f	class:classifier_single
+classifier_single	model_single.cpp	/^classifier_single::classifier_single(double ct, int mi, int k, int TY, double SC,$/;"	f	class:classifier_single
+classifier_single	model_single.h	/^class classifier_single{$/;"	c
+clear_segments	load.cpp	/^void load::clear_segments(vector<segment *> segments){$/;"	f	class:load
+collect_all_tmp_files	load.cpp	/^void load::collect_all_tmp_files(string dir, string job_name, int nprocs, int job_ID){$/;"	f	class:load
+component	model.cpp	/^component::component(){\/\/empty constructor$/;"	f	class:component
+component	model.h	/^class component{$/;"	c
+components	model.h	/^	component * components;$/;"	m	class:classifier
+components	model_single.h	/^	NLR * components;$/;"	m	class:classifier_single
+compute_average_model	across_segments.cpp	/^vector<double> compute_average_model(vector<segment *> segments, params * P){$/;"	f
+compute_true_and_false_positive_rates	model_selection.cpp	/^void compute_true_and_false_positive_rates(double penality, vector<segment_fits *> noise_fits,$/;"	f
+converged	FDR.h	/^  bool converged;$/;"	m	class:slice_ratio
+converged	model.h	/^	bool converged;$/;"	m	class:classifier
+convergence_threshold	model.h	/^	double convergence_threshold; \/\/convergence check$/;"	m	class:classifier
+convert_segment_vector	MPI_comm.cpp	/^map<string, vector<segment *> > MPI_comm::convert_segment_vector(vector<segment *> FSI){$/;"	f	class:MPI_comm
+counts	load.h	/^	int counts; \/\/ when is this used? (set to 1 in constructor)$/;"	m	class:segment
+covergence_threshold	model_single.h	/^	double ll, covergence_threshold, max_iterations;$/;"	m	class:classifier_single
+current	load.h	/^	vector<segment * > current;	\/\/ All intervals overlapping center$/;"	m	class:node
+currentDateTime	read_in_parameters.cpp	/^const std::string currentDateTime() {$/;"	f
+delta_a	model.h	/^	double delta_a, delta_b;$/;"	m	class:UNI
+delta_b	model.h	/^	double delta_a, delta_b;$/;"	m	class:UNI
+density_profiler_H	density_profiler.h	2;"	d
+display	read_in_parameters.cpp	/^void params::display(int nodes, int cores){$/;"	f	class:params
+error_stdo_logging_H	error_stdo_logging.h	2;"	d
+evaluate	model.cpp	/^double component::evaluate(double x, int st){$/;"	f	class:component
+ex	model.h	/^	double ey, ex, ex2, r_forward, r_reverse;\/\/running total$/;"	m	class:EMG
+ex2	model.h	/^	double ey, ex, ex2, r_forward, r_reverse;\/\/running total$/;"	m	class:EMG
+ex_r	model.h	/^	double ex_r;$/;"	m	class:EMG
+exponential	FDR.cpp	/^exponential::exponential(){};$/;"	f	class:exponential
+exponential	FDR.cpp	/^exponential::exponential(double MU, double LAMBDA){$/;"	f	class:exponential
+exponential	FDR.h	/^class exponential{$/;"	c
+ey	model.h	/^	double ey, ex, ex2, r_forward, r_reverse;\/\/running total$/;"	m	class:EMG
+fN	load.h	/^	double fN;	\/\/ Sum of forward values $/;"	m	class:segment
+fill_in_config_file	read_in_parameters.cpp	/^void fill_in_config_file(string FILE, params * P, int rank){$/;"	f
+fill_in_options	read_in_parameters.cpp	/^void fill_in_options(char* argv[],params * P, int rank){$/;"	f
+fit	model_single.cpp	/^double classifier_single::fit(segment * data,double foot_print){$/;"	f	class:classifier_single
+fit2	model.cpp	/^int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,$/;"	f	class:classifier
+fitted_bidirs	load.h	/^	vector<vector<double>> fitted_bidirs; \/\/mu, si, l,pi$/;"	m	class:segment
+foot_print	model.h	/^	double foot_print;$/;"	m	class:EMG
+foot_print	model.h	/^	double foot_print;$/;"	m	class:classifier
+foot_print	model.h	/^	double foot_print;$/;"	m	class:component
+forward	load.h	/^	vector< vector<double> > forward; \/\/ corresponds to strand == 1$/;"	m	class:segment
+forward	model.h	/^	UNI forward;$/;"	m	class:component
+forward	model_single.h	/^	UNI forward;$/;"	m	class:NLR
+forward_neighbor	model.h	/^	component * forward_neighbor;$/;"	m	class:component
+fp	model_single.h	/^	double mu, si, l, pi, wn , wl, wr, fp;$/;"	m	class:NLR
+gap_interval	density_profiler.cpp	/^gap_interval::gap_interval(){};$/;"	f	class:gap_interval
+gap_interval	density_profiler.cpp	/^gap_interval::gap_interval(double st, double sp){$/;"	f	class:gap_interval
+gap_interval	density_profiler.h	/^class gap_interval{$/;"	c
+gather_all_bidir_predicitions	MPI_comm.cpp	/^int MPI_comm::gather_all_bidir_predicitions(vector<segment *> all, $/;"	f	class:MPI_comm
+gather_all_simple_c_free_mode	MPI_comm.cpp	/^map<int, map<int, vector<simple_c_free_mode>  > > MPI_comm::gather_all_simple_c_free_mode(vector<map<int, vector<simple_c_free_mode> >> FITS, $/;"	f	class:MPI_comm
+get_all_repo	model.cpp	/^double component::get_all_repo(){$/;"	f	class:component
+get_closest	FDR.cpp	/^int slice_ratio::get_closest(double x){$/;"	f	class:slice_ratio
+get_header	read_in_parameters.cpp	/^string params::get_header(int ID){$/;"	f	class:params
+get_job_ID	MPI_comm.cpp	/^int MPI_comm::get_job_ID(string path, string job_ID, int rank, int nprocs){$/;"	f	class:MPI_comm
+get_max_from_free_mode	across_segments.cpp	/^map<int, vector<simple_c_free_mode> > get_max_from_free_mode(map<int, vector<classifier> > A, segment * data, int i){$/;"	f
+get_mean	bootstrap.cpp	/^double get_mean(vector<double> X){$/;"	f
+get_model	load.cpp	/^void segment_fits::get_model(double ms_pen){$/;"	f	class:segment_fits
+get_nearest_position	model.cpp	/^int get_nearest_position(segment * data, double center, double dist){$/;"	f
+get_slice	FDR.cpp	/^slice_ratio get_slice(vector<segment *> segments, int N, double CC, params * P){$/;"	f
+get_sum	model.cpp	/^double get_sum(segment * data, int j, int k, int st){$/;"	f
+get_table_mean_var	density_profiler.cpp	/^double get_table_mean_var(string GAP_FILE, string bed_file, double res, double bin_res, double scale){$/;"	f
+help	read_in_parameters.cpp	/^void params::help(){$/;"	f	class:params
+init	model_single.cpp	/^void NLR::init(segment * data, double MU , int K, double foot_print, $/;"	f	class:NLR
+init_parameters	model.h	/^	vector<vector<double>> init_parameters;$/;"	m	class:classifier
+initialize_bounds	model.cpp	/^void component::initialize_bounds(double mu, segment * data , int K, double scale, double noise_w, $/;"	f	class:component
+insert	FDR.cpp	/^void slice_ratio::insert(double y){$/;"	f	class:slice_ratio
+insert_bedgraph_to_segment_joint	load.cpp	/^vector<segment* > load::insert_bedgraph_to_segment_joint(map<string, vector<segment *> > A , $/;"	f	class:load
+insert_coverage	load.cpp	/^void node::insert_coverage(vector<double> x, int s){$/;"	f	class:node
+isDecGroup	read_in_parameters.h	/^	char * isDecGroup[17]  = {  "-br","-ns", "-ct",$/;"	m	class:params
+isIntGroup	read_in_parameters.h	/^	char * isIntGroup[8] = {"-pad", "-minK", "-maxK", $/;"	m	class:params
+isNumeric	read_in_parameters.cpp	/^bool isNumeric(const std::string& input) {$/;"	f
+isPathGroup	read_in_parameters.h	/^	char * isPathGroup[8] = {"-config", "-i", "-j", "-k", "-tss", "-log_out", "-o", "-q"};$/;"	m	class:params
+is_decimal	read_in_parameters.cpp	/^bool is_decimal(const std::string& s){$/;"	f
+is_integer	read_in_parameters.cpp	/^bool is_integer(const std::string& s){$/;"	f
+is_number	read_in_parameters.cpp	/^bool is_number(string s)$/;"	f
+is_path	read_in_parameters.cpp	/^bool is_path(string FILE){$/;"	f
+j	model.h	/^	int j,k,l; \/\/so j and k are the bounds the uniform can move through, l is the current one$/;"	m	class:UNI
+job_ID	error_stdo_logging.h	/^	int job_ID;$/;"	m	class:Log_File
+job_name	error_stdo_logging.h	/^	string job_name;$/;"	m	class:Log_File
+join	split.cpp	/^string join(vector<string> toBeJoined, string delim){$/;"	f
+k	model.h	/^	int j,k,l; \/\/so j and k are the bounds the uniform can move through, l is the current one$/;"	m	class:UNI
+l	model.h	/^	double mu, si, l, pi, w;$/;"	m	class:EMG
+l	model.h	/^	int j,k,l; \/\/so j and k are the bounds the uniform can move through, l is the current one$/;"	m	class:UNI
+l	model_single.h	/^	double mu, si, l, pi, wn , wl, wr, fp;$/;"	m	class:NLR
+label_tss	load.cpp	/^vector<segment_fits *> load::label_tss(string tss_file, vector<segment_fits *> query_fits ){$/;"	f	class:load
+lambda	FDR.h	/^  double lambda,mu;$/;"	m	class:exponential
+last_diff	model.h	/^	double last_diff;$/;"	m	class:classifier
+left	load.h	/^	node * left;  \/\/ All intervals fully to left of center$/;"	m	class:node
+left_SUM	model.h	/^	double left_SUM, right_SUM;$/;"	m	class:UNI
+ll	model.h	/^	double ll,pi;$/;"	m	class:classifier
+ll	model_single.h	/^	double ll, covergence_threshold, max_iterations;$/;"	m	class:classifier_single
+load	load.h	/^namespace load{$/;"	n
+load_H	load.h	2;"	d
+load_K_models_out	load.cpp	/^vector<segment_fits *> load::load_K_models_out(string FILE){$/;"	f	class:load
+load_bedgraphs_total	load.cpp	/^vector<segment*> load::load_bedgraphs_total(string forward_strand, string reverse_strand, $/;"	f	class:load
+load_intervals_of_interest	load.cpp	/^vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&  IDS, $/;"	f	class:load
+log_out_dir	error_stdo_logging.h	/^	string log_out_dir;$/;"	m	class:Log_File
+lower_upper	MPI_comm.cpp	/^  double lower_upper[5];$/;"	m	struct:bounds	file:
+main	main.cpp	/^int main(int argc, char* argv[]){$/;"	f
+make_bootstraps	bootstrap.cpp	/^vector<segment *> make_bootstraps(segment * S, params * P){$/;"	f
+make_classifier_struct_free_model	across_segments.cpp	/^map<int, vector<classifier> > make_classifier_struct_free_model(params * P, segment * data){$/;"	f
+maxX	load.h	/^	double minX, maxX;   \/\/ min and max coordinate, scaled$/;"	m	class:segment
+max_iterations	model.h	/^	int max_iterations; \/\/stop after this many iterations$/;"	m	class:classifier
+max_iterations	model_single.h	/^	double ll, covergence_threshold, max_iterations;$/;"	m	class:classifier_single
+mean	FDR.h	/^  double mean , std , w,c,threshold ;$/;"	m	class:slice_ratio
+mean	FDR.h	/^  double mean, std, x,threshold, c2;$/;"	m	class:normal
+merge	template_matching.cpp	/^vector<vector<double>> merge(vector<vector<double>> X, double window){$/;"	f
+merge_segments	load.cpp	/^vector<segment *> merge_segments(vector<segment *> segments, map<int, string>  IDS_first, map<int, string> & IDS, int & T){$/;"	f
+minX	load.h	/^	double minX, maxX;   \/\/ min and max coordinate, scaled$/;"	m	class:segment
+model	load.h	/^	int model;$/;"	m	class:segment_fits
+model	read_in_parameters.h	/^	bool model;$/;"	m	class:params
+model_H	model.h	2;"	d
+model_main_H	model_main.h	2;"	d
+model_run	model_main.cpp	/^int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_File * LG){$/;"	f
+model_selection_H	model_selection.h	2;"	d
+model_single_H	model_single.h	2;"	d
+module	read_in_parameters.h	/^	string module;$/;"	m	class:params
+move	model.h	/^	double move; \/\/variance in moving the uniform supports$/;"	m	class:classifier
+move_fp	model.h	/^	bool move_fp;$/;"	m	class:EMG
+move_l	model.h	/^	bool move_l;$/;"	m	class:classifier
+mu	FDR.h	/^  double alpha,mu;$/;"	m	class:pareto
+mu	FDR.h	/^  double lambda,mu;$/;"	m	class:exponential
+mu	model.h	/^	double mu, si, l, pi, w;$/;"	m	class:EMG
+mu	model_single.h	/^	double mu, si, l, pi, wn , wl, wr, fp;$/;"	m	class:NLR
+nINF	template_matching.cpp	/^double nINF	=-exp(1000);$/;"	v
+node	load.cpp	/^node::node(){};$/;"	f	class:node
+node	load.cpp	/^node::node(vector<segment * > segments ){$/;"	f	class:node
+node	load.h	/^class node{$/;"	c
+noise	model.h	/^	NOISE noise;$/;"	m	class:component
+noise_max	model.h	/^	double noise_max; \/\/fit a uniform noise component, never let it get above this weight$/;"	m	class:classifier
+norm_all	FDR.h	/^  normal norm_all;$/;"	m	class:slice_ratio
+normal	FDR.cpp	/^normal::normal(){}$/;"	f	class:normal
+normal	FDR.cpp	/^normal::normal(double X, double MU, double STD){$/;"	f	class:normal
+normal	FDR.h	/^class normal{$/;"	c
+p	model.h	/^	double p;$/;"	m	class:classifier
+p	read_in_parameters.h	/^	map<string, string> p;$/;"	m	class:params
+p2	read_in_parameters.h	/^	map<string, string> p2;$/;"	m	class:params
+p3	read_in_parameters.h	/^	map<string, string> p3;$/;"	m	class:params
+p4	read_in_parameters.h	/^	map<string, string> p4;$/;"	m	class:params
+p5	read_in_parameters.h	/^	map<string, string> p5;$/;"	m	class:params
+p6	read_in_parameters.h	/^	map<string, string> p6;$/;"	m	class:params
+parameters	load.h	/^	map<int, string> parameters;$/;"	m	class:segment_fits
+parameters	load.h	/^	vector<vector<double>> parameters; \/\/for bootstrapping$/;"	m	class:segment
+params	read_in_parameters.cpp	/^params::params(){$/;"	f	class:params
+params	read_in_parameters.h	/^class params{$/;"	c
+pareto	FDR.cpp	/^pareto::pareto(){};$/;"	f	class:pareto
+pareto	FDR.cpp	/^pareto::pareto(double MU, double ALPHA){$/;"	f	class:pareto
+pareto	FDR.h	/^class pareto{$/;"	c
+pdf	FDR.cpp	/^double exponential::pdf(double x){$/;"	f	class:exponential
+pdf	FDR.cpp	/^double normal::pdf(double x){$/;"	f	class:normal
+pdf	FDR.cpp	/^double pareto::pdf(double x){$/;"	f	class:pareto
+pdf	model.cpp	/^double EMG::pdf(double z, int s ){$/;"	f	class:EMG
+pdf	model.cpp	/^double NOISE::pdf(double x, int strand){$/;"	f	class:NOISE
+pdf	model.cpp	/^double UNI::pdf(double x, int strand){$/;"	f	class:UNI
+pdf	model_single.cpp	/^double NLR::pdf(double x){$/;"	f	class:NLR
+pi	model.h	/^	double a, b, w, pi;$/;"	m	class:NOISE
+pi	model.h	/^	double a,b,w,pi;$/;"	m	class:UNI
+pi	model.h	/^	double ll,pi;$/;"	m	class:classifier
+pi	model.h	/^	double mu, si, l, pi, w;$/;"	m	class:EMG
+pi	model_single.h	/^	double mu, si, l, pi, wn , wl, wr, fp;$/;"	m	class:NLR
+pos	model.h	/^	int pos;$/;"	m	class:UNI
+prev_mu	model.h	/^	double prev_mu;$/;"	m	class:EMG
+print	model.cpp	/^string EMG::print(){$/;"	f	class:EMG
+print	model.cpp	/^string UNI::print(){$/;"	f	class:UNI
+print	model.cpp	/^void component::print(){$/;"	f	class:component
+print	model_single.cpp	/^void NLR::print(){$/;"	f	class:NLR
+ps	across_segments.h	/^	double ps[12]; \/\/parameters for the component$/;"	m	struct:simple_c_free_mode
+pvalue	FDR.cpp	/^double slice_ratio::pvalue(double y){$/;"	f	class:slice_ratio
+rN	load.h	/^	double rN;	\/\/ Sum of reverse values $/;"	m	class:segment
+r_forward	model.h	/^	double ey, ex, ex2, r_forward, r_reverse;\/\/running total$/;"	m	class:EMG
+r_forward	model.h	/^	double r_forward, r_reverse; \/\/running total$/;"	m	class:NOISE
+r_forward	model.h	/^	double r_forward, r_reverse; \/\/running total$/;"	m	class:UNI
+r_mu	model.h	/^	double r_mu;$/;"	m	class:classifier
+r_reverse	model.h	/^	double ey, ex, ex2, r_forward, r_reverse;\/\/running total$/;"	m	class:EMG
+r_reverse	model.h	/^	double r_forward, r_reverse; \/\/running total$/;"	m	class:NOISE
+r_reverse	model.h	/^	double r_forward, r_reverse; \/\/running total$/;"	m	class:UNI
+rank	error_stdo_logging.h	/^	int rank; $/;"	m	class:Log_File
+read_in_parameters	read_in_parameters.cpp	/^int read_in_parameters( char* argv[], params * P, int rank){	$/;"	f
+read_in_parameters_H	read_in_parameters.h	2;"	d
+reset	model.cpp	/^void component::reset(){$/;"	f	class:component
+resetSS	model_single.cpp	/^void NLR::resetSS(){$/;"	f	class:NLR
+retrieve_nodes	load.cpp	/^void node::retrieve_nodes(vector<segment*> & saves){$/;"	f	class:node
+reverse	load.h	/^	vector< vector<double> > reverse; \/\/ corresponds to strand == -1$/;"	m	class:segment
+reverse	model.h	/^	UNI reverse;$/;"	m	class:component
+reverse	model_single.h	/^	UNI reverse;$/;"	m	class:NLR
+reverse_neighbor	model.h	/^	component * reverse_neighbor;$/;"	m	class:component
+ri_forward	model.h	/^	double ri_forward, ri_reverse; \/\/current responsibility$/;"	m	class:EMG
+ri_forward	model.h	/^	double ri_forward, ri_reverse; \/\/current responsibility$/;"	m	class:NOISE
+ri_forward	model.h	/^	double ri_forward, ri_reverse; \/\/current responsibility$/;"	m	class:UNI
+ri_reverse	model.h	/^	double ri_forward, ri_reverse; \/\/current responsibility$/;"	m	class:EMG
+ri_reverse	model.h	/^	double ri_forward, ri_reverse; \/\/current responsibility$/;"	m	class:NOISE
+ri_reverse	model.h	/^	double ri_forward, ri_reverse; \/\/current responsibility$/;"	m	class:UNI
+right	load.h	/^	node * right; \/\/ All intervals fully to the right of center$/;"	m	class:node
+right_SUM	model.h	/^	double left_SUM, right_SUM;$/;"	m	class:UNI
+run_bootstrap_across	bootstrap.cpp	/^void run_bootstrap_across(vector<segment *> segments, params * P, ofstream& log_file){$/;"	f
+run_global_template_matching	template_matching.cpp	/^double run_global_template_matching(vector<segment*> segments, $/;"	f
+run_model_across_free_mode	across_segments.cpp	/^vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<segment *> FSI, params * P, $/;"	f
+sample	bootstrap.cpp	/^int sample(double ** CDF, int XN, double sum_N, segment * NS, double pi , segment * S){$/;"	f
+sample_centers	template_matching.cpp	/^int sample_centers(vector<double> centers, double p){$/;"	f
+scale	model_single.h	/^	double scale;$/;"	m	class:classifier_single
+searchInterval	load.cpp	/^void node::searchInterval(int start, int stop, vector<int>& finds ){$/;"	f	class:node
+seed	model.h	/^	bool seed; \/\/seed with a gross peak finder$/;"	m	class:classifier
+segment	load.cpp	/^segment::segment(){$/;"	f	class:segment
+segment	load.cpp	/^segment::segment(string chr, int st, int sp){$/;"	f	class:segment
+segment	load.cpp	/^segment::segment(string chr, int st, int sp, int i){$/;"	f	class:segment
+segment	load.cpp	/^segment::segment(string chr, int st, int sp, int i, string STR){$/;"	f	class:segment
+segment	load.h	/^class segment{$/;"	c
+segment_fits	load.cpp	/^segment_fits::segment_fits(){$/;"	f	class:segment_fits
+segment_fits	load.cpp	/^segment_fits::segment_fits(string c, int st, int sp,$/;"	f	class:segment_fits
+segment_fits	load.h	/^class segment_fits{$/;"	c
+select	read_in_parameters.h	/^	bool select;$/;"	m	class:params
+select_main_H	select_main.h	2;"	d
+select_run	select_main.cpp	/^int select_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){$/;"	f
+send_out_parameters	MPI_comm.cpp	/^vector<double> MPI_comm::send_out_parameters(vector<double> parameters, int rank, int nprocs){$/;"	f	class:MPI_comm
+send_out_single_fit_assignments	MPI_comm.cpp	/^map<string, vector<segment *> > MPI_comm::send_out_single_fit_assignments(vector<segment *> FSI, int rank, int nprocs ){$/;"	f	class:MPI_comm
+set	FDR.cpp	/^void slice_ratio::set(double pval){$/;"	f	class:slice_ratio
+set_2	FDR.cpp	/^void slice_ratio::set_2(double pval){$/;"	f	class:slice_ratio
+set_new_parameters	model_single.cpp	/^void NLR::set_new_parameters(double N){$/;"	f	class:NLR
+set_priors	model.cpp	/^void component::set_priors(double s_0, double s_1, $/;"	f	class:component
+si	model.h	/^	double mu, si, l, pi, w;$/;"	m	class:EMG
+si	model_single.h	/^	double mu, si, l, pi, wn , wl, wr, fp;$/;"	m	class:NLR
+simple_c_free_mode	across_segments.cpp	/^simple_c_free_mode::simple_c_free_mode(){}$/;"	f	class:simple_c_free_mode
+simple_c_free_mode	across_segments.cpp	/^simple_c_free_mode::simple_c_free_mode(bool FOUND, double ll, $/;"	f	class:simple_c_free_mode
+simple_c_free_mode	across_segments.h	/^struct simple_c_free_mode{$/;"	s
+simple_seg_struct	MPI_comm.cpp	/^struct simple_seg_struct{$/;"	s	file:
+slice_ratio	FDR.cpp	/^slice_ratio::slice_ratio(){};$/;"	f	class:slice_ratio
+slice_ratio	FDR.cpp	/^slice_ratio::slice_ratio(double ST, double SP, int BINS){$/;"	f	class:slice_ratio
+slice_ratio	FDR.h	/^class slice_ratio{$/;"	c
+slice_segments	MPI_comm.cpp	/^vector<segment *> MPI_comm::slice_segments(vector<segment *> segments, int rank, int nprocs){$/;"	f	class:MPI_comm
+sort_bootstrap_parameters	bootstrap.cpp	/^vector<vector<double>> sort_bootstrap_parameters(vector<vector<double>> X){$/;"	f
+sort_components	model.cpp	/^void sort_components(component components[], int K){$/;"	f
+sort_mus	model.cpp	/^vector<vector<double>> sort_mus(vector<vector<double>> X){$/;"	f
+sort_vector	model.cpp	/^void sort_vector(double X[], int N){$/;"	f
+split_H	split.h	2;"	d
+split_by_bar	split.cpp	/^vector<string> split_by_bar(string line, string delim){$/;"	f
+split_by_colon	split.cpp	/^vector<string> split_by_colon(string line, string delim){$/;"	f
+split_by_comma	split.cpp	/^vector<string> split_by_comma(string line, string delim){$/;"	f
+split_by_dash	split.cpp	/^vector<string> split_by_dash(string line, string delim){$/;"	f
+split_by_tab	split.cpp	/^vector<string> split_by_tab(string line, string delim){$/;"	f
+split_config_line	read_in_parameters.cpp	/^void split_config_line(string line, string& param, string& value){$/;"	f
+splitter	split.cpp	/^vector<string> splitter(string ELE, string D){$/;"	f
+splitter2	split.cpp	/^vector<string> splitter2(string line, string delim){$/;"	f
+st	model.h	/^	int st;$/;"	m	class:UNI
+st_sp	MPI_comm.cpp	/^	int st_sp[4]; \/\/first->start, second->stop$/;"	m	struct:simple_seg_struct	file:
+start	FDR.h	/^  double start, stop ; \/\/these should be base ten$/;"	m	class:slice_ratio
+start	density_profiler.h	/^	double start, stop;$/;"	m	class:gap_interval
+start	load.h	/^	int start, stop, TSS;$/;"	m	class:segment_fits
+start	load.h	/^	int start, stop;  \/\/ genomic coordinates of start\/stop$/;"	m	class:segment
+start	load.h	/^	int start, stop;$/;"	m	class:node
+std	FDR.h	/^  double mean , std , w,c,threshold ;$/;"	m	class:slice_ratio
+std	FDR.h	/^  double mean, std, x,threshold, c2;$/;"	m	class:normal
+stop	FDR.h	/^  double start, stop ; \/\/these should be base ten$/;"	m	class:slice_ratio
+stop	density_profiler.h	/^	double start, stop;$/;"	m	class:gap_interval
+stop	load.h	/^	int start, stop, TSS;$/;"	m	class:segment_fits
+stop	load.h	/^	int start, stop;  \/\/ genomic coordinates of start\/stop$/;"	m	class:segment
+stop	load.h	/^	int start, stop;$/;"	m	class:node
+strand	MPI_comm.cpp	/^	char strand[2];$/;"	m	struct:simple_seg_struct	file:
+strand	load.h	/^	string strand; \/\/ strand information, unspecified = "."$/;"	m	class:segment
+string_split	split.cpp	/^vector<string> string_split(string s, const char delimiter)$/;"	f
+strip	split.cpp	/^string strip(string ELE, string D){$/;"	f
+subsample	bootstrap.cpp	/^void subsample(segment * S, segment * NS ){$/;"	f
+template_H	template_matching.h	2;"	d
+termination	model.h	/^	bool termination;$/;"	m	class:component
+threshold	FDR.h	/^  double mean , std , w,c,threshold ;$/;"	m	class:slice_ratio
+threshold	FDR.h	/^  double mean, std, x,threshold, c2;$/;"	m	class:normal
+transform_free_mode	across_segments.cpp	/^vector<simple_c_free_mode> transform_free_mode(bool FOUND, double ll, component * components, $/;"	f
+type	model.h	/^	bool type;$/;"	m	class:component
+type	model_single.h	/^	int K, type;$/;"	m	class:classifier_single
+update_j_k	model.cpp	/^void update_j_k( component * components,segment * data, int K, double N){$/;"	f
+update_l	model.cpp	/^void update_l(component * components, segment * data, int K){$/;"	f
+update_parameters	model.cpp	/^void component::update_parameters(double N, int K){$/;"	f	class:component
+validate_parameters	read_in_parameters.cpp	/^vector<string> params::validate_parameters(){$/;"	f	class:params
+variances	load.h	/^	map<int, vector<double> > variances;$/;"	m	class:segment
+w	FDR.h	/^  double mean , std , w,c,threshold ;$/;"	m	class:slice_ratio
+w	model.h	/^	double a, b, w, pi;$/;"	m	class:NOISE
+w	model.h	/^	double a,b,w,pi;$/;"	m	class:UNI
+w	model.h	/^	double mu, si, l, pi, w;$/;"	m	class:EMG
+w_thresh	model.h	/^	double w_thresh=0;$/;"	m	class:component
+wait_on_root	MPI_comm.cpp	/^void MPI_comm::wait_on_root(int rank, int nprocs){$/;"	f	class:MPI_comm
+wl	model_single.h	/^	double mu, si, l, pi, wn , wl, wr, fp;$/;"	m	class:NLR
+wn	model_single.h	/^	double mu, si, l, pi, wn , wl, wr, fp;$/;"	m	class:NLR
+wr	model_single.h	/^	double mu, si, l, pi, wn , wl, wr, fp;$/;"	m	class:NLR
+write	error_stdo_logging.cpp	/^void Log_File::write(string LINE, int verbose){$/;"	f	class:Log_File
+write	load.cpp	/^string segment_fits::write (){$/;"	f	class:segment_fits
+write_out	load.cpp	/^string segment::write_out(){$/;"	f	class:segment
+write_out_bidirectionals_ms_pen	load.cpp	/^void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params * P, int job_ID, int noise ){$/;"	f	class:load
+write_out_bidirs	load.cpp	/^void load::write_out_bidirs(map<string , vector<vector<double> > > G, string out_dir, $/;"	f	class:load
+write_out_models_from_free_mode	load.cpp	/^void load::write_out_models_from_free_mode(map<int, map<int, vector<simple_c_free_mode>  > > G, $/;"	f	class:load
+x	FDR.h	/^  double mean, std, x,threshold, c2;$/;"	m	class:normal

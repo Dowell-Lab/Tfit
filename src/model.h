@@ -43,6 +43,7 @@ public:
 	string print();
 };
 
+/***
 class NORMAL{
 public:
 	double mu,si,pi,w;
@@ -51,7 +52,7 @@ public:
 	NORMAL(double, double, double, double);
 	double pdf(double, int);
 };
-
+**/
 
 class NOISE{
 public:

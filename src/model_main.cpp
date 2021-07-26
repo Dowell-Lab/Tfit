@@ -3,7 +3,23 @@
 #include "density_profiler.h"
 #include "MPI_comm.h"
 #include <omp.h>
+
 using namespace std;
+
+/* Function: model_run 
+ *
+ * Purpose: Run the EM model on collection of regions
+ *
+ * Args:
+ *   P    parameters of current run
+ *   rank   MPI processor number
+ *   nprocs MPI total processes available
+ *   density      (when called by main, this is zero)
+ *   job_ID MPI job identifier
+ *   LG   a log file associated with this process
+ *
+ * Returns:	int
+ */
 int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_File * LG){
 	int verbose 	= stoi(P->p["-v"]);
 	LG->write("\ninitializing model module...............................done\n\n",verbose);
@@ -18,6 +34,7 @@ int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_
 	string interval_file 			= P->p["-k"];
 	string out_file_dir 			= P->p["-o"];
 	string spec_chrom 				= P->p["-chr"];
+
 	//=======================================================================================
 	//(1a) load intervals and keep track of their associated IDS
 	map<int, string> IDS;
@@ -36,7 +53,6 @@ int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_
 	map<string, vector<segment *> > GG 	= MPI_comm::send_out_single_fit_assignments(FSI, rank, nprocs);
 	LG->write("done\n",verbose);
 
-
 	//=======================================================================================
 	//(2a) load bedgraph files and insert them into intervals of interest (interval tree...)
 	LG->write("inserting bedgraph data.................................",verbose);
@@ -48,11 +64,11 @@ int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_
 	load::BIN(integrated_segments, stod(P->p["-br"]), stod(P->p["-ns"]),true);	
 	LG->write("done\n",verbose);
 
-
 	//=======================================================================================
 	//(3a) now run template matching for seeding the EM  
 	LG->write("running template matching...............................",verbose);
 	slice_ratio SC;
+  // WHY are these hard coded here?
 	SC.mean = 0.78, SC.std = 0.08; //this dependent on -w 0.9 !!!
 	SC.set_2(stod(P->p["-bct"]));
 	

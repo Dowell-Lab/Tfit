@@ -26,7 +26,9 @@ using namespace std;
 
 int main(int argc, char* argv[]){
   MPI::Init(argc, argv);
+  // the nprocs is the total number of processors available
   int nprocs		= MPI::COMM_WORLD.Get_size();
+  // The rank ranges from 0 to (nprocs-1) and is current process number
   int rank 		= MPI::COMM_WORLD.Get_rank();
   int threads  	= omp_get_max_threads();
 
@@ -44,15 +46,17 @@ int main(int argc, char* argv[]){
   
   int verbose 	= stoi(P->p["-v"]);
   Log_File * LG 	= new  Log_File(rank, job_ID, P->p["-N"], P->p["-log_out"]);
-  if (verbose and rank==0){
+  if (verbose > 0) { 
+     printf("This should be output when verbose is set!\n"); 
+   } 
+ if (verbose and rank==0){ 
     P->display(nprocs,threads);
     LG->write(P->get_header(1),0);
   }
   if (P->bidir){
     bidir_run(P, rank, nprocs, job_ID,LG);
-  }
-  else if (P->model){
-    model_run(P, rank, nprocs,0,job_ID,LG);
+  } else if (P->model){
+    model_run(P, rank, nprocs, 0, job_ID,LG);
   }else if (P->select){
     select_run(P, rank, nprocs, job_ID,LG);	
   }

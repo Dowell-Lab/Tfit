@@ -33,8 +33,6 @@ void compute_true_and_false_positive_rates(double penality, vector<segment_fits 
 }
 
 
-
-
 double ROC(vector<segment_fits *> noise_fits, vector<segment_fits *> query_fits, 
 	double& AUC , double& TP, double& FP, double& TP_at_fp, double& FP_at_tp, double& optimal_penality ){
 	double res 	= 500;

@@ -187,32 +187,32 @@ const std::string currentDateTime() {
     return buf;
 }
 void params::help(){
-	string header 	= "";
-	header+="--------------------------------------------------------------------------------------\n";
-	header+="                        transcriptional inference (tINF)                 \n";
-	printf("%s\n",header.c_str() );
+	printf("--------------------------------------------------------------------------------------\n");
+	printf("                        transcriptional inference (tINF)                 \n");
 	printf("                   ....description of application modules....             \n");
 	printf("                                  (critical)                            \n\n");
 	
-	printf("bidir     : must be provided immediately following the application call \"EMGU\"\n");
+	printf("bidir     : \n");
 	printf("              to scan for bidirectional signal across provided dataset, uses\n");
 	printf("              a poisson noise background model to assess enrichment and \n");
 	printf("              quick moment estimation to asses divergent transcription shape \n");
-	printf("model     : must be provided immediately following the application call \"EMGU\"\n");
+	printf("model     : \n");
 	printf("              to perform maximum likelihood or a-posteriori parameter inference\n");
 	printf("              recommended for accuracy; especially for point estimate on\n");
 	printf("              RNA polymerase II loading position needed for TF ID-ing \n");
-	printf("select    : must be provided immediately following the application call \"EMGU\"\n");
+	/*** 
+	printf("select    : \n");
 	printf("              model selection is performed via penalized bayesian information\n");
 	printf("              criteria. To set the penalty, we consider an ROC curve over signal\n");
 	printf("              with no moment estimate prediction (TN) and bidirectionals found near TSS (TP) \n");
+	**/
 	
 	printf("\n\n");
-	header="";
-	header+="                ....description of non-default parameters....          \n";
-	header+="                                 (critical)                             \n";
-	printf("%s\n",header.c_str() );
+	printf("");
+	printf("                ....description of non-default parameters....          \n");
+	printf("                                 (critical)                             \n");
 	printf("-N        : Name of Job; default is \"EMG\"\n");
+	printf("        *** Must provide one of the following: ***                  \n");
 	printf("-i        : /path/to/forward/strand/bedgraph/file\n");
 	printf("              this file should be bedgraph formatted\n");
 	printf("              chromosome[tab]start[tab]stop[tab]coverage[newline]\n");
@@ -225,9 +225,8 @@ void params::help(){
 	printf("              coverage < 0 is assumed to correspond to reverse strand\n");
 	printf("              coverage > 0 is assumed to correspond to forward strand\n");
 	
-	
 	printf("-k        : /path/to/interval/file\n");
-	printf("              this file should be formatted as a bed file\n");
+	printf("              this bed file is require for the model module\n");
 	printf("              chromosome[tab]start[tab]stop[newline]\n");
 	printf("              for each provided interval we will fit a mixture\n");
 	printf("              from -minK components to -maxK components\n");
@@ -245,7 +244,6 @@ void params::help(){
 	printf("                    ....description of default parameters....          \n");	
 	printf("                                (non-critical)                         \n");
 	printf("\n");
-
 
 	printf("-chr      : (chromosome ID; i.e. chr1) specific chromosome to run on (default is \"all\")\n");
 	printf("-merge    : (boolean integer) will merge overlaping intervals and run model on joint\n");
@@ -294,8 +292,7 @@ void params::help(){
 	printf("              flag = value [newline] syntax, parameters specified on the command line\n" );	                 
 	printf("              following the -config flag will override any parameters given in the config file\n" );	                 
 	
-	
-	printf("\nQuestions/Bugs? joseph[dot]azofeifa[at]colorado[dot]edu\n" );
+	printf("\nQuestions/Bugs? need_an_email_address_here!\n");
 		
 	printf("--------------------------------------------------------------------------------------------\n");
 
