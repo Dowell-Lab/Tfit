@@ -1,8 +1,0 @@
-In src/:
-
-mpirun -np 1 Tfit bidir -config ../config_files/config_file.txt -ij ../examples/test_ij_joint.BedGraph -N test -o ../temp
-
-Here:
-
-mpirun -np 1 ../src/Tfit bidir -config ../config_files/config_file.txt -ij ../../data/PRO-BSA-Eric-1.bedGraph_typical_region.bedGraph -N test -o .
-
