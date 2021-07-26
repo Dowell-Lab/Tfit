@@ -2,3 +2,5 @@
 *.o
 EMGU
 Tfit
+*.*~
+test
