@@ -25,9 +25,17 @@
 #include <math.h>   
 
 using namespace std;
-//========================================================================
-//The very very important segment class
 
+/* Constructors: segment 
+ *
+ * Author: Joey Azofeifa 
+ *
+ * Purpose: create/allocate instances of segment class
+ * The segment class contains both strands of data associated
+ * with a particular region.  
+ *
+ */
+// chrom, start, stop
 segment::segment(string chr, int st, int sp){
   chrom	= chr;
   start	= st;
@@ -40,41 +48,44 @@ segment::segment(string chr, int st, int sp){
   XN 		= 0;
   ID 		= 0;
   strand 	= ".";
-  chrom_ID= 0;
+  chrom_ID = 0;
   
 }
+// chrom, start, stop, ID
 segment::segment(string chr, int st, int sp, int i){
   chrom	= chr;
   start	= st;
   stop	= sp;
+  ID 		= i;
   fN 		= 0;
   rN 		= 0;
   N 		= 0;
   minX=st, maxX=sp;
   counts 	= 1;
   XN 		= 0;
-  ID 		= i;
   strand 	= ".";
   chrom_ID= 0;
   
 }
-
+// chrom, start, stop, ID, strand
 segment::segment(string chr, int st, int sp, int i, string STR){
   chrom	= chr;
   start	= st;
   stop	= sp;
+  ID 		= i;
+  strand 	= STR;
+
   N 		= 0;
   fN 		= 0;
   rN 		= 0;
   minX=st, maxX=sp;
   counts 	= 1;
   XN 		= 0;
-  ID 		= i;
-  strand 	= STR;
-  chrom_ID= 0;
+  chrom_ID = 0;
   
 }
 
+// empty -- sets defaults
 segment::segment(){
   N 		= 0;
   fN 		= 0;
@@ -83,16 +94,35 @@ segment::segment(){
   XN 		= 0;
   ID 		= 0;
   strand 	= ".";
-  chrom_ID= 0;
+  chrom_ID = 0;
+  chrom = "";
 }
 
+/* Class Function: segment::write_out() 
+ *
+ * Purpose: Write the contents of a segment.
+ * This is primarily used for debugging (currently unused).
+ *
+ * Returns: a string (single line) for output	
+ */
 string segment::write_out(){
-  string text 	= ("#" + chrom + ":" + to_string(start) + "-" 
-			   + to_string(stop) + "," + to_string(int(N))+ "\n");
-  return text;
+        string  text= ("#" + chrom + ":" + to_string(start) + "-" 
+		+ to_string(stop) + "," + to_string(int(N))+ "\n");
+	return text;
 }
 
-
+/* Class Function: segment::add2 
+ *
+ * Purpose: given a single data point (strand, coord, value), 
+ * build up the segment contents.
+ *
+ * Args:
+ *    strand (1 == forward; -1 == reverse)
+ *    x   coordinate 
+ *    y   value (read depth assumed)
+ *
+ * Returns:	-- void -- 
+ */
 void segment::add2(int strand, double x, double y){
   vector<double> v2(2);
   v2[0] 	= x;
@@ -110,6 +140,7 @@ void segment::add2(int strand, double x, double y){
       stop=int(x);
     }
   }
+  // [ x y ] where x is the coordinate and y is the value (depth)
   if (strand == 1){
     forward.push_back(v2);
   }else if (strand==-1){
@@ -118,37 +149,62 @@ void segment::add2(int strand, double x, double y){
 }
 
 
-
+/* Class Function: segment::bin
+ *
+ * Purpose: For a segment of data (stored in the class as 
+ * forward and reverse), scale and bin the data into the X 
+ * vector. 
+ *
+ * Args:
+ *    delta 	binning denominator (nts per bin)
+ *    scale	coordinat scaling constant (sets SCALE)
+ *    erase	whether to remove bins with both strands zero counts
+ *
+ * Returns:	-- void -- 
+ */
 void segment::bin(double delta, double scale, bool erase){
+
+  bool debug = false;
+
+  // X is a 3 x XN 2D array of doubles
+  // X[0] is scaled coordinate
+  // X[1] is sum of forward values over bin width (delta)
+  // X[2] is sum of reverse values over bin width (delta)
   X 				= new double*[3];
   SCALE 			= scale;
+
   int BINS;
   BINS 		= (maxX-minX)/delta;
-  start = minX, stop=maxX;
+  start = minX, stop=maxX;	// Why are we keeping these distinctly?
+
   for (int j = 0 ; j < 3;j++){
     X[j] 		= new double[BINS];
   }
   N 				= 0;
   fN = 0, rN = 0;
-  XN 				= BINS;
+  XN 				= BINS;  // will adjust if erase
+
   //===================
   //populate bin ranges
   X[0][0] 		= double(minX);
   X[1][0]=0,X[2][0]=0;
 	
-  
-  
-  
   for (int i = 1; i < BINS; i++){
     X[0][i] 	= X[0][i-1] + delta;
     X[1][i] 	= 0;
     X[2][i] 	= 0;
   }
+
+  if (debug) {
+	  printf("start: %d , stop: %d , bins: %d ,delta: %f, forward: %d, reverse: %d\n", 
+			  start, stop, BINS, delta, forward.size(), reverse.size() );
+  }
+
   // ===================
-  //insert forward strand
+  //BIN forward strand
   int j 	=0;
-  //printf("start: %d , stop: %d , bins: %d ,delta: %f, forward: %d, reverse: %d\n", start, stop, BINS, delta, forward.size(), reverse.size() );
   for (int i = 0 ; i < forward.size(); i++){
+	  // RDD: To me this seems klunky.  Why do it this way?
     while (j < BINS and X[0][j] <=forward[i][0]){
       j++;
     }
@@ -158,10 +214,11 @@ void segment::bin(double delta, double scale, bool erase){
       fN+=forward[i][1];
     }
   }
+
+  //BIN reverse strand
   j 	=0;
-  //===================
-  //insert reverse strand
   for (int i = 0 ; i < reverse.size(); i++){
+	  // RDD: To me this seems klunky.  Why do it this way?
     while (j < BINS and X[0][j] <=reverse[i][0]){
       j++;
     }
@@ -171,8 +228,10 @@ void segment::bin(double delta, double scale, bool erase){
       rN+=reverse[i][1];
     }
   }
+
   //===================
   //scale data down for numerical stability
+  // Moves from genomic coordinates to scaled 0 start coordinates
   if (scale){
     for (int i = 0; i < BINS; i ++ ){
       
@@ -181,17 +240,18 @@ void segment::bin(double delta, double scale, bool erase){
       // X[2][i]/=delta;
     }
   }
-  //we also want to get rid of those data points that we don't need
+  //JA: we also want to get rid of those data points that we don't need
   //i.e. the ones where there is no data coverage values on either the 
   //forward or reverse strands
-  
-  int realN 		= 0;
+  // RDD: WHY???
+  int realN 		= 0;	// number of non-zero bins
   for (int i = 0; i < BINS;i++){
     if (X[1][i]>0 or X[2][i]>0){
       realN++;
     }
   }
-  if (erase){
+
+  if (erase){  // going to remove the zero bins
     double ** newX 	= new double*[3];
     for (int j=0; j<3;j++){
       newX[j] 	= new double[realN];
@@ -216,20 +276,24 @@ void segment::bin(double delta, double scale, bool erase){
     X 				= newX;
     XN 				= realN;
   }
+
+  // Scaling centers and fitted bidirectionals
+  // Q1: Why not make a single scaling -- whereas here we scaled 
+  // 	data above and here are scaling these centers/bidir components?
+  //
   if (scale){
     if (not centers.empty()){
       for (int i = 0; i < centers.size(); i++){
 	centers[i]=(centers[i]-minX)/scale;			
       }
     }
-    if (not fitted_bidirs.empty() ){
+    if (not fitted_bidirs.empty() ){		// need to understand contents of fitted_bidirs
       for (int fb = 0; fb < fitted_bidirs.size(); fb++){
 	int center 	= fitted_bidirs[fb][0];
 	int std 	= fitted_bidirs[fb][1]*0.5 + (1. /  fitted_bidirs[fb][2]);
+		// 1/2* fb[1] + 1/fb[2]], but what are the 1st and 2nd elements?
 	int a 		= center - std*3;
 	int b 		= center + std*3;
-	
-	
 	
 	fitted_bidirs[fb][0] = (fitted_bidirs[fb][0] - minX)/scale;
 	fitted_bidirs[fb][1] /= scale;
@@ -244,31 +308,50 @@ void segment::bin(double delta, double scale, bool erase){
   for (int i = 0; i < XN; i++){
     S+=X[1][i];
   }
+  // Why do we throw away the raw data?
   forward.clear();
   reverse.clear();
 }
 
 //================================================================================================
-//interval tree code
+/* Constructors: node  (Within the interval tree) 
+ *
+ * Author: Joey Azofeifa 
+ *
+ * Purpose: We're going to keep an interval tree for rapid searching for
+ * particular genomics coordinates.
+ */
 
+// Empty constructor
 node::node(){};
 
+/* Constructor from set of segments. 
+ *
+ * Given a set of n intervals on the number line, we want to construct a data structure 
+ * so that we can efficiently retrieve all intervals overlapping another interval or point.
+ *
+ * Assumes:  segments is a sorted list of intervals (first has smallest start; last largest stop)
+ */
 node::node(vector<segment * > segments ){
+  // Initialize the node
+	// I believe this center assumes the segments are sorted.
   center 	= (double(segments[0]->start)  + double(segments[segments.size()-1]->stop)) / 2.;
+  left=NULL, right=NULL;
+
+  // Will be building sets of segments to left vs right
   vector<segment * > Left;
   vector<segment * > Right;
-  left=NULL, right=NULL;
+
   for (int i = 0 ; i < segments.size(); i++){
-    if (segments[i]->stop < center){
+    if (segments[i]->stop < center){ //all intervals completely to the left of the center point
       Left.push_back(segments[i]);
-    }
-    else if (segments[i]->start > center){
+    } else if (segments[i]->start > center){ // all intervals completely to the right of the center point
       Right.push_back(segments[i]);
-    }
-    else{
+    } else{	// all intervals overlapping the center point
       current.push_back(segments[i]);
     }
   }
+  // Now recursively build the left and right regions:
   if (Left.size() > 0){
     left 	= new node(Left);
 	}
@@ -276,6 +359,21 @@ node::node(vector<segment * > segments ){
     right 	= new node(Right);
   }
 }
+
+/* Class Function: node::insert_coverage
+ *
+ * Purpose: Add a data point (coordinate, value) to all of
+ * the nodes that include this point in the interval tree 
+ *
+ * Appears to assume that you will always be adding data point to
+ * the end of the forward/reverse indexed data points (sorted calls?)
+ *
+ * Args:
+ *    x		a 2D vector [x y] where x is coordinate and y is value
+ *    s		strand (1 is forward; -1 is reverse)
+ *
+ * Returns:	-- void -- 
+ */
 void node::insert_coverage(vector<double> x, int s){
   for (int i = 0 ; i < current.size(); i++){
     if (x[0] > current[i]->start and  x[0] < current[i]->stop  ){
@@ -286,7 +384,8 @@ void node::insert_coverage(vector<double> x, int s){
       }
     }
   }	
-  
+ 
+  // Recursively add point to all relevant intervals.
   if (x[0] >= center and right != NULL ){
     right->insert_coverage(x, s);
   }
@@ -294,6 +393,9 @@ void node::insert_coverage(vector<double> x, int s){
     left->insert_coverage(x,  s);
   }
 }
+
+// Effectively counts the number of intervals ("finds") that 
+// contain another interval (start stop)
 void node::searchInterval(int start, int stop, vector<int>& finds ){
   for (int i = 0 ; i < current.size(); i++){
     if (stop > current[i]->start and  start < current[i]->stop  ){
@@ -308,6 +410,7 @@ void node::searchInterval(int start, int stop, vector<int>& finds ){
   }	
 }
 
+// Collects all segments associated with a node
 void node::retrieve_nodes(vector<segment*> & saves){
   for (int i = 0; i < current.size(); i++){
     saves.push_back(current[i]);
@@ -428,115 +531,162 @@ bool check_ID_name(string & INFO){
 }
 
 //================================================================================================
-//LOADING from file functions...need to clean this up...
+/* Function: load_bedgraphs_total
+ *
+ * Purpose: Parses a bedgraph into a collection of segments, populates information on
+ * chromosomes seen within the bedgraph file, and does the data scaling and smoothing.
+ *
+ * Args:
+ *  forward_strand  Filename of forward strand data 
+ *  reverse_strand  Filename of reverse strand data
+ *  joint_bedgraph  Filename of joint data (ij)
+ *  BINS			how many bases per smoothing -- for bin() function
+ *  scale		    what is the scaling constant 
+ *  spec_chrom		a specified chromosome name, can be "all"
+ *  chromosomes		maps chromsome name to ?? (counter?)
+ *  ID_to_chrom     maps index number to chromosome name
+ *
+ * Assumptions:
+ *    Assumes either joint_bedgraph or (forward_strand reverse_strand) are specified (e.g. not empty)
+ *    Has a very hard coded 6 character limit on chromsome name (WHY????)
+ *
+ * Returns: a vector of segments, 
+ */
+vector<segment*> load::load_bedgraphs_total(string forward_strand, string reverse_strand, 
+		string joint_bedgraph, int BINS, double scale, string spec_chrom, 
+		map<string, int>& chromosomes, map<int, string>& ID_to_chrom){
 
-
-vector<segment*> load::load_bedgraphs_total(string forward_strand, 
-					    string reverse_strand, string joint_bedgraph, int BINS, double scale, string spec_chrom, map<string, int>& chromosomes
-					    , map<int, string>& ID_to_chrom){
   bool FOUND 	= false;
-  if (spec_chrom=="all"){
-		FOUND 	= true;
-  }
-  map<string, segment*> 	G;
-  vector<segment*> segments;
-  vector<string> FILES;
-  if (forward_strand.empty() and reverse_strand.empty()){
-    FILES 	= {joint_bedgraph};
-  }else if (not forward_strand.empty() and not reverse_strand.empty()){
-    FILES 	= {forward_strand, reverse_strand};
-  }
-  
+  if (spec_chrom=="all"){ FOUND = true; }
+  bool EXIT = false;   // Indicator for loop management
+
+  vector<string> FILES;	// Keep file names
+  int line_number = 0;
+  vector<string> lineArray; // Contents of file, split on tab (\t) 
   string line, chrom;
   int start, stop;
   double coverage;
-  vector<string> lineArray;
+
   segment * S =NULL;
-  bool EXIT 		= false;
-  int line_number = 0;
-  for (int u = 0 ; u < FILES.size(); u++){
-    bool INSERT     = false;	  
-    string prevChrom="";
-    ifstream FH(FILES[u]) ;
-    if (not FH ){
-      printf("couln't open FILE %s\n", FILES[u].c_str());
-    }
-    if (EXIT){
-      break;
-    }
-    while (getline(FH, line)){
-      //lineArray=splitter(line, "\t");
-      lineArray=string_split(line, '\t');
-      if (lineArray.size()!=4){
-	EXIT 	= true;
-	printf("\nLine number %d  in file %s was not formatted properly\nPlease see manual\n",line_number, FILES[u].c_str() );
-	break;
-      }
-      line_number++;
-      chrom=lineArray[0], start=stoi(lineArray[1]), stop=stoi(lineArray[2]), coverage=(stof(lineArray[3]));
-      if (chrom != prevChrom and (chrom==spec_chrom or spec_chrom=="all")  )  {
-	FOUND 		= true;
-	if (chrom.size()<6){
-	  INSERT          = true;
-	  FOUND           = true;
-	}
-	if (chrom.size() < 6 and u==0){
-	  G[chrom] 	= new segment(chrom, start, stop );
-	  INSERT 		= true;
-	  FOUND 		= true;
-	}else if(chrom.size() > 6){
-	  INSERT 		= false;
-	}
-      }
-      if (FOUND and chrom!= spec_chrom and spec_chrom!= "all"){
-	break;
-      }
-      if (INSERT){
-	if (u==0){
-	  if (coverage > 0){
-	    for (int xx = start; xx < stop; xx++){
-	      G[chrom]->add2(1, double(xx), abs(coverage));
-	    }
-	  }else{
-	    for (int xx = start; xx < stop; xx++){
-	      G[chrom]->add2(-1, xx, abs(coverage));						
-	    }
-	  }
-	}else{
-	  for (int xx = start; xx < stop; xx++){
-	    G[chrom]->add2(-1, xx, abs(coverage));	
-	  }
-	}
-      }
-      prevChrom=chrom;
-      
-    }
+  map<string, segment*> G;  // Data associated with a chrom name
+  vector<segment*> segments;	// returned variable
+ 
+  if (forward_strand.empty() and reverse_strand.empty()){
+    FILES 	= {joint_bedgraph};  // A single (ij) bedgraph with both strand info
+  }else if (not forward_strand.empty() and not reverse_strand.empty()){
+    FILES 	= {forward_strand, reverse_strand};  // Distinct files per strand
   }
-  if (not EXIT){
-    int c =1;
-    typedef map<string, segment*>::iterator it_type;
-    for (it_type i = G.begin(); i != G.end(); i++){
-      i->second->bin(BINS, scale,false);
-      if (chromosomes.find(i->second->chrom)==chromosomes.end()){
-	chromosomes[i->second->chrom]=c;
-	ID_to_chrom[c] 	= i->second->chrom;
-	c++;
-      }
-      segments.push_back(i->second);
-    }
+  
+  for (int u = 0 ; u < FILES.size(); u++){
+	  bool INSERT     = false;	  
+	  string prevChrom="";	// What chrom was on the previous line?
+	  ifstream FH(FILES[u]) ;
+	  if (not FH){ printf("couln't open FILE %s\n", FILES[u].c_str()); }
+	  if (EXIT){ break; }
+
+	  // For every line in this file...
+	  while (getline(FH, line)){
+		  lineArray=string_split(line, '\t');
+		  // Have a hard requirement for a four column bed input
+		  if (lineArray.size()!=4){
+			  EXIT 	= true;
+			  printf("\nLine number %d  in file %s was not formatted properly\nPlease see manual\n",line_number, FILES[u].c_str() );
+			  break;
+		  }
+		  line_number++;
+	      // Expects: chrom_name \t start \t stop \t coverage \n
+		  chrom=lineArray[0], start=stoi(lineArray[1]), stop=stoi(lineArray[2]), coverage=(stof(lineArray[3]));
+
+		  if (chrom != prevChrom and (chrom==spec_chrom or spec_chrom=="all")  )  {
+			  FOUND 		= true;
+			  // Why are we restricting chromosome sizes to 6 characters??
+			  if (chrom.size()<6){
+				  INSERT          = true;
+				  FOUND           = true;
+			  }
+			  if (chrom.size() < 6 and u==0){
+				  G[chrom] 	= new segment(chrom, start, stop);
+				  INSERT 		= true;
+				  FOUND 		= true;
+			  } else if(chrom.size() > 6){
+				  INSERT 		= false;
+			  }
+		  }
+		  if (FOUND and chrom!= spec_chrom and spec_chrom!= "all"){
+			  break;
+		  }
+		  if (INSERT){
+			  if (u==0){ // When u=0 we are either an ij file or positive strand
+				  //If an ij file, then coverage sign indicates strand
+				  if (coverage > 0) {  
+					  for (int xx = start; xx < stop; xx++){
+						  G[chrom]->add2(1, double(xx), abs(coverage));
+					  }
+				  } else {
+					  // so zero coverage is always neg strand?!?
+					  // What happens if give positive file with zeros!!!?!
+					  for (int xx = start; xx < stop; xx++){
+						  G[chrom]->add2(-1, xx, abs(coverage));						
+					  }
+				  }
+			  } else {  // If more than one input file, subsequent is neg strand
+				  for (int xx = start; xx < stop; xx++){
+					  G[chrom]->add2(-1, xx, abs(coverage));	
+				  }
+			  }
+		  }
+		  prevChrom=chrom;
+
+	  }
+  }
+  if (not EXIT) { // EXIT only true if not right format file
+	  int c = 1;
+	  typedef map<string, segment*>::iterator it_type;
+
+      // For each chromosome in G (each has a single segment?) 
+	  for (it_type i = G.begin(); i != G.end(); i++){
+		  i->second->bin(BINS, scale, false);	// Scale and smooth data
+		  // Building the naming cross referencing: chromosomes, ID_to_chrom
+		  if (chromosomes.find(i->second->chrom)==chromosomes.end()){
+			  chromosomes[i->second->chrom]=c;
+			  ID_to_chrom[c] 	= i->second->chrom;
+			  c++;
+		  }
+	      // Puts this segment into the return collection
+		  segments.push_back(i->second);
+	  }
   }
   if (not FOUND){
-    segments.clear();
-    printf("couldn't find chromosome %s in bedgraph files\n", spec_chrom.c_str());
+	  segments.clear();
+	  printf("couldn't find chromosome %s in bedgraph files\n", spec_chrom.c_str());
   }
   return segments;
 }
+
+/* Function: load_intervals_of_interest
+ *
+ * Purpose: 
+ *
+ * Args:
+ *  FILE	name of bedfile containing intervals (example: singleregion.bed)
+ *  IDS
+ *  P		parameters for this run
+ *  center    (initial call in model_run is 0)
+ *
+ * Assumptions:
+ *
+ * Returns: a vector of segments, note these segments are just regions
+ * (bedgraph input) -- and have no data associated with them.
+ */
 vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&  IDS, 
 						  params * P, bool center){
+  bool debug = false;    // a debugging indicator
   ifstream FH(FILE);
-  
+ 
   string spec_chrom 	= P->p["-chr"];
   int pad 	        = stoi(P->p["-pad"])+1;
+
+  // if (debug) { printf("\n  spec_chrom: %s, pad: %d\n", spec_chrom.c_str(), pad);}
   
   vector<segment *> G;
   int ct 	= 1;
@@ -544,6 +694,7 @@ vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&
   map<int, string> IDS_first;
   int T 	= 0;
   bool EXIT 		= false;
+
   if (FH){
     string line, chrom;
     int start, stop;
@@ -552,62 +703,73 @@ vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&
     string strand; 
     bool PASSED 	= true;
 
+    // Reading input file line by line
     while(getline(FH, line)){
-      //lineArray=splitter(line, "\t");
-      lineArray=string_split(line, '\t');
+      // if (debug) { printf("  %s\n", line.c_str()); }
+      lineArray=string_split(line, '\t');  // separate on tab
+      // Ignore commented lines (start with #) and require at least 3 columns
       if (lineArray[0].substr(0,1)!="#" and lineArray.size()>2){
-	if (lineArray.size() > 3){
-	  if (not check_ID_name(lineArray[3]) and PASSED ){
-	    PASSED 			= false;
-	    printf("\ninterval id in line: %s, contains a | symbol changing to :: -> %s\n",line.c_str(), lineArray[3].c_str() );
-	    printf("Will continue to change other occurrences....\n");
-	    
-	  }
-	  IDS_first[i] 		= lineArray[3];
-	}else{
-	  IDS_first[i] 		= "Entry_" + to_string(i+1);	
-	}
-	if (lineArray.size() > 4){
-	  strand 		= lineArray[4];
-	}else{
-	  strand 		= ".";
-	}
-	try{
-	  if (not center){
-	    chrom=lineArray[0], start=max(stoi(lineArray[1])-pad, 0), stop=stoi(lineArray[2]) + pad;
-	  }else{
-	    int x 	= 	((stoi(lineArray[1]) + stoi(lineArray[2])))/2.;
-	    start 		= max(x - pad, 0) , stop 	= x + pad;
-	    chrom=lineArray[0];
-	  }
-	}
-	catch(exception& e){
-	  printf("\n\nIssue with file %s at line %d\nPlease consult manual on file format\n\n",FILE.c_str(), i );
-	  EXIT=true;
-	  GS.clear();
-	  break;
-	}
-	if (start < stop){
-	  if (spec_chrom=="all" or spec_chrom==chrom){	    
-	    segment * S 	= new segment(chrom, start, stop,i,strand);
-	    GS[S->chrom].push_back(S);
-	  }
-	  i++;
-	}
+        if (lineArray.size() > 3){
+          // Expects an identifier in column 4
+          if (not check_ID_name(lineArray[3]) and PASSED ){
+            PASSED 			= false;
+            printf("\ninterval id in line: %s, contains a | symbol changing to :: -> %s\n",line.c_str(), 
+                lineArray[3].c_str() );
+            printf("Will continue to change other occurrences....\n");
+
+          }
+          IDS_first[i] 		= lineArray[3]; // identifier for segment
+        }else{
+          IDS_first[i] 		= "Entry_" + to_string(i+1);	// Provides identifier if not given
+        }
+
+        /* This is a BUG?  It expects column 5 to be strand, but in Joey's own 
+         * pre-filter, column 5 is a bunch of stuff (example: -1.486119,22599,7353)
+         * and it appears as though this gets passed through!  So how is this used (or 
+         * is it?
+         */
+        if (lineArray.size() > 4){
+          // if (debug) { printf("  %s\n", lineArray[4].c_str()); } 
+          strand 		= lineArray[4];
+        }else{
+          strand 		= ".";
+        }
+        try{
+          if (not center){
+            chrom=lineArray[0], start=max(stoi(lineArray[1])-pad, 0), stop=stoi(lineArray[2]) + pad;
+          }else{
+            int x 	= 	((stoi(lineArray[1]) + stoi(lineArray[2])))/2.;
+            start 		= max(x - pad, 0) , stop 	= x + pad;
+            chrom=lineArray[0];
+          }
+        }
+        catch(exception& e){
+          printf("\n\nIssue with file %s at line %d\nPlease consult manual on file format\n\n",FILE.c_str(), i );
+          EXIT=true;
+          GS.clear();
+          break;
+        }
+        if (start < stop){
+          if (spec_chrom=="all" or spec_chrom==chrom){	    
+            segment * S 	= new segment(chrom, start, stop,i,strand);
+            GS[S->chrom].push_back(S);
+          }
+          i++;
+        }
       }
     }
   }else{
     printf("couldn't open %s for reading\n", FILE.c_str() );
     EXIT 	= true;
   }
-  if (not EXIT){
+  if (not EXIT){ 
     typedef map<string, vector<segment * > >::iterator it_type;
     IDS 	= IDS_first;
     for (it_type c 	= GS.begin(); c!=GS.end(); c++){
       vector<segment *> m_segs;
       m_segs 	= c->second;
       for (int i = 0 ; i < m_segs.size(); i++){
-	G.push_back(m_segs[i]);
+        G.push_back(m_segs[i]);
       }
     }
   }else{
@@ -616,13 +778,29 @@ vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&
   return G;
 }
 
+/* Function: insert_bedgraph_to_segment_joint
+ *
+ * Purpose: 
+ *
+ * Args:
+ *  A        mapping of chrom name to segment array
+ *  forward     Filename of forward strand data 
+ *  reverse     Filename of reverse strand data
+ *  joint     Filename of joint data (ij)
+ *  rank    MPI process number
+ *
+ * Assumptions:
+ *
+ * Returns: a vector of segments, 
+ */
 vector<segment* > load::insert_bedgraph_to_segment_joint(map<string, vector<segment *> > A , 
-	string forward, string reverse, string joint, int rank ){
-	
-	
-	
+    string forward, string reverse, string joint, int rank ){
+
+  bool debug = true;
   map<string, node> NT;
   typedef map<string, vector<segment *> >::iterator it_type_5;
+
+  // Create an interval tree from the existing intervals
   for(it_type_5 c = A.begin(); c != A.end(); c++) {
     NT[c->first] 	= node(c->second);
   }
@@ -636,6 +814,7 @@ vector<segment* > load::insert_bedgraph_to_segment_joint(map<string, vector<segm
   vector<segment *> segments;
   double center;
   vector<string> FILES;
+
   if (forward.empty() and reverse.empty()){
     FILES 	= {joint};
   }else if (not forward.empty() and not reverse.empty()) {
@@ -648,34 +827,31 @@ vector<segment* > load::insert_bedgraph_to_segment_joint(map<string, vector<segm
     if (FH){
       prevchrom="";
       while (getline(FH, line)){
-	//lineArray 	= splitter2(line, "\t");
-	lineArray       = string_split(line, '\t');
-	if (lineArray.size()==4){
-	  chrom 		= lineArray[0];
-	  start=stoi(lineArray[1]),stop=stoi(lineArray[2]), coverage = stod(lineArray[3]);
-	  if (coverage > 0 and i == 0){
-	    strand 	= 1;
-	  }else if (coverage < 0 or i==1){
-	    strand 	= -1;
-	  }
-	  center 	= (stop + start) /2.;
-	  if (NT.find(chrom)!=NT.end()){
-	    for (int center_2=start; center_2 < stop; center_2++){
-	      vector<double> x(2);
-	      x[0]=double(center_2), x[1] = abs(coverage);
-	      NT[chrom].insert_coverage(x, strand);
-	    }
-	    
-	  }
-	}
-	else{
-	  printf("\n***error in line: %s, not bedgraph formatted\n", line.c_str() );
-	  segments.clear();
-	  return segments;
-	}
+        lineArray       = string_split(line, '\t');
+        if (lineArray.size()==4){
+          chrom 		= lineArray[0];
+          start=stoi(lineArray[1]),stop=stoi(lineArray[2]), coverage = stod(lineArray[3]);
+          if (coverage > 0 and i == 0){
+            strand 	= 1;
+          }else if (coverage < 0 or i==1){
+            strand 	= -1;
+          }
+          center 	= (stop + start) /2.;
+          if (NT.find(chrom)!=NT.end()){
+            for (int center_2=start; center_2 < stop; center_2++){
+              vector<double> x(2);
+              x[0]=double(center_2), x[1] = abs(coverage);
+              NT[chrom].insert_coverage(x, strand);
+            }
+
+          }
+        } else { 
+          printf("\n***error in line: %s, not bedgraph formatted\n", line.c_str() );
+          segments.clear();
+          return segments;
+        }
       }
       FH.close();
-      
     }else{
       cout<<"could not open forward bedgraph file: "<<FILE<<endl;
       segments.clear();
@@ -688,9 +864,22 @@ vector<segment* > load::insert_bedgraph_to_segment_joint(map<string, vector<segm
   for (it_type_6 c = NT.begin(); c!=NT.end(); c++){
     c->second.retrieve_nodes(NS);
   }
-  
+
   return NS;
 }
+
+
+/* Function: load_K_models_out
+ *
+ * Purpose: 
+ *
+ * Args:
+ *  FILE 
+ *
+ * Assumptions:
+ *
+ * Returns: a vector of segments, 
+ */
 vector<segment_fits *> load::load_K_models_out(string FILE){
   ifstream FH(FILE);
   string line;
@@ -743,10 +932,7 @@ vector<segment_fits *> load::load_K_models_out(string FILE){
   return segment_fits_all;
 }
 
-
 //================================================================================================
-//WRITE out to file functions
-
 vector<vector<double>> bubble_sort_alg(vector<vector<double>> X){
 	bool changed 	= true;
 	while (changed){
@@ -762,7 +948,6 @@ vector<vector<double>> bubble_sort_alg(vector<vector<double>> X){
 	}
 	return X;
 }
-
 
 void load::write_out_bidirs(map<string , vector<vector<double> > > G, string out_dir, 
 			    string job_name,int job_ID, params * P, int noise){
@@ -882,6 +1067,7 @@ void load::write_out_models_from_free_mode(map<int, map<int, vector<simple_c_fre
 	}
 	FHW.flush();
 }
+
 void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params * P, int job_ID, int noise ){
 	ofstream FHW;
 	FHW.open(P->p["-o"]+  P->p["-N"] + "-" + to_string(job_ID)+  "_bidir_predictions.bed");	
@@ -895,7 +1081,7 @@ void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params * 
 }
 
 //================================================================================================
-//misc.
+//
 void load::BIN(vector<segment*> segments, int BINS, double scale, bool erase){
 	for (int i = 0 ; i < segments.size() ; i ++){
 		if (segments[i]->forward.size() > 0 or segments[i]->reverse.size() > 0 ){
@@ -936,6 +1122,7 @@ void load::collect_all_tmp_files(string dir, string job_name, int nprocs, int jo
 		}
 	}
 }
+
 void load::clear_segments(vector<segment *> segments){
 	for (int i = 0; i < segments.size(); i++){
 		if (segments[i]!=NULL){
@@ -943,6 +1130,7 @@ void load::clear_segments(vector<segment *> segments){
 		}
 	}
 }
+
 vector<segment_fits *> load::label_tss(string tss_file, vector<segment_fits *> query_fits ){
 	vector<segment_fits *> new_fits;
 	ifstream FH(tss_file);
@@ -981,19 +1169,5 @@ vector<segment_fits *> load::label_tss(string tss_file, vector<segment_fits *> q
 	}
 	return new_fits;	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
