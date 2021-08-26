@@ -522,19 +522,9 @@ void component::update_parameters(double N, int K){
 		
 		bidir.si 	= pow(abs((1. /(r + 3 + ALPHA_0 ))*(bidir.ex2-2*bidir.mu*bidir.ex + 
 			r*pow(bidir.mu,2) + 2*BETA_0  )), 0.5) ;
-		// if (bidir.si > 50){
-		// 	EXIT 	= true;
-		// 	bidir.w = 0;
-		// }
-		if ((r / N) < pow(10,-5) ){
-			EXIT 	= true;
-		}
+		if ((r / N) < pow(10,-5) ){ EXIT 	= true; }
 		bidir.l 	= min((r+ALPHA_1) / (bidir.ey + BETA_1), 5.);
 		bidir.l 	= max(bidir.l, 0.05);
-		// if (bidir.l < 0.05  ){
-		// 	EXIT 	= true;
-		// 	bidir.w = 0;
-		// }
 		if (abs(bidir.mu-bidir.prev_mu)< 0.01 ){
 			bidir.move_fp 	= true;
 		}
@@ -544,7 +534,6 @@ void component::update_parameters(double N, int K){
 		if (bidir.move_fp){
 
 			bidir.foot_print 	= min( max(bidir.C / (r+0.1),0.0) , 2.5);
-		//	bidir.foot_print 	= floor((bidir.foot_print*10000.0))/10000.0;
 		}
 		//bidir.foot_print 	= 0.0;
 		//now for the forward and reverse strand elongation components
