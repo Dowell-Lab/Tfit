@@ -672,7 +672,8 @@ classifier::classifier(){};
 int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 	 int elon_move ){
 
-	// printf("topology: %d elon_move %d K %d \n", topology, elon_move, K);
+	//printf("topology: %d elon_move %d K %d \n", topology, elon_move, K);
+	//  printf("K %d \n", K);
 	//=========================================================================
 	//compute just a uniform model...no need for the EM
 	if (K == 0){
@@ -694,6 +695,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 			}
 		}
 		components 	= new component[1];
+	  printf("\t l: %9.6f pos: %9.6f neg: %9.6f pi: %9.6f ll: %9.6f \n", l, pos, neg, pi, ll);
 		return 1;
 	}
 	random_device rd;
