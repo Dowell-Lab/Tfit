@@ -191,6 +191,7 @@ void params::help(){
 	printf("                        transcriptional inference (tINF)                 \n");
 	printf("                   ....description of application modules....             \n");
 	printf("                                  (critical)                            \n\n");
+	printf("                                (version 1.0)                            \n\n");
 	
 	printf("bidir     : \n");
 	printf("              to scan for bidirectional signal across provided dataset, uses\n");
@@ -489,7 +490,13 @@ void fill_in_options(char* argv[],params * P, int rank){
 				P->help();
 				break;
 			}
+			if (F.substr(0,2) == "-v" or F.substr(0,10)=="--version" ){
+				P->EXIT=true;
+				P->help();
+				break;
+			}
 		
+
 		}
 		else if (not F.empty()) {
 			if ((model or bidir or select) && P->p.find(F) !=P->p.end()){
@@ -531,6 +538,11 @@ int read_in_parameters( char* argv[], params * P, int rank){
 			P->help();
 			return 1;
 		}
+		if ((F.size()==2 and F.substr(0,2) == "-v") or (F.size()==9 and F.substr(0,9)=="--version") ){
+			P->EXIT=true;
+			P->help();
+			return 1;
+		}
 		if (F.size()==5 and F.substr(0,5) == "bidir") {
 			P->bidir 	= 1;
 	 	}
@@ -545,6 +557,7 @@ int read_in_parameters( char* argv[], params * P, int rank){
 				printf("couldn't understand user provided module option: %s\n",F.c_str() );
 			}
 			P->EXIT = 1;
+			P->help();
 		}
 		if (not P->EXIT){
 			argv = ++argv;
