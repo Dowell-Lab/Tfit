@@ -4,8 +4,8 @@ VERSION = 1.0
 VDATE = JUL 2021
 
 # Compiler choices
-CXX             = /usr/lib64/mpich/bin/mpicxx		# mpich
-#CXX             = mpicxx				# openmpi
+#CXX             = /usr/lib64/mpich/bin/mpicxx		# mpich
+CXX             = mpicxx				# openmpi or mpich
 CXXFLAGS        = -static-libstdc++ -static-libgcc -Wno-unused-variable -Wno-non-virtual-dtor -std=c++11 -fopenmp -Wno-write-strings -Wno-literal-suffix -D_LGIBCXX_USE_CXX1_ABI=0 -g
 
 EXEC            = ${PWD}/Tfit
