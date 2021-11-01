@@ -47,7 +47,7 @@ int main(int argc, char* argv[]){
   int verbose 	= stoi(P->p["-v"]);
   Log_File * LG 	= new  Log_File(rank, job_ID, P->p["-N"], P->p["-log_out"]);
   if (verbose > 0) { 
-     printf("This should be output when verbose is set!\n"); 
+     // printf("This should be output when verbose is set!\n"); 
    } 
  if (verbose and rank==0){ 
     P->display(nprocs,threads);
