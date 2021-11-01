@@ -695,7 +695,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 			}
 		}
 		components 	= new component[1];
-	  printf("\t l: %9.6f pos: %9.6f neg: %9.6f pi: %9.6f ll: %9.6f \n", l, pos, neg, pi, ll);
+	  // printf("\t l: %9.6f pos: %9.6f neg: %9.6f pi: %9.6f ll: %9.6f \n", l, pos, neg, pi, ll);
 		return 1;
 	}
 	random_device rd;

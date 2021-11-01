@@ -471,6 +471,7 @@ string segment_fits::write (){
       double w 	= stod(split_by_comma(split_by_bar(params[5], "")[i] , "" )[0] );
       
       int start 	= max(mu - (std + lam),0.0), stop = mu + (std+lam);
+/* how much is this filtering! */
       if (std  < 5000 and lam < 20000 and w > 0.05 and pi > 0.05 and pi < 0.95  ){
 	line+=chrom+"\t" + to_string(start) + "\t" + to_string(stop)+"\t";
 	line+=ID+"|";
