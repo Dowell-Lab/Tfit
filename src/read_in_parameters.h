@@ -29,17 +29,17 @@ public:
 	map<string, string> p5;
 	map<string, string> p6;
 	
-	char * isIntGroup[8] = {"-pad", "-minK", "-maxK", 
+	const char * isIntGroup[8] = {"-pad", "-minK", "-maxK", 
 						 "-rounds", "-mi", "-MLE", "-elon", "-merge"};
 
-	char * isDecGroup[17]  = {  "-br","-ns", "-ct",
+	const char * isDecGroup[17]  = {  "-br","-ns", "-ct",
 						"-max_noise",    "-r_mu",
 						"-ALPHA_0", "-ALPHA_1", "-ALPHA_2", "-BETA_0", "-BETA_1",
 						"-bct", "-ms_pen" ,
 						"-lambda", "-sigma", 
 						"-foot_print", "-pi",
 						"-w"  };  
-	char * isPathGroup[8] = {"-config", "-i", "-j", "-k", "-tss", "-log_out", "-o", "-q"};
+	const char * isPathGroup[8] = {"-config", "-i", "-j", "-k", "-tss", "-log_out", "-o", "-q"};
 	string get_header(int);
 	
 	vector<string> validate_parameters();
