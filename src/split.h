@@ -16,5 +16,4 @@ vector<string> split_by_tab(string ELE, string D);
 vector<string> split_by_comma(string ELE, string D);
 vector<string> split_by_dash(string ELE, string D);
 
-
 #endif

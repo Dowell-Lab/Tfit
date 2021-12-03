@@ -4,10 +4,6 @@
 using namespace std;
 
 
-
-
-
-
 vector<string> string_split(string s, const char delimiter)
 {
   size_t start=0;
@@ -28,8 +24,6 @@ vector<string> string_split(string s, const char delimiter)
   
   return output;
 }
-
-
 
 vector<string> splitter(string ELE, string D){
 	int j = 0;

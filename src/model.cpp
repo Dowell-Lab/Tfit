@@ -442,7 +442,9 @@ double component::evaluate(double x, int st){
 	forward.ri_reverse 	= forward.pdf(x, st);
 	return bidir.ri_reverse + reverse.ri_reverse + forward.ri_reverse;
 }
+
 //compute the conditional expectations and add to running total
+//  This is equation #9 in the Azofeifa 2018 paper.
 void component::add_stats(double x, double y, int st, double normalize){
 	if (type==0){//noise component
 		if (st==1){
@@ -511,6 +513,7 @@ double component::get_all_repo(){
 	return 0.;
 }
 //take all the nice sample means and variances
+// This is equation #10 in Azofeifa 2018.
 void component::update_parameters(double N, int K){
 	if (type==1){
 		//first for the bidirectional
@@ -694,6 +697,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 				ll+=log((1-pi) / l)*data->X[2][i];		
 			}
 		}
+    // Sets the components part of the classifier to a new component, but this is an array?
 		components 	= new component[1];
 	  // printf("\t l: %9.6f pos: %9.6f neg: %9.6f pi: %9.6f ll: %9.6f \n", l, pos, neg, pi, ll);
 		return 1;

@@ -519,6 +519,7 @@ vector<segment *> merge_segments(vector<segment *> segments, map<int, string>  I
   
   return new_segments;
 }
+
 bool check_ID_name(string & INFO){
   bool PASSED 	= true;
   string change 	= "::";
@@ -724,13 +725,10 @@ vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&
           IDS_first[i] 		= "Entry_" + to_string(i+1);	// Provides identifier if not given
         }
 
-        /* This is a BUG?  It expects column 5 to be strand, but in Joey's own 
-         * pre-filter, column 5 is a bunch of stuff (example: -1.486119,22599,7353)
-         * and it appears as though this gets passed through!  So how is this used (or 
-         * is it?
-         */
+        /* This seems like a bug.  In prelim this is  -0.135002,4514,6894
+         * but here he's reading it as strand! */
         if (lineArray.size() > 4){
-          // if (debug) { printf("  %s\n", lineArray[4].c_str()); } 
+          if (debug) {  printf("  %s\n", lineArray[4].c_str());  }
           strand 		= lineArray[4];
         }else{
           strand 		= ".";
@@ -756,7 +754,7 @@ vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&
             GS[S->chrom].push_back(S);
           }
           i++;
-        }
+        } // Seems like a bug since ignores start > stop input.
       }
     }
   }else{

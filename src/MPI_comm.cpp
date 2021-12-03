@@ -59,7 +59,6 @@ int MPI_comm::gather_all_bidir_predicitions(vector<segment *> all,
   MPI_Aint displacements[1];
   displacements[0] 	= offsetof(bounds, lower_upper);
   MPI_Type_create_struct( 1, blocklens, displacements, old_types, &mystruct );
-
   
   MPI_Type_commit( &mystruct );
   int NN = 0;

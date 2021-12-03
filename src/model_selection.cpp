@@ -70,7 +70,7 @@ double ROC(vector<segment_fits *> noise_fits, vector<segment_fits *> query_fits,
 		}
 
 	}
-
+	return 1.;
 }
 
 
