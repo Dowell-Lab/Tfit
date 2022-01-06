@@ -1,4 +1,11 @@
-#include "model_selection.h"
+/**
+ * @file model_selection.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include "template_matching.h"
 #include <stdlib.h> 
 

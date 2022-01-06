@@ -1,4 +1,11 @@
-#include <string>
+/**
+ * @file load.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include <vector>
 #include "load.h"
 #include "split.h"
@@ -26,7 +33,7 @@
 
 using namespace std;
 
-/* Constructors: segment 
+/** Constructors: segment 
  *
  * Author: Joey Azofeifa 
  *
@@ -35,7 +42,12 @@ using namespace std;
  * with a particular region.  
  *
  */
-// chrom, start, stop
+/**
+ * @brief 
+ * @param chr
+ * @param st
+ * @param sp
+ */
 segment::segment(string chr, int st, int sp){
   chrom	= chr;
   start	= st;

@@ -1,4 +1,11 @@
-#ifndef density_profiler_H
+/**
+ * @file density_profiler.h
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #define density_profiler_H
 #include <string>
 #include <vector>

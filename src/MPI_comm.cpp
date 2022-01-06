@@ -1,4 +1,11 @@
-#include <mpi.h>
+/**
+ * @file MPI_comm.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include "MPI_comm.h"
 #include "load.h"
 #include <vector>

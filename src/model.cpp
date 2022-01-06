@@ -1,4 +1,11 @@
-#include <mpi.h>
+/**
+ * @file model.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include "model.h"
 #include "load.h"
 #include "template_matching.h"

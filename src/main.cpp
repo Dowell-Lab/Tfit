@@ -1,4 +1,11 @@
-#include <mpi.h>
+/**
+ * @file main.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include "load.h"
 #include "model.h"
 #include <iostream>

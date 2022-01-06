@@ -1,4 +1,11 @@
-#ifndef FDR_H
+/**
+ * @file FDR.h
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-11-22
+ * 
+ */
 #define FDR_H
 #include <limits>
 #include "load.h"

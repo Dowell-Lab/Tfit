@@ -1,4 +1,11 @@
-#include "error_stdo_logging.h"
+/**
+ * @file error_stdo_logging.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 
 /* Constructors: Log_File 
  * Author: Joey Azofeifa 

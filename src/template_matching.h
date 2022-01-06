@@ -1,4 +1,11 @@
-#ifndef template_H
+/**
+ * @file template_matching.h
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #define template_H
 #include "load.h"
 #include "read_in_parameters.h"

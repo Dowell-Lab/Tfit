@@ -1,4 +1,11 @@
-#include "split.h"
+/**
+ * @file split.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include <iostream>
 #include <sstream>
 using namespace std;

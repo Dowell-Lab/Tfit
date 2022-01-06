@@ -1,4 +1,11 @@
-#include "FDR.h"
+/**
+ * @file FDR.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-11-22
+ * 
+ */
 #include "load.h"
 #include "model.h"
 #include <limits>

@@ -1,4 +1,11 @@
-#ifdef USING_ICC
+/**
+ * @file model_single.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include <mathimf.h>
 #else
 #include <math.h>   

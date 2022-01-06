@@ -1,4 +1,11 @@
-#include <mpi.h>
+/**
+ * @file across_segments.cpp
+ * @author Joey Azofeifa
+ * @brief  NEEDS A BRIEF
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include "load.h"
 #include "across_segments.h"
 #include "model.h"

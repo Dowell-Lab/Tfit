@@ -1,4 +1,11 @@
-#include "bootstrap.h"
+/**
+ * @file bootstrap.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include "load.h"
 #include <vector>
 #include "read_in_parameters.h"

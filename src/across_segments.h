@@ -1,4 +1,11 @@
-#ifndef across_segments_H
+/**
+ * @file across_segments.h
+ * @author Joey Azofeifa 
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #define across_segments_H
 #include "load.h"
 #include "read_in_parameters.h"

@@ -1,4 +1,11 @@
-#include "bidir_main.h"
+/**
+ * @file bidir_main.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include "template_matching.h"
 #include "density_profiler.h"
 #include "MPI_comm.h"

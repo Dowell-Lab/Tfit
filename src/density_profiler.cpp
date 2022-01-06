@@ -1,4 +1,11 @@
-#include "density_profiler.h"
+/**
+ * @file density_profiler.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include <iostream>
 #include "split.h"
 #include <fstream>

@@ -1,4 +1,11 @@
-#include "load.h"
+/**
+ * @file select_main.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include "select_main.h"
 #include "MPI_comm.h"
 #include "template_matching.h"

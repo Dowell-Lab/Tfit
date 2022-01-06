@@ -1,4 +1,11 @@
-#include <iostream>
+/**
+ * @file read_in_parameters.cpp
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #include <fstream>
 #include <unistd.h>
 #include <string>

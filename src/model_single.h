@@ -1,4 +1,11 @@
-#ifndef model_single_H
+/**
+ * @file model_single.h
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #define model_single_H
 #include "load.h"
 #include "model.h"

@@ -1,4 +1,11 @@
-#ifndef model_H
+/**
+ * @file model.h
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #define model_H
 #include <string>
 #include "load.h"

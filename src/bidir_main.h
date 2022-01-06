@@ -1,4 +1,11 @@
-#ifndef bidir_main_H
+/**
+ * @file bidir_main.h
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #define bidir_main_H
 #include "read_in_parameters.h"
 #include "error_stdo_logging.h"

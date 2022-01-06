@@ -1,4 +1,11 @@
-#ifndef error_stdo_logging_H
+/**
+ * @file error_stdo_logging.h
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #define error_stdo_logging_H
 #include <fstream>
 #include <string>

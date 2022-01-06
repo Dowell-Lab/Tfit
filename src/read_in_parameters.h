@@ -1,4 +1,11 @@
-#ifndef read_in_parameters_H
+/**
+ * @file read_in_parameters.h
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #define read_in_parameters_H
 
 #include <iostream>

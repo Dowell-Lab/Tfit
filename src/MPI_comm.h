@@ -1,4 +1,11 @@
-#ifndef MPI_comm_H
+/**
+ * @file MPI_comm.h
+ * @author Joey Azofeifa
+ * @brief 
+ * @version 0.1
+ * @date 2016-05-20
+ * 
+ */
 #define MPI_comm_H
 #include "load.h"
 #include "across_segments.h"
