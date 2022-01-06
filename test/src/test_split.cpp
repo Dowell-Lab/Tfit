@@ -1,4 +1,11 @@
-#include <string>
+/**
+ * @file test_split.cpp
+ * @author Robin Dowell
+ * @brief Unit Testing: testing Tfit/src/split.cpp
+ * @version 0.1
+ * @date 2022-01-06
+ * 
+ */
 #include "gmock/gmock.h"
 #include "split.h"
 
