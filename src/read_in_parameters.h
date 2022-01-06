@@ -4,10 +4,9 @@
  * @brief 
  * @version 0.1
  * @date 2016-05-20
- * 
  */
+#ifndef read_in_parameters_H
 #define read_in_parameters_H
-
 #include <iostream>
 #include <fstream>
 #include <unistd.h>

@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#ifndef error_stdo_logging_H
 #define error_stdo_logging_H
 #include <fstream>
 #include <string>

@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#include "load.h"
 #include "select_main.h"
 #include "MPI_comm.h"
 #include "template_matching.h"

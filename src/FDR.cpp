@@ -6,6 +6,7 @@
  * @date 2016-11-22
  * 
  */
+#include "FDR.h"
 #include "load.h"
 #include "model.h"
 #include <limits>

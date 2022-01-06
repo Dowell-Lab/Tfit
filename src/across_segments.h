@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#ifndef across_segments_H
 #define across_segments_H
 #include "load.h"
 #include "read_in_parameters.h"

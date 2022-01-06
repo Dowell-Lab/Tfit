@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#include <mpi.h>
 #include "model.h"
 #include "load.h"
 #include "template_matching.h"

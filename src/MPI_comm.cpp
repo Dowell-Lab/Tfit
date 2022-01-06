@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#include <mpi.h>
 #include "MPI_comm.h"
 #include "load.h"
 #include <vector>

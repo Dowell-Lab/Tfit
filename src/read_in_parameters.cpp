@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#include <iostream>
 #include <fstream>
 #include <unistd.h>
 #include <string>

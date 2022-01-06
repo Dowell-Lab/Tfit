@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#include <string>
 #include <vector>
 #include "load.h"
 #include "split.h"

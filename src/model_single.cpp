@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#ifdef USING_ICC
 #include <mathimf.h>
 #else
 #include <math.h>   

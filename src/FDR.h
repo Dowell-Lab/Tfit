@@ -6,6 +6,7 @@
  * @date 2016-11-22
  * 
  */
+#ifndef FDR_H
 #define FDR_H
 #include <limits>
 #include "load.h"

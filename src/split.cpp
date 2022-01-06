@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#include "split.h"
 #include <iostream>
 #include <sstream>
 using namespace std;

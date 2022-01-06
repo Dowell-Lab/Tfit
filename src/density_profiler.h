@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#ifndef density_profiler_H
 #define density_profiler_H
 #include <string>
 #include <vector>

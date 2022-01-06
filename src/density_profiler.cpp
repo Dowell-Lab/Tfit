@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#include "density_profiler.h"
 #include <iostream>
 #include "split.h"
 #include <fstream>

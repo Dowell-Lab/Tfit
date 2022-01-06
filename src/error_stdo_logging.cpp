@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#include "error_stdo_logging.h"
 
 /* Constructors: Log_File 
  * Author: Joey Azofeifa 

@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#ifndef split_H
 #define split_H
 
 #include <vector>

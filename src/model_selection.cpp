@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#include "model_selection.h"
 #include "template_matching.h"
 #include <stdlib.h> 
 

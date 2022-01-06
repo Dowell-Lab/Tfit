@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#include "bootstrap.h"
 #include "load.h"
 #include <vector>
 #include "read_in_parameters.h"

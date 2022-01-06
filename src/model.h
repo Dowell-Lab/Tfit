@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#ifndef model_H
 #define model_H
 #include <string>
 #include "load.h"

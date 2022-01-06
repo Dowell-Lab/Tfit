@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#ifndef template_H
 #define template_H
 #include "load.h"
 #include "read_in_parameters.h"

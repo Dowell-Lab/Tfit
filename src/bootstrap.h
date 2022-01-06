@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#ifndef bootstrap_H
 #define bootstrap_H
 #include "load.h"
 #include <vector>

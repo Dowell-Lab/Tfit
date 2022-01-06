@@ -7,6 +7,7 @@
  * @date 2016-05-20
  * 
  */
+#include "load.h"
 #include "model.h"
 #include <limits>
 #include <iostream>

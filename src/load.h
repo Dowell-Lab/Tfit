@@ -4,8 +4,8 @@
  * @brief 
  * @version 0.1
  * @date 2016-05-20
- * 
  */
+#ifndef load_H
 #define load_H
 #include <string>
 #include <vector>

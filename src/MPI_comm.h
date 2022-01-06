@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#ifndef MPI_comm_H
 #define MPI_comm_H
 #include "load.h"
 #include "across_segments.h"

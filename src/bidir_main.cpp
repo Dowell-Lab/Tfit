@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#include "bidir_main.h"
 #include "template_matching.h"
 #include "density_profiler.h"
 #include "MPI_comm.h"

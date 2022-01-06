@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#ifndef model_single_H
 #define model_single_H
 #include "load.h"
 #include "model.h"

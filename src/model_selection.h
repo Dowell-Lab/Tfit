@@ -6,6 +6,7 @@
  * @date 2016-05-20
  * 
  */
+#ifndef model_selection_H
 #define model_selection_H
 #include <vector>
 #include "load.h"
