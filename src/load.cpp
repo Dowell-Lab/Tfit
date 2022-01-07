@@ -1,7 +1,10 @@
 /**
  * @file load.cpp
  * @author Joey Azofeifa
- * @brief 
+ * @brief Routines necessary for loading data and segments.
+ * This is a very overloaded file -- has segment, segment_fits, and node classes
+ * their corresponding code as well as large functions for loading data. 
+ * Also contains some helper functions.   Should be refactored.
  * @version 0.1
  * @date 2016-05-20
  * 
@@ -34,20 +37,22 @@
 
 using namespace std;
 
-/** Constructors: segment 
- *
- * Author: Joey Azofeifa 
+/**
+ * @brief Constructors: segment class
+ * @author Joey Azofeifa 
  *
  * Purpose: create/allocate instances of segment class
  * The segment class contains both strands of data associated
- * with a particular region.  
+ * with a particular region.  There is an empty constructor option. 
  *
- */
-/**
- * @brief 
- * @param chr
- * @param st
- * @param sp
+ * @param chr  Chromosome 
+ * @param st   Start
+ * @param sp   Stop
+ * @param Integer identifier (opt)
+ * @param STR  Strand (as string) (opt)
+ *
+ * @bug STR should be a char with only '.' '+' and '-' as valid.
+ *
  */
 segment::segment(string chr, int st, int sp){
   chrom	= chr;
@@ -111,12 +116,12 @@ segment::segment(){
   chrom = "";
 }
 
-/* Class Function: segment::write_out() 
- *
- * Purpose: Write the contents of a segment.
- * This is primarily used for debugging (currently unused).
- *
- * Returns: a string (single line) for output	
+/**
+ * @brief Print basic contents of segment
+ * @author Joey Azofeifa 
+ * @return printable string of format #chr:start-stop,identifier
+ * @bug - does not include strand information in printout
+ * - need a more comprehensive write function for all of segment
  */
 string segment::write_out(){
         string  text= ("#" + chrom + ":" + to_string(start) + "-" 
@@ -124,17 +129,13 @@ string segment::write_out(){
 	return text;
 }
 
-/* Class Function: segment::add2 
- *
- * Purpose: given a single data point (strand, coord, value), 
- * build up the segment contents.
- *
- * Args:
- *    strand (1 == forward; -1 == reverse)
- *    x   coordinate 
- *    y   value (read depth assumed)
- *
- * Returns:	-- void -- 
+/**
+ * @brief Given a dta point, build segment contents.
+ * @author Joey Azofeifa
+ * @param strand  here as integer, 1 == forward, -1 == reverse
+ * @param x   coordinate
+ * @param y   value (read depth assumed)
+ * @return (void)
  */
 void segment::add2(int strand, double x, double y){
   vector<double> v2(2);
@@ -162,18 +163,22 @@ void segment::add2(int strand, double x, double y){
 }
 
 
-/* Class Function: segment::bin
- *
- * Purpose: For a segment of data (stored in the class as 
- * forward and reverse), scale and bin the data into the X 
- * vector. 
- *
- * Args:
- *    delta 	binning denominator (nts per bin)
- *    scale	coordinat scaling constant (sets SCALE)
- *    erase	whether to remove bins with both strands zero counts
- *
- * Returns:	-- void -- 
+/**
+ * @brief For a segment of data, scale and bin into X vector
+ * @author Joey Azofeifa
+ * 
+ * Note: X is a 3 x XN 2D array of doubles. 
+ * X[0] is scaled coordinate
+ * X[1] is sum of forward values over bin width (delta)
+ * X[2] is sum of reverse values over bin width (delta)
+ * 
+ * @param delta binning denominator (nts per bin)
+ * @param scale coordinate scaling constant (sets SCALE)
+ * @param erase whether to remove bins with both strands having zero counts
+ * @return (void)
+ * 
+ * @bug This is klunky, long and cryptic.  This function does a LOT of stuff.
+ * And reasoning in several steps is unclear.  Needs to be refactored.
  */
 void segment::bin(double delta, double scale, bool erase){
 
@@ -327,23 +332,24 @@ void segment::bin(double delta, double scale, bool erase){
 }
 
 //================================================================================================
-/* Constructors: node  (Within the interval tree) 
- *
- * Author: Joey Azofeifa 
- *
- * Purpose: We're going to keep an interval tree for rapid searching for
- * particular genomics coordinates.
+/**
+ * @brief Construct a new node::node object
+ * @author Joey Azofeifa 
+ * 
+ * Keep an interval tree for rapid searching for particular genomics coordinates.
+ * 
  */
-
 // Empty constructor
 node::node(){};
 
-/* Constructor from set of segments. 
- *
- * Given a set of n intervals on the number line, we want to construct a data structure 
- * so that we can efficiently retrieve all intervals overlapping another interval or point.
- *
+/**
+ * @brief Constructor from a set of segments
+ * Given a set of n intervals on the number line, we want to construct 
+ * a data structure so that we can efficiently retrieve all intervals overlapping
+ * another interval or point.
  * Assumes:  segments is a sorted list of intervals (first has smallest start; last largest stop)
+ * 
+ * @param segments
  */
 node::node(vector<segment * > segments ){
   // Initialize the node
@@ -373,19 +379,15 @@ node::node(vector<segment * > segments ){
   }
 }
 
-/* Class Function: node::insert_coverage
- *
- * Purpose: Add a data point (coordinate, value) to all of
- * the nodes that include this point in the interval tree 
- *
+/**
+ * @brief Add a data point to all of the nodes that include this point on the tree.
+ * @author Joey Azofeifa 
  * Appears to assume that you will always be adding data point to
  * the end of the forward/reverse indexed data points (sorted calls?)
- *
- * Args:
- *    x		a 2D vector [x y] where x is coordinate and y is value
- *    s		strand (1 is forward; -1 is reverse)
- *
- * Returns:	-- void -- 
+ * 
+ * @param x a 2D vector [x y] where X is coordinate and y is value
+ * @param s strand (as int: 1 is forward; -1 is reverse)
+ * @return (void)
  */
 void node::insert_coverage(vector<double> x, int s){
   for (int i = 0 ; i < current.size(); i++){
@@ -407,8 +409,14 @@ void node::insert_coverage(vector<double> x, int s){
   }
 }
 
-// Effectively counts the number of intervals ("finds") that 
-// contain another interval (start stop)
+/**
+ * @brief Effectively counts number of intervals that contain another interval.
+ * @author Joey Azofeifa 
+ * @param start
+ * @param stop
+ * @param finds 
+ * @return (void)
+ */
 void node::searchInterval(int start, int stop, vector<int>& finds ){
   for (int i = 0 ; i < current.size(); i++){
     if (stop > current[i]->start and  start < current[i]->stop  ){
@@ -423,7 +431,12 @@ void node::searchInterval(int start, int stop, vector<int>& finds ){
   }	
 }
 
-// Collects all segments associated with a node
+/**
+ * @brief Collects all segments associated with a node.
+ * @author Joey Azofeifa 
+ * @param saves
+ * @return (void)
+ */
 void node::retrieve_nodes(vector<segment*> & saves){
   for (int i = 0; i < current.size(); i++){
     saves.push_back(current[i]);
@@ -437,9 +450,10 @@ void node::retrieve_nodes(vector<segment*> & saves){
 }
 
 //================================================================================================
-//a class from loading the K_models formmated file 
-segment_fits::segment_fits(){
-} //empty con
+/**
+ * @brief Constructors for segment_fits class
+ * @author Joey Azofeifa 
+ */
 segment_fits::segment_fits(string c, int st, int sp,
 			   double n_pos, double n_neg, string id){
 
@@ -448,6 +462,19 @@ segment_fits::segment_fits(string c, int st, int sp,
   ID 	= id;
   BIC_ratio 	= 0;
 }
+segment_fits::segment_fits(){
+} //empty con
+
+/**
+ * @brief Class constructor for loading the K_models formatted file
+ * @author Joey Azofeifa 
+ * @param c
+ * @param st
+ * @param sp
+ * @param n_pos
+ * @param n_neg
+ * @param id
+ */
 void segment_fits::get_model(double ms_pen){
   typedef map<int, double>::iterator it_type;
   int arg;
@@ -496,7 +523,14 @@ string segment_fits::write (){
 }
 
 //================================================================================================
-//merge segments from loading_intervals
+/**
+ * @brief Merge segments from the loading_intervals
+ * @param segments
+ * @param IDS_first
+ * @param IDS
+ * @param T
+ * @return 
+ */
 vector<segment *> merge_segments(vector<segment *> segments, map<int, string>  IDS_first, map<int, string> & IDS, int & T){
   vector<segment *> new_segments;
 	//bubble sort
@@ -533,6 +567,12 @@ vector<segment *> merge_segments(vector<segment *> segments, map<int, string>  I
   return new_segments;
 }
 
+/**
+ * @brief Helper function: check identifier doesn't have | character?
+ * @author Joey Azofeifa 
+ * @param INFO
+ * @return 
+ */
 bool check_ID_name(string & INFO){
   bool PASSED 	= true;
   string change 	= "::";
@@ -546,26 +586,29 @@ bool check_ID_name(string & INFO){
 }
 
 //================================================================================================
-/* Function: load_bedgraphs_total
- *
- * Purpose: Parses a bedgraph into a collection of segments, populates information on
- * chromosomes seen within the bedgraph file, and does the data scaling and smoothing.
- *
- * Args:
- *  forward_strand  Filename of forward strand data 
- *  reverse_strand  Filename of reverse strand data
- *  joint_bedgraph  Filename of joint data (ij)
- *  BINS			how many bases per smoothing -- for bin() function
- *  scale		    what is the scaling constant 
- *  spec_chrom		a specified chromosome name, can be "all"
- *  chromosomes		maps chromsome name to ?? (counter?)
- *  ID_to_chrom     maps index number to chromosome name
- *
+/**
+ * @brief Parses a bedgraph into a collection of segments.
+ * Also populates information on chromosomes seen within the bedgraph file and 
+ * does the data scaling and smoothing.
+ * 
  * Assumptions:
  *    Assumes either joint_bedgraph or (forward_strand reverse_strand) are specified (e.g. not empty)
  *    Has a very hard coded 6 character limit on chromsome name (WHY????)
- *
- * Returns: a vector of segments, 
+ * 
+ * @author Joey Azofeifa 
+ * 
+ * @param forward_strand Filename of forward strand data 
+ * @param reverse_strand Filename of reverse strand data
+ * @param joint_bedgraph Filename of joint data (ij)
+ * @param BINS how many bases per smoothing -- for bin() function
+ * @param scale what is the scaling constant 
+ * @param spec_chrom a specified chromosome name, can be "all"
+ * @param chromosomes maps chromsome name to ?? (counter?)
+ * @param ID_to_chrom maps index number to chromosome name
+ * @return  a vector of segments
+ * 
+ * @bug This thing has lots of steps and does lots of things, could 
+ * stand to be refactored for clarity. 
  */
 vector<segment*> load::load_bedgraphs_total(string forward_strand, string reverse_strand, 
 		string joint_bedgraph, int BINS, double scale, string spec_chrom, 
@@ -678,20 +721,16 @@ vector<segment*> load::load_bedgraphs_total(string forward_strand, string revers
   return segments;
 }
 
-/* Function: load_intervals_of_interest
- *
- * Purpose: 
- *
- * Args:
- *  FILE	name of bedfile containing intervals (example: singleregion.bed)
- *  IDS
- *  P		parameters for this run
- *  center    (initial call in model_run is 0)
- *
- * Assumptions:
- *
- * Returns: a vector of segments, note these segments are just regions
+/**
+ * @brief 
+ * @author Joey Azofeifa 
+ * @param FILE name of bedfile containing intervals (example: singleregion.bed)
+ * @param IDS
+ * @param P parameters for this run
+ * @param center (initial call in model_run is 0)
+ * @return a vector of segments, note these segments are just regions
  * (bedgraph input) -- and have no data associated with them.
+ * 
  */
 vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&  IDS, 
 						  params * P, bool center){
@@ -790,20 +829,15 @@ vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&
   return G;
 }
 
-/* Function: insert_bedgraph_to_segment_joint
- *
- * Purpose: 
- *
- * Args:
- *  A        mapping of chrom name to segment array
- *  forward     Filename of forward strand data 
- *  reverse     Filename of reverse strand data
- *  joint     Filename of joint data (ij)
- *  rank    MPI process number
- *
- * Assumptions:
- *
- * Returns: a vector of segments, 
+/**
+ * @brief 
+ * @author Joey Azofeifa 
+ * @param A mapping of chrom name to segment array
+ * @param forward Filename of forward strand data 
+ * @param reverse Filename of reverse strand data
+ * @param joint Filename of joint data (ij)
+ * @param rank MPI process number
+ * @return a vector of segments
  */
 vector<segment* > load::insert_bedgraph_to_segment_joint(map<string, vector<segment *> > A , 
     string forward, string reverse, string joint, int rank ){
@@ -881,16 +915,11 @@ vector<segment* > load::insert_bedgraph_to_segment_joint(map<string, vector<segm
 }
 
 
-/* Function: load_K_models_out
- *
- * Purpose: 
- *
- * Args:
- *  FILE 
- *
- * Assumptions:
- *
- * Returns: a vector of segments, 
+/**
+ * @brief 
+ * @author Joey Azofeifa 
+ * @param FILE
+ * @return 
  */
 vector<segment_fits *> load::load_K_models_out(string FILE){
   ifstream FH(FILE);
@@ -961,6 +990,17 @@ vector<vector<double>> bubble_sort_alg(vector<vector<double>> X){
 	return X;
 }
 
+/**
+ * @brief 
+ * @author Joey Azofeifa 
+ * @param G
+ * @param out_dir
+ * @param job_name
+ * @param job_ID
+ * @param P
+ * @param noise
+ * @return (void)
+ */
 void load::write_out_bidirs(map<string , vector<vector<double> > > G, string out_dir, 
 			    string job_name,int job_ID, params * P, int noise){
   typedef map<string , vector<vector<double> > >::iterator it_type;
@@ -1080,6 +1120,15 @@ void load::write_out_models_from_free_mode(map<int, map<int, vector<simple_c_fre
 	FHW.flush();
 }
 
+/**
+ * @brief 
+ * @author Joey Azofeifa 
+ * @param fits
+ * @param P
+ * @param job_ID
+ * @param noise
+ * @return (void)
+ */
 void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params * P, int job_ID, int noise ){
 	ofstream FHW;
 	FHW.open(P->p["-o"]+  P->p["-N"] + "-" + to_string(job_ID)+  "_bidir_predictions.bed");	
@@ -1094,6 +1143,15 @@ void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params * 
 
 //================================================================================================
 //
+/**
+ * @brief 
+ * @author Joey Azofeifa 
+ * @param segments
+ * @param BINS
+ * @param scale
+ * @param erase
+ * @return (void)
+ */
 void load::BIN(vector<segment*> segments, int BINS, double scale, bool erase){
 	for (int i = 0 ; i < segments.size() ; i ++){
 		if (segments[i]->forward.size() > 0 or segments[i]->reverse.size() > 0 ){
@@ -1102,6 +1160,15 @@ void load::BIN(vector<segment*> segments, int BINS, double scale, bool erase){
 	}
 }
 
+/**
+ * @brief 
+ * @author Joey Azofeifa 
+ * @param dir
+ * @param job_name
+ * @param nprocs
+ * @param job_ID
+ * @return (void)
+ */
 void load::collect_all_tmp_files(string dir, string job_name, int nprocs, int job_ID){
 	int c 	= 0;
 	time_t     now = time(0);
@@ -1135,6 +1202,12 @@ void load::collect_all_tmp_files(string dir, string job_name, int nprocs, int jo
 	}
 }
 
+/**
+ * @brief 
+ * @author Joey Azofeifa 
+ * @param segments
+ * @return (void)
+ */
 void load::clear_segments(vector<segment *> segments){
 	for (int i = 0; i < segments.size(); i++){
 		if (segments[i]!=NULL){
@@ -1143,6 +1216,13 @@ void load::clear_segments(vector<segment *> segments){
 	}
 }
 
+/**
+ * @brief 
+ * @author Joey Azofeifa 
+ * @param tss_file
+ * @param query_fits
+ * @return 
+ */
 vector<segment_fits *> load::label_tss(string tss_file, vector<segment_fits *> query_fits ){
 	vector<segment_fits *> new_fits;
 	ifstream FH(tss_file);

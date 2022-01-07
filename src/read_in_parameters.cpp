@@ -478,7 +478,7 @@ void fill_in_options(char* argv[],params * P, int rank){
 	bool bidir 		= P->bidir;
 	bool model 		= P->model;
 	string F 		= "";
-	char * COM 		= "-";
+	char * COM 		= (char *)"-";
 		
 	while (*argv){
 		if ((*argv)[0] == COM[0]){
