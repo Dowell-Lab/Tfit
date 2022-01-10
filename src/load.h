@@ -16,45 +16,56 @@ class simple_c_free_mode;
 
 class classifier; //forward declare
 
-/* Class: The primary data class, which represents
- * a genomic segment of data.  
+/**
+ * @brief Primary data class which represents a genomic segment of data.
+ * @author Joey Azofeifa
  */
 class segment{
 public:
-	string chrom; 	// identifier for chromosome 
-	int start, stop;  // genomic coordinates of start/stop
-	double minX, maxX;   // min and max coordinate, scaled
+	string chrom; 	//!< identifier for chromosome 
+	int start; //!< genomic coordinates of start
+	int stop;  //!< genomic coordinates of stop
+	double minX; //!< min coordinate, scaled
+	double maxX;   //!< max coordinate, scaled
+	string strand; //!< strand information, unspecified = "."
 
-	string strand; // strand information, unspecified = "."
-	// these two are vectors of vectors where the inner vector is two doubles
-	// Expected to be [ x y ] with x being a coordinate [0th item] and y [1st item] being a value (reads?)
-	vector< vector<double> > forward; // corresponds to strand == 1
-	vector< vector<double> > reverse; // corresponds to strand == -1
+    /** 
+	 * @brief vectors of vectors where the inner vector is two doubles
+	 * Expected to be [ x y ] with x being a coordinate [0th item] and y [1st item] being a value (reads?)
+     */
+	vector< vector<double> > forward; //<! corresponds to strand == 1
+    /** 
+	 * @brief vectors of vectors where the inner vector is two doubles
+	 * Expected to be [ x y ] with x being a coordinate [0th item] and y [1st item] being a value (reads?)
+     */
+	vector< vector<double> > reverse; //<! corresponds to strand == -1
 
-	int ID, chrom_ID;  // when are these used? (set to 0 in constructors)
-	int counts; // when is this used? (set to 1 in constructor)
+	int ID; //!< when are these used? (set to 0 in constructors)
+	int chrom_ID;  //!< when are these used? (set to 0 in constructors)
+	int counts; //!< when is this used? (set to 1 in constructor)
 
 	vector<double> centers;
-	vector<vector<double>> parameters; //for bootstrapping
+	vector<vector<double>> parameters; // for bootstrapping
 	map<int, vector<double> > variances;
 
-	// Reality is that input data is binned into a smoothed representation
-	// This is the smoothed representation of the data (X) which is a 3 dimensional vector
-	// Vector[0] is coordinate (possibly scaled); [1] is forward (summed for bin)
-	// [2] is reverse (summed for bin)
-	double ** X;  // Smoothed data inner is [3] dimensions
-	double XN; // total number of bins
-	double SCALE;  // scaling factor
+	/**
+	 * @brief This (X) is the smoothed representation of the data.
+	 * Vector[0] is coordinate (possibly scaled); [1] is forward (summed for bin)
+	 * [2] is reverse (summed for bin)
+	 */
+	double ** X;  //!< Smoothed data inner is [3] dimensions
+	double XN; //!< total number of bins
+	double SCALE;  //!< scaling factor
 
-	double N;	// Total sum of values 
-	double fN;	// Sum of forward values 
-	double rN;	// Sum of reverse values 
+	double N;	//!< Total sum of values 
+	double fN;	//!< Sum of forward values 
+	double rN;	//!< Sum of reverse values 
 
 	vector<vector<double> > bidirectional_bounds;
 	vector<segment *> bidirectional_data;
-	vector<int>  bidir_counts; //used for optimization of BIC?
+	vector<int>  bidir_counts; //!< used for optimization of BIC?
 	vector<int> bidirectional_N;
-	vector<vector<double>> fitted_bidirs; //mu, si, l,pi
+	vector<vector<double>> fitted_bidirs; //!< mu, si, l,pi
 
 	// Constructors
 	segment(string, int , int);
@@ -65,24 +76,24 @@ public:
 	/* FUNCTIONS: */
 	// Reporting out (currently unused)
 	string write_out();
-
 	// bin does the scaling and smoothing of input data (builds X)
 	void bin(double, double, bool); // delta, scale, erase
-
 	// add2 appears to add a single data point (coord) to an interval
 	void add2(int, double, double); // strand, x, y 
 };
 
-/* Class:  A node within the interval tree.
+/**
+ * @brief A node within the interval tree.
  * Interval tree allows for rapid searching based on coordinates.
+ * @author Joey Azofeifa
  */
 class node{
 public:
 	double center;
 	int start, stop;
-	node * left;  // All intervals fully to left of center
-	node * right; // All intervals fully to the right of center
-	vector<segment * > current;	// All intervals overlapping center
+	node * left;  //!< All intervals fully to left of center
+	node * right; //!< All intervals fully to the right of center
+	vector<segment *> current;	//<! All intervals overlapping center
 
 	void retrieve_nodes(vector<segment * >&);
 	void insert_coverage(vector<double>, int);
@@ -91,9 +102,14 @@ public:
 	node();	// empty constructor
 	node(vector<segment *>);
 
+	/* FUNCTIONS: */
 	void searchInterval(int, int, vector<int> &) ;
 };
 
+/**
+ * @brief Needs documentation.
+ * 
+ */
 class segment_fits{
 public:
 	string chrom;
@@ -105,13 +121,15 @@ public:
 	int model;
 	double BIC_ratio;
 	string ID;
+
+	// Constructors
 	segment_fits();
 	segment_fits(string, int, int, double, double, string);
+
+	/* FUNCTIONS: */
 	void get_model(double);
 	string write();
 };
-
-
 
 namespace load{
 

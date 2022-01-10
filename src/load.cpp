@@ -2,7 +2,7 @@
  * @file load.cpp
  * @author Joey Azofeifa
  * @brief Routines necessary for loading data and segments.
- * This is a very overloaded file -- has segment, segment_fits, and node classes
+ * This is a very overloaded file -- has \ref segment, segment_fits, and \ref node classes
  * their corresponding code as well as large functions for loading data. 
  * Also contains some helper functions.   Should be refactored.
  * @version 0.1
@@ -164,7 +164,7 @@ void segment::add2(int strand, double x, double y){
 
 
 /**
- * @brief For a segment of data, scale and bin into X vector
+ * @brief For a segment of data, scale and bin (smooth) input data into X vector
  * @author Joey Azofeifa
  * 
  * Note: X is a 3 x XN 2D array of doubles. 
