@@ -1,7 +1,9 @@
 /**
  * @file model.h
  * @author Joey Azofeifa
- * @brief 
+ * @brief Header file of \ref UNI (uniform), \ref EMG (full model), \ref NOISE,
+ *  \ref component (full set of distros, priors), and \ref classifier (EM convergence
+ * info and k number of components) classes.  
  * @version 0.1
  * @date 2016-05-20
  * 
@@ -11,6 +13,11 @@
 #include <string>
 #include "load.h"
 using namespace std;
+
+/**
+ * @brief Uniform distribution class
+ * @author Joey Azofeifa  
+ */
 class UNI{
 public:
 	double a,b,w,pi;
@@ -28,10 +35,25 @@ public:
 	string print();
 
 };
+/**
+ * @brief 
+ * 
+ * @return double 
+ */
 double sum(double * , int );
+/**
+ * @brief 
+ * 
+ * @return double 
+ */
 double LOG(double );
 
-
+/**
+ * @brief Class for a single instance of the model.  Contains mostly 
+ * the EMG but also l from the Uniform. 
+ * @author Joey Azofeifa  
+ * 
+ */
 class EMG{
 public:
 	double mu, si, l, pi, w;
@@ -51,7 +73,7 @@ public:
 	string print();
 };
 
-/***
+/*** deprecated
 class NORMAL{
 public:
 	double mu,si,pi,w;
@@ -60,8 +82,12 @@ public:
 	NORMAL(double, double, double, double);
 	double pdf(double, int);
 };
-**/
+***/
 
+/**
+ * @brief NOISE class is another Uniform.
+ * 
+ */
 class NOISE{
 public:
 	double a, b, w, pi;
@@ -72,7 +98,10 @@ public:
 	NOISE(double, double, double, double);
 };
 
-
+/**
+ * @brief Class that handles a single instance of the model.
+ *  Also contains the priors.   
+ */
 class component{
 public:
 	EMG bidir;
@@ -122,7 +151,10 @@ public:
 	string write_out();
 };
 
-
+/**
+ * @brief Wrapper class around the EM
+ * 
+ */
 class classifier{
 public:
 	int K; //number of components
@@ -162,10 +194,6 @@ public:
 	double ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3;
 	vector<vector<double>> init_parameters;
 };
-
-
-
-
 
 
 

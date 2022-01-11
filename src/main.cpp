@@ -1,7 +1,9 @@
 /**
  * @file main.cpp
  * @author Joey Azofeifa
- * @brief 
+ * @brief This is the primary executable file.  
+ * It contains the mpi code, reading parameters, then forking to one of three functions:
+ * \ref bidir_run, \ref model_run or \ref select_run -- which are all separate files. 
  * @version 0.1
  * @date 2016-05-20
  * 
@@ -32,6 +34,13 @@
 #include "select_main.h"
 using namespace std;
 
+/**
+ * @brief Program main.  
+ * It contains the mpi code, reading parameters, then forking to one of three modules. 
+ * @param argc
+ * @param argv
+ * @return 
+ */
 int main(int argc, char* argv[]){
   MPI::Init(argc, argv);
   // the nprocs is the total number of processors available
@@ -66,6 +75,7 @@ int main(int argc, char* argv[]){
   } else if (P->model){
     model_run(P, rank, nprocs, 0, job_ID,LG);
   }else if (P->select){
+    // This one is commented out -- ie. this function does nothing.
     select_run(P, rank, nprocs, job_ID,LG);	
   }
   if (rank == 0){

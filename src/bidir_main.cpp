@@ -5,6 +5,8 @@
  * @version 0.1
  * @date 2016-05-20
  * 
+ * @bug Uses threads in a parasitic way.  Needs a parameter to restrict
+ * the thread count.
  */
 #include "bidir_main.h"
 #include "template_matching.h"
@@ -24,6 +26,8 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	P->p["-merge"] 	= "1";
 	
 	LG->write("\ninitializing bidir module...............................done\n", verbose);
+	// This appears to be parasitic -- i.e. it uses all available even 
+	// if you set it to less in your scheduler.  
 	int threads 	= omp_get_max_threads();//number of OpenMP threads that are available for use
 	
 	//===========================================================================

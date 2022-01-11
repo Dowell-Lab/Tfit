@@ -1,7 +1,14 @@
 /**
  * @file model.cpp
  * @author Joey Azofeifa
- * @brief 
+ * @brief Contains \ref UNI (uniform), \ref EMG (full model), \ref NOISE,
+ *  \ref component (full set of distros, priors), and \ref classifier (EM convergence
+ * info and k number of components) classes.  
+ * Note that the EMG class contains both the EMG of initiation and the L of the uniform of 
+ * elongation.  Also that the UNI and NOISE are both uniform.  
+ * @bug Contains lots of deadends -- as code clearly used to generate from the model and
+ * other functions and classes (e.g. NORMAL) that are now missing.
+ * @bug HEAVILY overloaded, should be refactored.
  * @version 0.1
  * @date 2016-05-20
  * 
@@ -20,14 +27,29 @@
 
 //=============================================
 //Helper functions
+/**
+ * @brief Standard Normal PDF (with a terrible name!)
+ * @param x 
+ * @return double 
+ */
 double IN(double x){ //Standard Normal PDF 
 	return exp(-pow(x,2)*0.5)/sqrt(2*M_PI);
 }
-
+/**
+ * @brief Standard Normal CDF (with a terrible name!)
+ * 
+ * @param x 
+ * @return double 
+ */
 double IC(double x){ //Standard Normal CDF
 	return 0.5*(1+erf(x/sqrt(2)));
 }
-
+/**
+ * @brief Mills Ratio (R)
+ * 
+ * @param x 
+ * @return double 
+ */
 double R(double x){ //Mills Ratio
 	if (x > 4){
 		return 1.0 / x;
@@ -39,14 +61,26 @@ double R(double x){ //Mills Ratio
 	}
 	return exp(log(1. - N)-log(D));
 }
-
+/**
+ * @brief a wrapper around isfinite()
+ * WHY??
+ * 
+ * @param x 
+ * @return true 
+ * @return false 
+ */
 bool checkNumber(double x){
 	if (isfinite(x)){
 		return true;
 	}
 	return false;//wrapper for isfinite()
 }
-
+/**
+ * @brief wrapper around log(x) that returns nINF if x <=0
+ * 
+ * @param x 
+ * @return double 
+ */
 double LOG(double x){
 	if (x <= 0){
 		return nINF;
@@ -59,13 +93,28 @@ double LOG(double x){
 // Uniform Noise Class
 NOISE::NOISE(){} //empty constructor
 
+/**
+ * @brief Construct a new NOISE::NOISE object
+ * There is also an empty constructor.
+ * @param A
+ * @param B
+ * @param W
+ * @param PI
+ */
 NOISE::NOISE(double A, double B, double W, double PI){
 	a=A;
 	b=B;
 	w=W;
 	pi=PI;
 }
-//density function
+/**
+ * @brief NOISE density function
+ * Note that NOISE is just a uniform.
+ * 
+ * @param x 
+ * @param strand 
+ * @return double 
+ */
 double NOISE::pdf(double x, int strand){
 	if (strand == 1){
 		return (w*pi) / abs(b-a);
@@ -73,11 +122,19 @@ double NOISE::pdf(double x, int strand){
 	return (w*(1-pi)) / abs(b-a);
 }
 
-
 //=============================================
 //Uniform Class
 UNI::UNI(){} //empty constructor
-
+/**
+ * @brief Construct a new UNI::UNI object
+ * 
+ * @param start 
+ * @param stop 
+ * @param w_i 
+ * @param strand 
+ * @param POS 
+ * @param Pi 
+ */
 UNI::UNI(double start, double stop, double w_i, int strand, int POS, double Pi){
 	a 		= start;
 	b 		= stop;
@@ -98,7 +155,13 @@ UNI::UNI(double start, double stop, double w_i, int strand, int POS, double Pi){
 	delta_b=0;
 	ri_forward=0, ri_reverse=0;
 }
-//density function
+/**
+ * @brief UNI density function
+ * 
+ * @param x 
+ * @param strand 
+ * @return double 
+ */
 double UNI::pdf(double x, int strand){
 	double p;
 	if (w==0){
@@ -113,20 +176,29 @@ double UNI::pdf(double x, int strand){
 	}
 	return 0;
 }
-
+/**
+ * @brief Print the parameters of the UNI distro.
+ * 
+ * @return string 
+ */
 string UNI::print(){
 	string text = ("U: " + to_string(a) + "," + to_string(b) 
 	+ "," + to_string(w) + "," + to_string(pi));
 	return text;
 }	
 
-
-
-
 //=============================================
 //Exponentially Modified Gaussian class
 EMG::EMG(){} //empty constructor
-
+/**
+ * @brief Construct a new EMG::EMG object
+ * 
+ * @param MU 
+ * @param SI 
+ * @param L 
+ * @param W 
+ * @param PI 
+ */
 EMG::EMG(double MU, double SI, double L, double W, double PI ){
 	mu 	= MU;
 	si 	= SI;
@@ -136,13 +208,23 @@ EMG::EMG(double MU, double SI, double L, double W, double PI ){
 	prev_mu = 0 ;
 	move_fp = 0;
 }
-
+/**
+ * @brief Output parameters of this EMG instance.
+ * 
+ * @return string 
+ */
 string EMG::print(){
 	string text 	= ("N: " + to_string(mu)+","+to_string(si)
 		+ "," + to_string(l) + "," + to_string(w) + "," + to_string(pi) + "," + to_string(foot_print) );
 	return text;
 }
-//density function
+/**
+ * @brief EMG density function
+ * 
+ * @param z 
+ * @param s 
+ * @return double 
+ */
 double EMG::pdf(double z, int s ){
         if (w==0){
 	  return 0.0;
@@ -166,7 +248,13 @@ double EMG::pdf(double z, int s ){
 	}
 	return 0.0;
 }
-//conditional expectation of Y given z_i
+/**
+ * @brief conditional expectation of Y given z_i
+ * 
+ * @param z 
+ * @param s 
+ * @return double 
+ */
 double EMG::EY(double z, int s){
 	if (s==1){
 		z-=foot_print;
@@ -176,7 +264,13 @@ double EMG::EY(double z, int s){
 	
 	return max(0. , s*(z-mu) - l*pow(si, 2) + (si / R(l*si - s*((z-mu)/si))));
 }
-//conditional expectation of Y^2 given z_i
+/**
+ * @brief conditional expectation of Y^2 given z_i
+ * 
+ * @param z 
+ * @param s 
+ * @return double 
+ */
 double EMG::EY2(double z, int s){
 	if (s==1){
 		z-=foot_print;
@@ -188,6 +282,14 @@ double EMG::EY2(double z, int s){
 
 //===============================================================================
 //functions that help estimate uniform support bounds
+/**
+ * @brief Get the nearest position. 
+ *  This is a helper function for estimating support bounds. 
+ * @param data 
+ * @param center 
+ * @param dist 
+ * @return int 
+ */
 int get_nearest_position(segment * data, double center, double dist){
 	int i;
 
@@ -204,7 +306,15 @@ int get_nearest_position(segment * data, double center, double dist){
 	}
 	return i;
 }
-
+/**
+ * @brief Get the sum of segment between j and k.
+ * 
+ * @param data 
+ * @param j 
+ * @param k 
+ * @param st 
+ * @return double 
+ */
 double get_sum(segment * data, int j, int k, int st){
 	double S 	= 0;
 	for (int i = j; i <k;i++){
@@ -212,7 +322,14 @@ double get_sum(segment * data, int j, int k, int st){
 	}
 	return S;
 }
-
+/**
+ * @brief 
+ * 
+ * @param components 
+ * @param data 
+ * @param K 
+ * @param N 
+ */
 void update_j_k( component * components,segment * data, int K, double N){
 	for (int k = 0 ; k < K;k++){
 		if (k > 0){
@@ -251,8 +368,6 @@ void update_j_k( component * components,segment * data, int K, double N){
 			j--;
 		}
 
-
-
 		if (K>j and j>=0 and components[j].reverse_neighbor!=NULL){
 			center 						= components[k].bidir.mu-delta;
 			components[k].reverse.j 	= get_nearest_position(data, center, components[j].reverse_neighbor->bidir.mu - center );
@@ -266,7 +381,13 @@ void update_j_k( component * components,segment * data, int K, double N){
 		}		
 	}
 }
-
+/**
+ * @brief 
+ * 
+ * @param components 
+ * @param data 
+ * @param K 
+ */
 void update_l(component * components, segment * data, int K){
 	for (int k 	= 0; k < K; k++){
 		//forward
@@ -325,17 +446,30 @@ void update_l(component * components, segment * data, int K){
 	}
 }
 
-
 //===============================================================================
 //components 
-//wrapper class for EMG and UNIFORM objects
-
+/**
+ * @brief Construct a new component::component object
+ * Empty constructor.  Sets pointers to NULL.
+ * 
+ */
 component::component(){//empty constructor
 	foot_print 			= 0;
 	forward_neighbor 	= NULL;
 	reverse_neighbor 	= NULL;
 } 
-//set the hyperparameters
+/**
+ * @brief set the hyperparameters
+ * 
+ * @param s_0 
+ * @param s_1 
+ * @param l_0 
+ * @param l_1 
+ * @param w_0 
+ * @param strand_0 
+ * @param N 
+ * @param K 
+ */
 void component::set_priors(double s_0, double s_1, 
 	double l_0, double l_1, double w_0,double strand_0, double N, int K) { 
 	//============================
@@ -361,8 +495,19 @@ void component::set_priors(double s_0, double s_1,
 		
 	w_thresh= ( ALPHA_2 ) / (N + ALPHA_2*K*3 + K*3 );
 }
-
-//randomly seed the sigma, pi, lambda ws etc...
+/**
+ * @brief randomly seed the sigma, pi, lambda ws etc...
+ * 
+ * @param mu 
+ * @param data 
+ * @param K 
+ * @param scale 
+ * @param noise_w 
+ * @param termination 
+ * @param fp 
+ * @param forward_bound 
+ * @param reverse_bound 
+ */
 void component::initialize_bounds(double mu, segment * data , int K, double scale, double noise_w, 
 	double termination, double fp, double forward_bound, double reverse_bound){//random seeds...
 	foot_print 	= fp;
@@ -423,7 +568,10 @@ void component::initialize_bounds(double mu, segment * data , int K, double scal
 		
 	}
 } 
-//print out the component parameters
+/**
+ * @brief Print out parameters of component.
+ * 
+ */
 void component::print(){
 	if (type==1){
 		string text 	= bidir.print()+ "\n";
@@ -434,7 +582,13 @@ void component::print(){
 		cout<<"NOISE: " << noise.w<<"," <<noise.pi<<endl;
 	}
 }
-//compute the density at x_i,s_i
+/**
+ * @brief compute the density at x_i,s_i
+ * 
+ * @param x 
+ * @param st 
+ * @return double 
+ */
 double component::evaluate(double x, int st){
 	if (type ==0){ //this is the uniform noise component
 		return noise.pdf(x, st);
@@ -451,8 +605,15 @@ double component::evaluate(double x, int st){
 	return bidir.ri_reverse + reverse.ri_reverse + forward.ri_reverse;
 }
 
-//compute the conditional expectations and add to running total
-//  This is equation #9 in the Azofeifa 2018 paper.
+/**
+ * @brief compute the conditional expectations and add to running total
+ *  This is equation #9 in the Azofeifa 2018 paper.
+ * 
+ * @param x 
+ * @param y 
+ * @param st 
+ * @param normalize 
+ */
 void component::add_stats(double x, double y, int st, double normalize){
 	if (type==0){//noise component
 		if (st==1){
@@ -498,7 +659,10 @@ void component::add_stats(double x, double y, int st, double normalize){
 		}
 	}
 }
-//rest running totals and responsibility terms
+/**
+ * @brief reset running totals and responsibility terms
+ * 
+ */
 void component::reset(){
 	if (type){
 		bidir.C=0;
@@ -513,15 +677,24 @@ void component::reset(){
 		
 	}
 }
-//used for large responsibility normalization term
+/**
+ * @brief used for large responsibility normalization term
+ * 
+ * @return double 
+ */
 double component::get_all_repo(){
 	if (type==1){
 		return bidir.r_forward+bidir.r_reverse+forward.r_forward+reverse.r_reverse;
 	}
 	return 0.;
 }
-//take all the nice sample means and variances
-// This is equation #10 in Azofeifa 2018.
+/**
+ * @brief take all the nice sample means and variances
+ *  This is equation #10 in Azofeifa 2018.
+ * 
+ * @param N 
+ * @param K 
+ */
 void component::update_parameters(double N, int K){
 	if (type==1){
 		//first for the bidirectional
@@ -562,10 +735,14 @@ void component::update_parameters(double N, int K){
 	}
 }
 
-
 //=========================================================
 //sorting functions for the classifier class 
-//(they are all bubble sort...)
+/**
+ * @brief Bubble Sort vector of components
+ * 
+ * @param components 
+ * @param K 
+ */
 void sort_components(component components[], int K){
 	bool sorted=true;
 	while (sorted){
@@ -580,7 +757,12 @@ void sort_components(component components[], int K){
 		}
 	}
 }
-
+/**
+ * @brief Bubble Sort mu ?
+ * 
+ * @param X 
+ * @return vector<vector<double>> 
+ */
 vector<vector<double>> sort_mus(vector<vector<double>> X){
 	bool changed=true;
 
@@ -597,7 +779,12 @@ vector<vector<double>> sort_mus(vector<vector<double>> X){
 	}
 	return X;
 }
-
+/**
+ * @brief Bubble sort the data values.
+ * 
+ * @param X 
+ * @param N 
+ */
 void sort_vector(double X[], int N){
 	bool sorted=true;
 	while (sorted){
@@ -616,8 +803,23 @@ void sort_vector(double X[], int N){
 
 //=========================================================
 //classifier class 
-//wrapper around EM
 //(most of these constructors are deprecated)
+/**
+ * @brief Construct a new classifier::classifier object
+ * 
+ * @param k 
+ * @param ct 
+ * @param mi 
+ * @param nm 
+ * @param R_MU 
+ * @param alpha_0 
+ * @param beta_0 
+ * @param alpha_1 
+ * @param beta_1 
+ * @param alpha_2 
+ * @param alpha_3 
+ * @param fp 
+ */
 classifier::classifier(int k, double ct, int mi, double nm,
 	double R_MU, double alpha_0, double beta_0,
 	double alpha_1, double beta_1, double alpha_2,double alpha_3, double fp){
@@ -657,6 +859,22 @@ classifier::classifier(int k, double ct, int mi, double nm,
 	ALPHA_2=alpha_2, ALPHA_3=alpha_3;
 	move_l 	= MOVE;
 }
+/**
+ * @brief Construct a new classifier::classifier object
+ * 
+ * @param ct 
+ * @param mi 
+ * @param nm 
+ * @param R_MU 
+ * @param alpha_0 
+ * @param beta_0 
+ * @param alpha_1 
+ * @param beta_1 
+ * @param alpha_2 
+ * @param alpha_3 
+ * @param IP 
+ * @param fp 
+ */
 classifier::classifier(double ct, int mi, double nm,
 	double R_MU, double alpha_0, double beta_0,
 	double alpha_1, double beta_1, double alpha_2,double alpha_3, vector<vector<double>> IP, double fp){
@@ -679,7 +897,15 @@ classifier::classifier(double ct, int mi, double nm,
 
 classifier::classifier(){}; 
 
-//this IS the EM...estimate away
+/**
+ * @brief This is the core EM algorithm.
+ * 
+ * @param data 
+ * @param mu_seeds 
+ * @param topology 
+ * @param elon_move 
+ * @return int 
+ */
 int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 	 int elon_move ){
 
@@ -857,17 +1083,3 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 
 	return 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

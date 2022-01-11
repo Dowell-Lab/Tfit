@@ -1,7 +1,7 @@
 /**
  * @file model_main.cpp
  * @author Joey Azofeifa
- * @brief 
+ * @brief This is the primary executable for running the model module. 
  * @version 0.1
  * @date 2016-05-20
  * 
@@ -14,19 +14,16 @@
 
 using namespace std;
 
-/* Function: model_run 
- *
- * Purpose: Run the EM model on collection of regions
- *
- * Args:
- *   P    parameters of current run
- *   rank   MPI processor number
- *   nprocs MPI total processes available
- *   density      (when called by main, this is zero)
- *   job_ID MPI job identifier
- *   LG   a log file associated with this process
- *
- * Returns:	int
+/**
+ * @brief The "model" module code.
+ * Runs the EM model on a collection of regions.  
+ * @param P		The parameters with which the program was run.
+ * @param rank	MPI processor number
+ * @param nprocs	MPI total processes available
+ * @param density	(when called by main, this is zero)
+ * @param job_ID	MPI job identifier
+ * @param LG		a log file associated with this process
+ * @return 	int  Is this a status code?
  */
 int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_File * LG){
 	int verbose 	= stoi(P->p["-v"]);
@@ -109,11 +106,6 @@ int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_
 	//wait for everybody to catch up
 	MPI_comm::wait_on_root(rank, nprocs);
 
-
-
-	return 1;
-
-
-
+	return 1;	
 
 }

@@ -1,7 +1,9 @@
 /**
  * @file load.h
  * @author Joey Azofeifa
- * @brief 
+ * @brief Header file for overloaded load.cpp.
+ * This is a very overloaded file -- has \ref segment, segment_fits, and \ref node classes
+ * Also contains some helper functions.   Should be refactored.
  * @version 0.1
  * @date 2016-05-20
  */
