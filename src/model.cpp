@@ -934,14 +934,16 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 	//compute just a uniform model...no need for the EM
 	if (K == 0){
 		ll 			= 0;
-		double 	l 	= (data->maxX-data->minX);
+		double 	l 	= (data->maxX-data->minX); //~length
 		double pos 	= 0;
 		double neg 	= 0;
+		// Sum per strand
 		for (int i = 0; i < data->XN; i++){
 			pos+=data->X[1][i];
 			neg+=data->X[2][i];
 		}
-		double pi 	= pos / (pos + neg);
+		double pi 	= pos / (pos + neg); // strand bias?
+		// Calculate MLE = -n log (pi/l) where pi is strand (1 -> +; -1 -> -)
 		for (int i = 0; i < data->XN; i++){
 			if (pi > 0){
 				ll+=log(pi / l)*data->X[1][i];
@@ -955,6 +957,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 	  // printf("\t l: %9.6f pos: %9.6f neg: %9.6f pi: %9.6f ll: %9.6f \n", l, pos, neg, pi, ll);
 		return 1;
 	}
+	// These are the seeds for the initial location.
 	random_device rd;
 	mt19937 mt(rd());
 	
@@ -977,11 +980,11 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 			mu 	= mu_seeds[i];
 			if (r_mu > 0){
 				normal_distribution<double> dist_r_mu(mu, r_mu);
-				mu 		= dist_r_mu(mt);
+				mu 		= dist_r_mu(mt); // mt is the random number
 			}
 		}else{
 			normal_distribution<double> dist_MU((data->minX+data->maxX)/2., r_mu);
-			mu 			= dist_MU(mt);
+			mu 			= dist_MU(mt); // mt is the random number
 		}
 		
 		mus[k] 	= mu;
@@ -1008,6 +1011,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 			components[k].forward_neighbor 	= NULL;
 		}
 	}
+	// I think this is the noise component ...
 	if (add){
 		components[K].initialize_bounds(0., data, 0., 0. , noise_max, pi, foot_print, data->minX, data->maxX);
 	}
@@ -1035,10 +1039,12 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 		//======================================================
 		//E-step, grab all the stats and responsibilities
 		ll 	= 0;
+		// i -> |D| (Azofeifa 2017 pseudocode) 
 		for (int i =0; i < data->XN;i++){
 			norm_forward=0;
 			norm_reverse=0;
 			
+			// Equation 7 in Azofeifa 2017: calculate r_i^k
 			for (int k=0; k < K+add; k++){ //computing the responsibility terms
 				if (data->X[1][i]){//if there is actually data point here...
 					norm_forward+=components[k].evaluate(data->X[0][i],1);
@@ -1055,6 +1061,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 			}
 			
 			//now we need to add the sufficient statistics, need to compute expectations
+			// Equation 9 in Azofeifa 2017
 			for (int k=0; k < K+add; k++){
 				if (norm_forward){
 					components[k].add_stats(data->X[0][i], data->X[1][i], 1, norm_forward);
@@ -1066,7 +1073,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 		}
 
 		//======================================================
-		//M-step
+		//M-step, Equation 10 in Azofeifa 2017, Theta_k^(t+1)
 		N=0; //get normalizing constant
 		for (int k = 0; k < K+add; k++){
 			N+=(components[k].get_all_repo());
@@ -1084,7 +1091,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 			return 0;	
 		}
 		//======================================================
-		//should we try to move the uniform component?
+		//should we try to move the uniform component? e.g. change L
 		if (u > 200 ){
 			sort_components(components, K);
 			//check_mu_positions(components, K);

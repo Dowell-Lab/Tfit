@@ -175,10 +175,11 @@ public:
  */
 class classifier{
 public:
-	int K; //number of components
+	int K; //number of components, if K=0 only UNI otherwise K+NOISE components
 	double convergence_threshold; //convergence check
 	int max_iterations; //stop after this many iterations
 	bool seed; //seed with a gross peak finder
+	// If noise_max > 0, include a noise component (e.g. it's actually K+1)
 	double noise_max; //fit a uniform noise component, never let it get above this weight
 	double move; //variance in moving the uniform supports
 	//===================================================================================
