@@ -1,10 +1,13 @@
 /**
  * @file read_in_parameters.cpp
  * @author Joey Azofeifa
- * @brief 
+ * @brief  Parameters are kept in a large map/hash. 
+ * @bug This method of tracking parameters is klunky at best.
+ * It means when a parameter is used, you must know what the option is called.
+ * So changes to its name impact HUGE segments of code. It also doesn't do 
+ * very many sanity checks on those parameters.
  * @version 0.1
  * @date 2016-05-20
- * 
  */
 #include <iostream>
 #include <fstream>
@@ -25,6 +28,10 @@
 #endif
 using namespace std;
 
+/**
+ * @brief Construct a new params::params object
+ *  Note that this also defines the defaults. 
+ */
 params::params(){
   p["-N"] 		= "EMG";
   p["-v"] 		= "1";
@@ -74,7 +81,6 @@ params::params(){
   p["-pi"] 			= "0.5";
   p["-w"] 			= "0.9";
   
-  
   N 				= 0;
   module 			= "";
   EXIT 			= 0;
@@ -83,20 +89,47 @@ params::params(){
   select 			= 0;
   CONFIG 			= 0;
 }
+/**
+ * @brief Converts a string to decimal (modifies input param) 
+ * 
+ * @param s 	The string to convert into a decimal
+ * @return false  if string is empty, space, or words
+ */
 bool is_decimal(const std::string& s){
    if(s.empty() || std::isspace(s[0]) || std::isalpha(s[0])) return false ;
    char * p ;
    strtod(s.c_str(), &p) ;
-   return (*p == 0) ;
+   return (*p == 0) ;  // Not sure I understand how this returns the decimal
 }
+/**
+ * @brief  
+ * 
+ * @param s 
+ * @return true 
+ * @return false 
+ */
 bool is_integer(const std::string& s){
 	std::string::const_iterator it = s.begin();
 	while (it != s.end() && std::isdigit(*it)) ++it;
 	return !s.empty() && it == s.end();
 }
+/**
+ * @brief 
+ * 
+ * @param input 
+ * @return true 
+ * @return false 
+ */
 bool isNumeric(const std::string& input) {
 	return std::all_of(input.begin(), input.end(), ::isdigit);
 }
+/**
+ * @brief 
+ * 
+ * @param s 
+ * @return true 
+ * @return false 
+ */
 bool is_number(string s)
 {
 	locale loc;
@@ -108,7 +141,13 @@ bool is_number(string s)
  	return true;
 
 }
-
+/**
+ * @brief 
+ * 
+ * @param FILE 
+ * @return true 
+ * @return false 
+ */
 bool is_path(string FILE){
 	ifstream FH(FILE);
 	if (FH){
@@ -116,9 +155,12 @@ bool is_path(string FILE){
 	}else{
 		return false;
 	}
-
 }
-
+/**
+ * @brief 
+ * 
+ * @return vector<string> 
+ */
 vector<string> params::validate_parameters(){
 	vector<string> errors;
 	for (int i = 0; i < 17; i++){
@@ -182,7 +224,11 @@ vector<string> params::validate_parameters(){
 
 	return errors;
 }
-
+/**
+ * @brief 
+ * 
+ * @return const std::string 
+ */
 const std::string currentDateTime() {
     time_t     now = time(0);
     struct tm  tstruct;
@@ -194,6 +240,9 @@ const std::string currentDateTime() {
 
     return buf;
 }
+/**
+ * @brief This is the usage statement.
+ */
 void params::help(){
 	printf("--------------------------------------------------------------------------------------\n");
 	printf("                        transcriptional inference (tINF)                 \n");
@@ -304,25 +353,13 @@ void params::help(){
 	printf("\nQuestions/Bugs? need_an_email_address_here!\n");
 		
 	printf("--------------------------------------------------------------------------------------------\n");
-
-	
-	
-
-	
-	
-
-
-
-	
-	
-
-
-	
-	
-
-
-
 }
+/**
+ * @brief 
+ * 
+ * @param nodes 
+ * @param cores 
+ */
 void params::display(int nodes, int cores){
 	bool MLE 	= stoi(p["-MLE"]);
 	bool SELECT = stoi(p["-select"]);
@@ -380,7 +417,12 @@ void params::display(int nodes, int cores){
 	
 }
 
-
+/**
+ * @brief 
+ * 
+ * @param ID 
+ * @return string 
+ */
 string params::get_header(int ID){
 
 	string header = "";
@@ -427,9 +469,13 @@ string params::get_header(int ID){
 	header+="#----------------------------------------------------\n";
 	return header;
 }
-
-
-
+/**
+ * @brief 
+ * 
+ * @param line 
+ * @param param 
+ * @param value 
+ */
 void split_config_line(string line, string& param, string& value){
 	bool   S=false;
 	for (int i = 0 ; i < line.size(); i++){
@@ -445,7 +491,13 @@ void split_config_line(string line, string& param, string& value){
 		}
 	}
 }
-
+/**
+ * @brief 
+ * 
+ * @param FILE 
+ * @param P 
+ * @param rank 
+ */
 void fill_in_config_file(string FILE, params * P, int rank){
 	ifstream FH(FILE);
 	if (FH){
@@ -473,7 +525,13 @@ void fill_in_config_file(string FILE, params * P, int rank){
 		P->EXIT 	= 1;
 	}
 }
-
+/**
+ * @brief 
+ * 
+ * @param argv 
+ * @param P 
+ * @param rank 
+ */
 void fill_in_options(char* argv[],params * P, int rank){
 	bool bidir 		= P->bidir;
 	bool model 		= P->model;
@@ -523,10 +581,15 @@ void fill_in_options(char* argv[],params * P, int rank){
 		P->EXIT 	= true;
 	}
 }
-
-
-
-
+/**
+ * @brief The primary function for reading in the command line
+ * options and producing the large map/has P
+ * 
+ * @param argv 	command line arguments
+ * @param P 	the parameters object
+ * @param rank  in current main this is MPI::COMM_WORLD.Get_rank();
+ * @return int 
+ */
 int read_in_parameters( char* argv[], params * P, int rank){	
 	string userModParameter = "";
 	argv = ++argv;
@@ -586,22 +649,3 @@ int read_in_parameters( char* argv[], params * P, int rank){
 	}
 	return 1;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

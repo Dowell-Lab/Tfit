@@ -1,7 +1,7 @@
 /**
  * @file read_in_parameters.h
  * @author Joey Azofeifa
- * @brief 
+ * @brief  Parameters are kept in a large map/hash. 
  * @version 0.1
  * @date 2016-05-20
  */
@@ -15,12 +15,13 @@
 #include <map>
 using namespace std;
 
+/**
+ * @brief The parameters class.
+ * Keeps a singular map ("p") which is a hash of all parameters.
+ */
 class params{
 public:
 	map<string, string> p;
-	params();
-	void display(int,int);
-	void help();
 	int N;
 	string module;
 	bool bidir;
@@ -29,35 +30,40 @@ public:
 	bool select;
 
 	map<string, string> p2;
-
 	map<string, string> p3;
 	map<string, string> p4;
 	map<string, string> p5;
 	map<string, string> p6;
-	
-	const char * isIntGroup[8] = {"-pad", "-minK", "-maxK", 
-						 "-rounds", "-mi", "-MLE", "-elon", "-merge"};
 
-	const char * isDecGroup[17]  = {  "-br","-ns", "-ct",
-						"-max_noise",    "-r_mu",
-						"-ALPHA_0", "-ALPHA_1", "-ALPHA_2", "-BETA_0", "-BETA_1",
-						"-bct", "-ms_pen" ,
-						"-lambda", "-sigma", 
-						"-foot_print", "-pi",
-						"-w"  };  
-	const char * isPathGroup[8] = {"-config", "-i", "-j", "-k", "-tss", "-log_out", "-o", "-q"};
-	string get_header(int);
-	
-	vector<string> validate_parameters();
 	bool EXIT;
 	
+	// Should these be private?
+	const char * isIntGroup[8] = {"-pad", "-minK", "-maxK", "-rounds", 
+	"-mi", "-MLE", "-elon", "-merge"};
+
+	const char * isDecGroup[17]  = {  "-br","-ns", "-ct", "-max_noise", 
+	"-r_mu", "-ALPHA_0", "-ALPHA_1", "-ALPHA_2", "-BETA_0", "-BETA_1", 
+	"-bct", "-ms_pen" , "-lambda", "-sigma", "-foot_print", "-pi", "-w" }; 
+
+	const char * isPathGroup[8] = {"-config", "-i", "-j", "-k", "-tss", 
+"-log_out", "-o", "-q"};
+	
+	//Constructors
+	params();
+
+	//Functions
+	void display(int,int);
+	void help();
+	string get_header(int);
+	vector<string> validate_parameters();
 };
 
+/* Deprecated: These don't appear to have code anywhere 
 void fillInOptions(char*,params);
-
 params * readInParameters(char**);
-
-const std::string currentDateTime();
 void fill_in_bidir_boostrap(params *);
+*/
+const std::string currentDateTime();
 int read_in_parameters( char**, params *, int );
+
 #endif

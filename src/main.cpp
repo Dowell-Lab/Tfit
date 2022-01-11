@@ -50,7 +50,7 @@ int main(int argc, char* argv[]){
   int threads  	= omp_get_max_threads();
 
   params * P 	= new params();
-  read_in_parameters(argv, P, rank );
+  read_in_parameters(argv, P, rank);
   if (P->EXIT){
     if (rank == 0){
       printf("exiting...\n");
