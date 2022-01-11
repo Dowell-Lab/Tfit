@@ -128,12 +128,14 @@ UNI::UNI(){} //empty constructor
 /**
  * @brief Construct a new UNI::UNI object
  * 
- * @param start 
- * @param stop 
- * @param w_i 
+ * @param start  genomic position of start
+ * @param stop   genomic position of stop
+ * @param w_i 	 
  * @param strand 
- * @param POS 
- * @param Pi 
+ * @param POS   position 
+ * @param Pi   Appears to also be strand info? Appears to overwrite strand? 
+ * 
+ * @bug Appears to set strand twice. First based on strand then to Pi.
  */
 UNI::UNI(double start, double stop, double w_i, int strand, int POS, double Pi){
 	a 		= start;
@@ -840,6 +842,23 @@ classifier::classifier(int k, double ct, int mi, double nm,
 
 	move_l = true;
 }
+/**
+ * @brief Construct a new classifier::classifier object
+ * 
+ * @param k 
+ * @param ct 
+ * @param mi 
+ * @param nm 
+ * @param R_MU 
+ * @param alpha_0 
+ * @param beta_0 
+ * @param alpha_1 
+ * @param beta_1 
+ * @param alpha_2 
+ * @param alpha_3 
+ * @param MOVE 
+ * @param fp 
+ */
 classifier::classifier(int k, double ct, int mi, double nm,
 	double R_MU, double alpha_0, double beta_0,
 	double alpha_1, double beta_1, double alpha_2,double alpha_3, bool MOVE, double fp){

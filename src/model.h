@@ -17,20 +17,28 @@ using namespace std;
 /**
  * @brief Uniform distribution class
  * @author Joey Azofeifa  
+ * @bug Uses a distinct strand representation from everywhere else in Tfit code.
  */
 class UNI{
 public:
-	double a,b,w,pi;
+	double a,b; // Bounds of the uniform interval
+	double w;
+	double pi;	// strand (=1 if + strand; =0 if - strand)
 	int j,k,l; //so j and k are the bounds the uniform can move through, l is the current one
 	double left_SUM, right_SUM;
-	int st;
-	int pos;
+	int st;		// Strand
+	int pos;	
+
 	//sufficient stats
 	double ri_forward, ri_reverse; //current responsibility
 	double r_forward, r_reverse; //running total
 	double delta_a, delta_b;
+
+	// Constructors
 	UNI();
 	UNI(double, double, double, int, int, double);
+
+	// Functions
 	double pdf(double,int);	
 	string print();
 
@@ -65,8 +73,11 @@ public:
 	double foot_print;
 	bool move_fp;
 	double prev_mu;
+
+	// Constructors
 	EMG();
 	EMG(double, double, double, double, double);
+	// Functions
 	double pdf(double,int);
 	double EY(double ,int);
 	double EY2(double ,int);
@@ -94,6 +105,8 @@ public:
 	double ri_forward, ri_reverse; //current responsibility
 	double r_forward, r_reverse; //running total
 	double pdf(double, int);
+
+	// Constructors
 	NOISE();
 	NOISE(double, double, double, double);
 };
@@ -133,22 +146,27 @@ public:
 
 	double w_thresh=0;
 
-
+	// Constructor
 	component();
-	void initialize(double, segment *, int , double , double, double, double);
-	void initialize_with_parameters(vector<double>, segment *, int, double, double, double);
-	void initialize_with_parameters2(vector<double>, segment *, int, double, double, double);
+	// Functions
 	void initialize_bounds(double,  segment *, int , double , double, double, double, double, double);
 	double evaluate(double, int);
 	void add_stats(double, double , int, double);
-	double pdf(double , int);
 	void update_parameters(double,int);
 	void set_priors(double,double,double,double,double,double,double, int);
 	double get_all_repo();
-	bool check_elongation_support();
 	void print();
 	void reset();
+	/*  Deprecated: These appear to NOT be used or defined.
+	void initialize(double, segment *, int , double , double, double, double);
+	void initialize_with_parameters(vector<double>, segment *, int, double, double, double);
+	void initialize_with_parameters2(vector<double>, segment *, int, double, double, double);
+	double pdf(double , int);
+	bool check_elongation_support();
 	string write_out();
+	*/
+
+
 };
 
 /**
@@ -167,21 +185,6 @@ public:
 	//Bayesian Priors
 	double p;
 	double foot_print;
-	int fit(segment *,vector<double>);
-	int fit2(segment *,vector<double>, int, int);
-	classifier(int, double, int, double, double, double, double
-		, double, double, double, double, double);
-	classifier(int, double, int, double, double, double, double
-		, double, double, double, double, bool, double);
-	classifier(double , int  , double ,
-		double , double , double ,
-		double , double , double ,double , vector<vector<double>>, double );
-
-	classifier();
-	void free_classifier();
-	string print_out_components();
-	int fit_uniform_only(segment * );
-	int fit_uniform_only2(segment * );
 	
 	//===================================================================================
 	//final important parameters
@@ -193,6 +196,27 @@ public:
 	bool move_l;
 	double ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3;
 	vector<vector<double>> init_parameters;
+
+	// Constructor
+	classifier(int, double, int, double, double, double, double
+		, double, double, double, double, double);
+	classifier(int, double, int, double, double, double, double
+		, double, double, double, double, bool, double);
+    classifier(double , int  , double ,
+		double , double , double ,
+		double , double , double ,double , vector<vector<double>>, double );
+	classifier();
+
+	// Functions
+	int fit2(segment *,vector<double>, int, int);
+
+    /* Deprecated:  These appear undefined.	
+	int fit(segment *,vector<double>);
+	void free_classifier();
+	string print_out_components();
+	int fit_uniform_only(segment * );
+	int fit_uniform_only2(segment * );
+	*/
 };
 
 
