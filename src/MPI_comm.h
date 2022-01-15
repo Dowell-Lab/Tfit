@@ -37,5 +37,6 @@ void wait_on_root(int, int);
 vector<double> send_out_parameters(vector<double> , int , int );
 
 map<string, vector<segment *> >  convert_segment_vector(vector<segment *> );
-}
+
+} // namespace MPI_comm
 #endif

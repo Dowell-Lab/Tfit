@@ -17,6 +17,7 @@
 #include "read_in_parameters.h"
 
 using namespace std;
+
 class simple_c_free_mode;
 
 class classifier; //forward declare
@@ -158,6 +159,6 @@ namespace load{
 	vector<segment_fits *> load_K_models_out(string);
 	void write_out_bidirectionals_ms_pen(vector<segment_fits*> , params * , int, int );
 
-}
+} // namespace load
 
 #endif

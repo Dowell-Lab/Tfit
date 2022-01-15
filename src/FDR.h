@@ -24,6 +24,7 @@
 #include "read_in_parameters.h"
 
 using namespace std;
+
 class normal{
  public:
   double mean, std, x,threshold, c2;

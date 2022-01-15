@@ -14,6 +14,7 @@
 #include <vector>
 
 using namespace std;
+
 class gap_interval{
 public:
 	double start, stop;

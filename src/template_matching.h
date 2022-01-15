@@ -18,6 +18,7 @@
 #include "read_in_parameters.h"
 
 using namespace std;
+
 vector<double> peak_bidirs(segment * );
 int sample_centers(vector<double>, double);
 void noise_global_template_matching(vector<segment*>, double);
