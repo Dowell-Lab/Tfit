@@ -8,4 +8,4 @@ build
 .DS_Store
 .vscode
 tags
-docs
+docs/Doxygen
