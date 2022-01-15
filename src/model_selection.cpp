@@ -7,8 +7,10 @@
  * 
  */
 #include "model_selection.h"
-#include "template_matching.h"
+
 #include <stdlib.h> 
+
+#include "template_matching.h"
 
 int BIC(double penality, segment_fits * S){
 	double noise_bic, model_bic;

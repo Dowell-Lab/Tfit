@@ -9,31 +9,33 @@
  * @date 2016-05-20
  * 
  */
+#include "load.h"
+
+#include <stdio.h>
+#include <unistd.h>
+#include <time.h>
+#include <math.h>   
+
 #include <string>
 #include <vector>
-#include "load.h"
-#include "split.h"
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <cmath>
+#include <limits>
+#include <iostream>
+#include <algorithm>
+#include <random>
+#include <exception>
+
 #include "dirent.h"
+
+#include "split.h"
 #include "template_matching.h"
 #include "model.h"
 #include "read_in_parameters.h"
 #include "across_segments.h"
 #include "model_selection.h"
-#include <cmath>
-#include <math.h>   
-#include <limits>
-#include <iostream>
-#include <algorithm>
-#include <unistd.h>
-#include <random>
-#include <exception>
-
-#include <stdio.h>
-#include <time.h>
-#include <math.h>   
 
 using namespace std;
 

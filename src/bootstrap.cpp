@@ -7,19 +7,22 @@
  * 
  */
 #include "bootstrap.h"
-#include "load.h"
+
 #include <vector>
-#include "read_in_parameters.h"
-#include "model.h"
 #include <random>
 #include <iostream>
 #include <fstream>
-
-#include <omp.h>
-#include "template_matching.h"
 #ifdef USING_ICC
 #include <aligned_new>
 #endif
+
+#include <omp.h>
+
+#include "load.h"
+#include "read_in_parameters.h"
+#include "model.h"
+#include "template_matching.h"
+
 using namespace std;
 
 int sample(double ** CDF, int XN, double sum_N, segment * NS, double pi , segment * S){

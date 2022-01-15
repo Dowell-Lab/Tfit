@@ -6,19 +6,21 @@
  * @date 2016-05-20
  * 
  */
-#include <mpi.h>
 #include "MPI_comm.h"
-#include "load.h"
-#include <vector>
-#include "across_segments.h"
+
 #include <sys/types.h>
 #include <dirent.h>
-#include "split.h"
 #include <stddef.h>
+
+#include <vector>
+
+#include <mpi.h>
+
+#include "load.h"
+#include "across_segments.h"
+#include "split.h"
 #include "read_in_parameters.h"
-#ifdef USING_ICC
-#include <aligned_new>
-#endif
+
 using namespace std;
 
 vector<segment *> MPI_comm::slice_segments(vector<segment *> segments, int rank, int nprocs){

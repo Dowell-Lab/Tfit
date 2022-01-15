@@ -7,9 +7,7 @@
  * 
  */
 #include "density_profiler.h"
-#include <iostream>
-#include "split.h"
-#include <fstream>
+
 #ifdef USING_ICC
 #include <mathimf.h>
 #else
@@ -19,6 +17,12 @@
 #ifdef USING_ICC
 #include <aligned_new>
 #endif
+
+#include <iostream>
+#include <fstream>
+
+#include "split.h"
+
 using namespace std;
 
 gap_interval::gap_interval(){};

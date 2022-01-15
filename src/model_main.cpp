@@ -7,10 +7,12 @@
  * 
  */
 #include "model_main.h"
+
+#include <omp.h>
+
 #include "template_matching.h"
 #include "density_profiler.h"
 #include "MPI_comm.h"
-#include <omp.h>
 
 using namespace std;
 

@@ -7,18 +7,22 @@
  * @date 2016-05-20
  * 
  */
-#include "load.h"
-#include "model.h"
+#include "template_matching.h"
+
 #include <limits>
 #include <iostream>
 #include <algorithm>
-#include "template_matching.h"
 #include <fstream>
 #include <random>
-#include "omp.h"
 #include <cmath> 
+
+#include "omp.h"
+
 #include "BIC.h"
 #include "FDR.h"
+#include "load.h"
+#include "model.h"
+
 using namespace std;
 
 double nINF	=-exp(1000);

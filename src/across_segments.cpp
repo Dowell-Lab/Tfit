@@ -6,19 +6,24 @@
  * @date 2016-05-20
  * 
  */
-#include <mpi.h>
-#include "load.h"
 #include "across_segments.h"
-#include "model.h"
-#include "template_matching.h"
-#include "model_single.h"
+
+#include <time.h>
+
 #include <iostream>
 #include <fstream>
 #include <map>
-#include <time.h>
+
+#include <mpi.h>
 #include "omp.h"
+
+#include "load.h"
+#include "model.h"
+#include "template_matching.h"
+#include "model_single.h"
 #include "read_in_parameters.h"
 #include "error_stdo_logging.h"
+
 using namespace std;
 
 

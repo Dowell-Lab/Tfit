@@ -13,17 +13,21 @@
  * @date 2016-05-20
  * 
  */
-#include <mpi.h>
 #include "model.h"
-#include "load.h"
-#include "template_matching.h"
+
 #include <math.h>   
+#include <unistd.h>
+
 #include <limits>
 #include <iostream>
 #include <algorithm>
-#include <unistd.h>
 #include <random>
+
+#include <mpi.h>
 #include "omp.h"
+
+#include "load.h"
+#include "template_matching.h"
 
 //=============================================
 //Helper functions

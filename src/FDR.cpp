@@ -7,18 +7,23 @@
  * 
  */
 #include "FDR.h"
-#include "load.h"
-#include "model.h"
+
+#include <math.h> 
+
 #include <limits>
 #include <iostream>
 #include <algorithm>
 #include <random>
-#include "omp.h"
 #include <cmath>
 #include <vector>
 #include <string>
+
+#include "omp.h"
+
 #include "BIC.h"
-#include <math.h> 
+#include "load.h"
+#include "model.h"
+
 using namespace std;
 
 normal::normal(){}

@@ -6,31 +6,27 @@
  * @date 2016-05-20
  * 
  */
+#include "model_single.h"
+
 #ifdef USING_ICC
 #include <mathimf.h>
 #else
 #include <math.h>   
 #endif
+#include <unistd.h>
+
 #include <limits>
-#include "model_single.h"
-#include "load.h"
-#include "template_matching.h"
 #include <iostream>
 #include <algorithm>
-#include <unistd.h>
 #include <random>
-#ifdef USING_ICC
-#include <mathimf.h>
-#else
-#include <math.h>   
-#endif
-#include "model.h"
-#include "template_matching.h"
 #ifdef USING_ICC
 #include <aligned_new>
 #endif
 
-
+#include "model.h"
+#include "template_matching.h"
+#include "load.h"
+#include "template_matching.h"
 
 NLR::NLR(){}
 

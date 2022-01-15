@@ -5,8 +5,8 @@
  * @version 0.1
  * @date 2016-11-22
  */
-#include "model.h"
 #include <cmath>
+#include "model.h"
 using namespace std;
 
 

@@ -9,23 +9,26 @@
  * @version 0.1
  * @date 2016-05-20
  */
+#include "read_in_parameters.h"
+
+#include <unistd.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <stdio.h>
+#include <time.h>
+
 #include <iostream>
 #include <fstream>
-#include <unistd.h>
 #include <string>
 #include <vector>
 #include <algorithm>
-#include "read_in_parameters.h"
-#include <stdio.h>
-#include <ctype.h>
 #include <cctype>
-#include <stdio.h>
-#include <time.h>
 #include <locale>
-#include "split.h"
 #ifdef USING_ICC
 #include <aligned_new>
 #endif
+
+#include "split.h"
 using namespace std;
 
 /**
