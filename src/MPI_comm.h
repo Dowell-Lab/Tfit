@@ -8,14 +8,16 @@
  */
 #ifndef MPI_comm_H
 #define MPI_comm_H
-#include "load.h"
-#include "across_segments.h"
-#include <vector>
+
 #include <fstream>
 #include <iostream>
-
 #include <map>
+#include <vector>
+
+#include "across_segments.h"
+#include "load.h"
 #include "read_in_parameters.h"
+
 namespace MPI_comm {
 
 vector<segment *> slice_segments(vector<segment *>, int , int );

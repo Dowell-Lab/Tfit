@@ -10,8 +10,11 @@
  */
 #ifndef model_H
 #define model_H
+
 #include <string>
+
 #include "load.h"
+
 using namespace std;
 
 /**

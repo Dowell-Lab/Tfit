@@ -9,10 +9,13 @@
  */
 #ifndef load_H
 #define load_H
+
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
+
 #include "read_in_parameters.h"
+
 using namespace std;
 class simple_c_free_mode;
 

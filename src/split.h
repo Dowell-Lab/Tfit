@@ -9,8 +9,9 @@
 #ifndef split_H
 #define split_H
 
-#include <vector>
 #include <string>
+#include <vector>
+
 using namespace std;
 
 vector<string> string_split(string , const char);

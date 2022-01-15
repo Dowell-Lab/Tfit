@@ -13,14 +13,14 @@
 #include <mpi.h>
 #include <omp.h>
 
-#include "MPI_comm.h"
-#include "template_matching.h"
 #include "density_profiler.h"
-#include "model_main.h"
-#include "select_main.h"
+#include "BIC.h"
 #include "error_stdo_logging.h"
 #include "FDR.h"
-#include "BIC.h"
+#include "model_main.h"
+#include "MPI_comm.h"
+#include "select_main.h"
+#include "template_matching.h"
 
 using namespace std;
 int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){

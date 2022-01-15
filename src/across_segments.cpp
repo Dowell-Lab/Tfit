@@ -10,19 +10,19 @@
 
 #include <time.h>
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <map>
 
 #include <mpi.h>
 #include "omp.h"
 
+#include "error_stdo_logging.h"
 #include "load.h"
 #include "model.h"
-#include "template_matching.h"
 #include "model_single.h"
 #include "read_in_parameters.h"
-#include "error_stdo_logging.h"
+#include "template_matching.h"
 
 using namespace std;
 

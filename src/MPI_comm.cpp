@@ -8,18 +8,18 @@
  */
 #include "MPI_comm.h"
 
-#include <sys/types.h>
 #include <dirent.h>
 #include <stddef.h>
+#include <sys/types.h>
 
 #include <vector>
 
 #include <mpi.h>
 
-#include "load.h"
 #include "across_segments.h"
-#include "split.h"
+#include "load.h"
 #include "read_in_parameters.h"
+#include "split.h"
 
 using namespace std;
 

@@ -8,8 +8,9 @@
  */
 #ifndef model_main_H
 #define model_main_H
-#include "read_in_parameters.h"
+
 #include "error_stdo_logging.h"
+#include "read_in_parameters.h"
 
 int model_run(params *, int, int, double, int, Log_File * );
 

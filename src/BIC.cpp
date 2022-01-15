@@ -6,7 +6,9 @@
  * @date 2016-11-22
  */
 #include <cmath>
+
 #include "model.h"
+
 using namespace std;
 
 

@@ -8,30 +8,35 @@
  * @date 2016-05-20
  * 
  */
-#include <mpi.h>
-#include "load.h"
-#include "model.h"
-#include <iostream>
-#include "across_segments.h"
-#include <limits>
-#include <math.h>   
+
 #include <errno.h>
-#include "error_stdo_logging.h"
-#include <time.h>  
+#include <math.h>   
 #include <stdio.h>   
+#include <time.h>  
+
 #include <chrono>
+#include <iostream>
+#include <limits>
 #include <map>
-#include "read_in_parameters.h"
-#include "model_selection.h"
 #include <thread>
-#include "template_matching.h"
-#include "MPI_comm.h"
+
+#include <mpi.h>
+#include <omp.h>
+
+#include "across_segments.h"
+#include "bidir_main.h"
 #include "bootstrap.h"
 #include "density_profiler.h"
-#include <omp.h>
-#include "bidir_main.h"
+#include "error_stdo_logging.h"
+#include "load.h"
+#include "MPI_comm.h"
+#include "model.h"
 #include "model_main.h"
+#include "model_selection.h"
+#include "read_in_parameters.h"
 #include "select_main.h"
+#include "template_matching.h"
+
 using namespace std;
 
 /**

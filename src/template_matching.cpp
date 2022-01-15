@@ -9,12 +9,12 @@
  */
 #include "template_matching.h"
 
-#include <limits>
-#include <iostream>
 #include <algorithm>
-#include <fstream>
-#include <random>
 #include <cmath> 
+#include <fstream>
+#include <iostream>
+#include <limits>
+#include <random>
 
 #include "omp.h"
 

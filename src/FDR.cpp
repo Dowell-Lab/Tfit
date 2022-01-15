@@ -10,13 +10,13 @@
 
 #include <math.h> 
 
-#include <limits>
-#include <iostream>
 #include <algorithm>
-#include <random>
 #include <cmath>
-#include <vector>
+#include <iostream>
+#include <limits>
+#include <random>
 #include <string>
+#include <vector>
 
 #include "omp.h"
 

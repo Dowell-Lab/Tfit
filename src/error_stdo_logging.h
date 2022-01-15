@@ -8,9 +8,11 @@
  */
 #ifndef error_stdo_logging_H
 #define error_stdo_logging_H
+
 #include <fstream>
-#include <string>
 #include <iostream>
+#include <string>
+
 using namespace std;
 
 class Log_File{

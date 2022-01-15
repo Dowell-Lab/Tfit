@@ -8,11 +8,13 @@
  */
 #ifndef bootstrap_H
 #define bootstrap_H
-#include "load.h"
-#include <vector>
-#include "read_in_parameters.h"
-#include <iostream>
+
 #include <fstream>
+#include <iostream>
+#include <vector>
+
+#include "load.h"
+#include "read_in_parameters.h"
 
 using namespace std;
 

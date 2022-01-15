@@ -8,10 +8,11 @@
  */
 #ifndef across_segments_H
 #define across_segments_H
-#include "load.h"
-#include "read_in_parameters.h"
-#include "model.h"
+
 #include "error_stdo_logging.h"
+#include "load.h"
+#include "model.h"
+#include "read_in_parameters.h"
 
 string check_file(string, int);
 

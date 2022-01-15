@@ -15,17 +15,16 @@
 #endif
 #include <unistd.h>
 
-#include <limits>
-#include <iostream>
 #include <algorithm>
-#include <random>
 #ifdef USING_ICC
 #include <aligned_new>
 #endif
+#include <iostream>
+#include <limits>
+#include <random>
 
-#include "model.h"
-#include "template_matching.h"
 #include "load.h"
+#include "model.h"
 #include "template_matching.h"
 
 NLR::NLR(){}

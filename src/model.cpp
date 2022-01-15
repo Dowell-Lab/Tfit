@@ -18,9 +18,9 @@
 #include <math.h>   
 #include <unistd.h>
 
-#include <limits>
-#include <iostream>
 #include <algorithm>
+#include <iostream>
+#include <limits>
 #include <random>
 
 #include <mpi.h>

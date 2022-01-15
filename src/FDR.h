@@ -8,17 +8,21 @@
  */
 #ifndef FDR_H
 #define FDR_H
+
+#include <algorithm>
+#include <cmath>
+#include <iostream>
 #include <limits>
+#include <random>
+#include <string>
+#include <vector>
+
+#include "omp.h"
+
 #include "load.h"
 #include "model.h"
-#include <iostream>
-#include <algorithm>
-#include <random>
-#include "omp.h"
-#include <cmath>
-#include <vector>
-#include <string>
 #include "read_in_parameters.h"
+
 using namespace std;
 class normal{
  public:

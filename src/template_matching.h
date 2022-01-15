@@ -8,12 +8,15 @@
  */
 #ifndef template_H
 #define template_H
-#include "load.h"
-#include "read_in_parameters.h"
+
+#include <iostream>
 #include <math.h>
 #include <vector>
-#include <iostream>
+
 #include "FDR.h"
+#include "load.h"
+#include "read_in_parameters.h"
+
 using namespace std;
 vector<double> peak_bidirs(segment * );
 int sample_centers(vector<double>, double);

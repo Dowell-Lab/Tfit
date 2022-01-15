@@ -11,24 +11,24 @@
  */
 #include "read_in_parameters.h"
 
-#include <unistd.h>
-#include <stdio.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <time.h>
+#include <unistd.h>
 
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <vector>
 #include <algorithm>
-#include <cctype>
-#include <locale>
 #ifdef USING_ICC
 #include <aligned_new>
 #endif
+#include <cctype>
+#include <fstream>
+#include <iostream>
+#include <locale>
+#include <string>
+#include <vector>
 
 #include "split.h"
+
 using namespace std;
 
 /**

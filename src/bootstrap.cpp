@@ -8,19 +8,19 @@
  */
 #include "bootstrap.h"
 
-#include <vector>
-#include <random>
-#include <iostream>
-#include <fstream>
 #ifdef USING_ICC
 #include <aligned_new>
 #endif
+#include <fstream>
+#include <iostream>
+#include <random>
+#include <vector>
 
 #include <omp.h>
 
 #include "load.h"
-#include "read_in_parameters.h"
 #include "model.h"
+#include "read_in_parameters.h"
 #include "template_matching.h"
 
 using namespace std;

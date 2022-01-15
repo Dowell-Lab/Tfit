@@ -11,10 +11,10 @@
 #include <omp.h>
 
 #include "load.h"
-#include "MPI_comm.h"
-#include "template_matching.h"
 #include "model_main.h"
 #include "model_selection.h"
+#include "MPI_comm.h"
+#include "template_matching.h"
 
 int select_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	// int verbose 	= stoi(P->p["-v"]);

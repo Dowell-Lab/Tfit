@@ -8,9 +8,11 @@
  */
 #ifndef density_profiler_H
 #define density_profiler_H
+
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
+
 using namespace std;
 class gap_interval{
 public:

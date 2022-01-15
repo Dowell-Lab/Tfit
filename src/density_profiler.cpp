@@ -9,17 +9,17 @@
 #include "density_profiler.h"
 
 #ifdef USING_ICC
+#include <aligned_new>
+#endif
+#include <cmath>
+#ifdef USING_ICC
 #include <mathimf.h>
 #else
 #include <math.h>   
 #endif
-#include <cmath>
-#ifdef USING_ICC
-#include <aligned_new>
-#endif
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 #include "split.h"
 

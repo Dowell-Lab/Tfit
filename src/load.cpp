@@ -11,31 +11,30 @@
  */
 #include "load.h"
 
-#include <stdio.h>
-#include <unistd.h>
-#include <time.h>
 #include <math.h>   
+#include <stdio.h>
+#include <time.h>
+#include <unistd.h>
 
+#include <algorithm>
+#include <cmath>
+#include <exception>
+#include <fstream>
+#include <iostream>
+#include <limits>
+#include <map>
+#include <random>
 #include <string>
 #include <vector>
-#include <iostream>
-#include <fstream>
-#include <map>
-#include <cmath>
-#include <limits>
-#include <iostream>
-#include <algorithm>
-#include <random>
-#include <exception>
 
 #include "dirent.h"
 
+#include "across_segments.h"
+#include "model.h"
+#include "model_selection.h"
+#include "read_in_parameters.h"
 #include "split.h"
 #include "template_matching.h"
-#include "model.h"
-#include "read_in_parameters.h"
-#include "across_segments.h"
-#include "model_selection.h"
 
 using namespace std;
 
