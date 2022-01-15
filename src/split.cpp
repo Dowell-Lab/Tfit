@@ -39,7 +39,7 @@ vector<string> splitter(string ELE, string D){
 	int j = 0;
 	vector<string> results;
 	const char *d =D.c_str();
-	while (not ELE.empty() and j != ELE.size()){
+	while (not ELE.empty() and j != (int)ELE.size()){
 		if (ELE[j] == *d){
 			results.push_back(ELE.substr(0,j));
 			ELE=ELE.substr(j+1,ELE.size());
@@ -111,7 +111,7 @@ vector<string> split_by_dash(string line, string delim){
 string strip(string ELE, string D){
 	const char *d 	= D.c_str();
 	string result 	= "";
-	for (int i = 0; i < ELE.size(); i++){
+	for (int i = 0; i < (int)ELE.size(); i++){
 		if (ELE[i]==*d){
 			break;
 		}else{
