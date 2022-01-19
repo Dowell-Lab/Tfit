@@ -78,10 +78,10 @@ int sample_centers(vector<double> centers, double p){
 
 
 void BIC_template(segment * data,  double * BIC_values, double * densities, double * densities_r, double window, 
-		  double sigma, double lambda, double foot_print, double pi, double w){
+		  double sigma, double lambda, double foot_print, double pi, double w, int thr){
   double vl;
   int NN 	= int(data->XN);
-  int threads  	= omp_get_max_threads();
+  int threads  	= thr; // omp_get_max_threads();
   int counts 		= NN / threads;
   #pragma omp parallel num_threads(threads)
   {
@@ -183,7 +183,7 @@ double run_global_template_matching(vector<segment*> segments,
     double er 		= segments[i]->rN*( 2*(window*ns)*0.05 /(l*ns ));
     double stdf 	= sqrt(ef*(1- (  2*(window*ns)*0.05/(l*ns )  ) )  );
     double stdr 	= sqrt(er*(1- (  2*(window*ns)*0.05 /(l*ns ) ) )  );
-    BIC_template(segments[i],  BIC_values, densities, densities_r, window, sigma, lambda, foot_print, pi, w);   
+    BIC_template(segments[i],  BIC_values, densities, densities_r, window, sigma, lambda, foot_print, pi, w, P->threads);   
     double start=-1, rN=0.0 , rF=0.0, rR=0.0, rB=0.0;
     vector<vector<double>> HITS;
     for (int j = 1; j<segments[i]->XN-1; j++){

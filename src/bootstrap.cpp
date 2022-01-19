@@ -99,7 +99,7 @@ void subsample(segment * S, segment * NS ){
 vector<segment *> make_bootstraps(segment * S, params * P){
 	int rounds 	= stoi(P->p6["-rounds"]);
 	int brounds = stoi(P->p6["-brounds"]);
-	int np 		= omp_get_max_threads();
+	int np 		= P->threads; // omp_get_max_threads();
 	//make segmnets
 	vector<segment *> segments(brounds);
 	// NS->minX = S->minX, NS->maxX = S->maxX;

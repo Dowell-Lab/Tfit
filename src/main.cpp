@@ -1,6 +1,7 @@
 /**
  * @file main.cpp
  * @author Joey Azofeifa
+ * @copyright Copyright 2016 Dowell Lab 
  * @brief This is the primary executable file.  
  * It contains the mpi code, reading parameters, then forking to one of three functions:
  * \ref bidir_run, \ref model_run or \ref select_run -- which are all separate files. 
@@ -64,6 +65,16 @@ int main(int argc, char* argv[]) {
   int job_ID = MPI_comm::get_job_ID(P->p["-log_out"], P->p["-N"], rank, nprocs);
 
   int verbose   = stoi(P->p["-v"]);
+
+  int reqthreads = stoi(P->p["-threads"]);
+  // printf("THREADS: %d requested; %d available\n", reqthreads, threads);
+  if ((reqthreads != 0) && (reqthreads <= threads)) {
+    threads = reqthreads;
+    P->threads = reqthreads;
+  } else {
+    P->threads = threads;
+  }
+
   Log_File * LG = new  Log_File(rank, job_ID, P->p["-N"], P->p["-log_out"]);
   if (verbose > 0) {
   // printf("This should be output when verbose is set!\n");

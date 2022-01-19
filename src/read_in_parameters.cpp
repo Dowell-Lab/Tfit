@@ -38,6 +38,7 @@ using namespace std;
 params::params(){
   p["-N"] 		= "EMG";
   p["-v"] 		= "1";
+  p["-threads"] = "32";
   
   p["-h"] 		= "";
   p["--help"] 	= "";
@@ -91,6 +92,7 @@ params::params(){
   model 			= 0;
   select 			= 0;
   CONFIG 			= 0;
+  threads = 1;
 }
 /**
  * @brief Converts a string to decimal (modifies input param) 
@@ -586,7 +588,7 @@ void fill_in_options(char* argv[],params * P, int rank){
 }
 /**
  * @brief The primary function for reading in the command line
- * options and producing the large map/has P
+ * options and producing the large map/hash P
  * 
  * @param argv 	command line arguments
  * @param P 	the parameters object

@@ -32,10 +32,13 @@ public:
 	bool CONFIG;
 	bool select;
 
+    int threads;
+/*
 	map<string, string> p2;
 	map<string, string> p3;
 	map<string, string> p4;
 	map<string, string> p5;
+	*/
 	map<string, string> p6;
 
 	bool EXIT;
@@ -61,11 +64,6 @@ public:
 	vector<string> validate_parameters();
 };
 
-/* Deprecated: These don't appear to have code anywhere 
-void fillInOptions(char*,params);
-params * readInParameters(char**);
-void fill_in_bidir_boostrap(params *);
-*/
 const std::string currentDateTime();
 int read_in_parameters( char**, params *, int );
 
