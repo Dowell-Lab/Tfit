@@ -15,6 +15,10 @@
 
 using namespace std;
 
+/**
+ * @brief Presumably holds file info for logging?
+ * 
+ */
 class Log_File{
 public:
 	int job_ID;

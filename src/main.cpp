@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
   int verbose   = stoi(P->p["-v"]);
 
   int reqthreads = stoi(P->p["-threads"]);
-  // printf("THREADS: %d requested; %d available\n", reqthreads, threads);
+  printf("THREADS: %d requested; %d available\n", reqthreads, threads);
   if ((reqthreads != 0) && (reqthreads <= threads)) {
     threads = reqthreads;
     P->threads = reqthreads;

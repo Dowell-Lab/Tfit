@@ -14,6 +14,10 @@
 
 using namespace std;
 
+/**
+ * @brief 
+ * 
+ */
 class NLR{
 public:
 	double mu, si, l, pi, wn , wl, wr, fp;
@@ -34,7 +38,10 @@ public:
 
 };
 
-
+/**
+ * @brief 
+ * 
+ */
 class classifier_single{
 public:
 	double ll, covergence_threshold, max_iterations;

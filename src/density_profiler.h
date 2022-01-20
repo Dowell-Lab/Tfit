@@ -15,6 +15,10 @@
 
 using namespace std;
 
+/**
+ * @brief I'm not actually sure what this object is for ...
+ * 
+ */
 class gap_interval{
 public:
 	double start, stop;

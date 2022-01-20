@@ -25,6 +25,10 @@
 
 using namespace std;
 
+/**
+ * @brief 
+ * 
+ */
 class normal{
  public:
   double mean, std, x,threshold, c2;
@@ -33,7 +37,10 @@ class normal{
   double cdf(double);
   double pdf(double); 
 };
-
+/**
+ * @brief 
+ * 
+ */
 class exponential{
  public:
   double lambda,mu;
@@ -41,7 +48,10 @@ class exponential{
   exponential(double, double);
   double pdf(double );
 };
-
+/**
+ * @brief 
+ * 
+ */
 class pareto{
  public:
   double alpha,mu;
@@ -50,9 +60,10 @@ class pareto{
   double pdf(double );
 };
 
-
-
-
+/**
+ * @brief 
+ * 
+ */
 class slice_ratio{
  public:
   double start, stop ; //these should be base ten
