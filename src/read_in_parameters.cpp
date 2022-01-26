@@ -417,7 +417,7 @@ void params::display(int nodes, int cores){
 	}
 	printf("-threads   : %d\n",  cores);
 	printf("-MPI_np    : %d\n",  nodes);
-	printf("\nQuestions/Bugs? joseph[dot]azofeifa[at]colorado[dot]edu\n" );
+	printf("\nQuestions/Bugs? robin[dot]dowell[at]colorado[dot]edu\n" );
 	printf("----------------------------------------------------------------\n" );
 	
 }
