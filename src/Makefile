@@ -16,12 +16,16 @@ CPP_FLAGS_64  	= -D64_BIT
 
 GCCVERSION 	= $(shell ${CXX} -dumpversion)
 
-PROGS = Tfit
+PROGS = Tfit argTest
 OBJ = load.o split.o model.o across_segments.o template_matching.o \
       read_in_parameters.o model_selection.o error_stdo_logging.o\
       MPI_comm.o density_profiler.o bootstrap.o bidir_main.o model_main.o \
-      select_main.o FDR.o BIC.o
+      select_main.o FDR.o BIC.o 
 SRC = $(OBJ:.o=.cpp)
+
+OBJ2 = parse_args.o
+SRC2 = $(OBJ2:.o=.cpp)
+CFLAGS = -g -std=c++11
 
 ### Build instructions
 
@@ -32,6 +36,11 @@ Tfit: main.o ${OBJ}
 	@echo "========================================="
 	@printf "Tfit version: "${VERSION}
 	@printf " successfully compiled \n\n"
+
+argTest:
+	echo "Temporary Stuff"
+	g++ -c ${CFLAGS} ${PWD}/parse_args.cpp 
+	g++ -o argTest ${CFLAGS} arg_main.o parse_args.o 
 
 %: 
 	@${CXX} -c ${CXXFLAGS} ${PWD}/$*.cpp
