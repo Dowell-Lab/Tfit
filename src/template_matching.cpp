@@ -28,6 +28,13 @@ using namespace std;
 double nINF	=-exp(1000);
 double INF 	= exp(1000);
 
+/**
+ * @brief 
+ * 
+ * @param X 
+ * @param window 
+ * @return vector<vector<double>> 
+ */
 vector<vector<double>> merge(vector<vector<double>> X, double window){
   int N = X.size(), t=0;
   vector<vector<double> > nX;
@@ -74,9 +81,21 @@ int sample_centers(vector<double> centers, double p){
 	return i;//required in model.o (ugh...)
 }
 
-
-
-
+/**
+ * @brief 
+ * 
+ * @param data 
+ * @param BIC_values 
+ * @param densities 
+ * @param densities_r 
+ * @param window 
+ * @param sigma 
+ * @param lambda 
+ * @param foot_print 
+ * @param pi 
+ * @param w 
+ * @param thr 
+ */
 void BIC_template(segment * data,  double * BIC_values, double * densities, double * densities_r, double window, 
 		  double sigma, double lambda, double foot_print, double pi, double w, int thr){
   double vl;
@@ -127,7 +146,18 @@ void BIC_template(segment * data,  double * BIC_values, double * densities, doub
     }
   }
 }
-
+/**
+ * @brief 
+ * 
+ * @param a 
+ * @param b 
+ * @param c 
+ * @param x 
+ * @param y 
+ * @param z 
+ * @return true 
+ * @return false 
+ */
 bool check_hit(double a, double b, double c, double x, double y, double z){
   if (a > x and b > y and c > z){
     return true;
@@ -136,19 +166,14 @@ bool check_hit(double a, double b, double c, double x, double y, double z){
 } 
 
 //================================================================================================
-/* Function: run_global_template_matching
- *
- * Purpose: 
- *
- * Args:
- *   segments
- *   out_dir
- *   P      parameters for this run
- *   SC     slice_ratio ?!?!
- *
- * Assumptions:
- *
- * Returns: 
+/**
+ * @brief 
+ * 
+ * @param segments 
+ * @param out_dir 
+ * @param P     the ubiquitous parameters hash
+ * @param SC    the slice ratio (some preset values)
+ * @return double 
  */
 double run_global_template_matching(vector<segment*> segments, 
 				    string out_dir,  params * P, slice_ratio SC){

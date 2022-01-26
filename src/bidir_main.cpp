@@ -29,8 +29,8 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	P->p["-merge"] 	= "1";
 	
 	LG->write("\ninitializing bidir module...............................done\n", verbose);
-	// This appears to be parasitic -- i.e. it uses all available even 
-	// if you set it to less in your scheduler.  
+
+	// Threads limited by parameters.
 	int threads 	= P->threads;
 	
 	//===========================================================================

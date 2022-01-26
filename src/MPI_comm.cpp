@@ -23,6 +23,15 @@
 
 using namespace std;
 
+/**
+ * @brief Splits the number of segments into roughly equal numbered
+ * subsets for each MPI process. 
+ * 
+ * @param segments 
+ * @param rank 
+ * @param nprocs 
+ * @return vector<segment *> 
+ */
 vector<segment *> MPI_comm::slice_segments(vector<segment *> segments, int rank, int nprocs){
   
   int count 	= segments.size()/ nprocs;
@@ -47,6 +56,20 @@ struct bounds{
 public:
   double lower_upper[5];
 };
+/**
+ * @brief Collects all the MPI bidir predictions 
+ * 
+ * @param all 
+ * @param segments 
+ * @param rank 
+ * @param nprocs 
+ * @param out_file_dir 
+ * @param job_name 
+ * @param job_ID 
+ * @param P 
+ * @param noise 
+ * @return int 
+ */
 int MPI_comm::gather_all_bidir_predicitions(vector<segment *> all, 
 					    vector<segment *> segments , 
 					    int rank, int nprocs, string out_file_dir, string job_name, int job_ID, params * P, int noise){
