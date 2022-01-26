@@ -10,6 +10,7 @@ const char *argp_program_bug_address = "<dowellde@colorado.edu>";
 
 static char doc[] = "Transcription Fit (Tfit): Nascent transcription to RNA polymerase behavior\n";
 
+// Needs to have options from current Tfit.  Currently morse code example.
 struct argp_option options[] = {
     {0,0,0,0, "Morse Code Options:", 7},
     {"dot", 'd', "NUM", OPTION_ARG_OPTIONAL, "Show a dot on the screen."},
@@ -19,12 +20,13 @@ struct argp_option options[] = {
     {0}
 };
 
-
-
+// This is a brief usage statement with pre options and post options portions.
 struct argp argp = {options, parse_opt, "WORD\nWORD WORD", 
     "Show some dots and dashes on the screen.\v"
       "A final newline is also shown regardless of whether any options were given."};
 
+// This is the main parsing function.  Ultimately will need to check
+// option quality/identity, parse them into objects, and error handle.  
 int parse_opt(int key, char *arg, struct argp_state * state) {
   struct arguments *a = (struct arguments *)state->input;
   switch(key) {

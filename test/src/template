@@ -1,0 +1,33 @@
+/**
+ * @file template
+ * @author Robin Dowell
+ * @brief Unit Testing template
+ * @date 2022-01-24
+ * 
+ */
+#include "gmock/gmock.h"
+
+// TEST() {}  is the Test Case macro
+// Avoid if statements
+TEST(TestSuiteName, TestName)
+{
+    // Arrange: bring SUT to desired state
+    std::string testString;
+    testString = "Blanket\tPillow";
+    vector<string> answer;
+
+    // Act: call methods on SUT, capture output
+    // Most often a single line.
+    answer = string_split(testString, '\t');
+
+    // Assert: Verify the outcome
+    // Avoid multiple assert sections.
+    // ASSERT_* fatal failure, abort current function
+    // EXPECT_* nonfatal failure
+    // Can stream custom failure messages
+    // ASSERT_EQ(x.size(), y.size()) << "Vectors x and y are of unequal length";
+    EXPECT_THAT(answer.back(), "Pillow");
+    EXPECT_EQ(answer.size(),2);
+
+    // Occasionally a teardown is necessary to cleanup.
+}
