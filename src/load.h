@@ -46,31 +46,32 @@ public:
      */
 	vector< vector<double> > reverse; //<! corresponds to strand == -1
 
-	int ID; //!< when are these used? (set to 0 in constructors)
-	int counts; //!< when is this used? (set to 1 in constructor)
+	int ID; //!< Used by MPI code
+	int counts; //!< sets min_k in across_segments?
 
-	vector<double> centers;
-	vector<vector<double>> parameters; // for bootstrapping
+	vector<double> centers; //!< used in the scaling and binning and mu_seeds to fit2 
+
+	// Both of below are used in boostrapping code only.  Unclear what they do.
+	vector<vector<double>> parameters; 
 	map<int, vector<double> > variances;
 
 	/**
 	 * @brief This (X) is the smoothed representation of the data.
 	 * Vector[0] is coordinate (possibly scaled); [1] is forward (summed for bin)
-	 * [2] is reverse (summed for bin)
+	 * [2] is reverse (summed for bin).  This is the meat and potatoes data
+	 * representation that is used in the EM (fit2).
 	 */
 	double ** X;  //!< Smoothed data inner is [3] dimensions
 	double XN; //!< total number of bins
 	double SCALE;  //!< scaling factor
 
+	// I think these are for convenience (calculate once)
 	double N;	//!< Total sum of values 
 	double fN;	//!< Sum of forward values 
 	double rN;	//!< Sum of reverse values 
 
-	vector<vector<double> > bidirectional_bounds;
-	vector<segment *> bidirectional_data;
-	vector<int>  bidir_counts; //!< used for optimization of BIC?
-	vector<int> bidirectional_N;
-	vector<vector<double>> fitted_bidirs; //!< mu, si, l,pi
+	vector<vector<double> > bidirectional_bounds; //!< Used by the MPI
+	vector<vector<double>> fitted_bidirs; //!< mu, si, l, pi : used in bin()
 
 	// Constructors
 	segment(string, int , int);
