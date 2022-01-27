@@ -47,6 +47,7 @@ public:
   /*
    * Wrappers to effectively obtain an iterator across data.
    * This is a bit clunky currently, but a step in the right direction.
+   * In all of these cases, you are expected to iterate from 0 to num_elements()
    */
   double num_elements();
   double forward(int);
@@ -57,13 +58,20 @@ public:
   double sum_forward(); // forward only
   double sum_reverse(); // reverse only
 
+  void load_forward_strand();
+  void load_reverse_strand();
+  void scale_and_bin();
+
 private:
 	/**
-	 * @brief This (X) is the smoothed representation of the data.
+	 * @brief This (X) is the internal representation of the data.
 	 * Vector[0] is coordinate (possibly scaled); [1] is forward (summed for bin)
-	 * [2] is reverse (summed for bin).  This is the meat and potatoes data
-	 * representation that is used in the EM (fit2).  These data structures are 
-	 * identical to how originally written in segment class.
+	 * [2] is reverse (summed for bin).  
+	 * 
+	 * This is the meat and potatoes data representation that is used in the EM (fit2).  
+	 * 
+	 * These data elements are currently identical to how originally written 
+	 * in segment class.
 	 */
 	double ** X;  //!< Smoothed data inner is [3] dimensions
 	double XN; //!< total number of bins
