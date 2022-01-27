@@ -171,7 +171,12 @@ int MPI_comm::gather_all_bidir_predicitions(vector<segment *> all,
 }
 
 
-
+/**
+ * @brief This is used in the MPI code and appears to be a container.
+ * It's crpytic as st_sp[4] is undefined.  Usage code suggests:
+ * start, stop, ID, count
+ * 
+ */
 struct simple_seg_struct{
 	char chrom[6];
 	char strand[2];

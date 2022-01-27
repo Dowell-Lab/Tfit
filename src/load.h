@@ -47,7 +47,6 @@ public:
 	vector< vector<double> > reverse; //<! corresponds to strand == -1
 
 	int ID; //!< when are these used? (set to 0 in constructors)
-	int chrom_ID;  //!< when are these used? (set to 0 in constructors)
 	int counts; //!< when is this used? (set to 1 in constructor)
 
 	vector<double> centers;

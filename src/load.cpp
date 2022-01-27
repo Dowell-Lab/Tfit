@@ -67,7 +67,6 @@ segment::segment(string chr, int st, int sp){
   XN 		= 0;
   ID 		= 0;
   strand 	= ".";
-  chrom_ID = 0;
   
 }
 // chrom, start, stop, ID
@@ -83,7 +82,6 @@ segment::segment(string chr, int st, int sp, int i){
   counts 	= 1;
   XN 		= 0;
   strand 	= ".";
-  chrom_ID= 0;
   
 }
 // chrom, start, stop, ID, strand
@@ -100,7 +98,6 @@ segment::segment(string chr, int st, int sp, int i, string STR){
   minX=st, maxX=sp;
   counts 	= 1;
   XN 		= 0;
-  chrom_ID = 0;
   
 }
 
@@ -113,7 +110,6 @@ segment::segment(){
   XN 		= 0;
   ID 		= 0;
   strand 	= ".";
-  chrom_ID = 0;
   chrom = "";
 }
 
