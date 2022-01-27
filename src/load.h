@@ -1,11 +1,10 @@
 /**
  * @file load.h
- * @author Joey Azofeifa
+ * @author Joey Azofeifa, Robin Dowell
  * @brief Header file for overloaded load.cpp.
  * This is a very overloaded file -- has \ref segment, segment_fits, and \ref node classes
  * Also contains some helper functions.   Should be refactored.
  * @version 0.1
- * @date 2016-05-20
  */
 #ifndef load_H
 #define load_H
@@ -24,7 +23,7 @@ class classifier; //forward declare
 
 /**
  * @brief Primary data class which represents a genomic segment of data.
- * @author Joey Azofeifa
+ * @author Joey Azofeifa, Robin Dowell
  */
 class segment{
 public:

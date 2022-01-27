@@ -29,6 +29,8 @@ set(sources
                 src/test_main.cpp
                 src/test_split.cpp
                 ../src/split.cpp
+                src/test_dInterval.cpp
+                ../src/dInterval.cpp
                 )
 # Set Include directories
 include_directories(
