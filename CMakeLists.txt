@@ -20,6 +20,10 @@ include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 #However, the file(GLOB...) allows for wildcard additions:
 file(GLOB SOURCES "src/*.cpp")
 
+# This is a temporary testing stub.
+# message(${SOURCES})
+list(REMOVE_ITEM SOURCES "/home/robindowell/src/Tfit/Dowell/Tfit/src/arg_main.cpp")
+
 add_executable(Tfit ${SOURCES})
 
 target_link_libraries(Tfit ${MPI_CXX_LIBRARIES})
