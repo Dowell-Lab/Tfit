@@ -127,7 +127,7 @@ string segment::write_out(){
 }
 
 /**
- * @brief Given a dta point, build segment contents.
+ * @brief Given a data point, build segment contents.
  * @author Joey Azofeifa
  * @param strand  here as integer, 1 == forward, -1 == reverse
  * @param x   coordinate
