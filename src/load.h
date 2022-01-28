@@ -112,7 +112,7 @@ public:
 };
 
 /**
- * @brief Needs documentation.
+ * @brief The _K_models file is read back into this class. 
  * 
  */
 class segment_fits{

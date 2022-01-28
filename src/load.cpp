@@ -494,6 +494,14 @@ void segment_fits::get_model(double ms_pen){
   }
   model 	= arg;
 }
+/**
+ * @brief Writes out a set of models (as bed file) that have reasonable
+ * parameters.
+ * 
+ * @bug As written, K is never decided.  Thus you could output overlapping or
+ * embedded answers if a region has to distinct K that give reasonable outcomes.
+ * @return string 
+ */
 string segment_fits::write (){
   string line 				= "";
   if (model > 0){
@@ -508,7 +516,11 @@ string segment_fits::write (){
       double w 	= stod(split_by_comma(split_by_bar(params[5], "")[i] , "" )[0] );
       
       int start 	= max(mu - (std + lam),0.0), stop = mu + (std+lam);
-/* how much is this filtering! */
+
+  // This is where he decides what are the best hits.  Ironically he's not 
+  // actually picking K but rather outputting all regions where the parameters are
+  // "reasonable" (defined below).  Seems to work OK, but only because most LL end 
+  // up as INF and therefore the lam ends up INF
       if (std  < 5000 and lam < 20000 and w > 0.05 and pi > 0.05 and pi < 0.95  ){
 	line+=chrom+"\t" + to_string(start) + "\t" + to_string(stop)+"\t";
 	line+=ID+"|";
@@ -913,9 +925,9 @@ vector<segment* > load::insert_bedgraph_to_segment_joint(map<string, vector<segm
 
 
 /**
- * @brief 
+ * @brief   Reads in a _K_models_MLE file
  * @author Joey Azofeifa 
- * @param FILE
+ * @param FILE  (contents produced by write_out_models_from_free_mode)
  * @return 
  */
 vector<segment_fits *> load::load_K_models_out(string FILE){
@@ -1017,7 +1029,16 @@ void load::write_out_bidirs(map<string , vector<vector<double> > > G, string out
   FHW.close();
 }
 
-
+/**
+ * @brief Writes the _K_models_MLE.tsv file.
+ * 
+ * @param G 
+ * @param P parameters
+ * @param job_ID output job name (used as prefix to file name)
+ * @param IDS 
+ * @param noise 
+ * @param file_name  This does NOT appear to be used!
+ */
 void load::write_out_models_from_free_mode(map<int, map<int, vector<simple_c_free_mode>  > > G, 
 	params * P, int job_ID,map<int, string> IDS, int noise, string & file_name){
 
@@ -1117,11 +1138,13 @@ void load::write_out_models_from_free_mode(map<int, map<int, vector<simple_c_fre
 	FHW.flush();
 }
 
+
+
 /**
- * @brief 
+ * @brief  Writes out the best model as a bed file.
  * @author Joey Azofeifa 
  * @param fits
- * @param P
+ * @param P   parameters
  * @param job_ID
  * @param noise
  * @return (void)
