@@ -26,7 +26,14 @@
 
 using namespace std;
 
-
+/**
+ * @brief Wrapper to check that file exists.  If does, append unique 
+ * number index to name.
+ * 
+ * @param FILE 
+ * @param i 
+ * @return string 
+ */
 string check_file(string FILE, int i){ //don't want to write over an existing file
 	string template_file 	= FILE + to_string(i);
 	ifstream FH(template_file);
@@ -37,7 +44,13 @@ string check_file(string FILE, int i){ //don't want to write over an existing fi
 	return template_file;
 }
 
-
+/**
+ * @brief 
+ * 
+ * @param P 
+ * @param data 
+ * @return map<int, vector<classifier> > 
+ */
 map<int, vector<classifier> > make_classifier_struct_free_model(params * P, segment * data){
 
 	int min_k 		= stoi(P->p["-minK"]);
@@ -67,6 +80,18 @@ map<int, vector<classifier> > make_classifier_struct_free_model(params * P, segm
 
 }
 
+/**
+ * @brief Construct a new simple c free mode::simple c free mode object
+ * 
+ * @param FOUND 
+ * @param ll 
+ * @param C 
+ * @param K 
+ * @param data 
+ * @param i 
+ * @param forward_N 
+ * @param reverse_N 
+ */
 simple_c_free_mode::simple_c_free_mode(bool FOUND, double ll, 
 	component C, int K, segment * data, int i, double forward_N, double reverse_N){
 	SS[0]=ll, SS[1]=forward_N, SS[2]=reverse_N;
@@ -97,6 +122,19 @@ simple_c_free_mode::simple_c_free_mode(bool FOUND, double ll,
 }
 simple_c_free_mode::simple_c_free_mode(){}
 
+/**
+ * @brief 
+ * 
+ * @param FOUND 
+ * @param ll 
+ * @param components 
+ * @param K 
+ * @param data 
+ * @param i 
+ * @param forward_N 
+ * @param reverse_N 
+ * @return vector<simple_c_free_mode> 
+ */
 vector<simple_c_free_mode> transform_free_mode(bool FOUND, double ll, component * components, 
 	int K, segment * data, int i, double forward_N, double reverse_N) {
 	vector<simple_c_free_mode> SC ;
@@ -110,7 +148,14 @@ vector<simple_c_free_mode> transform_free_mode(bool FOUND, double ll, component 
 
 	
 }
-
+/**
+ * @brief Get the max from free mode object
+ * 
+ * @param A 
+ * @param data 
+ * @param i 
+ * @return map<int, vector<simple_c_free_mode> > 
+ */
 map<int, vector<simple_c_free_mode> > get_max_from_free_mode(map<int, vector<classifier> > A, segment * data, int i){
 	map<int, vector<simple_c_free_mode> > BEST;
 	typedef map<int, vector<classifier> >::iterator it_type_A;
@@ -144,7 +189,14 @@ map<int, vector<simple_c_free_mode> > get_max_from_free_mode(map<int, vector<cla
 	return BEST;
 }
 
-
+/**
+ * @brief 
+ * 
+ * @param FSI 
+ * @param P 
+ * @param LG 
+ * @return vector<map<int, vector<simple_c_free_mode> >> 
+ */
 vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<segment *> FSI, params * P, 
 	Log_File * LG){
 	vector<map<int, vector<simple_c_free_mode> >> D;
@@ -186,7 +238,13 @@ vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<
 	return D;
 }
 
-
+/**
+ * @brief 
+ * 
+ * @param segments 
+ * @param P 
+ * @return vector<double> 
+ */
 vector<double> compute_average_model(vector<segment *> segments, params * P){
 	//need to compute average model
 	double minX 	= 0;
