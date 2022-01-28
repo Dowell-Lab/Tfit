@@ -38,6 +38,13 @@ struct simple_c{
 };
 ***/
 
+/**
+ * @brief keeps model fits
+ * 
+ * @bug this thing is horrible.  it keeps all the parameters in a double array and
+ * you just have to *know* which index correponds to which element!
+ * 
+ */
 struct simple_c_free_mode{
 	double SS[3];	//log-likelihood, N_forward, N_reverse
 	int ID[5] ;  //index of the segment that this belongs,start, stop, converged?
@@ -54,21 +61,6 @@ struct simple_c_free_mode{
 		int, segment *, int, double, double);
 	simple_c_free_mode();
 };
-
-/**
-struct single_simple_c{
-	char chrom[6];
-	int st_sp[3];
-	double ps[10];
-};
-
-vector<simple_c> run_model_accross_segments_template(vector<segment*>, 
-	params *);
-vector<simple_c> run_model_accross_segments_to_simple_c(vector<segment *>, params *, ofstream&);
-string get_header(params *);
-vector<simple_c> move_elongation_support(vector<segment *>, params *);
-vector<single_simple_c> run_single_model_across_segments(vector<segment *> , params *, ofstream& );
-**/
 
 vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<segment *> , params *, Log_File * );
 vector<double> compute_average_model(vector<segment *> , params * );
