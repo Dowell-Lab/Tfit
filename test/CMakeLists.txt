@@ -8,12 +8,17 @@ project(TestTfit)
 # add definitions
 add_definitions(-fprofile-arcs -ftest-coverage)
 
+find_package(MPI REQUIRED)
+
 # Include diretories
 include_directories(/usr/include)
 link_directories(/usr/lib)
+#Bring the headers, such as Student.h into the project
+include_directories(SYSTEM ${MPI_INCLUDE_PATH})
 
 # Set the compiler options
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g -O0 -Wall -fprofile-arcs -ftest-coverage")
+##  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -g -O0 -Wall -fprofile-arcs -ftest-coverage")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc -std=c++11 -fopenmp -g -D_LGIBCXX_USE_CXX1_ABI=0 -fprofile-arcs -ftest-coverage")
 set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE ON)
 
 # Create OBJECT_DIR variable
@@ -25,13 +30,18 @@ find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
 # Set the sources
-set(sources
+#However, the file(GLOB...) allows for wildcard additions:
+file(GLOB sources "../src/*.cpp")
+# Remove other main functions
+list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/arg_main.cpp")
+list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/main.cpp")
+list(APPEND sources
                 src/test_main.cpp
                 src/test_split.cpp
-                ../src/split.cpp
                 src/test_dInterval.cpp
-                ../src/dInterval.cpp
+                src/test_segment.cpp
                 )
+
 # Set Include directories
 include_directories(
                 src/
@@ -90,4 +100,6 @@ target_link_libraries(TestTfit gtest)
 target_link_libraries(TestTfit gmock)
 target_link_libraries(TestTfit pthread)
 target_link_libraries(TestTfit -fprofile-arcs)
+target_link_libraries(TestTfit ${MPI_CXX_LIBRARIES})
 #target_link_libraries(TestTfit gcov)
+
