@@ -78,6 +78,9 @@ public:
 	segment(string, int , int, int, string);
 	segment();
 
+	// Accessors of commonly used values
+	double getXLength ();
+
 	/* FUNCTIONS: */
 	// Reporting out (currently unused)
 	string write_out();
@@ -85,6 +88,7 @@ public:
 	void bin(double, double, bool); // delta, scale, erase
 	// add2 appears to add a single data point (coord) to an interval
 	void add2(int, double, double); // strand, x, y 
+
 };
 
 /**

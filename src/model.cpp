@@ -399,8 +399,8 @@ void update_l(component * components, segment * data, int K){
 		//forward
 		double left_SUM=0, right_SUM=get_sum(data,components[k].forward.j ,components[k].forward.k,1);
 		double N 		= left_SUM+right_SUM;
-		double null_vl 	= 0.05 / (data->maxX - data->minX  );
-		double null_ll 	= N*LOG(1. / (data->maxX - data->minX  ));
+		double null_vl 	= 0.05 / (data->getXLength()); // ->maxX - data->minX  );
+		double null_ll 	= N*LOG(1. / (data->getXLength())); // ->maxX - data->minX  ));
 		double null_BIC = -2*null_ll + LOG(N);
 		double vl 		= 0, w=0;
 		double mod_ll, mod_BIC;
@@ -429,7 +429,7 @@ void update_l(component * components, segment * data, int K){
 		arg_l 	= components[k].reverse.j;
 		left_SUM=0, right_SUM=get_sum(data,components[k].reverse.j,components[k].reverse.k,2 );
 		N 		= left_SUM+right_SUM;
-		null_ll 	= N*LOG(1. / (data->maxX - data->minX  ));
+		null_ll 	= N*LOG(1. / (data->getXLength())); // ->maxX - data->minX  ));
 		null_BIC = -2*null_ll + LOG(N);
 		prev_prev=0, prev=0, current=0,BIC_best = 0;
 		for (int l = components[k].reverse.j; l < components[k].reverse.k; l++ ){
@@ -544,7 +544,7 @@ void component::initialize_bounds(double mu, segment * data , int K, double scal
 		//for the bidirectional/EMG component
 		uniform_real_distribution<double> dist_lambda_2(1, 250);
 		uniform_real_distribution<double> dist_sigma_2(1, 250);
-		gamma_distribution<double> dist_lengths(1,( (data->maxX-data->minX)/(K)));
+		gamma_distribution<double> dist_lengths(1,( (data->getXLength())/(K)));
 		
 		sigma 				= dist_sigma_2(mt)/scale;
 		lambda 				= scale/dist_lambda_2(mt) ;
@@ -938,7 +938,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 	//compute just a uniform model...no need for the EM
 	if (K == 0){
 		ll 			= 0;
-		double 	l 	= (data->maxX-data->minX); //~length
+		double 	l 	= (data->getXLength()); // ->maxX-data->minX); 
 		double pos 	= 0;
 		double neg 	= 0;
 		// Sum per strand

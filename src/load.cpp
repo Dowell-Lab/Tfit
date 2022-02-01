@@ -113,6 +113,10 @@ segment::segment(){
   chrom = "";
 }
 
+double segment::getXLength () {
+	 return maxX-minX;
+}
+
 /**
  * @brief Print basic contents of segment
  * @author Joey Azofeifa 
