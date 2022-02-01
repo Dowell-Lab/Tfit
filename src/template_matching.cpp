@@ -203,7 +203,7 @@ double run_global_template_matching(vector<segment*> segments,
     double * densities 		= new double[int(segments[i]->XN)];
     double * densities_r 	= new double[int(segments[i]->XN)];
 
-    double l 		=  segments[i]->maxX-segments[i]->minX;
+    double l 		=  segments[i]->getXLength(); // maxX-segments[i]->minX;
     double ef 		= segments[i]->fN*( 2*(window*ns)*0.05  /(l*ns ));
     double er 		= segments[i]->rN*( 2*(window*ns)*0.05 /(l*ns ));
     double stdf 	= sqrt(ef*(1- (  2*(window*ns)*0.05/(l*ns )  ) )  );

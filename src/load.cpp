@@ -193,7 +193,7 @@ void segment::bin(double delta, double scale, bool erase){
   SCALE 			= scale;
 
   int BINS;
-  BINS 		= (maxX-minX)/delta;
+  BINS 		= (getXLength())/delta;
   start = minX, stop=maxX;	// Why are we keeping these distinctly?
 
   for (int j = 0 ; j < 3;j++){
@@ -320,7 +320,7 @@ void segment::bin(double delta, double scale, bool erase){
       }
     }
     
-    maxX 			= (maxX-minX)/scale;
+    maxX 			= (getXLength())/scale;
     minX 			=0;
   }
   double S=0;
