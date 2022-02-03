@@ -40,6 +40,7 @@ list(APPEND sources
                 src/test_split.cpp
                 src/test_dInterval.cpp
                 src/test_segment.cpp
+                src/test_Nested.cpp
                 )
 
 # Set Include directories
