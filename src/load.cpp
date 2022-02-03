@@ -950,6 +950,7 @@ vector<segment_fits *> load::load_K_models_out(string FILE){
 	  segment_fits_all.push_back(S);
 	}
 	line 							= line.substr(1,line.size()-1);
+  printf("%s\n",line);
 	
 	vector<string> bar_split 		= split_by_bar(line, "");
 	vector<string> comma_split 		= split_by_comma(bar_split[2], "");
