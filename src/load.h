@@ -122,13 +122,14 @@ public:
 class segment_fits{
 public:
 	string chrom;
+	// At least in model_main, TSS is unused.
 	int start, stop, TSS;
-	double N;
-	double N_pos, N_neg;
-	map<int, double> M;
-	map<int, string> parameters;
-	int model;
-	double BIC_ratio;
+	double N;	// N_pos + N_neg
+	double N_pos, N_neg;  // counts per strand
+	map<int, double> M;	 // <#K, likelihood>
+	map<int, string> parameters;  // <#K, parameters_tab_sep_string>
+	int model;	// Best model (lowest BIC ratio)
+	double BIC_ratio;  // min(null_score / log_likelihood)
 	string ID;
 
 	// Constructors
