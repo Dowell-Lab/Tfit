@@ -6,7 +6,7 @@
  * 
  */
 #include "gmock/gmock.h"
-#include "load.h"  // contains segment class
+#include "load.h"  // contains segment_fits class
 
 TEST(nested, reproduceNested)
 {
@@ -20,5 +20,5 @@ TEST(nested, reproduceNested)
   // Act: call methods on SUT, capture output
 
   // Assert: Verify the outcome
-  
+  EXPECT_EQ(fits[0]->model, 4);
 }

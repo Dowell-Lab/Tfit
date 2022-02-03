@@ -482,11 +482,14 @@ void segment_fits::get_model(double ms_pen){
   double MIN=INF;
   double score;
   double null_score;
-  
+
+  // We're going to walk through the M map (#K, log_likelihood) 
   for (it_type m 	= M.begin(); m != M.end(); m++){
     if (m->first > 0){
+      // So ms_pen is the complexity penalty for additional models!!
       score 		= -2*m->second + log(N)*(ms_pen*m->first);
-    }else{
+    }else{  // For the first entry, store the null_score
+    // recall m->second refers to the value (log_likelihood)
       score 		= -2*m->second + log(N) ;		
       null_score 	= -2*m->second + log(N) ;
     }
@@ -508,27 +511,28 @@ void segment_fits::get_model(double ms_pen){
  */
 string segment_fits::write (){
   string line 				= "";
+  // model is set by get_model to be the index of min model? 
   if (model > 0){
     string forward_N=to_string(N_pos), reverse_N = to_string(N_neg);
-    vector<string> params 		= split_by_tab(parameters[model], "");
+    vector<string> params 		= split_by_tab(parameters[model], "");  // splits parameters
     for (int i = 0 ; i < model; i++){
-      vector<string> S 	=  split_by_comma(params[0], "");
+      vector<string> S 	=  split_by_comma(params[0], ""); 
       double mu 	= stod(split_by_comma(params[0], "")[i]);
       double std 	= stod(split_by_comma(params[1], "")[i]);
       double lam 	= stod(split_by_comma(params[2], "")[i]);
       double pi 	= stod(split_by_comma(params[3], "")[i]);
-      double w 	= stod(split_by_comma(split_by_bar(params[5], "")[i] , "" )[0] );
-      
-      int start 	= max(mu - (std + lam),0.0), stop = mu + (std+lam);
+      double w = stod(split_by_comma(split_by_bar(params[5], "")[i], "")[0]);
 
-  // This is where he decides what are the best hits.  Ironically he's not 
-  // actually picking K but rather outputting all regions where the parameters are
-  // "reasonable" (defined below).  Seems to work OK, but only because most LL end 
-  // up as INF and therefore the lam ends up INF
-      if (std  < 5000 and lam < 20000 and w > 0.05 and pi > 0.05 and pi < 0.95  ){
-	line+=chrom+"\t" + to_string(start) + "\t" + to_string(stop)+"\t";
-	line+=ID+"|";
-	line+=to_string(BIC_ratio)+","+ to_string(N_pos)+","+to_string(N_neg)+"\n";
+      int start = max(mu - (std + lam), 0.0), stop = mu + (std + lam);
+
+      // This is where he decides what are the best hits.  Ironically he's not
+      // actually picking K but rather outputting all regions where the parameters are
+      // "reasonable" (defined below).  Seems to work OK, but only because most LL end
+      // up as INF and therefore the lam ends up INF
+      if (std < 5000 and lam < 20000 and w > 0.05 and pi > 0.05 and pi < 0.95) {
+        line += chrom + "\t" + to_string(start) + "\t" + to_string(stop) + "\t";
+        line += ID + "|";
+        line += to_string(BIC_ratio) + "," + to_string(N_pos) + "," + to_string(N_neg) + "\n";
       }
     }
   }
@@ -932,7 +936,7 @@ vector<segment* > load::insert_bedgraph_to_segment_joint(map<string, vector<segm
  * @brief   Reads in a _K_models_MLE file
  * @author Joey Azofeifa 
  * @param FILE  (contents produced by write_out_models_from_free_mode)
- * @return 
+ * @return  pointer to collection of model fits. 
  */
 vector<segment_fits *> load::load_K_models_out(string FILE){
   ifstream FH(FILE);
@@ -942,46 +946,54 @@ vector<segment_fits *> load::load_K_models_out(string FILE){
   double ll;
   string chrom;
   int start,stop;
-  vector<segment_fits *> segment_fits_all;	
-  if (FH){
-    while (getline(FH, line)){
-      if (line.substr(0,1)!= "#" and line.substr(0,1)==">"){
-	if (S!=NULL){
-	  segment_fits_all.push_back(S);
-	}
-	line 							= line.substr(1,line.size()-1);
-  printf("%s\n",line);
-	
-	vector<string> bar_split 		= split_by_bar(line, "");
-	vector<string> comma_split 		= split_by_comma(bar_split[2], "");
-	vector<string> colon_split 		= split_by_colon(bar_split[1], "");
-	vector<string> dash_split 		= split_by_dash(colon_split[1], "");
-	chrom = colon_split[0], start 	= stoi(dash_split[0]) ,stop = stoi(dash_split[1]) ;
-	S 		= new segment_fits(chrom,start,
-					   stop, stod(comma_split[0]), stod(comma_split[1]), bar_split[0] );
-	
-      }else if (line.substr(0,1)=="~" and S!=NULL){
-	line 	= line.substr(1,line.size()-1);
-	vector<string> tab_split 		= split_by_tab(line, "");
-	vector<string> comma_split 		= split_by_comma(tab_split[0], "");
-	complexity 	= stoi(comma_split[0]), ll 	= stod(comma_split[1]);
-	S->M[complexity]=ll;
-	string parameters 	= "";
-	for (int i = 1; i < tab_split.size(); i++){
-	  if (i+1 < tab_split.size()){
-	    parameters+=tab_split[i]+"\t";
-	  }else{
-	    parameters+=tab_split[i];
-	  }
-	}
-	S->parameters[complexity] 	= parameters;
-	
-      }
-    }
+  vector<segment_fits *> segment_fits_all;
+  if (FH) {
+    while (getline(FH, line)) {
+      if (line.substr(0, 1) != "#" and line.substr(0, 1) == ">") {
+        // This is the region header line.
+        // > ID|chr:start-end|Nforward,Nreverse
+        // >ME_36597:0|chr3:57965508-57976184|2572.000000,1885.000000
+        if (S != NULL) { segment_fits_all.push_back(S); }
+        line = line.substr(1, line.size() - 1); //removes 1st character, ">"
+
+        vector<string> bar_split = split_by_bar(line, "");
+        vector<string> comma_split = split_by_comma(bar_split[2], ""); // Nforward Nreverse
+        vector<string> colon_split = split_by_colon(bar_split[1], ""); // chr:start-end
+        chrom = colon_split[0];
+        vector<string> dash_split = split_by_dash(colon_split[1], ""); // start end
+        start = stoi(dash_split[0]), stop = stoi(dash_split[1]);
+        S = new segment_fits(chrom, start,
+                             stop, stod(comma_split[0]), stod(comma_split[1]), bar_split[0]);
+      } else if (line.substr(0, 1) == "~" and S != NULL) {
+        // This is a model output line.
+        // output lines are tab separated fields each comma separated for # models
+        line = line.substr(1, line.size() - 1); // removes the ~ first character
+        // Example:
+        // ~2,-18405.714702	57970016.797935,57974849.280602	69.438995,37.975287	371.734252,408.579080	0.486291,0.586718	121.206766,250.000000	0.617766,0.069621,0.000284|0.310201,0.000341,0.000348	57976184.000000,57976184.000000	57965508.000000,57965508.000000
+        // First field is model_complexity,log_likelihood
+        vector<string> tab_split = split_by_tab(line, "");
+        vector<string> comma_split = split_by_comma(tab_split[0], "");
+        complexity = stoi(comma_split[0]), ll = stod(comma_split[1]);
+        S->M[complexity] = ll;
+        // subsequent fields were output as: 
+        // mus+"\t"+sigmas+"\t"+lambdas+"\t" + pis+"\t" + fps+ "\t" + ws + "\t" + fbs+"\t" +ras;
+        string parameters = "";
+        // Isn't this just rebuilding the parameters string (e.g. tab_split[1->size]?)
+        for (int i = 1; i < tab_split.size(); i++) {
+          if (i + 1 < tab_split.size()) {
+            parameters += tab_split[i] + "\t";
+          } else {
+            parameters += tab_split[i];
+          } 
+        } // for each element tab_split
+        S->parameters[complexity] = parameters;
+      } // if header or model output line
+    } // while each line of the file
     if (S!=NULL){
       segment_fits_all.push_back(S);		
     }
-  }else{
+  } else {
+    // A file handling error (couldn't open the file)
     printf("couldn't open %s...strange error\n", FILE.c_str() );
   }
   return segment_fits_all;
@@ -1160,7 +1172,7 @@ void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params * 
 	FHW<<P->get_header(2);
 	double penality 	= stod(P->p["-ms_pen"]);
 	for (int i = 0; i < fits.size(); i++){
-		fits[i]->get_model(penality);
+		fits[i]->get_model(penality); // applies a complexity penalty and finds min likelihood model
 		FHW<<fits[i]->write();
 	}
 	FHW.flush();
