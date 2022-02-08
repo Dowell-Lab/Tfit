@@ -101,7 +101,7 @@ int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_
 		vector<segment_fits *> fits 		= load::load_K_models_out(file_name);
 		LG->write("done\n",verbose);		
 		LG->write("writing out results (model selection)...................",verbose);
-		load::write_out_bidirectionals_ms_pen(fits, P, job_ID, density );
+		load::write_out_bidirectionals_with_penalty(fits, P, job_ID, density );
 		LG->write("done\n",verbose);
 	}
 	LG->write("\nexiting model module....................................done\n\n",verbose);
