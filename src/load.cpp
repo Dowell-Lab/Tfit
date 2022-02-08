@@ -476,7 +476,7 @@ segment_fits::segment_fits(){
  * @param n_neg
  * @param id
  */
-void segment_fits::get_model(double ms_pen){
+void segment_fits::identify_best_model(double penalty){
   typedef map<int, double>::iterator it_type;
   int arg;
   double MIN=INF;
@@ -487,7 +487,7 @@ void segment_fits::get_model(double ms_pen){
   for (it_type m 	= M.begin(); m != M.end(); m++){
     if (m->first > 0){
       // So ms_pen is the complexity penalty for additional models!!
-      score 		= -2*m->second + log(N)*(ms_pen*m->first);
+      score 		= -2*m->second + log(N)*(penalty*m->first);
     }else{  // For the first entry, store the null_score
     // recall m->second refers to the value (log_likelihood)
       score 		= -2*m->second + log(N) ;		
@@ -509,9 +509,9 @@ void segment_fits::get_model(double ms_pen){
  * embedded answers if a region has to distinct K that give reasonable outcomes.
  * @return string 
  */
-string segment_fits::write (){
+string segment_fits::write(){
   string line 				= "";
-  // model is set by get_model to be the index of min model? 
+  // model is set by identify_best_model to be the index of min model? 
   if (model > 0){
     string forward_N=to_string(N_pos), reverse_N = to_string(N_neg);
     vector<string> params 		= split_by_tab(parameters[model], "");  // splits parameters
@@ -1062,7 +1062,7 @@ void load::write_out_models_from_free_mode(map<int, map<int, vector<simple_c_fre
 	//========================================================================================
 	//write out each model parameter estimates
 	double scale 	= stof(P->p["-ns"]);
-	double penality = stof(P->p["-ms_pen"]) ;
+	double penalty = stof(P->p["-ms_pen"]) ;
 	string out_dir 	= P->p["-o"];
 	ofstream FHW;
 	file_name 	= out_dir+  P->p["-N"] + "-" + to_string(job_ID)+  "_K_models_MLE.tsv";
@@ -1166,13 +1166,13 @@ void load::write_out_models_from_free_mode(map<int, map<int, vector<simple_c_fre
  * @param noise
  * @return (void)
  */
-void load::write_out_bidirectionals_ms_pen(vector<segment_fits*> fits, params * P, int job_ID, int noise ){
+void load::write_out_bidirectionals_with_penalty(vector<segment_fits*> fits, params * P, int job_ID, int noise ){
 	ofstream FHW;
 	FHW.open(P->p["-o"]+  P->p["-N"] + "-" + to_string(job_ID)+  "_bidir_predictions.bed");	
 	FHW<<P->get_header(2);
-	double penality 	= stod(P->p["-ms_pen"]);
+	double penalty 	= stod(P->p["-ms_pen"]);
 	for (int i = 0; i < fits.size(); i++){
-		fits[i]->get_model(penality); // applies a complexity penalty and finds min likelihood model
+		fits[i]->identify_best_model(penalty); // applies a complexity penalty and finds min likelihood model
 		FHW<<fits[i]->write();
 	}
 	FHW.flush();

@@ -137,7 +137,7 @@ public:
 	segment_fits(string, int, int, double, double, string);
 
 	/* FUNCTIONS: */
-	void get_model(double);
+	void identify_best_model(double);
 	string write();
 };
 
@@ -161,7 +161,7 @@ namespace load{
 	void clear_segments(vector<segment *> );
 
 	vector<segment_fits *> load_K_models_out(string);
-	void write_out_bidirectionals_ms_pen(vector<segment_fits*> , params * , int, int );
+	void write_out_bidirectionals_with_penalty(vector<segment_fits*> , params * , int, int );
 
 } // namespace load
 

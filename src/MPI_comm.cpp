@@ -378,7 +378,6 @@ int MPI_comm::get_job_ID(string path, string job_ID, int rank, int nprocs){
 	
 map<int, map<int, vector<simple_c_free_mode>  > > MPI_comm::gather_all_simple_c_free_mode(vector<map<int, vector<simple_c_free_mode> >> FITS, 
 	int rank, int nprocs){
-	
 
 	simple_c_free_mode sc_fm;
 	MPI_Datatype mystruct;
@@ -394,7 +393,6 @@ map<int, map<int, vector<simple_c_free_mode>  > > MPI_comm::gather_all_simple_c_
 	
 	MPI_Type_create_struct( 4, blocklens, displacements, old_types, &mystruct );
 	MPI_Type_commit( &mystruct );
-
 
 	vector<simple_c_free_mode> recieved;
 
