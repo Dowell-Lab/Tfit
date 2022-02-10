@@ -17,13 +17,13 @@
 
 #include "split.h"
 
-parameters::parameters() {
+EMGparameters::EMGparameters() {
   // Empty constructor.
   mu = sigma = lambda = pi = footprint = omega = 0.0;    
 }
 
 /**
- * @brief Construct a new parameters::parameters object
+ * @brief Construct a new EMGparameters::EMGparameters object
  * 
  * @param mu        The center of the bidirectional, position of loading
  * @param sigma     The variance on the loading position (mu)
@@ -32,7 +32,7 @@ parameters::parameters() {
  * @param footprint     The offset parameter (aka Beta)
  * @param omega     The pausing probability. 
  */
-parameters::parameters(double mu, double sigma, double lambda, double pi, double footprint, double omega) {
+EMGparameters::EMGparameters(double mu, double sigma, double lambda, double pi, double footprint, double omega) {
     mu = mu;
     sigma = sigma;
     lambda = lambda;
@@ -45,7 +45,7 @@ parameters::parameters(double mu, double sigma, double lambda, double pi, double
  * 
  * @return std::string 
  */
-std::string parameters::write() {
+std::string EMGparameters::write() {
   std::string output =    std::to_string(mu) +"\t" + std::to_string(sigma) +"\t" + 
     std::to_string(lambda) + "\t" + std::to_string(pi) +"\t" + std::to_string(footprint) 
     + "\t" + std::to_string(omega) + "\n";
@@ -58,7 +58,7 @@ std::string parameters::write() {
  * @param single  Tab delimited list of parameters, 
  * in order: mu, sigma, lambda, pi, footprint, and omega.
  */
-void parameters::read(std::string single) {
+void EMGparameters::read(std::string single) {
    vector<std::string> split_tab = split_by_tab(single, ""); // note delim variable ignored!
 
    mu = std::stod(split_tab[0]);
@@ -76,7 +76,7 @@ void parameters::read(std::string single) {
  * 
  * @return std::string 
  */
-double parameters::getStart() {
+double EMGparameters::getStart() {
     return max(mu-(sigma+lambda), 0.0);
 }
 
@@ -85,20 +85,26 @@ double parameters::getStart() {
  * 
  * @return std::string 
  */
-double parameters::getEnd() {
+double EMGparameters::getEnd() {
    return (mu + (sigma+lambda));
 }
 
 /******************************************************/
-/* Class: Set_parameters */
+/* Class: Set_EMGparameters */
 /*************************/
 
-Set_parameters::Set_parameters() {
+Set_EMGparameters::Set_EMGparameters() {
    K = 0;
    // Should we do something with the collection (set to NULL)?
 }
 
-Set_parameters::Set_parameters(int K) {
+/**
+ * @brief Construct a new Set_EMGparameters::Set_EMGparameters object
+ * This is a collection of EMGparameters.  Used for a "set of K fits".
+ * 
+ * @param K Number of items in the collection.
+ */
+Set_EMGparameters::Set_EMGparameters(int K) {
     K = K;
    // Should we do something with the collection (set to NULL)?
 }

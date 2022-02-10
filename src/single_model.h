@@ -20,7 +20,7 @@
  * 
  * Unclear what fbs and ras are .. so leaving those out for now.
  */
-class parameters {
+class EMGparameters {
 public:
   double mu;
   double sigma;
@@ -30,8 +30,8 @@ public:
   double omega;
 
   // Constructors
-  parameters();
-  parameters(double,double,double,double,double,double);
+  EMGparameters();
+  EMGparameters(double,double,double,double,double,double);
 
   // Functions
   std::string write();        
@@ -43,13 +43,13 @@ public:
   // or genomic coordinates yet. 
 };
 
-class Set_parameters {
+class Set_EMGparameters {
   public:
-  vector<parameters *> collection;  // Contains K models
+  std::vector<EMGparameters *> collection;  // Contains K models
 
    //Constructors
-   Set_parameters();
-   Set_parameters(int);
+   Set_EMGparameters();
+   Set_EMGparameters(int);
 
    // Functions
   std::string write();
