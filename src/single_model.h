@@ -38,7 +38,8 @@ public:
   void read(std::string);
   double getStart();
   double getEnd();
-  // What about a function that outputs this as BED.  We don't keep
+  std::vector<std::string> fetch_as_strings();
+  // What about a function that outputs this as BED?  We don't keep
   // currently its chromosome.  We also aren't sure if these will be relative
   // or genomic coordinates yet. 
 };
@@ -46,14 +47,15 @@ public:
 class Set_EMGparameters {
   public:
   std::vector<EMGparameters *> collection;  // Contains K models
+  double log_likelihood;
 
-   //Constructors
-   Set_EMGparameters();
-   Set_EMGparameters(int);
+  //Constructors
+  Set_EMGparameters();
+  Set_EMGparameters(int);
 
-   // Functions
+  // Functions
   std::string write();
-  void read(std::string);
+  void read_from_K_models(std::string);  // This will parse/read in a K_models string
   
   private:
   int K;    // Number of models

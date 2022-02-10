@@ -41,6 +41,7 @@ list(APPEND sources
                 src/test_dInterval.cpp
                 src/test_segment.cpp
                 src/test_Nested.cpp
+                src/test_EMGparameters.cpp
                 )
 
 # Set Include directories

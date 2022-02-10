@@ -505,8 +505,6 @@ void segment_fits::identify_best_model(double penalty){
  * @brief Writes out a set of models (as bed file) that have reasonable
  * parameters.
  * 
- * @bug As written, K is never decided.  Thus you could output overlapping or
- * embedded answers if a region has to distinct K that give reasonable outcomes.
  * @return string 
  */
 string segment_fits::write(){

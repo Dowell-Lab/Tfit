@@ -32,13 +32,13 @@ EMGparameters::EMGparameters() {
  * @param footprint     The offset parameter (aka Beta)
  * @param omega     The pausing probability. 
  */
-EMGparameters::EMGparameters(double mu, double sigma, double lambda, double pi, double footprint, double omega) {
-    mu = mu;
-    sigma = sigma;
-    lambda = lambda;
-    pi = pi;
-    footprint = footprint;
-    omega = omega;
+EMGparameters::EMGparameters(double v_mu, double v_sigma, double v_lambda, double v_pi, double v_footprint, double v_omega) {
+    mu = v_mu;
+    sigma = v_sigma;
+    lambda = v_lambda;
+    pi = v_pi;
+    footprint = v_footprint;
+    omega = v_omega;
 }
 /**
  * @brief Convert the parameters into an ouput string.
@@ -89,6 +89,24 @@ double EMGparameters::getEnd() {
    return (mu + (sigma+lambda));
 }
 
+/**
+ * @brief Return the parameters as vector of strings.
+ * 
+ * @remark Unclear if this should be concerned with precision in conversion to string
+ * 
+ * @return std::vector<std::string> 
+ */
+std::vector<std::string> EMGparameters::fetch_as_strings() {
+   std::vector<std::string> asStrings(6);
+   asStrings[0] = std::to_string(mu);
+   asStrings[1] = std::to_string(sigma);
+   asStrings[2] = std::to_string(lambda);
+   asStrings[3] = std::to_string(pi);
+   asStrings[4] = std::to_string(footprint);
+   asStrings[5] = std::to_string(omega);
+
+   return asStrings;
+}
 /******************************************************/
 /* Class: Set_EMGparameters */
 /*************************/
@@ -107,4 +125,77 @@ Set_EMGparameters::Set_EMGparameters() {
 Set_EMGparameters::Set_EMGparameters(int K) {
     K = K;
    // Should we do something with the collection (set to NULL)?
+}
+
+/**
+ * @brief Convert a set of distinct fits into something like 
+ * the K_models output string.  NOTE it's not exactly K_models 
+ * as we don't keep the wf and wp parameters here.
+ * 
+ * UNTESTED
+ * 
+ * @return std::string 
+ */
+std::string Set_EMGparameters::write() {
+  std::string asString = to_string(K) + "," + to_string(log_likelihood);
+
+  std::vector<std::vector<std::string>> params; // [models][parameter]
+  for (int i = 0; i < K; i++) { // each of the K models
+    params.push_back(collection[i]->fetch_as_strings());
+  }
+
+  for (int j = 0; j < 6; j++) { // each of the parameters
+     std::string temp = params[0][j];
+     for (int i = 1; i < K; i++) {
+       temp = temp + "," + params[i][j];
+     }
+     asString = asString + "\t" + temp;
+  }
+  return asString;
+}
+
+/**
+ * @brief Convert a string of K model output into a Set_EMGparameters 
+ * 
+ * UNTESTED 
+ * 
+ */
+void Set_EMGparameters::read_from_K_models(std::string line) {
+   std::vector<std::string> tab_split = split_by_tab(line, "");
+
+   // These are values for the entire set (size and loglikelihood).
+   std::vector<std::string> comma_split = split_by_comma(tab_split[0], "");
+   K = stoi(comma_split[0]);
+   log_likelihood = stod(comma_split[1]);
+
+   // Now we need to build all the EMGparameter sets, of which there are K.
+   // Recall the string is formatted:
+   // mus+"\t"+sigmas+"\t"+lambdas+"\t" + pis+"\t" + fps+ "\t" + ws
+   std::vector<std::vector<double>> par_as_double; // [params][model]
+   for (int i = 1; i < 6; i++)
+   { // mu to footprint
+      std::vector<std::string> temp = split_by_comma(tab_split[i], "");
+      for (int j = 0; j < K; j++)
+      { // each of the K models
+         par_as_double[i][j] = stod(temp[j]);
+      }
+   }
+
+   // omega is tab_split[6] but it's got a bar in it so has to have
+   // separate parsing.  But should go into par_as_double[6].
+   // w, fw, rw|w, fw, rw| ...
+   std::vector<std::string> temp = split_by_bar(tab_split[6], "");
+   // Note that temp.size should eq K.
+   for (int i = 0; i < K; i++)
+   {
+      std::vector<std::string> wset = split_by_comma(temp[i], "");
+      par_as_double[6][i] = stod(wset[0]);
+   }
+
+   for (int i = 0; i < K; i++)
+   {
+      collection.push_back(new EMGparameters(par_as_double[1][i], par_as_double[2][i],
+               par_as_double[3][i], par_as_double[4][i], par_as_double[5][i], 
+               par_as_double[6][i]));
+   }
 }
