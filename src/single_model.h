@@ -19,15 +19,19 @@
  * mus+"\t"+sigmas+"\t"+lambdas+"\t" + pis+"\t" + fps+ "\t" + ws + "\t" + fbs+"\t" +ras;
  * 
  * Unclear what fbs and ras are .. so leaving those out for now.
+ * 
+ * @remark Currently keeping all parameters as doubles, as Joey did.  Reality is that
+ * they are not really all doubles.  Should be checking those that are probabilities for 
+ * proper bounds and storing coordinates as ints.
  */
 class EMGparameters {
 public:
-  double mu;
+  double mu;    // Technically an int
   double sigma;
   double lambda;
-  double pi;
+  double pi;  // This one is a probability
   double footprint;
-  double omega;
+  double omega;  // This one is a probability
 
   // Constructors
   EMGparameters();
@@ -44,6 +48,10 @@ public:
   // or genomic coordinates yet. 
 };
 
+/**
+ * @brief A collection of EMGparameters, i.e. K models.
+ * 
+ */
 class Set_EMGparameters {
   public:
   std::vector<EMGparameters *> collection;  // Contains K models

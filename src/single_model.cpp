@@ -139,6 +139,9 @@ Set_EMGparameters::Set_EMGparameters(int K) {
 std::string Set_EMGparameters::write() {
   std::string asString = to_string(K) + "," + to_string(log_likelihood);
 
+  // Note that output is currently all K values of mu (et. al.) 
+  // But storage is in K EMGparameters -- this leads to a indexing
+  // issues in the read/write functions.
   std::vector<std::vector<std::string>> params; // [models][parameter]
   for (int i = 0; i < K; i++) { // each of the K models
     params.push_back(collection[i]->fetch_as_strings());
