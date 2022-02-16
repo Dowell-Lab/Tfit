@@ -50,7 +50,7 @@ public:
 
 /**
  * @brief A collection of EMGparameters, i.e. K models.
- * 
+ *  Should this provide iterator behavior? 
  */
 class Set_EMGparameters {
   public:

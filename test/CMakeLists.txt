@@ -42,6 +42,7 @@ list(APPEND sources
                 src/test_segment.cpp
                 src/test_Nested.cpp
                 src/test_EMGparameters.cpp
+                src/test_SetEMGparam.cpp
                 )
 
 # Set Include directories

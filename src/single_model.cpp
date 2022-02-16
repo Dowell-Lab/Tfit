@@ -14,6 +14,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>  // for cout?
 
 #include "split.h"
 
@@ -164,7 +165,8 @@ std::string Set_EMGparameters::write() {
  * 
  */
 void Set_EMGparameters::read_from_K_models(std::string line) {
-   std::vector<std::string> tab_split = split_by_tab(line, "");
+   std::string data = line.substr(1, line.size() - 1); // removes the ~ first character
+   std::vector<std::string> tab_split = split_by_tab(data, "");
 
    // These are values for the entire set (size and loglikelihood).
    std::vector<std::string> comma_split = split_by_comma(tab_split[0], "");
@@ -174,12 +176,10 @@ void Set_EMGparameters::read_from_K_models(std::string line) {
    // Now we need to build all the EMGparameter sets, of which there are K.
    // Recall the string is formatted:
    // mus+"\t"+sigmas+"\t"+lambdas+"\t" + pis+"\t" + fps+ "\t" + ws
-   std::vector<std::vector<double>> par_as_double; // [params][model]
-   for (int i = 1; i < 6; i++)
-   { // mu to footprint
+   std::vector<std::vector<double>> par_as_double(7, std::vector<double>(K)); // [params][model]
+   for (int i = 1; i < 6; i++) { // mu to footprint
       std::vector<std::string> temp = split_by_comma(tab_split[i], "");
-      for (int j = 0; j < K; j++)
-      { // each of the K models
+      for (int j = 0; j < K; j++) { // each of the K models
          par_as_double[i][j] = stod(temp[j]);
       }
    }
@@ -189,14 +189,12 @@ void Set_EMGparameters::read_from_K_models(std::string line) {
    // w, fw, rw|w, fw, rw| ...
    std::vector<std::string> temp = split_by_bar(tab_split[6], "");
    // Note that temp.size should eq K.
-   for (int i = 0; i < K; i++)
-   {
+   for (int i = 0; i < K; i++) {
       std::vector<std::string> wset = split_by_comma(temp[i], "");
       par_as_double[6][i] = stod(wset[0]);
    }
 
-   for (int i = 0; i < K; i++)
-   {
+   for (int i = 0; i < K; i++) {
       collection.push_back(new EMGparameters(par_as_double[1][i], par_as_double[2][i],
                par_as_double[3][i], par_as_double[4][i], par_as_double[5][i], 
                par_as_double[6][i]));
