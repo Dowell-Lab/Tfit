@@ -33,7 +33,7 @@ public:
   double footprint;
   double omega;  // This one is a probability
 
-  // Constructors
+  // Constructors & Destructors
   EMGparameters();
   EMGparameters(double,double,double,double,double,double);
 
@@ -60,6 +60,7 @@ class Set_EMGparameters {
   //Constructors
   Set_EMGparameters();
   Set_EMGparameters(int);
+  ~Set_EMGparameters();
 
   // Functions
   std::string write();

@@ -41,6 +41,7 @@ EMGparameters::EMGparameters(double v_mu, double v_sigma, double v_lambda, doubl
     footprint = v_footprint;
     omega = v_omega;
 }
+
 /**
  * @brief Convert the parameters into an ouput string.
  * 
@@ -99,6 +100,7 @@ double EMGparameters::getEnd() {
  */
 std::vector<std::string> EMGparameters::fetch_as_strings() {
    std::vector<std::string> asStrings(6);
+   // cout << std::to_string(mu) << std::endl;
    asStrings[0] = std::to_string(mu);
    asStrings[1] = std::to_string(sigma);
    asStrings[2] = std::to_string(lambda);
@@ -114,7 +116,7 @@ std::vector<std::string> EMGparameters::fetch_as_strings() {
 
 Set_EMGparameters::Set_EMGparameters() {
    K = 0;
-   // Should we do something with the collection (set to NULL)?
+   log_likelihood = 0;
 }
 
 /**
@@ -123,9 +125,23 @@ Set_EMGparameters::Set_EMGparameters() {
  * 
  * @param K Number of items in the collection.
  */
-Set_EMGparameters::Set_EMGparameters(int K) {
-    K = K;
-   // Should we do something with the collection (set to NULL)?
+Set_EMGparameters::Set_EMGparameters(int k) {
+    K = k;
+    EMGparameters *nodata = NULL;
+    for (int i = 0; i < K; i++) {
+       collection.push_back(nodata) ;
+    }
+    log_likelihood = 0;
+  // cout << K << "," << log_likelihood << std::endl;
+}
+/**
+ * @brief Destroy the Set_EMGparameters::Set_EMGparameters object
+ * 
+ */
+Set_EMGparameters::~Set_EMGparameters() {
+   for (int i = 0; i < K; i++) {
+      free(collection[i]);
+   }
 }
 
 /**
@@ -138,18 +154,25 @@ Set_EMGparameters::Set_EMGparameters(int K) {
  * @return std::string 
  */
 std::string Set_EMGparameters::write() {
-  std::string asString = to_string(K) + "," + to_string(log_likelihood);
+  std::string asString = "~" + to_string(K) + "," + to_string(log_likelihood);
 
   // Note that output is currently all K values of mu (et. al.) 
   // But storage is in K EMGparameters -- this leads to a indexing
   // issues in the read/write functions.
-  std::vector<std::vector<std::string>> params; // [models][parameter]
+  // std::vector<std::vector<std::string>> params(K, std::vector<std::string>(7)); // [models][parameter]
+  std::vector<std::vector<std::string>> params(K);
   for (int i = 0; i < K; i++) { // each of the K models
-    params.push_back(collection[i]->fetch_as_strings());
+    if (collection[i]) {
+      params[i] = collection[i]->fetch_as_strings();
+      // cout << params[i][0] << std::endl;
+    } else {   // This model is null
+      params[i] = std::vector<std::string>(6,""); // Set to empty strings
+    }
   }
 
   for (int j = 0; j < 6; j++) { // each of the parameters
      std::string temp = params[0][j];
+     // cout << temp << std::endl;
      for (int i = 1; i < K; i++) {
        temp = temp + "," + params[i][j];
      }
