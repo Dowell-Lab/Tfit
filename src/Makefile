@@ -38,9 +38,15 @@ Tfit: main.o ${OBJ}
 	@printf " successfully compiled \n\n"
 
 argTest:
-	echo "Temporary Stuff"
+	echo "Temporary Argument Stuff"
 	g++ -c ${CFLAGS} ${PWD}/parse_args.cpp 
+	g++ -c ${CFLAGS} ${PWD}/arg_main.cpp 
 	g++ -o argTest ${CFLAGS} arg_main.o parse_args.o 
+
+testmain: test_main.o ${OBJ}
+	echo "Temporary Testing"
+	@${CXX} -o Testmain ${CXXFLAGS} test_main.o ${OBJ} -lmpi
+
 
 %: 
 	@${CXX} -c ${CXXFLAGS} ${PWD}/$*.cpp
