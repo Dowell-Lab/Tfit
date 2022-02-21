@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
 
   FSI = load::load_intervals_of_interest(interval_file, IDS, P, 0);
   for (auto &element : FSI) {
-	  cout << element->write_withData() << std::endl;
+	  cout << element->write_interval() << std::endl;
 	  GG[element->chrom].push_back(element);
   }
   vector<segment *> integrated_segments = load::insert_bedgraph_to_segment_joint(GG,
@@ -68,7 +68,6 @@ int main(int argc, char* argv[]) {
   load::BIN(integrated_segments, 25, 100, true); // Note 25 and 100 are defaults from params
   for (auto &element : integrated_segments) {
 	  cout << element->write_withData() << std::endl;
-	  cout << element->write_centers() << std::endl;
   }
 
   /* Attempt to fit a single model (K=1) */
@@ -83,6 +82,7 @@ void setupParams (params *P) {
   P->p["-pad"] = "2000";
   P->p["-minK"] = "1";
   P->p["-maxK"] = "1";
+  P->p["-rounds"] = "5";
 
 }
 
@@ -114,9 +114,10 @@ vector<map<int, vector<simple_c_free_mode> >> run_model (vector<segment *> FSI, 
 		segment * data 	= FSI[i];
 		map<int, vector<classifier> > A 	= make_classifier_struct_free_model(P, FSI[i]);
 		for (it_type k = A.begin(); k!= A.end(); k++){
-			int N 	=  k->second.size();
-			for (int r = 0; r < N; r++ ){
+			int N 	=  k->second.size(); // second ... num classifiers
+			for (int r = 0; r < N; r++ ){	 // This is "-rounds"
 				cout << "RUN EM r:" << r << std::endl;
+	  			cout << data->write_centers() << std::endl;
 				A[k->first][r].fit2(data, data->centers,0,0);
 			}
 		}

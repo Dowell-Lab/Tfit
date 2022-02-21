@@ -987,6 +987,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 				mu 		= dist_r_mu(mt); // mt is the random number
 			}
 		}else{
+			// cout << "HERE!" << std::endl;
 			normal_distribution<double> dist_MU((data->minX+data->maxX)/2., r_mu);
 			mu 			= dist_MU(mt); // mt is the random number
 		}
