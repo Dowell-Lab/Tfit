@@ -53,26 +53,26 @@ int main(int argc, char* argv[]) {
   std::string interval_file = "../end2end/singleregion.bed";
 
   /* Read in a segment of data */
-	map<int, string> IDS;
-	vector<segment *> FSI;
+  map<int, string> IDS;
+  vector<segment *> FSI;
   map<string, vector<segment *>> GG;
 
-	FSI 	= load::load_intervals_of_interest(interval_file, IDS, P, 0);
-  for (auto & element: FSI) {
-    cout << element->write_out() << std::endl;
-    GG[element->chrom].push_back(element);
+  FSI = load::load_intervals_of_interest(interval_file, IDS, P, 0);
+  for (auto &element : FSI) {
+	  cout << element->write_withData() << std::endl;
+	  GG[element->chrom].push_back(element);
   }
-	vector<segment*> integrated_segments= load::insert_bedgraph_to_segment_joint(GG, 
-    "", "", data_file, 0);
-  for (auto & element: integrated_segments) {
-    cout << element->write_out() << std::endl;
-  }
+  vector<segment *> integrated_segments = load::insert_bedgraph_to_segment_joint(GG,
+				"", "", data_file, 0);
   /* Centering and scaling */
-	load::BIN(integrated_segments, 25, 100, true);	// Note 25 and 100 are defaults from params
+  load::BIN(integrated_segments, 25, 100, true); // Note 25 and 100 are defaults from params
+  for (auto &element : integrated_segments) {
+	  cout << element->write_withData() << std::endl;
+	  cout << element->write_centers() << std::endl;
+  }
 
-  /* Attempt to fit a single model (K=1) */ 
-	vector<map<int, vector<simple_c_free_mode> >> FITS 		= run_model(integrated_segments, P);
-
+  /* Attempt to fit a single model (K=1) */
+  vector<map<int, vector<simple_c_free_mode>>> FITS = run_model(integrated_segments, P);
 }
 
 /* Setup as needed for this run */
@@ -93,7 +93,7 @@ vector<map<int, vector<simple_c_free_mode> >> run_model (vector<segment *> FSI, 
   /* defaults */
 	double scale 	= 100; int num_proc 				= 1;
 	int verbose 	= 1; double N 		= FSI.size();
-	double percent 	= 0; int elon_move 	= 0;
+	double percent 	= 0; 
 
 	//printf("FSI.size: %d\n", FSI.size());
 	for (int i = 0 ; i < FSI.size(); i++){
@@ -110,14 +110,14 @@ vector<map<int, vector<simple_c_free_mode> >> run_model (vector<segment *> FSI, 
 			cout << center << std::endl;
 			FSI[i]->centers.push_back(center);
 		}
+
 		segment * data 	= FSI[i];
 		map<int, vector<classifier> > A 	= make_classifier_struct_free_model(P, FSI[i]);
 		for (it_type k = A.begin(); k!= A.end(); k++){
 			int N 	=  k->second.size();
-			#pragma omp parallel for num_threads(num_proc)	
 			for (int r = 0; r < N; r++ ){
 				cout << "RUN EM r:" << r << std::endl;
-				A[k->first][r].fit2(data, data->centers,0,elon_move);
+				A[k->first][r].fit2(data, data->centers,0,0);
 			}
 		}
 		D.push_back(get_max_from_free_mode(A, FSI[i], i));

@@ -82,8 +82,11 @@ public:
 	double getXLength ();
 
 	/* FUNCTIONS: */
-	// Reporting out (currently unused)
-	string write_out();
+	string write_interval(); // chr:start-stop,identifier
+	string write_allScalar();	// All doubles, strings and ints
+	string write_withData();  // includes X
+	string write_centers(); 	// Just the centers vector
+
 	// bin does the scaling and smoothing of input data (builds X)
 	void bin(double, double, bool); // delta, scale, erase
 	// add2 appears to add a single data point (coord) to an interval

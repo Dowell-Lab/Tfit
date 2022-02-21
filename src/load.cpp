@@ -118,16 +118,59 @@ double segment::getXLength () {
 }
 
 /**
- * @brief Print basic contents of segment
- * @author Joey Azofeifa 
+ * @brief Print region identification for segment 
  * @return printable string of format #chr:start-stop,identifier
- * @bug - does not include strand information in printout
- * - need a more comprehensive write function for all of segment
  */
-string segment::write_out(){
+string segment::write_interval(){
         string  text= ("#" + chrom + ":" + to_string(start) + "-" 
 		+ to_string(stop) + "," + to_string(int(N))+ "\n");
 	return text;
+}
+
+/**
+ * @brief Print region identificaton and all scalar values in segment
+ * 
+ * @return printable string with all scalar values in segment
+ */
+string segment::write_allScalar() {
+	std::string identifier = this->write_interval();
+  std::string text = (";n: " + to_string(minX) + ",x: " + to_string(maxX) + 
+    ":c" + to_string(counts) +  ";XN: " + to_string(XN) + ";SCALE: " + to_string(SCALE)
+    + "**" + to_string(N) + ":" + to_string(fN) + "," + to_string(rN));
+  return (identifier + " " + strand + " " + text);
+}
+
+/**
+ * @brief Print allScalar and then contents of X (multiple lines)
+ * @return printable string with all scalar and contents of X
+ */
+string segment::write_withData() {
+	std::string allscalar = this->write_allScalar();
+  std::string data;
+  for(int i = 0; i < 3; i++) {
+    data = data + "\ni:" + to_string(i);
+    if (XN == 0) {
+      data = data + " no data";
+    } else {
+      for (int j = 0; j < XN; j++) {
+        data = data + " " + to_string(X[i][j]);
+      }
+    }
+  }
+  return (allscalar + data);
+}
+
+/**
+ * @brief Print out the contents of the centers vector
+ * 
+ * @return centers vector as string
+ */
+string segment::write_centers() {
+  std::string centers_as_string;
+  for (auto & element : centers) {
+    centers_as_string = centers_as_string + " " + to_string(element);
+  }
+  return centers_as_string;
 }
 
 /**
