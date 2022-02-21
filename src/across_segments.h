@@ -16,6 +16,8 @@
 
 string check_file(string, int);
 
+map<int, vector<classifier> > make_classifier_struct_free_model(params * P, segment * data);
+
 void run_model_accross_segments(vector<segment*>, 
 	params *);
 void free_segments(vector<segment*>);
@@ -60,9 +62,11 @@ struct simple_c_free_mode{
 	simple_c_free_mode(bool , double, component ,
 		int, segment *, int, double, double);
 	simple_c_free_mode();
+
 };
 
 vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<segment *> , params *, Log_File * );
 vector<double> compute_average_model(vector<segment *> , params * );
+	map<int, vector<simple_c_free_mode> > get_max_from_free_mode(map<int, vector<classifier> > A, segment * data, int i);
 
 #endif

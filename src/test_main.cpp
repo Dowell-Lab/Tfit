@@ -21,7 +21,6 @@
 #include <map>
 #include <thread>  // This is an unapproved C++11 header
 
-#include "across_segments.h"
 #include "bidir_main.h"
 #include "bootstrap.h"
 #include "density_profiler.h"
@@ -34,6 +33,11 @@
 #include "read_in_parameters.h"
 #include "select_main.h"
 #include "template_matching.h"
+#include "across_segments.h"
+#include "model_single.h"
+
+void setupParams (params *P);
+vector<map<int, vector<simple_c_free_mode> >> run_model(vector<segment *> FSI, params * P);
 
 /**
  * @brief Program main.  
@@ -42,51 +46,81 @@
  * @return 
  */
 int main(int argc, char* argv[]) {
-  MPI::Init(argc, argv);
-  // the nprocs is the total number of processors available
-  int nprocs  = MPI::COMM_WORLD.Get_size();
-  // The rank ranges from 0 to (nprocs-1) and is current process number
-  int rank    = MPI::COMM_WORLD.Get_rank();
-  int threads = omp_get_max_threads();
+  params *P = new params();
+  setupParams(P);
 
-  nprocs = 1;  rank = 0; threads = 1;  // Force MPI to minimum
+  std::string data_file = "../end2end/reduced.bg";
+  std::string interval_file = "../end2end/singleregion.bed";
 
-  params * P  = new params();
-  read_in_parameters(argv, P, rank);
-  if (P->EXIT) {
-    if (rank == 0) {
-      printf("exiting...\n");
-    }
-    delete P;
-    MPI::Finalize();
-    return 0;
+  /* Read in a segment of data */
+	map<int, string> IDS;
+	vector<segment *> FSI;
+  map<string, vector<segment *>> GG;
+
+	FSI 	= load::load_intervals_of_interest(interval_file, IDS, P, 0);
+  for (auto & element: FSI) {
+    cout << element->write_out() << std::endl;
+    GG[element->chrom].push_back(element);
   }
-  int job_ID = MPI_comm::get_job_ID(P->p["-log_out"], P->p["-N"], rank, nprocs);
-
-  int verbose   = stoi(P->p["-v"]);
-
-  Log_File * LG = new  Log_File(rank, job_ID, P->p["-N"], P->p["-log_out"]);
-  if (verbose > 0) {
-  // printf("This should be output when verbose is set!\n");
+	vector<segment*> integrated_segments= load::insert_bedgraph_to_segment_joint(GG, 
+    "", "", data_file, 0);
+  for (auto & element: integrated_segments) {
+    cout << element->write_out() << std::endl;
   }
-  if (verbose && rank == 0) {
-    P->display(nprocs, threads);
-    LG->write(P->get_header(1), 0);
-  }
-  if (P->bidir) {
-    bidir_run(P, rank, nprocs, job_ID, LG);
-  } else if (P->model) {
-    model_run(P, rank, nprocs, 0, job_ID, LG);
-  } else if (P->select) {
-    // Contents of select_run are commented out:
-    // i.e. this function does nothing.
-    select_run(P, rank, nprocs, job_ID, LG);
-  }
-  if (rank == 0) {
-    load::collect_all_tmp_files(P->p["-log_out"], P->p["-N"], nprocs, job_ID);
-  }
+  /* Centering and scaling */
+	load::BIN(integrated_segments, 25, 100, true);	// Note 25 and 100 are defaults from params
 
-  MPI::Finalize();
+  /* Attempt to fit a single model (K=1) */ 
+	vector<map<int, vector<simple_c_free_mode> >> FITS 		= run_model(integrated_segments, P);
 
-  return 0;
+}
+
+/* Setup as needed for this run */
+void setupParams (params *P) {
+  P->threads = 1;
+  P->model = 1;
+  P->p["-chr"] = "chr21";
+  P->p["-pad"] = "2000";
+  P->p["-minK"] = "1";
+  P->p["-maxK"] = "1";
+
+}
+
+vector<map<int, vector<simple_c_free_mode> >> run_model (vector<segment *> FSI, params * P) {
+	vector<map<int, vector<simple_c_free_mode> >> D;
+	typedef map<int, vector<classifier> > ::iterator it_type;
+
+  /* defaults */
+	double scale 	= 100; int num_proc 				= 1;
+	int verbose 	= 1; double N 		= FSI.size();
+	double percent 	= 0; int elon_move 	= 0;
+
+	//printf("FSI.size: %d\n", FSI.size());
+	for (int i = 0 ; i < FSI.size(); i++){
+		if ((i / N) > (percent+0.05)){
+			percent 	= (i / N);
+		}
+
+		//first need to populate data->centers
+		for (int b = 0 ; b < FSI[i]->bidirectional_bounds.size(); b++){
+			double center = FSI[i]->bidirectional_bounds[b][0] +  FSI[i]->bidirectional_bounds[b][1] ;
+			center/=2.;
+			center-=FSI[i]->start;
+			center/=scale;
+			cout << center << std::endl;
+			FSI[i]->centers.push_back(center);
+		}
+		segment * data 	= FSI[i];
+		map<int, vector<classifier> > A 	= make_classifier_struct_free_model(P, FSI[i]);
+		for (it_type k = A.begin(); k!= A.end(); k++){
+			int N 	=  k->second.size();
+			#pragma omp parallel for num_threads(num_proc)	
+			for (int r = 0; r < N; r++ ){
+				cout << "RUN EM r:" << r << std::endl;
+				A[k->first][r].fit2(data, data->centers,0,elon_move);
+			}
+		}
+		D.push_back(get_max_from_free_mode(A, FSI[i], i));
+	}
+	return D;
 }
