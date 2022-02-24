@@ -1,6 +1,6 @@
 /**
  * @file main.cpp
- * @author Joey Azofeifa
+ * @author Joey Azofeifa, Robin Dowell
  * @copyright Copyright 2016 Dowell Lab 
  * @brief This is the primary executable file.  
  * It contains the mpi code, reading parameters, then forking to one of three functions:

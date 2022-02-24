@@ -924,9 +924,9 @@ classifier::classifier(){};
  * @brief This is the core EM algorithm.
  * 
  * @param data 
- * @param mu_seeds 
- * @param topology 
- * @param elon_move 
+ * @param mu_seeds  only used in initialization of algorithm
+ * @param topology passed through to initialize_bounds as termination 
+ * @param elon_move should try to move elongation component (e.g. L)?
  * @return int 
  */
 int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
@@ -999,6 +999,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 	}
 	sort_vector(mus, K);
 	for (int k = 0; k < K;k++){ //random seeding, initialize(3) other parameters
+	    // This is the only place topology is used, passed as termination.
 		components[k].initialize_bounds(mus[k], 
 			data, K, data->SCALE , 0., topology,foot_print, data->maxX, data->maxX);
 		
@@ -1100,7 +1101,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 		if (u > 200 ){
 			sort_components(components, K);
 			//check_mu_positions(components, K);
-			if (elon_move){
+			if (elon_move){		// Only place this is used.
 				update_j_k(components,data, K, N);
 				update_l(components,  data, K);
 			}

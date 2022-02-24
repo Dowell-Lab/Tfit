@@ -43,9 +43,9 @@ argTest:
 	g++ -c ${CFLAGS} ${PWD}/arg_main.cpp 
 	g++ -o argTest ${CFLAGS} arg_main.o parse_args.o 
 
-testmain: test_main.o ${OBJ}
+testmain: MainTesting.o ${OBJ}
 	echo "Temporary Testing"
-	@${CXX} -o Testmain ${CXXFLAGS} test_main.o ${OBJ} -lmpi
+	@${CXX} -o Testmain ${CXXFLAGS} MainTesting.o ${OBJ} -lmpi
 
 
 %: 

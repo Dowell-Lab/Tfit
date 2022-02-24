@@ -35,14 +35,16 @@ file(GLOB sources "../src/*.cpp")
 # Remove other main functions
 list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/arg_main.cpp")
 list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/main.cpp")
+list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/MainTesting.cpp")
 list(APPEND sources
                 src/test_main.cpp
                 src/test_split.cpp
                 src/test_dInterval.cpp
                 src/test_segment.cpp
-                src/test_Nested.cpp
+                src/reproduce_Nested.cpp
                 src/test_EMGparameters.cpp
                 src/test_SetEMGparam.cpp
+                src/test_coreEM.cpp
                 )
 
 # Set Include directories
