@@ -1,5 +1,5 @@
 /**
- * @file test_dataIntervals.cpp 
+ * @file test_dIntervals.cpp 
  * @author Robin Dowell
  * @brief Testing the data interval class/object 
  * @date 2022-01-27

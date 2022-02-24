@@ -1,7 +1,7 @@
 /**
  * @file across_segments.cpp
  * @author Joey Azofeifa
- * @brief  NEEDS A BRIEF
+ * @brief  Used mostly by MPI to distribute segments?
  * @version 0.1
  * @date 2016-05-20
  * 

@@ -1,7 +1,7 @@
 /**
  * @file bidir_main.cpp
  * @author Joey Azofeifa
- * @brief 
+ * @brief Tfit bidir executable
  * @version 0.1
  * @date 2016-05-20
  * 

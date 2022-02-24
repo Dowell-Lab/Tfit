@@ -1,7 +1,7 @@
 /**
- * @file test_segment.cpp 
+ * @file reproduce_Nested.cpp 
  * @author Robin Dowell
- * @brief Testing the old segment_fits class (to be refactored) 
+ * @brief Recreate the nested regions bug 
  * @date 2022-02-01
  * 
  */

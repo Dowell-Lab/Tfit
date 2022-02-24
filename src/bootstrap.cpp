@@ -1,7 +1,7 @@
 /**
  * @file bootstrap.cpp
  * @author Joey Azofeifa
- * @brief 
+ * @brief I don't believe this is currently used anywhere.
  * @version 0.1
  * @date 2016-05-20
  * 

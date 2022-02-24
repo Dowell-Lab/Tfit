@@ -1,7 +1,7 @@
 /**
  * @file BIC.cpp
  * @author Joey Azofeifa 
- * @brief 
+ * @brief The basic BIC calculation
  * @version 0.1
  * @date 2016-11-22
  */
