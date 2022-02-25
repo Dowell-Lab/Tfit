@@ -45,6 +45,7 @@ list(APPEND sources
                 src/test_EMGparameters.cpp
                 src/test_SetEMGparam.cpp
                 src/test_coreEM.cpp
+                src/test_loadBedGraph.cpp
                 )
 
 # Set Include directories
