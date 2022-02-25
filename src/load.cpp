@@ -661,8 +661,9 @@ bool check_ID_name(string & INFO){
  * @param BINS how many bases per smoothing -- for bin() function
  * @param scale what is the scaling constant 
  * @param spec_chrom a specified chromosome name, can be "all"
- * @param chromosomes maps chromsome name to ?? (counter?)
- * @param ID_to_chrom maps index number to chromosome name
+ * 
+ * @param chromosomes returns: maps chromsome name to ?? (counter?)
+ * @param ID_to_chrom returns: maps index number to chromosome name
  * @return  a vector of segments
  * 
  * @bug This thing has lots of steps and does lots of things, could 
@@ -780,14 +781,15 @@ vector<segment*> load::load_bedgraphs_total(string forward_strand, string revers
 }
 
 /**
- * @brief 
+ * @brief  load a bedfile of intervals
  * @author Joey Azofeifa 
  * @param FILE name of bedfile containing intervals (example: singleregion.bed)
- * @param IDS
+ * @param IDS side effect:  typically given empty and returns this TOO!
  * @param P parameters for this run
  * @param center (initial call in model_run is 0)
  * @return a vector of segments, note these segments are just regions
  * (bedgraph input) -- and have no data associated with them.
+ * Also modifies IDS.
  * 
  */
 vector<segment*> load::load_intervals_of_interest(string FILE, map<int, string>&  IDS, 

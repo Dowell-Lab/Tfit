@@ -11,7 +11,7 @@
 TEST(nested, reproduceNested)
 {
   // Arrange: bring SUT to desired state
-  string file_name = "../testNested.K-models.tsv"; 
+  string file_name = "../examples/testNested.K-models.tsv"; 
   params * P  = new params();
   vector<segment_fits *> fits 		= load::load_K_models_out(file_name);
 

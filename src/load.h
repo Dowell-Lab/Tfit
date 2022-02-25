@@ -23,7 +23,8 @@ class classifier; //forward declare
 
 /**
  * @brief Primary data class which represents a genomic segment of data.
- * @author Joey Azofeifa, Robin Dowell
+ * Represents both bed files (no data) and bedgraphs (with data).  Also 
+ * represents binned, scaled and conditioned data.
  */
 class segment{
 public:
@@ -97,7 +98,6 @@ public:
 /**
  * @brief A node within the interval tree.
  * Interval tree allows for rapid searching based on coordinates.
- * @author Joey Azofeifa
  */
 class node{
 public:

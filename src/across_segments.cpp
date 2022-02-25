@@ -223,6 +223,7 @@ vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<
 			center/=scale;
 			FSI[i]->centers.push_back(center);
 		}
+
 		segment * data 	= FSI[i];
 		map<int, vector<classifier> > A 	= make_classifier_struct_free_model(P, FSI[i]);
 		for (it_type k = A.begin(); k!= A.end(); k++){
