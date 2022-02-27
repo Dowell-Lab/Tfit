@@ -1115,3 +1115,33 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 
 	return 1;
 }
+
+string classifier::write_classifier_setup() {
+	string contents;
+	contents = to_string(K);
+	contents = contents + " " + to_string(convergence_threshold);
+	contents = contents + " " + to_string(max_iterations);
+	contents = contents + " " + to_string(noise_max);
+	contents = contents + " " + to_string(move);
+	if (seed) { contents = contents + " Y"; } 
+	else { contents = contents + " N"; }
+	contents = contents + " " + to_string(p) + " " + to_string(foot_print);
+	contents = contents + " " + to_string(pi);
+	if (move_l) { contents = contents + " Y"; } 
+	else { contents = contents + " N"; }
+	contents = contents + " " + to_string(last_diff) + " " + to_string(r_mu);
+	contents = contents + " " + to_string(ALPHA_0) + " " + to_string(ALPHA_1);
+	contents = contents + " " + to_string(ALPHA_2) + " " + to_string(ALPHA_3);
+	contents = contents + " " + to_string(BETA_0) + " " + to_string(BETA_1);
+	
+	return contents;
+
+}
+string classifier::write_classifier_status() {
+	string contents;
+	if (converged) { contents = contents + " Y"; } 
+	else { contents = contents + " N"; }
+	contents = contents + " " + to_string(ll);
+
+	return contents;
+}

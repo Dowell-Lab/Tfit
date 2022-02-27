@@ -160,16 +160,6 @@ public:
 	double get_all_repo();
 	void print();
 	void reset();
-	/*  Deprecated: These appear to NOT be used or defined.
-	void initialize(double, segment *, int , double , double, double, double);
-	void initialize_with_parameters(vector<double>, segment *, int, double, double, double);
-	void initialize_with_parameters2(vector<double>, segment *, int, double, double, double);
-	double pdf(double , int);
-	bool check_elongation_support();
-	string write_out();
-	*/
-
-
 };
 
 /**
@@ -194,11 +184,12 @@ public:
 	//final important parameters
 	double ll,pi;
 	double last_diff;
-	component * components;
 	bool converged;
 	double r_mu;
 	bool move_l;
 	double ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3;
+
+	component * components;
 	vector<vector<double>> init_parameters;
 
 	// Constructor
@@ -212,15 +203,11 @@ public:
 	classifier();
 
 	// Functions
-	int fit2(segment *,vector<double>, int, int);
+	int fit2(segment *,vector<double>, int, int);  // This is the core EM algorithm
+	string write_classifier_setup();  // The invariant parts of the object
+	string write_classifier_status();  // The parts that track model quality
 
-    /* Deprecated:  These appear undefined.	
-	int fit(segment *,vector<double>);
-	void free_classifier();
-	string print_out_components();
-	int fit_uniform_only(segment * );
-	int fit_uniform_only2(segment * );
-	*/
+    string write_params();
 };
 
 
