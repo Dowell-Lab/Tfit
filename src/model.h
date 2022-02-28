@@ -43,7 +43,7 @@ public:
 
 	// Functions
 	double pdf(double,int);	
-	string print();
+	string write();
 
 };
 /**
@@ -68,12 +68,15 @@ double LOG(double );
 class EMG{
 public:
 	double mu, si, l, pi, w;
+	double foot_print;
+
 	//sufficient stats
 	double ri_forward, ri_reverse; //current responsibility
 	double ey, ex, ex2, r_forward, r_reverse;//running total
 	double ex_r;
+
+	// Internals?
 	double C;
-	double foot_print;
 	bool move_fp;
 	double prev_mu;
 
@@ -84,19 +87,10 @@ public:
 	double pdf(double,int);
 	double EY(double ,int);
 	double EY2(double ,int);
-	string print();
+	string write();
+	string write_sufficient_stats();
+	string write_internals();
 };
-
-/*** deprecated
-class NORMAL{
-public:
-	double mu,si,pi,w;
-	double ex,ex2,r,ri;
-	NORMAL();
-	NORMAL(double, double, double, double);
-	double pdf(double, int);
-};
-***/
 
 /**
  * @brief NOISE class is another Uniform.
@@ -112,6 +106,8 @@ public:
 	// Constructors
 	NOISE();
 	NOISE(double, double, double, double);
+
+	string write();
 };
 
 /**
@@ -124,11 +120,14 @@ public:
 	UNI forward;
 	UNI reverse;
 	NOISE noise;
+
+	/* double linked list */
 	component * forward_neighbor;
 	component * reverse_neighbor;
-	
-	bool type;
-	bool termination;
+
+	// Indicator variables	
+	bool type;		// TRUE then have bidir, forward and reverse; FALSE noise
+	// bool termination;  // doesn't appear used.
 	bool EXIT;
 
 	//=====================================
@@ -145,9 +144,8 @@ public:
 	//FOR PI ; strand prob. , beta
 	double ALPHA_3;
 
-	double foot_print;
-
-	double w_thresh=0;
+	double foot_print;		// set but never used?
+	double w_thresh=0;		// set but never used?
 
 	// Constructor
 	component();
@@ -158,8 +156,9 @@ public:
 	void update_parameters(double,int);
 	void set_priors(double,double,double,double,double,double,double, int);
 	double get_all_repo();
-	void print();
+	string write();
 	void reset();
+	string write_priors();
 };
 
 /**

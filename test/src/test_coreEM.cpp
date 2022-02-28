@@ -50,15 +50,15 @@ TEST(classifier, exerciseFit2)
   for (it_type k = A.begin(); k!= A.end(); k++){
 			int N 	=  k->second.size();    // I think this is K
 			for (int r = 0; r < N; r++ ){   // This is rounds
-        cout << "Before: " +  A[k->first][r].write_classifier_status() << std::endl;
+        // cout << "Before: " +  A[k->first][r].write_classifier_status() << std::endl;
         // Act: call methods on SUT, capture output
         // So we run this and r rounds per K
 				A[k->first][r].fit2(data, data->centers,0,0);
-        cout << "After: " +  A[k->first][r].write_classifier_status() << std::endl;
+        // cout << "After: " +  A[k->first][r].write_classifier_status() << std::endl;
 		}
 	}
 
   // Assert: Verify the outcome
-  EXPECT_EQ(A[0][0].K, 1);
+  EXPECT_EQ(A[0][0].K, 0);
 }
 

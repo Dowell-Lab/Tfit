@@ -111,6 +111,11 @@ NOISE::NOISE(double A, double B, double W, double PI){
 	w=W;
 	pi=PI;
 }
+string NOISE::write() {
+	string text = ("N: " + to_string(a) + "," + to_string(b) 
+	+ "," + to_string(w) + "," + to_string(pi));
+	return text;
+}
 /**
  * @brief NOISE density function
  * Note that NOISE is just a uniform.
@@ -187,7 +192,7 @@ double UNI::pdf(double x, int strand){
  * 
  * @return string 
  */
-string UNI::print(){
+string UNI::write(){
 	string text = ("U: " + to_string(a) + "," + to_string(b) 
 	+ "," + to_string(w) + "," + to_string(pi));
 	return text;
@@ -219,11 +224,29 @@ EMG::EMG(double MU, double SI, double L, double W, double PI ){
  * 
  * @return string 
  */
-string EMG::print(){
-	string text 	= ("N: " + to_string(mu)+","+to_string(si)
-		+ "," + to_string(l) + "," + to_string(w) + "," + to_string(pi) + "," + to_string(foot_print) );
+string EMG::write(){
+	string text 	= ("N: " + to_string(mu)+ "," + to_string(si)
+		+ "," + to_string(l) + "," + to_string(w) + "," + to_string(pi) 
+		+ "," + to_string(foot_print) );
 	return text;
 }
+
+string EMG::write_sufficient_stats() {
+	string text = ("SS: " + to_string(ri_forward)+ "," + to_string(ri_reverse)
+		+ "," + to_string(ey) + "," + to_string(ex) + "," + to_string(ex2) 
+		+ "," + to_string(r_forward) + "," + to_string(r_reverse) + "," + to_string(ex_r) );
+	return text;
+}
+
+string EMG::write_internals() {
+	string text;
+	text = "I: " + to_string(C)+ "," + to_string(prev_mu);
+	if (move_fp) { text = text + " Y"; } 
+	else { text = text + " N"; }
+    return text;
+}
+
+
 /**
  * @brief EMG density function
  * 
@@ -578,15 +601,16 @@ void component::initialize_bounds(double mu, segment * data , int K, double scal
  * @brief Print out parameters of component.
  * 
  */
-void component::print(){
+string component::write(){
+	string text;
 	if (type==1){
-		string text 	= bidir.print()+ "\n";
-		text+=forward.print()+ "\n";
-		text+=reverse.print() + "\n";
-		cout<<text;
+		text = bidir.write() + "\n";
+		text+=forward.write()+ "\n";
+		text+=reverse.write() + "\n";
 	}else{
-		cout<<"NOISE: " << noise.w<<"," <<noise.pi<<endl;
+		text = noise.write() + "\n";
 	}
+	return text;
 }
 /**
  * @brief compute the density at x_i,s_i
@@ -682,6 +706,16 @@ void component::reset(){
 		noise.ri_reverse=0,noise.ri_forward=0 ;
 		
 	}
+}
+string component::write_priors() {
+	string text = "Priors: S1: ";
+	text = text + to_string(alpha_0) + "," + to_string(alpha_1) + "," + to_string(alpha_2);
+	text = text + "," + to_string(beta_0) + "," + to_string(beta_1) + "," + to_string(beta_2);
+	text = text + "\nsigma: gamma(" + to_string(ALPHA_0) + "," + to_string(BETA_0) + ")";
+	text = text + "\nlambda: gamma(" + to_string(ALPHA_1) + "," + to_string(BETA_1) + ")";
+	text = text + "\nW: dirichlet(" + to_string(ALPHA_2) + ")";
+	text = text + "\npi: Beta(" + to_string(ALPHA_3) + ")";
+    return text;
 }
 /**
  * @brief used for large responsibility normalization term
