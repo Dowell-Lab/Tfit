@@ -75,7 +75,7 @@ vector<vector<double>> bubble_sort3(vector<vector<double>> X){ //sort vector of 
 int sample_centers(vector<double> centers, double p){
 	random_device rd;
 	mt19937 mt(rd());
-	default_random_engine generator;
+	// default_random_engine generator;    // Unused...
 	uniform_int_distribution<int> distribution(0,centers.size()-1);
 	int i 	= distribution(mt);
 	return i;//required in model.o (ugh...)

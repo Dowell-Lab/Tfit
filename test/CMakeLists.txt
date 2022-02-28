@@ -46,6 +46,7 @@ list(APPEND sources
                 src/test_SetEMGparam.cpp
                 src/test_coreEM.cpp
                 src/test_loadBedGraph.cpp
+                src/test_Random.cpp
                 )
 
 # Set Include directories
