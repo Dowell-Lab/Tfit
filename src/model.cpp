@@ -225,7 +225,7 @@ EMG::EMG(double MU, double SI, double L, double W, double PI ){
  * @return string 
  */
 string EMG::write(){
-	string text 	= ("N: " + to_string(mu)+ "," + to_string(si)
+	string text 	= ("EMG: " + to_string(mu)+ "," + to_string(si)
 		+ "," + to_string(l) + "," + to_string(w) + "," + to_string(pi) 
 		+ "," + to_string(foot_print) );
 	return text;
@@ -605,8 +605,8 @@ string component::write(){
 	string text;
 	if (type==1){
 		text = bidir.write() + "\n";
-		text+=forward.write()+ "\n";
-		text+=reverse.write() + "\n";
+		text+= "F:" + forward.write()+ "\n";
+		text+= "R:" + reverse.write() + "\n";
 	}else{
 		text = noise.write() + "\n";
 	}
@@ -1178,4 +1178,12 @@ string classifier::write_classifier_status() {
 	contents = contents + " " + to_string(ll);
 
 	return contents;
+}
+
+string classifier::write_components() {
+	string text = components->write();
+	if ((components->forward_neighbor != NULL) || (components->reverse_neighbor != NULL)) {
+      text = text + " more ";
+	}
+	return text;
 }

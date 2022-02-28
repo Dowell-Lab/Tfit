@@ -157,8 +157,7 @@ vector<simple_c_free_mode> transform_free_mode(bool FOUND, double ll, component 
  * @return map<int, vector<simple_c_free_mode> > 
  */
 map<int, vector<simple_c_free_mode> > get_max_from_free_mode(map<int, vector<classifier> > A, segment * data, int i){
-	map<int, vector<simple_c_free_mode> > BEST;
-	typedef map<int, vector<classifier> >::iterator it_type_A;
+
 	//get forward and reverse N
 	double forward_N =0, reverse_N=0;
 	for (int i  = 0 ; i < data->XN;i++){
@@ -166,7 +165,8 @@ map<int, vector<simple_c_free_mode> > get_max_from_free_mode(map<int, vector<cla
 		reverse_N+=data->X[2][i];
 	}
 
-
+	typedef map<int, vector<classifier> >::iterator it_type_A;
+	map<int, vector<simple_c_free_mode> > BEST;
 	for (it_type_A a = A.begin(); a!=A.end(); a++){
 		component * best_components;
 		double best_ll 	= nINF;

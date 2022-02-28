@@ -189,7 +189,7 @@ public:
 	double ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3;
 
 	component * components;
-	vector<vector<double>> init_parameters;
+	vector<vector<double>> init_parameters;  // set but never used?
 
 	// Constructor
 	classifier(int, double, int, double, double, double, double
@@ -205,6 +205,7 @@ public:
 	int fit2(segment *,vector<double>, int, int);  // This is the core EM algorithm
 	string write_classifier_setup();  // The invariant parts of the object
 	string write_classifier_status();  // The parts that track model quality
+	string write_components();
 
     string write_params();
 };

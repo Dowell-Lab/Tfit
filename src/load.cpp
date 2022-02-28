@@ -147,13 +147,16 @@ string segment::write_allScalar() {
 string segment::write_withData() {
 	std::string allscalar = this->write_allScalar();
   std::string data;
-  for(int i = 0; i < 3; i++) {
+  int numsperline = 15; // this if for convenience and pretty output
+  for(int i = 0; i < 3; i++) {  // keeps (index forward reverse)
     data = data + "\ni:" + to_string(i);
     if (XN == 0) {
       data = data + " no data";
     } else {
       for (int j = 0; j < XN; j++) {
-        data = data + " " + to_string(X[i][j]);
+        if (j % numsperline == 0) { data += "\n";}
+        // trimming decimals to 2 places for pretty printing
+        data = data + " " + to_string(X[i][j]).substr(0,std::to_string(X[i][j]).find(".") + 3);
       }
     }
   }
