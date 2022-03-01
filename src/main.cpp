@@ -37,7 +37,7 @@
 #include "select_main.h"
 #include "template_matching.h"
 
-int g_testing {};
+int g_testing {};  // Ugh. Global variable to say we're NOT testing code here.
 
 /**
  * @brief Program main.  
