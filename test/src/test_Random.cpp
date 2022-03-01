@@ -16,25 +16,10 @@ TEST(Random, fetchProbabilityRandom)
 
     // Act
     double ran_num = sut.fetchProbability();
-
+    // std::cout << ran_num << std::endl;
+    
     // Assert
-    EXPECT_EQ(sut.testing, 0);
-    ASSERT_GE(ran_num, 0);
-    ASSERT_LE(ran_num, 1);
-}
-
-TEST(Random, fetchProbabilitySeed)
-{
-    // Arrange
-    Random sut(1974);
-
-    // Act
-    double ran_num = sut.fetchProbability();
-
-    // Assert
-    EXPECT_EQ(sut.testing, 1);
-    ASSERT_GE(ran_num, 0);
-    ASSERT_LE(ran_num, 1);
+    ASSERT_LE(abs(ran_num - 0.4610), 0.0001);  // Using a "tolerance" of 0.0001
 }
 
 TEST(Random, fetchNormalRandom)
@@ -45,22 +30,8 @@ TEST(Random, fetchNormalRandom)
 
     // Act
     double ran_num = sut.fetchNormal(8,2);
+    // std::cout << ran_num << std::endl;
 
     // Assert
-    EXPECT_EQ(sut.testing, 0);
-    ASSERT_GE(ran_num, ndist.min());
-    ASSERT_LE(ran_num, ndist.max());
-}
-
-TEST(Random, fetchNormalSeed)
-{
-    // Arrange
-    Random sut(1974);
-
-    // Act
-    double ran_num = sut.fetchNormal(8,2);
-
-    // Assert
-    EXPECT_EQ(sut.testing, 1);
-    ASSERT_DOUBLE_EQ(ran_num, 7.3837135785183463);
+    ASSERT_LE(abs(ran_num - 11.1246), 0.0001);  // Using a "tolerance" of 0.0001
 }

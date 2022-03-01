@@ -17,11 +17,8 @@ class Random {
     public:
 	std::mt19937 mt;
 
-    bool testing;
-
     // Constructors
     Random();
-    Random(int);
 
     // Wrapper functions
     double fetchUniform(double,double);

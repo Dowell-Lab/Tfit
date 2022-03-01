@@ -12,43 +12,29 @@
 #include <sstream>
 #include <random>	// random numbers within distributions
 
+extern int g_testing;
+
 Random::Random() { 
-   testing = 0;
+   int truerandom = 1;
+   if (g_testing) { truerandom = 0; }		// ugh a global!
+
    std::random_device rd;
 
-   mt.seed(rd());
-   srand(100);
-}
-
-Random::Random(int t_seed) {
-   testing = 1;
-   std::random_device rd;
-
-   mt.seed(rd());
-   srand(t_seed);
+   if (truerandom) {
+    mt.seed(rd());
+   } else {
+    mt.seed(1974);
+   }
 }
 
 double Random::fetchUniform(double lower, double upper) {
-	if (!testing) {
-		std::uniform_real_distribution<double> udist(lower, upper);
-		return udist(mt);
-	} else {
-      double rn =  lower + static_cast <double> (rand()) / 
-	  	(static_cast <double> (RAND_MAX/(upper-lower)));
-      return rn;
-	}
+	std::uniform_real_distribution<double> udist(lower, upper);
+	return udist(mt);
 }
 
 double Random::fetchNormal(double mean, double std) {
-	if (!testing) {
-		std::normal_distribution<double> ndist(mean, std);
-		return ndist(mt);
-	} else {
-	  // restrict to pseudo-uniform within 2 sd of mean
-      double lower = mean - 2*std;
-	  double upper = mean + 2*std;
-	  return Random::fetchUniform(lower,upper);
-	}
+	std::normal_distribution<double> ndist(mean, std);
+	return ndist(mt);
 }
 
 double Random::fetchProbability() {

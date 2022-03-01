@@ -10,6 +10,8 @@
  */
 #include "gmock/gmock.h"
 
+int g_testing {1};
+
 int main(int argc, char** argv) {
 	::testing::InitGoogleMock(&argc, argv);
 	return RUN_ALL_TESTS();

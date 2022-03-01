@@ -37,6 +37,8 @@
 #include "select_main.h"
 #include "template_matching.h"
 
+int g_testing {};
+
 /**
  * @brief Program main.  
  * It contains the mpi code, reading parameters, then forking to one of three modules. 
