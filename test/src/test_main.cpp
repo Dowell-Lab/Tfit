@@ -10,7 +10,7 @@
  */
 #include "gmock/gmock.h"
 
-int g_testing {1};
+int g_testing {1};		// This "fixes" all the random num to reproducible seed
 
 int main(int argc, char** argv) {
 	::testing::InitGoogleMock(&argc, argv);

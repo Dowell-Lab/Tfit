@@ -21,13 +21,13 @@
 #include <algorithm>
 #include <iostream>
 #include <limits>
-#include <random>
 
 #include <mpi.h>
 #include "omp.h"
 
 #include "load.h"
 #include "template_matching.h"
+#include "helper.h"
 
 //=============================================
 //Helper functions
@@ -555,22 +555,18 @@ void component::initialize_bounds(double mu, segment * data , int K, double scal
 		}
 
 		//====================================
-		random_device rd;
-		mt19937 mt(rd());
-		
-		double sigma,lambda, pi_EMG, w_EMG  ;	
+     	double sigma,lambda, pi_EMG, w_EMG  ;	
 		double b_forward,  w_forward;
 		double a_reverse,  w_reverse;
 
 		//====================================
 		//start sampling
 		//for the bidirectional/EMG component
-		uniform_real_distribution<double> dist_lambda_2(1, 250);
-		uniform_real_distribution<double> dist_sigma_2(1, 250);
 		gamma_distribution<double> dist_lengths(1,( (data->getXLength())/(K)));
-		
-		sigma 				= dist_sigma_2(mt)/scale;
-		lambda 				= scale/dist_lambda_2(mt) ;
+		Random ran_num_gen;
+
+		sigma 				= ran_num_gen.fetchUniform(1,250)/scale;
+		lambda 				= scale/ran_num_gen.fetchUniform(1,250);
 		double dist 		=  (1.0/lambda);
 		int j 				= get_nearest_position(data, mu, dist);
 		int k 				= get_nearest_position(data, mu, forward_bound-mu);
@@ -988,20 +984,16 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 	double mu;
 	double mus[K];
 	// These are the seeds for the initial location.
-	random_device rd;
-	mt19937 mt(rd());
+	Random ran_num_generator;
 	for (int k = 0; k < K; k++){
 		if (mu_seeds.size()>0  ){
 			i 	= sample_centers(mu_seeds ,  p);
 			mu 	= mu_seeds[i];
 			if (r_mu > 0){
-				normal_distribution<double> dist_r_mu(mu, r_mu);
-				mu 		= dist_r_mu(mt); // mt is the random number
+				mu = ran_num_generator.fetchNormal(mu,r_mu);
 			}
 		}else{
-			// cout << "HERE!" << std::endl;
-			normal_distribution<double> dist_MU((data->minX+data->maxX)/2., r_mu);
-			mu 			= dist_MU(mt); // mt is the random number
+			mu = ran_num_generator.fetchNormal((data->minX+data->maxX)/2., r_mu);
 		}
 		
 		mus[k] 	= mu;
