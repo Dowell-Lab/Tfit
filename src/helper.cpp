@@ -20,25 +20,38 @@ Random::Random() {
    srand(100);
 }
 
-double Random::FetchUniform(double lower, double upper) {
+Random::Random(int t_seed) {
+   testing = 1;
+   std::random_device rd;
+
+   mt.seed(rd());
+   srand(t_seed);
+}
+
+double Random::fetchUniform(double lower, double upper) {
 	if (!testing) {
 		std::uniform_real_distribution<double> udist(lower, upper);
 		return udist(mt);
 	} else {
-      return rand(); 
+      double rn =  lower + static_cast <double> (rand()) / 
+	  	(static_cast <double> (RAND_MAX/(upper-lower)));
+      return rn;
 	}
 }
 
-double Random::FetchNormal(double lower, double upper) {
+double Random::fetchNormal(double mean, double std) {
 	if (!testing) {
-		std::normal_distribution<double> ndist(lower, upper);
+		std::normal_distribution<double> ndist(mean, std);
 		return ndist(mt);
 	} else {
-      return rand(); 
+	  // restrict to pseudo-uniform within 2 sd of mean
+      double lower = mean - 2*std;
+	  double upper = mean + 2*std;
+	  return Random::fetchUniform(lower,upper);
 	}
 }
 
-double Random::FetchProbability() {
-	return Random::FetchUniform(0,1);
+double Random::fetchProbability() {
+	return Random::fetchUniform(0,1);
 }
 

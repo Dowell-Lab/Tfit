@@ -27,10 +27,10 @@ TEST(classifier, exerciseFit2)
   classifier sut = classifier(1, 0.0001, 2000, 0.05, 0, 1, 1, 1, 1, 1, 1, 0);
 
   // Act on sut (run EM!)
-  cout << "Before: " +  sut.write_classifier_status() << std::endl;
+  // cout << "Before: " +  sut.write_classifier_status() << std::endl;
   sut.fit2(data, data->centers, 0, 0);
-  cout << "components: " + sut.write_components() << std::endl;
-  cout << "After: " +  sut.write_classifier_status() << std::endl;
+  // cout << "components: " + sut.write_components() << std::endl;
+  // cout << "After: " +  sut.write_classifier_status() << std::endl;
 
   // Assert: Verify the outcome
   EXPECT_EQ(sut.K, 1);

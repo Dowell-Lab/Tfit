@@ -6,7 +6,7 @@ VDATE = JUL 2021
 # Compiler choices
 #CXX             = /usr/lib64/mpich/bin/mpicxx		# mpich
 CXX             = mpicxx				# openmpi or mpich
-CXXFLAGS        = -O2 -static-libstdc++ -static-libgcc -Wno-unused-variable -Wno-non-virtual-dtor -std=c++11 -fopenmp -Wno-write-strings -Wno-literal-suffix -D_LGIBCXX_USE_CXX1_ABI=0 -g
+CXXFLAGS        = -O2 -static-libstdc++ -static-libgcc -Wno-unused-variable -Wno-non-virtual-dtor -std=c++11 -fopenmp -Wno-write-strings -Wno-literal-suffix -D_LGIBCXX_USE_CXX1_ABI=0 -g -pg
 
 EXEC            = ${PWD}/Tfit
 

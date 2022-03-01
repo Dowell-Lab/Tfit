@@ -966,38 +966,13 @@ classifier::classifier(){};
 int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 	 int elon_move ){
 
-	//printf("topology: %d elon_move %d K %d \n", topology, elon_move, K);
-	//  printf("K %d \n", K);
-	//=========================================================================
+	//=================================================
 	//compute just a uniform model...no need for the EM
 	if (K == 0){
-		ll 			= 0;
-		double 	l 	= (data->getXLength()); // ->maxX-data->minX); 
-		double pos 	= 0;
-		double neg 	= 0;
-		// Sum per strand
-		for (int i = 0; i < data->XN; i++){
-			pos+=data->X[1][i];
-			neg+=data->X[2][i];
-		}
-		double pi 	= pos / (pos + neg); // strand bias?
-		// Calculate MLE = -n log (pi/l) where pi is strand (1 -> +; -1 -> -)
-		for (int i = 0; i < data->XN; i++){
-			if (pi > 0){
-				ll+=log(pi / l)*data->X[1][i];
-			}
-			if (pi < 1){
-				ll+=log((1-pi) / l)*data->X[2][i];		
-			}
-		}
-    // Sets the components part of the classifier to a new component, but this is an array?
-		components 	= new component[1];
-	  // printf("\t l: %9.6f pos: %9.6f neg: %9.6f pi: %9.6f ll: %9.6f \n", l, pos, neg, pi, ll);
+		this->computeUniform(data);
 		return 1;
 	}
-	// These are the seeds for the initial location.
-	random_device rd;
-	mt19937 mt(rd());
+
 	
 	int add 	= noise_max>0;
 	components 	= new component[K+add];
@@ -1012,6 +987,9 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 	int i 	= 0;
 	double mu;
 	double mus[K];
+	// These are the seeds for the initial location.
+	random_device rd;
+	mt19937 mt(rd());
 	for (int k = 0; k < K; k++){
 		if (mu_seeds.size()>0  ){
 			i 	= sample_centers(mu_seeds ,  p);
@@ -1148,6 +1126,33 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 	}
 
 	return 1;
+}
+
+void classifier::computeUniform(segment *data)
+{
+	ll = 0;
+	double l = (data->getXLength()); // ->maxX-data->minX);
+	double pos = 0;
+	double neg = 0;
+	// Sum per strand
+	for (int i = 0; i < data->XN; i++) {
+		pos += data->X[1][i];
+		neg += data->X[2][i];
+	}
+	double pi = pos / (pos + neg); // strand bias?
+
+	// Calculate MLE = -n log (pi/l) where pi is strand (1 -> +; -1 -> -)
+	for (int i = 0; i < data->XN; i++) {
+		if (pi > 0) {
+			ll += log(pi / l) * data->X[1][i];
+		}
+		if (pi < 1) {
+			ll += log((1 - pi) / l) * data->X[2][i];
+		}
+	}
+	// Add a single "noise" component
+	components = new component[1];
+	// printf("\t l: %9.6f pos: %9.6f neg: %9.6f pi: %9.6f ll: %9.6f \n", l, pos, neg, pi, ll);
 }
 
 string classifier::write_classifier_setup() {

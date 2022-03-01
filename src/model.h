@@ -208,6 +208,8 @@ public:
 	string write_components();
 
     string write_params();
+
+    void computeUniform (segment * data);
 };
 
 

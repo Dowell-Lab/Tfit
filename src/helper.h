@@ -14,19 +14,19 @@
 #include <random>
 
 class Random {
+    public:
 	std::mt19937 mt;
 
     bool testing;
-    int  tseed;
 
     // Constructors
     Random();
     Random(int);
 
     // Wrapper functions
-    double FetchUniform(double,double);
-    double FetchNormal(double,double);  // return a random number in this interval, normal dist.
-    double FetchProbability();
+    double fetchUniform(double,double);
+    double fetchNormal(double,double);  // return a random number in this interval, normal dist.
+    double fetchProbability();
 };
 
 #endif
