@@ -46,17 +46,8 @@ public:
 	string write();
 
 };
-/**
- * @brief 
- * 
- * @return double 
- */
+
 double sum(double * , int );
-/**
- * @brief 
- * 
- * @return double 
- */
 double LOG(double );
 
 /**
@@ -181,14 +172,15 @@ public:
 	
 	//===================================================================================
 	//final important parameters
-	double ll,pi;
+	double ll,pi; // log likelihood, 
 	double last_diff;
-	bool converged;
+	bool converged;	// indicator
 	double r_mu;
-	bool move_l;
+	bool move_l;	// indicator
+	// These are priors again.
 	double ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3;
 
-	component * components;
+	component * components;		// These are all the models we fit
 	vector<vector<double>> init_parameters;  // set but never used?
 
 	// Constructor
@@ -206,10 +198,9 @@ public:
 	string write_classifier_setup();  // The invariant parts of the object
 	string write_classifier_status();  // The parts that track model quality
 	string write_components();
-
     string write_params();
 
-    void computeUniform (segment * data);
+    void computeUniform (segment * data);	// Used when K = 0
 };
 
 

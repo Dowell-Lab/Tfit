@@ -254,7 +254,7 @@ $cmd $src <module> <parameter flags and values>
 
 
 ##Questions and Comments
-Please email me at joseph[dot]azofeifa[at]colorado[dot]edu with questions and comments! Or additionally open an "issue" through the GitHub site. 
+Please email me at robin[dot]dowell[at]colorado[dot]edu with questions and comments! Or additionally open an "issue" through the GitHub site. 
 
 
 
