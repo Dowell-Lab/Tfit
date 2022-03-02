@@ -5,6 +5,8 @@
 
 #include "parse_args.h"
 
+int g_testing = {};
+
 int main(int argc, char **argv) {
   struct arguments arguments;
   if (argp_parse(&argp, argc, argv, 0, 0, &arguments) == 0) {

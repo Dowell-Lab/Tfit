@@ -37,6 +37,8 @@
 #include "model_single.h"
 
 void setupParams (params *P);
+int g_testing {};
+
 vector<map<int, vector<simple_c_free_mode> >> run_model(vector<segment *> FSI, params * P);
 
 /**
