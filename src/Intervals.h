@@ -1,12 +1,12 @@
 /**
- * @file dInterval.h
+ * @file Intervals.h
  * @author Robin Dowell
  * @brief Header file for data interval class (dInterval)
  *
  * @version 0.1
  */
-#ifndef dInterval_H 
-#define dInterval_H 
+#ifndef Intervals_H 
+#define Intervals_H 
 
 #include <string>
 #include <vector>

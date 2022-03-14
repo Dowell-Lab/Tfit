@@ -1,5 +1,5 @@
 /**
- * @file dInterval.cpp
+ * @file Intervals.cpp
  * @author Robin Dowell 
  * @brief Class code for data intervals
  * @version 0.1
@@ -103,6 +103,7 @@ double dInterval::forward(int x) {
 double dInterval::reverse(int x) {
   return X[2][x];
 }
+
 /**
  * @brief Position at the xth index.
  * 
