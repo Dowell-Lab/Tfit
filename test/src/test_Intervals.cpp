@@ -1,12 +1,12 @@
 /**
- * @file test_dIntervals.cpp 
+ * @file test_Intervals.cpp 
  * @author Robin Dowell
- * @brief Testing the data interval class/object 
+ * @brief Testing the data interval class/objects:  dInterval, gInterval
  * @date 2022-01-27
  * 
  */
 #include "gmock/gmock.h"
-#include "dInterval.h"
+#include "Intervals.h"
 
 // Stupid simplest first case:  Just to get skeleton class setup
 TEST(dInterval, RecoverIdentity)

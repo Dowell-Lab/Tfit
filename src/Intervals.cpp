@@ -6,7 +6,7 @@
  * @date 2022-01-27
  * 
  */
-#include "dInterval.h"
+#include "Intervals.h"
 
 #include <string>
 #include <vector>

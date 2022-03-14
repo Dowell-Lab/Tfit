@@ -47,7 +47,6 @@ testmain: MainTesting.o ${OBJ}
 	echo "Temporary Testing"
 	@${CXX} -o Testmain ${CXXFLAGS} MainTesting.o ${OBJ} -lmpi
 
-
 %: 
 	@${CXX} -c ${CXXFLAGS} ${PWD}/$*.cpp
 
