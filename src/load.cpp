@@ -558,7 +558,7 @@ string segment_fits::write(){
   // model is set by identify_best_model to be the index of min model? 
   if (model > 0){
     string forward_N=to_string(N_pos), reverse_N = to_string(N_neg);
-    vector<string> params 		= split_by_tab(parameters[model], "");  // splits parameters
+    vector<string> params 		= split_by_tab(parameters[model]); // splits parameters
     for (int i = 0 ; i < model; i++){
       vector<string> S 	=  split_by_comma(params[0], ""); 
       double mu 	= stod(split_by_comma(params[0], "")[i]);
@@ -1017,7 +1017,7 @@ vector<segment_fits *> load::load_K_models_out(string FILE){
         // Example:
         // ~2,-18405.714702	57970016.797935,57974849.280602	69.438995,37.975287	371.734252,408.579080	0.486291,0.586718	121.206766,250.000000	0.617766,0.069621,0.000284|0.310201,0.000341,0.000348	57976184.000000,57976184.000000	57965508.000000,57965508.000000
         // First field is model_complexity,log_likelihood
-        vector<string> tab_split = split_by_tab(line, "");
+        vector<string> tab_split = split_by_tab(line);
         vector<string> comma_split = split_by_comma(tab_split[0], "");
         complexity = stoi(comma_split[0]), ll = stod(comma_split[1]);
         S->M[complexity] = ll;
@@ -1316,7 +1316,7 @@ vector<segment_fits *> load::label_tss(string tss_file, vector<segment_fits *> q
 	typedef map<string, vector<segment *>>::iterator it_type;
 	if (FH){	
 		while (getline(FH, line)){
-			vector<string> lineArray 	= split_by_tab(line, "");
+			vector<string> lineArray 	= split_by_tab(line);
 			chrom 	= lineArray[0], start = lineArray[1], stop = lineArray[2];
 			segment * S 	= new segment(chrom, stoi(start), stoi(stop));
 			G[chrom].push_back(S);

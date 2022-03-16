@@ -61,7 +61,7 @@ std::string EMGparameters::write() {
  * in order: mu, sigma, lambda, pi, footprint, and omega.
  */
 void EMGparameters::read(std::string single) {
-   vector<std::string> split_tab = split_by_tab(single, ""); // note delim variable ignored!
+   vector<std::string> split_tab = split_by_tab(single);
 
    mu = std::stod(split_tab[0]);
    sigma = std::stod(split_tab[1]);
@@ -189,7 +189,7 @@ std::string Set_EMGparameters::write() {
  */
 void Set_EMGparameters::read_from_K_models(std::string line) {
    std::string data = line.substr(1, line.size() - 1); // removes the ~ first character
-   std::vector<std::string> tab_split = split_by_tab(data, "");
+   std::vector<std::string> tab_split = split_by_tab(data);
 
    // These are values for the entire set (size and loglikelihood).
    std::vector<std::string> comma_split = split_by_comma(tab_split[0], "");

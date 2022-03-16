@@ -79,11 +79,12 @@ vector<string> split_by_colon(string line, string delim){
 	}
 	return tokens;
 }
-vector<string> split_by_tab(string line, string delim){
+
+vector<string> split_by_tab(string line){
 	vector<string> tokens;
 	istringstream iss(line);
 	string token;
-	while(std::getline(iss, token, '\t' )){   // but we can specify a different one
+	while(std::getline(iss, token, '\t' )){  
 		tokens.push_back(token);
 	}
 	return tokens;
