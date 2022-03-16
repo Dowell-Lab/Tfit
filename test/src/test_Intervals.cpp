@@ -8,8 +8,39 @@
 #include "gmock/gmock.h"
 #include "Intervals.h"
 
+TEST(Intervals, gInt_basicBED4)
+{
+    // Arrange: bring SUT to desired state
+    std::string chromosome, name;
+    name = "TestName";
+    chromosome = "chrTest";
+    gInterval sut = gInterval(chromosome, 100, 1000, name); 
+
+    // Act: call methods on SUT, capture output
+    name = sut.write_out(); 
+
+    // Assert: Verify the outcome
+    EXPECT_THAT(name, "#chrTest:100-1000,TestName");
+}
+
+TEST(Intervals, gInt_basicBED6)
+{
+    // Arrange: bring SUT to desired state
+    std::string chromosome, name, strand;
+    name = "TestName";
+    chromosome = "chrTest";
+    strand = ".";
+    bed6 sut = bed6(chromosome, 100, 1000, name, 30, strand); 
+
+    // Act: call methods on SUT, capture output
+    name = sut.write_out(); 
+
+    // Assert: Verify the outcome
+    EXPECT_THAT(name, "#chrTest:100-1000,TestName,30,+");
+}
+
 // Stupid simplest first case:  Just to get skeleton class setup
-TEST(dInterval, RecoverIdentity)
+TEST(Intervals, dInt_RecoverIdentity)
 {
     // Arrange: bring SUT to desired state
     std::string name;
@@ -20,12 +51,5 @@ TEST(dInterval, RecoverIdentity)
     name = sut.write_out(); 
 
     // Assert: Verify the outcome
-    EXPECT_THAT(name, "#TestName:100-1000,1,0");
-}
-
-TEST(dInterval, IterateValues)
-{
-  // Arrange
-  // Act
-  // Assert
+    EXPECT_THAT(name, "#TestName:d:100-1000,1,0");
 }

@@ -3,6 +3,13 @@
  * @author Robin Dowell
  * @brief Header file for data interval class (dInterval)
  *
+ * Two kinds of intervals:  genomic (gIntervals) and data (dIntervals)
+ * gIntervals maintain genomic coordinates and are the fundamental datatype
+ * within the Interval trees (see ITree.cpp).
+ * 
+ * dIntervals contain data (two strands) per an interval but do so in zero
+ * based coordinates.  Can translate back to gInterval if correspondance is setup.
+ * 
  * @version 0.1
  */
 #ifndef Intervals_H 
@@ -12,18 +19,72 @@
 #include <vector>
 
 /**
- * @brief Data interval class which contains two strands of data
- * over an interval.  
+ * @brief gInterval
  * 
- * Data Intervals are expected to represent two strands of data 
- * over a set of positions.  The data may, or may not, be scaled
- * and binned relative to genomic coordinates.
+ * Basic genomic interval.  Equivalent to basic information stored in bed4 file.
+ * This is also the fundamental unit maintained in interval trees.
  * 
- * Questions: do we need to keep the genomic coordinates here?
- * Does each interval need a unique identifier?
+ * BED4 is 0-based, half open coordinate scheme.
+ * 
+ */
+class gInterval {
+
+public:
+  std::string identifier; // field 4 in BED
+  std::string chromosome;  // field 1 in BED
+  double start, stop;   // genomic coordinates, fields 2 and 3 in bed
+
+  // Constructors
+  gInterval(std::string, double, double, std::string);  // input is BED4
+  gInterval();
+
+  /* FUCTIONS: */
+  // Reporting out 
+  std::string write_out();
+  std::string write_asBED();
+
+  void setfromBedLine(std::string);  // converts from a single line from file 
+
+private:
+};
+
+/**
+ * @brief a gInterval that also includes score and strand information
+ * 
+ * Follows the BED6 format.
+ *
+ * BED6 is 0-based, half-open coordinate scheme. 
+ * In BED6 score is between 0 and 1000 and used in heatmap generation.
+ * In BED6 strand is "." (no strand), "+" (positive) or "-" (negative).
+ */
+class bed6: public gInterval {
+public:
+  char strand;
+  int score;
+
+  // Constructors
+  bed6(std::string, double, double, std::string, int, std::string);
+  bed6();
+
+  /* FUCTIONS: */
+  // Reporting out 
+  std::string write_out();
+  std::string write_asBED();
+
+  void setfromBedLine(std::string);  // converts from a single line from file 
+};
+
+/**
+ * @brief dInterval 
+ * 
+ * Data interval class which contains two strands of data
+ * over an interval.  Data is expected to be forward and reverse
+ * strand info (as double). 
+ * 
+ * The data may, or may not, be scaled and binned relative 
+ * to genomic coordinates.
  * 
  * Goals: Storage of the data should be hidden from the user.
- * But for efficiency, the iterator should be indexable?
  * 
  * @author Robin Dowell
  */
