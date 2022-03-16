@@ -1,0 +1,6 @@
+Function parameteters in constructors are named v_paramname to 
+distinguish from the names of the components of the objects.
+
+Global variables are named g_paramname.
+
+
