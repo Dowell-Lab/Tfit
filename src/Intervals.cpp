@@ -3,11 +3,15 @@
  * @author Robin Dowell 
  * @brief Class code for data intervals
  * Two kinds of intervals:  genomic (gIntervals) and data (dIntervals)
+ * 
  * Current design: 
  * gIntervals maintain genomic coordinates and are the fundamental datatype
- * within the Interval trees (see ITree.cpp).
+ * within the Interval trees (see ITree.cpp). Basic gInterval assumes BED4,
+ * exists a bed6 class that extends for score and strand.
+ * 
  * dIntervals contain data (two strands) per an interval but do so in zero
  * based coordinates.  Can translate back to gInterval if correspondance is setup.
+ * 
  * Data intervals must have rapid data access for EM algorithm.
  * @version 0.1
  * @date 2022-01-27
@@ -36,6 +40,7 @@ gInterval::gInterval(std::string v_chromosome, double v_start, double v_stop, st
   chromosome = v_chromosome;
   start = v_start;
   stop = v_stop;
+  // Should we check that start < stop?  Throw an error when it doesn't?
   identifier = v_identifier;
 }
 
@@ -71,19 +76,27 @@ std::string gInterval::write_asBED() {
 }
 
 /**
- * @brief Set this gInterval based on a single line from a BED file.
+ * @brief Set this gInterval based on a single line from a BED4 file.
  * 
  * @param line expects a single line of a BED file 
  */
 void gInterval::setfromBedLine(std::string line) {
   std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
-
   lineArray=string_split(line, '\t');
-
   setBED4fromStrings(lineArray);
 }
 
+/**
+ * @brief Helper function that sets the basic BED4 contents from a vector of strings.
+ * 
+ * @param lineArray expects: chromosome start stop ID in lineArray and ignores rest.
+ */
 void gInterval::setBED4fromStrings(std::vector<std::string> lineArray) {
+  if (lineArray.size() < 3) {  // accept BED3 or BED4
+    // Should this throw an exception?
+    cout << "ERROR: Invalid BED file\n" << std::endl;
+    chromosome = "formaterror";   // hacking an internal indicator of error for now.
+  }
   chromosome = lineArray[0];
   start = stod(lineArray[1]);
   stop = stod(lineArray[2]);
@@ -139,7 +152,7 @@ std::string bed6::write_out() {
 }
 
 /**
- * @brief Writes out the interval as a line in a BED file.  
+ * @brief Writes out the interval as a line in a BED6 file.  
  * Note does NOT include newline.
  * 
  * @return std::string 
@@ -158,7 +171,6 @@ std::string bed6::write_asBED() {
 void bed6::setfromBedLine(std::string line) {
   std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
   lineArray=string_split(line, '\t');
-
   setBED4fromStrings(lineArray);  // setup basic BED3/4 contents.
 
   if (lineArray.size() >= 6) {  // At least a BED6, so score and strand are present.
@@ -172,10 +184,10 @@ void bed6::setfromBedLine(std::string line) {
     }
   } else {
     // score and strand unavailable in BED3 and BED4
+    // Not currently throwing error, but should we?
     score = -1;   // using -1 to indicate unavailable (i.e. wrong file type?)
     strand = '.';
   }
-
 }
 
 /*******************************************************************/
