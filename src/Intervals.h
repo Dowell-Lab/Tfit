@@ -44,6 +44,9 @@ public:
   std::string write_asBED();
 
   void setfromBedLine(std::string);  // converts from a single line from file 
+  
+protected:
+  void setBED4fromStrings(std::vector<std::string> lineArray); // helper function
 
 private:
 };

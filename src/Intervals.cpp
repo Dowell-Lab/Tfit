@@ -17,6 +17,7 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "split.h"
 
@@ -78,6 +79,11 @@ void gInterval::setfromBedLine(std::string line) {
   std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
 
   lineArray=string_split(line, '\t');
+
+  setBED4fromStrings(lineArray);
+}
+
+void gInterval::setBED4fromStrings(std::vector<std::string> lineArray) {
   chromosome = lineArray[0];
   start = stod(lineArray[1]);
   stop = stod(lineArray[2]);
@@ -103,26 +109,19 @@ void gInterval::setfromBedLine(std::string line) {
  * @param v_strand       Strand info (field 6 of BED6); read as string, stored as char
  */
 bed6::bed6(std::string v_chromosome, double v_start, double v_stop, 
-    std::string v_identifier, int v_score, std::string v_strand) {
-  chromosome = v_chromosome;
-  start = v_start;
-  stop = v_stop;
-  identifier = v_identifier;
+    std::string v_identifier, int v_score, std::string v_strand) 
+    : gInterval(v_chromosome, v_start, v_stop, v_identifier) {
   score = v_score;
-  if (v_strand.substr(0, 1).compare("+")) {
+  if (v_strand.compare(0,1,"+") == 0) {
     strand = '+';
-  } else if(v_strand.substr(0, 1).compare("-")) {
+  } else if(v_strand.compare(0,1, "-") == 0) {
     strand = '-';
   } else {
     strand = '.';
   }
 }
 
-bed6::bed6() {
-  chromosome = "NA";
-  identifier = "empty";
-  start = 0;
-  stop = 0;
+bed6::bed6():gInterval() {
   score = 0;
   strand = '.';
 }
@@ -158,24 +157,15 @@ std::string bed6::write_asBED() {
  */
 void bed6::setfromBedLine(std::string line) {
   std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
-
   lineArray=string_split(line, '\t');
 
-  chromosome = lineArray[0];
-  start = stod(lineArray[1]);
-  stop = stod(lineArray[2]);
-
-  if (lineArray.size() >= 4) {  // At least a BED4, so identifier is present.
-    identifier = lineArray[3];
-  } else {
-    identifier = "";    // identifier not present in BED3 files.
-  }
+  setBED4fromStrings(lineArray);  // setup basic BED3/4 contents.
 
   if (lineArray.size() >= 6) {  // At least a BED6, so score and strand are present.
     score = stod(lineArray[4]);
-    if (lineArray[5].substr(0, 1).compare("+")) {
+    if (lineArray[5].compare(0,1,"+") == 0) {
       strand = '+';
-    } else if(lineArray[5].substr(0, 1).compare("-")) {
+    } else if(lineArray[5].compare(0,1,"-") == 0) {
       strand = '-';
     } else {
       strand = '.';

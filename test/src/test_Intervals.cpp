@@ -23,13 +23,30 @@ TEST(Intervals, gInt_basicBED4)
     EXPECT_THAT(name, "#chrTest:100-1000,TestName");
 }
 
+TEST(Intervals, gInt_BED4io)
+{
+    // Arrange: bring SUT to desired state
+    std::string chromosome, name;
+    name = "TestName";
+    chromosome = "chrTest";
+    gInterval temp = gInterval(chromosome, 100, 1000, name); 
+    gInterval sut = gInterval();
+
+    // Act: call methods on SUT, capture output
+    name = temp.write_asBED();
+    sut.setfromBedLine(name);
+
+    // Assert: Verify the outcome
+    EXPECT_THAT(temp.write_out(), sut.write_out());
+}
+
 TEST(Intervals, gInt_basicBED6)
 {
     // Arrange: bring SUT to desired state
     std::string chromosome, name, strand;
     name = "TestName";
     chromosome = "chrTest";
-    strand = ".";
+    strand = "+";
     bed6 sut = bed6(chromosome, 100, 1000, name, 30, strand); 
 
     // Act: call methods on SUT, capture output
@@ -39,7 +56,25 @@ TEST(Intervals, gInt_basicBED6)
     EXPECT_THAT(name, "#chrTest:100-1000,TestName,30,+");
 }
 
-// Stupid simplest first case:  Just to get skeleton class setup
+TEST(Intervals, gInt_BED6io)
+{
+    // Arrange: bring SUT to desired state
+    std::string chromosome, name, strand;
+    name = "TestName";
+    chromosome = "chrTest";
+    strand = ".";
+    bed6 temp = bed6(chromosome, 100, 1000, name, 30, strand); 
+    bed6 sut = bed6();
+
+    // Act: call methods on SUT, capture output
+    name = temp.write_asBED();
+    // std::cout << name << std::endl;
+    sut.setfromBedLine(name);
+
+    // Assert: Verify the outcome
+    EXPECT_THAT(temp.write_out(), sut.write_out());
+}
+
 TEST(Intervals, dInt_RecoverIdentity)
 {
     // Arrange: bring SUT to desired state
