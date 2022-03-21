@@ -32,9 +32,6 @@ public:
     Inode(double, std::vector<gInterval *>);
 
 	/* FUNCTIONS: */
-    bool Overlap(gInterval *, gInterval *);
-    bool compareStart(gInterval *, gInterval *);
-    bool compareEnd(gInterval *, gInterval *);
     std::string write_currentIntervals(); // print intervals on current node.
 
 };

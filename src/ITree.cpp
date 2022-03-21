@@ -13,6 +13,8 @@
 #include <iostream>
 #include <algorithm>
 
+#include "Intervals.h"
+
 /**
  * @brief Construct a new Inode:: Inode object
  */
@@ -45,19 +47,6 @@ std::string Inode::write_currentIntervals() {
     return intervals;
 }
 
-bool Inode::compareStart(gInterval *i0, gInterval *i2) {
-   return (i0->start < i2->start);
-}
-
-bool Inode::compareEnd(gInterval *i0, gInterval *i2) {
-   return (i0->stop < i2->stop);
-}
-
-bool Inode::Overlap(gInterval *i0, gInterval *i2) {
-   return ((i0->start <= i2->stop) && (i2->start <= i0->stop));
-}
-
-
 /******************************************************/
 
 CITree::CITree() {
@@ -71,10 +60,64 @@ CITree::CITree(Inode *v_root) {
 CITree::CITree(std::vector<gInterval *> setIntervals) {
    if (setIntervals.empty()) { root = NULL; return; }
 
-   // Sort setIntervals by end value of intervals
+  // Sort setIntervals by end value of intervals
+  std::sort(setIntervals.begin(),setIntervals.end(), 
+      [](gInterval *const &l, gInterval *const &r) { return l->stop < r->stop;});
 
-   // Build the tree!a
+   // Build the tree!
    root = constructTree(setIntervals);
+}
+
+/*
+std::vector<gInterval *>CITree::searchPoint(double point) {
+  if (root == NULL) { return; } // should return empty vector?
+
+  // If we happen to equal point, all overlap
+  if (point == root->center) {
+    return root->OverlapCenter;
+  } 
+  // Search those that overlap this center + half children 
+  std::vector<gInterval *> hits;
+
+  std::vector<gInterval *>::iterator it;
+  for (it = root->OverlapCenter.begin(); it != root->OverlapCenter.end(); it++) {
+    if ((*it).Contains(point)) { hits.push_back(*it);}
+  }
+  if (point < root->center) {
+    CITree Lftleaf(root->left);
+    hits.push_back(Lftleaf.searchPoint(point));
+  } else {
+    CITree Rtleaf(root->right);
+    hits.push_back(Rtleaf.searchPoint(point));
+  }
+  return hits;
+}
+*/
+
+/**
+ * @brief writes out the entire subtree at root
+ * 
+ * @param root  Centered Interval tree of interest
+ * @return std::string 
+ */
+std::string CITree::write_Full_Tree() {
+  if (root == NULL) { return "";} 
+
+  std::string tree_output;
+
+  // The tmp is just to not output the "L:" for empty nodes
+  CITree tmp(root->left);
+  std::string tstring = tmp.write_Full_Tree();
+  if (tstring != "") { tree_output += "\nL:" + tstring; }
+
+  tree_output += root->write_currentIntervals();
+
+  // The tmp is just to not output the "R:" for empty nodes
+  CITree tmpR(root->right);
+  tstring = tmpR.write_Full_Tree();
+  if (tstring != "") { tree_output += "\nR:" + tstring; }
+
+  return (tree_output);
 }
 
 /**
@@ -124,40 +167,7 @@ Inode *CITree::constructTree(std::vector<gInterval *>segments){
   return root;
 }
 
-/**
- * @brief writes out the entire subtree at root
- * 
- * @param root  Centered Interval tree of interest
- * @return std::string 
- */
-std::string CITree::write_Full_Tree() {
-  if (root == NULL) { return "";} 
-
-  std::string tree_output;
-
-  // The tmp is just to not output the "L:" for empty nodes
-  CITree tmp(root->left);
-  std::string tstring = tmp.write_Full_Tree();
-  if (tstring != "") { tree_output += "\nL:" + tstring; }
-
-  tree_output += root->write_currentIntervals();
-
-  // The tmp is just to not output the "R:" for empty nodes
-  CITree tmpR(root->right);
-  tstring = tmpR.write_Full_Tree();
-  if (tstring != "") { tree_output += "\nR:" + tstring; }
-
-  return (tree_output);
-}
-
 /*
-std::vector<gInterval *>CITree::searchPoint(double point) {
-    // if query->high < center search left 
-    // if query->low > center search right
-
-    // Check all current intervals for overlap -- use left/right sorts for speedup
-}
-
 std::vector<gInterval *>CITree::overlapSearch(gInterval *) {
     // must look for all points in interval and concatenate (without 
     // repeats) the resulting intervals

@@ -44,7 +44,12 @@ public:
   std::string write_asBED();
 
   void setfromBedLine(std::string);  // converts from a single line from file 
-  
+
+  bool Overlap(gInterval *);
+  bool compareStart(gInterval *);
+  bool compareEnd(gInterval *);
+  bool Contains(double point);
+
 protected:
   void setBED4fromStrings(std::vector<std::string> lineArray); // helper function
 
