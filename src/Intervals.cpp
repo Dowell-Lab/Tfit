@@ -102,7 +102,6 @@ bool gInterval::Contains(double point) {
   return ((point < stop) && (point > start));
 }
 
-
 /**
  * @brief Helper function that sets the basic BED4 contents from a vector of strings.
  * 
@@ -124,6 +123,8 @@ void gInterval::setBED4fromStrings(std::vector<std::string> lineArray) {
     identifier = "";    // identifier not present in BED3 files.
   }
 }
+
+/********************  BED6 ***********************/
 
 /**
  * @brief Construct a new bed6::bed6 object
@@ -207,7 +208,7 @@ void bed6::setfromBedLine(std::string line) {
   }
 }
 
-/*******************************************************************/
+/****************** dInterval *********************/
 
 /**
  * @brief Constructors: dInterval class
