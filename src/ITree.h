@@ -25,28 +25,13 @@ public:
 	Inode * left;  //!< All intervals fully to left of center
 	Inode * right; //!< All intervals fully to the right of center
 
-	std::vector<gInterval *> MidLeft;	//<! All intervals overlapping center, sorted by left
-	std::vector<gInterval *> MidRight;	//<! All intervals overlapping center, sorted by right
+	std::vector<gInterval *> OverlapCenter;	//<! All intervals overlapping center, sorted by end 
 
 	// Constructors
 	Inode();	// empty constructor
     Inode(double, std::vector<gInterval *>);
 
 	/* FUNCTIONS: */
-    // Construct Interval Tree
-	Inode *constructTree(std::vector<gInterval *>);
-    // Search for all intervals that overlap a given point 
-    std::vector<gInterval *>searchPoint(Inode *, double);
-    // Search for all intervals that overlap a given interval 
-    std::vector<gInterval *>overlapSearch(Inode *, gInterval *);
-
-    // Delete a node from the tree
-    // Insert a new interval into the tree
-
-    // Print a Tree
-    void inorder(Inode *); // In order traversal of tree (output function)
-
-    // Helper functions:
     bool Overlap(gInterval *, gInterval *);
     bool compareStart(gInterval *, gInterval *);
     bool compareEnd(gInterval *, gInterval *);
@@ -54,6 +39,31 @@ public:
 
 };
 
+/**
+ * @brief The actual tree object only contains a pointer to the root.
+ * 
+ */
+class CITree {
+    Inode *root;
 
+public:
+	// Constructors
+    CITree();
+    CITree(Inode *);
+    CITree(std::vector<gInterval *>);  // sorts intervals then builds tree.
+
+    // Functions:
+    std::string write_Full_Tree();
+    // Search tree for all intervals that overlap a given point 
+    std::vector<gInterval *>searchPoint(double);
+    // Search tree for all intervals that overlap a given interval 
+    std::vector<gInterval *>overlapSearch(gInterval *);
+
+    // Could create insert/delete functions for tree?
+
+private: 
+    // Recursively builds tree, assumes sorted vector of intervals
+    Inode *constructTree(std::vector<gInterval *>);
+};
 
 #endif

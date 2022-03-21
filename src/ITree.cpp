@@ -23,30 +23,74 @@ Inode::Inode() {
 
 Inode::Inode(double v_center, std::vector<gInterval *> current) {
    center = v_center;
-
-   // MidLeft: copy of {overlap intervals} sorted by left endpoint
-   MidLeft = current;
-   // std::sort(MidLeft.begin(), MidLeft.end(), compareStart());
-
-   // MidRight: copy of {overlap.intervals} sorted by right endpoint
-   MidRight = current;
-   // std::sort(MidRight.begin(), MidRight.end(), compareEnd());
+   OverlapCenter = current;
 
    left = right = NULL;
 }
-  /**
+
+/**
+ * @brief Output function for THIS node.
+ * 
+ * @return std::string 
+ */
+std::string Inode::write_currentIntervals() {
+   std::string intervals;
+   intervals = "\nIntervals overlapping " + std::to_string(center);
+   // iterate over contents of current node's intervals
+
+   std::vector<gInterval *>::iterator it;
+   for (it = OverlapCenter.begin(); it != OverlapCenter.end(); it++) {
+      intervals += "\n" + (*it)->write_out();
+    }
+    return intervals;
+}
+
+bool Inode::compareStart(gInterval *i0, gInterval *i2) {
+   return (i0->start < i2->start);
+}
+
+bool Inode::compareEnd(gInterval *i0, gInterval *i2) {
+   return (i0->stop < i2->stop);
+}
+
+bool Inode::Overlap(gInterval *i0, gInterval *i2) {
+   return ((i0->start <= i2->stop) && (i2->start <= i0->stop));
+}
+
+
+/******************************************************/
+
+CITree::CITree() {
+  root = NULL;
+}
+
+CITree::CITree(Inode *v_root) {
+  root = v_root;
+}
+
+CITree::CITree(std::vector<gInterval *> setIntervals) {
+   if (setIntervals.empty()) { root = NULL; return; }
+
+   // Sort setIntervals by end value of intervals
+
+   // Build the tree!a
+   root = constructTree(setIntervals);
+}
+
+/**
  * @brief Constructor from a set of gInterval 
  * Given a set of n intervals on the number line, we want to construct 
  * a data structure so that we can efficiently retrieve all intervals overlapping
  * another interval or point.
- * Assumes:  gInterval is a sorted list of intervals (first has smallest start; last largest stop)
+ * 
+ * Assumes:  gInterval is a sorted list of intervals (first has smallest stop; last largest stop)
  * @param segments
  */
-Inode *constructTree(std::vector<gInterval *>segments){
-  if (segments.empty()) return NULL;
-
+Inode *CITree::constructTree(std::vector<gInterval *>segments){
   // center = median of interval endpoints
-  double center = (double(segments[0]->stop)  + double(segments[segments.size()-1]->stop)) / 2.;
+  int median = segments.size()/2;  // if even finds median; if odd takes upper bound on median
+  // std::cout << median << std::endl;
+  double center = segments[median]->stop;
 
   std::vector<gInterval *> Left;
   std::vector<gInterval *> Right;
@@ -80,42 +124,42 @@ Inode *constructTree(std::vector<gInterval *>segments){
   return root;
 }
 
-std::vector<gInterval *>Inode::searchPoint(Inode *root, double point) {
+/**
+ * @brief writes out the entire subtree at root
+ * 
+ * @param root  Centered Interval tree of interest
+ * @return std::string 
+ */
+std::string CITree::write_Full_Tree() {
+  if (root == NULL) { return "";} 
+
+  std::string tree_output;
+
+  // The tmp is just to not output the "L:" for empty nodes
+  CITree tmp(root->left);
+  std::string tstring = tmp.write_Full_Tree();
+  if (tstring != "") { tree_output += "\nL:" + tstring; }
+
+  tree_output += root->write_currentIntervals();
+
+  // The tmp is just to not output the "R:" for empty nodes
+  CITree tmpR(root->right);
+  tstring = tmpR.write_Full_Tree();
+  if (tstring != "") { tree_output += "\nR:" + tstring; }
+
+  return (tree_output);
+}
+
+/*
+std::vector<gInterval *>CITree::searchPoint(double point) {
     // if query->high < center search left 
     // if query->low > center search right
 
     // Check all current intervals for overlap -- use left/right sorts for speedup
 }
 
-std::vector<gInterval *>Inode::overlapSearch(Inode *root, gInterval *) {
+std::vector<gInterval *>CITree::overlapSearch(gInterval *) {
     // must look for all points in interval and concatenate (without 
     // repeats) the resulting intervals
 }
-
-void Inode::inorder(Inode *root) {
-    if (root == NULL) { return;} 
-    
-    inorder(root->left);
-    root->write_currentIntervals();
-    inorder(root->right);
-}
-
-bool Inode::compareStart(gInterval *i1, gInterval *i2) {
-   return (i1->start < i2->start);
-}
-bool Inode::compareEnd(gInterval *i1, gInterval *i2) {
-   return (i1->stop < i2->stop);
-}
-bool Inode::Overlap(gInterval *i1, gInterval *i2) {
-   return ((i1->start <= i2->stop) && (i2->start <= i1->stop));
-}
-std::string Inode::write_currentIntervals() {
-   std::string intervals;
-   intervals = "\nIntervals overlapping " + std::to_string(center);
-   // iterate over contents of current node's MidLeft (i.e. intervals)
-   std::vector<gInterval *>::iterator it;
-   for (it = MidLeft.begin(); it != MidLeft.end(); it++) {
-      intervals += "\n" + (*it)->write_out();
-    }
-    return intervals;
-}
+*/
