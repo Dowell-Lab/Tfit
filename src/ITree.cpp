@@ -93,6 +93,13 @@ std::vector<gInterval *>CITree::searchPoint(double point) {
   return hits;
 }
 
+/*
+std::vector<gInterval *>CITree::overlapSearch(gInterval *) {
+    // must look for all points in interval and concatenate (without 
+    // repeats) the resulting intervals
+}
+*/
+
 /**
  * @brief writes out the entire subtree at root
  * 
@@ -166,9 +173,3 @@ Inode *CITree::constructTree(std::vector<gInterval *>segments){
   return root;
 }
 
-/*
-std::vector<gInterval *>CITree::overlapSearch(gInterval *) {
-    // must look for all points in interval and concatenate (without 
-    // repeats) the resulting intervals
-}
-*/
