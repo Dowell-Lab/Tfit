@@ -86,20 +86,12 @@ void gInterval::setfromBedLine(std::string line) {
   setBED4fromStrings(lineArray);
 }
 
-bool gInterval::compareEnd(gInterval *i2) {
-   return (stop < i2->stop);
-}
-
-bool gInterval::compareStart(gInterval *i2) {
-   return (start < i2->start);
-}
-
 bool gInterval::Overlap(gInterval *i2) {
    return ((start <= i2->stop) && (i2->start <= stop));
 }
 
 bool gInterval::Contains(double point) {
-  return ((point < stop) && (point > start));
+  return ((point <= stop) && (point >= start));
 }
 
 /**

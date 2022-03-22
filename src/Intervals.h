@@ -46,8 +46,6 @@ public:
   void setfromBedLine(std::string);  // converts from a single line from file 
 
   bool Overlap(gInterval *);
-  bool compareStart(gInterval *);
-  bool compareEnd(gInterval *);
   bool Contains(double point);
 
 protected:
