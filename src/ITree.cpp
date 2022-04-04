@@ -93,12 +93,34 @@ std::vector<gInterval *>CITree::searchPoint(double point) {
   return hits;
 }
 
-/*
-std::vector<gInterval *>CITree::overlapSearch(gInterval *) {
-    // must look for all points in interval and concatenate (without 
-    // repeats) the resulting intervals
+std::vector<gInterval *>CITree::overlapSearch(gInterval *query) {
+  std::vector<gInterval *> hits;  // all overlapping intervals
+
+  if (root == NULL) { return hits; } // should return empty vector?
+  
+  // Must consider all intervals at the current root.
+  std::vector<gInterval *>::iterator it;
+  for (it = root->OverlapCenter.begin(); it != root->OverlapCenter.end(); it++) {
+    if ((*it)->Overlap(query)) { hits.push_back(*it);}
+  }
+
+  // if l < c then we have to check left
+  std::vector<gInterval *> rset;
+  if (query->start < root->center) {
+    CITree Lftleaf(root->left);
+    rset = Lftleaf.overlapSearch(query);
+    hits.insert(hits.end(), rset.begin(), rset.end());
+  }
+
+  // if h > c then we have to check right 
+  if (query->stop > root->center) {
+    CITree Rtleaf(root->right);
+    rset = Rtleaf.overlapSearch(query);
+    hits.insert(hits.end(), rset.begin(), rset.end());
+  }
+
+  return hits;
 }
-*/
 
 /**
  * @brief writes out the entire subtree at root
