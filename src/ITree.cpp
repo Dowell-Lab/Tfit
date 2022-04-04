@@ -60,6 +60,9 @@ CITree::CITree(Inode *v_root) {
 CITree::CITree(std::vector<gInterval *> setIntervals) {
    if (setIntervals.empty()) { root = NULL; return; }
 
+  // Shouldn't this be responsible for all intervals originating
+  // from the same chromosome??
+
   // Sort setIntervals by end value of intervals
   std::sort(setIntervals.begin(),setIntervals.end(), 
       [](gInterval *const &l, gInterval *const &r) { return l->stop < r->stop;});
