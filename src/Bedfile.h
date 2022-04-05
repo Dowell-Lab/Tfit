@@ -22,11 +22,13 @@
  */
 class Bedfile {
 public:
-    std::string filename;       // read in file name
+   std::string filename;       // read in file name
+   int num_chr;     // Total number of chromosomes (number of indicies)
+   std::map<int, CITree *> intervals;   // index to interval tree 
 
-    std::map<int,std::string> IDindex;    // chromosome -> index (and vice versa)
-
-    std::map<int, CITree> intervals;   // contents of the bedfile!
+   // These are name to index lookup variables (and vice versa)
+   std::map<int,std::string> IDindex;    // chromosome -> index 
+   std::map<std::string, int> chr2index;    // index -> chromosome
 
 	// Constructors
 	Bedfile();	// empty constructor
@@ -34,9 +36,12 @@ public:
 
 	/* FUNCTIONS: */
     // Read the file
-    void load_file (std::string spec_chrom, int pad, bool center);
+    void load_file ();
     // Find overlapping intervals (search)
     // Return all intervals on given chromosome
+
+    void addChromosome(std::string);    // Add new name to indexes
+
 };
 
 

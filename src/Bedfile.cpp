@@ -25,10 +25,26 @@
  */
 Bedfile::Bedfile() {
   filename = "";
-
+  num_chr = 0;
 }
 Bedfile::Bedfile(std::string FILE) {
   filename = FILE; 
+  num_chr = 0;
+}
+
+/**
+ * @brief Adding a new identifier (chromosome name) to the container
+ * 
+ * @param chrid  // string: name of current chromosome
+ */
+void Bedfile::addChromosome(std::string chrid) {
+   if (!(chr2index.count(chrid))) {  // a new chromosome
+    // Lets add a new chromosome to the index list
+    chr2index[chrid] = num_chr; 
+    // Reverse index
+    IDindex[num_chr] = chrid;
+    num_chr++;
+   }
 }
 
 /**
@@ -38,44 +54,48 @@ Bedfile::Bedfile(std::string FILE) {
  * @param spec_chrom  string spec_chrom 	= P->p["-chr"];
  * @param pad   int pad = stoi(P->p["-pad"])+1;
  */
-void Bedfile::load_file (std::string spec_chrom, int pad, bool center) {
-  bool debug = false;    // a debugging indicator
+void Bedfile::load_file() {
   ifstream FH(filename);
 
-  // if (debug) { printf("\n  spec_chrom: %s, pad: %d\n", spec_chrom.c_str(), pad);}
-  bool EXIT 		= false;
+  bool EXIT 		= false;  // file error indicator
+  // collection of gIntervals from file, one "set" per chromosome ID
+  // std::map<std::string, std::vector<bed6 *>> regions;  
+  map<int, std::vector<gInterval *>> regions;  
 
   if (FH){
     std::string line;   // We are going to read this file in one line at a time.
-    int 	i = 0;
-    bool PASSED 	= true; // check on identifier.
-
-    // These are the relevant Bed line fields:
-    std::string chrom;  // field[0]
-    int start, stop;    // field[1] and field[2]
-    // field[3] is the identifier, will make one internally if not provided.
-    std::string strand; // field[5] will set to "." if not provided
+    int 	i = 0;    // line counter
 
     // Reading input file line by line
     while(getline(FH, line)){
-      // if (debug) { printf("  %s\n", line.c_str()); }
-
       if (line.substr(0,1)!="#") { // ignore comment lines
 
-      // Should have the objects parse the line.  But do I keep bed4 and bed6 
-      // objects distinctly?  Should do check for "proper bed"?
+      bed6 interval;  // This interval's info.
+      interval.setfromBedLine(line);
 
-      // Should objects be padded?  Centered?
+      // Is the current chromosome one we've seen before?
+      if (!(chr2index.count(interval.chromosome))) {
+        addChromosome(interval.chromosome);
+      }
+      // Now add the interval to the correct set.
+      int idx = chr2index[interval.chromosome];
+      regions[idx].push_back(&interval);
 
       } // not a comment
+      i++;    // line counter
     } // for each line in bedfile
-  }else{  // filehandle error
+  } else {  // filehandle error
     printf("couldn't open %s for reading\n", filename.c_str() );
     EXIT 	= true;
   }
 
-  // setup interval trees, one per chromosome
-  // setup indexes to each tree
+   if (!EXIT) {
+    // setup interval trees, one per chromosome
+    std::map<int, std::vector<gInterval *>>::iterator it;
+    for (it = regions.begin(); it != regions.end(); it++) {
+      intervals[it->first] = new CITree(it->second);
+    }
+   }
 
 }
 

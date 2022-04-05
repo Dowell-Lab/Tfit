@@ -106,13 +106,17 @@ void gInterval::setBED4fromStrings(std::vector<std::string> lineArray) {
     chromosome = "formaterror";   // hacking an internal indicator of error for now.
   }
   chromosome = lineArray[0];
+
   start = stod(lineArray[1]);
   stop = stod(lineArray[2]);
 
+  // Check that start < stop.  If not, throw an error?
+  // Check start >= 0?
+
   if (lineArray.size() >= 4) {  // At least a BED4, so identifier is present.
     identifier = lineArray[3];
-  } else {
-    identifier = "";    // identifier not present in BED3 files; should use internal
+  } else {  // bed3 files don't have an identifier.
+    identifier = "";    // should we make up something internally?
   }
 }
 
@@ -134,7 +138,7 @@ void gInterval::setBED4fromStrings(std::vector<std::string> lineArray) {
 bed6::bed6(std::string v_chromosome, double v_start, double v_stop, 
     std::string v_identifier, int v_score, std::string v_strand) 
     : gInterval(v_chromosome, v_start, v_stop, v_identifier) {
-  score = v_score;
+  score = v_score;  // Technically constrained to be between 0 and 1000 -- enforce?
   if (v_strand.compare(0,1,"+") == 0) {
     strand = '+';
   } else if(v_strand.compare(0,1, "-") == 0) {
