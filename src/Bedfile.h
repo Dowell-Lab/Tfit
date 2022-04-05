@@ -35,12 +35,16 @@ public:
 	Bedfile(std::string filename);	// empty constructor
 
 	/* FUNCTIONS: */
+    void addChromosome(std::string);    // Add new name to indexes
+
+    std::string print_chr_names();  // output chromosome names sep by spaces
+    std::string print_tree_at_chromosome(std::string);
+
     // Read the file
     void load_file ();
     // Find overlapping intervals (search)
     // Return all intervals on given chromosome
 
-    void addChromosome(std::string);    // Add new name to indexes
 
 };
 

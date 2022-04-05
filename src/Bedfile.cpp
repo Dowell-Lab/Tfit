@@ -47,6 +47,20 @@ void Bedfile::addChromosome(std::string chrid) {
    }
 }
 
+std::string Bedfile::print_chr_names() {
+  std::string output;
+   for (int i=0; i< num_chr; i++) {
+      if (i > 0) { output += " ";}
+      output += IDindex[i];
+   }
+   return output;
+}
+
+std::string Bedfile::print_tree_at_chromosome(std::string chromo) {
+    int idx = chr2index[chromo];
+    return intervals[idx]->write_Full_Tree();
+}
+
 /**
  * @brief  load a bedfile of intervals
  * @author Robin Dowell 
@@ -58,9 +72,9 @@ void Bedfile::load_file() {
   ifstream FH(filename);
 
   bool EXIT 		= false;  // file error indicator
+
   // collection of gIntervals from file, one "set" per chromosome ID
-  // std::map<std::string, std::vector<bed6 *>> regions;  
-  map<int, std::vector<gInterval *>> regions;  
+  std::map<int, std::vector<gInterval *>> regions;  
 
   if (FH){
     std::string line;   // We are going to read this file in one line at a time.
@@ -70,19 +84,20 @@ void Bedfile::load_file() {
     while(getline(FH, line)){
       if (line.substr(0,1)!="#") { // ignore comment lines
 
-      bed6 interval;  // This interval's info.
-      interval.setfromBedLine(line);
+      bed6 *iregion = new bed6();
+      iregion->setfromBedLine(line);  // This interval's info.
 
       // Is the current chromosome one we've seen before?
-      if (!(chr2index.count(interval.chromosome))) {
-        addChromosome(interval.chromosome);
+      if (!(chr2index.count(iregion->chromosome))) {
+        addChromosome(iregion->chromosome);
       }
       // Now add the interval to the correct set.
-      int idx = chr2index[interval.chromosome];
-      regions[idx].push_back(&interval);
+      int idx = chr2index[iregion->chromosome];
+      // std::cout <<  "New interval: " << idx << " " << iregion.write_out() << std::endl;
+      regions[idx].push_back(iregion);
 
       } // not a comment
-      i++;    // line counter
+      i++;    // line counter, could be useful later.
     } // for each line in bedfile
   } else {  // filehandle error
     printf("couldn't open %s for reading\n", filename.c_str() );
@@ -96,6 +111,7 @@ void Bedfile::load_file() {
       intervals[it->first] = new CITree(it->second);
     }
    }
+
 
 }
 

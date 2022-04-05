@@ -38,8 +38,8 @@ Inode::Inode(double v_center, std::vector<gInterval *> current) {
 std::string Inode::write_currentIntervals() {
    std::string intervals;
    intervals = "\nIntervals overlapping " + std::to_string(center);
-   // iterate over contents of current node's intervals
 
+   // iterate over contents of current node's intervals
    std::vector<gInterval *>::iterator it;
    for (it = OverlapCenter.begin(); it != OverlapCenter.end(); it++) {
       intervals += "\n" + (*it)->write_out();
@@ -135,18 +135,24 @@ std::string CITree::write_Full_Tree() {
   if (root == NULL) { return "";} 
 
   std::string tree_output;
+  std::string tstring;  // Temp variable
 
   // The tmp is just to not output the "L:" for empty nodes
-  CITree tmp(root->left);
-  std::string tstring = tmp.write_Full_Tree();
-  if (tstring != "") { tree_output += "\nL:" + tstring; }
-
+  if (root->left != NULL) {
+    CITree tmp(root->left);
+    tstring = tmp.write_Full_Tree();
+    if (tstring != "") { tree_output += "\nL:" + tstring; }
+  }
   tree_output += root->write_currentIntervals();
 
   // The tmp is just to not output the "R:" for empty nodes
-  CITree tmpR(root->right);
-  tstring = tmpR.write_Full_Tree();
-  if (tstring != "") { tree_output += "\nR:" + tstring; }
+  if (root->right != NULL) {
+    CITree tmpR(root->right);
+    tstring = tmpR.write_Full_Tree();
+    if (tstring != "") {
+      tree_output += "\nR:" + tstring;
+    }
+  }
 
   return (tree_output);
 }
@@ -163,7 +169,6 @@ std::string CITree::write_Full_Tree() {
 Inode *CITree::constructTree(std::vector<gInterval *>segments){
   // center = median of interval endpoints
   int median = segments.size()/2;  // if even finds median; if odd takes upper bound on median
-  // std::cout << median << std::endl;
   double center = segments[median]->stop;
 
   std::vector<gInterval *> Left;
