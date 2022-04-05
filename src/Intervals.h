@@ -5,7 +5,8 @@
  *
  * Two kinds of intervals:  genomic (gIntervals) and data (dIntervals)
  * gIntervals maintain genomic coordinates and are the fundamental datatype
- * within the Interval trees (see ITree.cpp).
+ * within the Interval trees (see ITree.cpp).  These are all obtained from 
+ * bed files (bed3, bed4, bed6, bed9, bed12).  
  * 
  * dIntervals contain data (two strands) per an interval but do so in zero
  * based coordinates.  Can translate back to gInterval if correspondance is setup.

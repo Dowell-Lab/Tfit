@@ -112,7 +112,7 @@ void gInterval::setBED4fromStrings(std::vector<std::string> lineArray) {
   if (lineArray.size() >= 4) {  // At least a BED4, so identifier is present.
     identifier = lineArray[3];
   } else {
-    identifier = "";    // identifier not present in BED3 files.
+    identifier = "";    // identifier not present in BED3 files; should use internal
   }
 }
 
