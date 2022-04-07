@@ -49,6 +49,7 @@ list(APPEND sources
                 src/test_Random.cpp
                 src/test_ITree.cpp
                 src/test_Bedfile.cpp
+                src/test_Bimap.cpp
                 )
 
 # Set Include directories
