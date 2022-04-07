@@ -41,3 +41,36 @@ double Random::fetchProbability() {
 	return Random::fetchUniform(0,1);
 }
 
+Bimap::Bimap() {
+   num_elements = 0;
+}
+
+void Bimap::addIdentifier(std::string name) {
+   if (!(str2index.count(name))) {  // a new chromosome
+    // Lets add a new chromosome to the index list
+    str2index[name] = num_elements; 
+    // Reverse index
+    index2str[num_elements] = name;
+    num_elements++;
+   }
+}
+
+int Bimap::lookupIndex(std::string name) {
+   return str2index[name];
+}
+
+std::string Bimap::lookupName(int index) {
+   return index2str[index];
+}
+
+std::string Bimap::print_index_names() {
+  std::string output;
+   for (int i=0; i< num_elements; i++) {
+      if (i > 0) { output += " ";}
+      output += index2str[i];
+   }
+   return output;
+}
+
+
+

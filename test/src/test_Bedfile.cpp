@@ -23,5 +23,5 @@ TEST(Bedfile, fromBedFile)
    // std:: cout << sut.print_tree_at_chromosome((std::string)"chr22") << std::endl;
 
    // Assert: Verify the outcome
-   EXPECT_EQ(sut.num_chr, 2);
+   EXPECT_EQ(sut.chr_names.num_elements, 2);
 }

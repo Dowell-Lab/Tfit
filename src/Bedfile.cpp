@@ -25,18 +25,13 @@
  */
 Bedfile::Bedfile() {
   filename = "";
-  num_chr = 0;
-}
-Bedfile::Bedfile(std::string FILE) {
-  filename = FILE; 
-  num_chr = 0;
 }
 
-/**
- * @brief Adding a new identifier (chromosome name) to the container
- * 
- * @param chrid  // string: name of current chromosome
- */
+Bedfile::Bedfile(std::string FILE) {
+  filename = FILE; 
+}
+
+/*
 void Bedfile::addChromosome(std::string chrid) {
    if (!(chr2index.count(chrid))) {  // a new chromosome
     // Lets add a new chromosome to the index list
@@ -55,9 +50,10 @@ std::string Bedfile::print_chr_names() {
    }
    return output;
 }
+*/
 
 std::string Bedfile::print_tree_at_chromosome(std::string chromo) {
-    int idx = chr2index[chromo];
+    int idx = chr_names.lookupIndex(chromo);
     return intervals[idx]->write_Full_Tree();
 }
 
@@ -87,12 +83,11 @@ void Bedfile::load_file() {
       bed6 *iregion = new bed6();
       iregion->setfromBedLine(line);  // This interval's info.
 
-      // Is the current chromosome one we've seen before?
-      if (!(chr2index.count(iregion->chromosome))) {
-        addChromosome(iregion->chromosome);
-      }
+      // be sure we have an identifier for this chromosome
+      chr_names.addIdentifier(iregion->chromosome);
+
       // Now add the interval to the correct set.
-      int idx = chr2index[iregion->chromosome];
+      int idx = chr_names.lookupIndex(iregion->chromosome);
       // std::cout <<  "New interval: " << idx << " " << iregion.write_out() << std::endl;
       regions[idx].push_back(iregion);
 
