@@ -28,14 +28,6 @@ public:
    std::map<int, CITree *> intervals;   // index to interval tree 
    Bimap chr_names;     // system for converting names to indexes (& vice versa)
 
-   /*
-   int num_chr;     // Total number of chromosomes (number of indicies)
-   std::map<int,std::string> IDindex;    // chromosome -> index 
-   std::map<std::string, int> chr2index;    // index -> chromosome
-   void addChromosome(std::string);    // Add new name to indexes
-   std::string print_chr_names();  // output chromosome names sep by spaces
-   */
-
 	// Constructors
 	Bedfile();	// empty constructor
 	Bedfile(std::string filename);	// empty constructor

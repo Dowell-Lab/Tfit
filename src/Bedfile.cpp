@@ -31,27 +31,6 @@ Bedfile::Bedfile(std::string FILE) {
   filename = FILE; 
 }
 
-/*
-void Bedfile::addChromosome(std::string chrid) {
-   if (!(chr2index.count(chrid))) {  // a new chromosome
-    // Lets add a new chromosome to the index list
-    chr2index[chrid] = num_chr; 
-    // Reverse index
-    IDindex[num_chr] = chrid;
-    num_chr++;
-   }
-}
-
-std::string Bedfile::print_chr_names() {
-  std::string output;
-   for (int i=0; i< num_chr; i++) {
-      if (i > 0) { output += " ";}
-      output += IDindex[i];
-   }
-   return output;
-}
-*/
-
 std::string Bedfile::print_tree_at_chromosome(std::string chromo) {
     int idx = chr_names.lookupIndex(chromo);
     return intervals[idx]->write_Full_Tree();
