@@ -15,10 +15,10 @@ TEST(Bedfile, fromBedFile)
 {
     // Arrange: bring SUT to desired state
    std::string file_name = "../examples/multiple.bed"; 
-   Bedfile sut(file_name);
+   Bedfile sut;
    
    // Act: call methods on SUT, capture output
-   sut.load_file();
+   sut.load_file(file_name);
 
    // std:: cout << sut.print_tree_at_chromosome((std::string)"chr22") << std::endl;
 

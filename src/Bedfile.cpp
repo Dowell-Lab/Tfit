@@ -27,10 +27,6 @@ Bedfile::Bedfile() {
   filename = "";
 }
 
-Bedfile::Bedfile(std::string FILE) {
-  filename = FILE; 
-}
-
 std::string Bedfile::print_tree_at_chromosome(std::string chromo) {
     int idx = chr_names.lookupIndex(chromo);
     return intervals[idx]->write_Full_Tree();
@@ -39,11 +35,10 @@ std::string Bedfile::print_tree_at_chromosome(std::string chromo) {
 /**
  * @brief  load a bedfile of intervals
  * @author Robin Dowell 
- * @param FILE name of bedfile containing intervals (example: singleregion.bed)
- * @param spec_chrom  string spec_chrom 	= P->p["-chr"];
- * @param pad   int pad = stoi(P->p["-pad"])+1;
+ * @param fle  name of bedfile containing intervals (example: singleregion.bed)
  */
-void Bedfile::load_file() {
+void Bedfile::load_file(std::string file) {
+  filename = file;
   ifstream FH(filename);
 
   bool EXIT 		= false;  // file error indicator
@@ -67,10 +62,11 @@ void Bedfile::load_file() {
 
       // Now add the interval to the correct set.
       int idx = chr_names.lookupIndex(iregion->chromosome);
+
       // std::cout <<  "New interval: " << idx << " " << iregion.write_out() << std::endl;
       regions[idx].push_back(iregion);
 
-      } // not a comment
+      } // for all lines in bedfile that aren't comments 
       i++;    // line counter, could be useful later.
     } // for each line in bedfile
   } else {  // filehandle error
@@ -85,7 +81,5 @@ void Bedfile::load_file() {
       intervals[it->first] = new CITree(it->second);
     }
    }
-
-
 }
 
