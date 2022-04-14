@@ -220,7 +220,7 @@ void segment::add2(int strand, double x, double y){
  * X[2] is sum of reverse values over bin width (delta)
  * 
  * @param delta binning denominator (nts per bin)
- * @param scale coordinate scaling constant (sets SCALE)
+ * @param scale scaling constant (sets SCALE)
  * @param erase whether to remove bins with both strands having zero counts
  * @return (void)
  * 
@@ -296,7 +296,6 @@ void segment::bin(double delta, double scale, bool erase){
 
   //===================
   //scale data down for numerical stability
-  // Moves from genomic coordinates to scaled 0 start coordinates
   if (scale){
     for (int i = 0; i < BINS; i ++ ){
       
@@ -305,6 +304,7 @@ void segment::bin(double delta, double scale, bool erase){
       // X[2][i]/=delta;
     }
   }
+
   //JA: we also want to get rid of those data points that we don't need
   //i.e. the ones where there is no data coverage values on either the 
   //forward or reverse strands
