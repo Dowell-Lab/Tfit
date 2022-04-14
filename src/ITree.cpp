@@ -136,15 +136,6 @@ std::vector<gInterval *>CITree::overlapSearch(gInterval *query) {
 }
 
 /**
- * @brief How many intervals are in this tree?
- * 
- * @return int 
- */
-int CITree::getSize() {
-   return 1; 
-}
-
-/**
  * @brief writes out the entire subtree at root
  * 
  * @param root  Centered Interval tree of interest

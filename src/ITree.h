@@ -58,8 +58,6 @@ public:
     std::vector<gInterval *>searchPoint(double);
     // Search tree for all intervals that overlap a given interval 
     std::vector<gInterval *>overlapSearch(gInterval *);
-    // Determine how many intervals are in the tree.
-    int getSize(); 
 
 private: 
     // Recursively builds tree, assumes sorted vector of intervals
