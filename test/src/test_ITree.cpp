@@ -9,6 +9,7 @@
 #include "ITree.h"
 #include "Intervals.h"
 
+
 TEST(Itree, treeConstruction)
 {
     // Arrange: bring SUT to desired state
@@ -221,27 +222,3 @@ TEST(ITree, SearchIntervalContained)
     EXPECT_EQ(results.size(), 2);
 }
 
-/*
-TEST(ITree, fromBedFile) 
-{
-    // Arrange: bring SUT to desired state
-   string file_name = "../examples/multiple.bed"; 
-   
-   std::vector<gInterval *>setofIntervals;
-
-   CITree sut(setofIntervals);
-   gInterval queryI("chr1", 33, 35, "contained");
-  
-   std::vector<gInterval *> results;
-   // Act: call methods on SUT, capture output
-   results = sut.overlapSearch(&queryI);
-
-   // std::vector<gInterval *>::iterator it;
-   // for (it = results.begin(); it != results.end(); it++) {
-   //   std::cout << (*it)->write_out() << std::endl;
-   // }
-
-   // Assert: Verify the outcome
-   EXPECT_EQ(results.size(), 2);
-}
-*/

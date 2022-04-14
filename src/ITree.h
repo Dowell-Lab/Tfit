@@ -50,13 +50,16 @@ public:
     CITree(std::vector<gInterval *>);  // sorts intervals then builds tree.
 
     // Functions:
+    // Debugging functions:
     std::string write_Full_Tree();
+    std::string write_Root();
+
     // Search tree for all intervals that overlap a given point 
     std::vector<gInterval *>searchPoint(double);
     // Search tree for all intervals that overlap a given interval 
     std::vector<gInterval *>overlapSearch(gInterval *);
-
-    // Could create insert/delete functions for tree?
+    // Determine how many intervals are in the tree.
+    int getSize(); 
 
 private: 
     // Recursively builds tree, assumes sorted vector of intervals

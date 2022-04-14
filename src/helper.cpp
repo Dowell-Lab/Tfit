@@ -56,7 +56,11 @@ void Bimap::addIdentifier(std::string name) {
 }
 
 int Bimap::lookupIndex(std::string name) {
-   return str2index[name];
+   if (str2index.count(name)) {  // exists check
+     return str2index[name];
+   } else {
+      return -1;
+   }
 }
 
 std::string Bimap::lookupName(int index) {

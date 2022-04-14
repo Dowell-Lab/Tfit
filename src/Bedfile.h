@@ -32,13 +32,15 @@ public:
 	Bedfile();	// empty constructor
 
 	/* FUNCTIONS: */
+    // Debugging functions:
     std::string print_tree_at_chromosome(std::string);
+    std::string reportBedfileContents();        // used for debugging
 
     // Read the file
     void load_file (std::string filename);	
-    // Find overlapping intervals (search)
-    // Return all intervals on given chromosome
 
+    // Find overlapping intervals (search)
+    std::vector<gInterval *>findOverlapIntervals(gInterval *);
 
 };
 

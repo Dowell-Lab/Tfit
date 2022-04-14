@@ -27,6 +27,12 @@ Bedfile::Bedfile() {
   filename = "";
 }
 
+/**
+ * @brief Debugging function for printing ITree for a chromosome
+ * 
+ * @param chromo 
+ * @return std::string 
+ */
 std::string Bedfile::print_tree_at_chromosome(std::string chromo) {
     int idx = chr_names.lookupIndex(chromo);
     return intervals[idx]->write_Full_Tree();
@@ -55,7 +61,9 @@ void Bedfile::load_file(std::string file) {
       if (line.substr(0,1)!="#") { // ignore comment lines
 
       bed6 *iregion = new bed6();
+      // Note that the bed6 object is doing sanity checking on the line.
       iregion->setfromBedLine(line);  // This interval's info.
+
 
       // be sure we have an identifier for this chromosome
       chr_names.addIdentifier(iregion->chromosome);
@@ -63,7 +71,6 @@ void Bedfile::load_file(std::string file) {
       // Now add the interval to the correct set.
       int idx = chr_names.lookupIndex(iregion->chromosome);
 
-      // std::cout <<  "New interval: " << idx << " " << iregion.write_out() << std::endl;
       regions[idx].push_back(iregion);
 
       } // for all lines in bedfile that aren't comments 
@@ -81,5 +88,41 @@ void Bedfile::load_file(std::string file) {
       intervals[it->first] = new CITree(it->second);
     }
    }
+}
+
+/**
+ * @brief find all the intervals that overlap a given input interval.
+ * Since the ITree search work is done by CITree::overlapSearch 
+ * the goal here is really just to do that on the right tree (i.e. using
+ * the chromosome identifier).
+ * 
+ */
+std::vector<gInterval *> Bedfile::findOverlapIntervals(gInterval *input) {
+  int index = chr_names.lookupIndex(input->chromosome);
+  //  std::cout << "Index: " << index << std::endl;
+  if (index >= 0) {  // exists in the bimap, search the right tree
+    return intervals[index]->overlapSearch(input);
+  } else {  // this index isn't found, return empty vector;
+    std::vector<gInterval *> empty_vector;
+    return empty_vector;
+  }
+}
+
+/**
+ * @brief Provide a basic report on a bedfile.
+ * 
+ * @return std::string 
+ */
+std::string Bedfile::reportBedfileContents() {
+   // Summary should include: name of file:
+   std::string report = filename;
+   // Then one per line:  chromosome name \t # intervals on that chromosome
+   // Currently only chromosome names reported.
+   std::map<int, CITree *>::iterator it;
+   for (it = intervals.begin(); it != intervals.end(); it++) {
+       report += "\nIndex: " + std::to_string(it->first) + " " + chr_names.lookupName(it->first);
+          // + "\t" + std::to_string(intervals[it->first]->getSize());
+   }
+   return report;    
 }
 

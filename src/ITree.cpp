@@ -99,12 +99,22 @@ std::vector<gInterval *>CITree::searchPoint(double point) {
 std::vector<gInterval *>CITree::overlapSearch(gInterval *query) {
   std::vector<gInterval *> hits;  // all overlapping intervals
 
+  bool debug = 0;   // this is manual programming switch for convenience
+
+  if (debug) {
+    std::cout << "Tree root: " << write_Root() << std::endl;
+    std::cout << "overlapSearch query: " << query->write_out() << std::endl;
+  }
+
   if (root == NULL) { return hits; } // should return empty vector?
   
   // Must consider all intervals at the current root.
   std::vector<gInterval *>::iterator it;
   for (it = root->OverlapCenter.begin(); it != root->OverlapCenter.end(); it++) {
-    if ((*it)->Overlap(query)) { hits.push_back(*it);}
+    if ((*it)->Overlap(query)) { 
+      if (debug) { std::cout << "Hit: " << (*it)->write_out() << std::endl; }
+      hits.push_back(*it);
+    }
   }
 
   // if l < c then we have to check left
@@ -123,6 +133,15 @@ std::vector<gInterval *>CITree::overlapSearch(gInterval *query) {
   }
 
   return hits;
+}
+
+/**
+ * @brief How many intervals are in this tree?
+ * 
+ * @return int 
+ */
+int CITree::getSize() {
+   return 1; 
 }
 
 /**
@@ -155,6 +174,11 @@ std::string CITree::write_Full_Tree() {
   }
 
   return (tree_output);
+}
+
+std::string CITree::write_Root() {
+   if (root == NULL) { return "";} 
+   return root->write_currentIntervals(); 
 }
 
 /**

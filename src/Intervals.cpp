@@ -105,13 +105,14 @@ void gInterval::setBED4fromStrings(std::vector<std::string> lineArray) {
     cout << "ERROR: Invalid BED file\n" << std::endl;
     chromosome = "formaterror";   // hacking an internal indicator of error for now.
   }
-  chromosome = lineArray[0];
 
-  start = stod(lineArray[1]);
-  stop = stod(lineArray[2]);
+  chromosome = lineArray[0];
 
   // Check that start < stop.  If not, throw an error?
   // Check start >= 0?
+  start = stod(lineArray[1]);
+  stop = stod(lineArray[2]);
+
 
   if (lineArray.size() >= 4) {  // At least a BED4, so identifier is present.
     identifier = lineArray[3];
