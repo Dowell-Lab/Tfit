@@ -147,8 +147,6 @@ private:
 
 	// I think these are for convenience (calculate once)
 	double N;	//!< Total sum of values 
-	double fN;	//!< Sum of forward values 
-	double rN;	//!< Sum of reverse values 
 };
 
 #endif

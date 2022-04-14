@@ -200,9 +200,11 @@ struct simple_seg_struct{
 map<string, vector<segment *> > MPI_comm::send_out_single_fit_assignments(vector<segment *> FSI, int rank, int nprocs ){
   bool debug = false;
 	map<string, vector<segment *> > GG;
-	int N 		= FSI.size();
-	int count 	= N / nprocs;
-	if (count == 0){ count 	= 1; }
+	int N 		= FSI.size();		// Number of segments (intervals)
+	int count 	= N / nprocs;		// Divided evenly across number of processes
+	if (count == 0){ count 	= 1; }	// With minimum of 1
+
+	/********  Setup the MPI communication datastructure *****/
 	simple_seg_struct sss;
 	MPI_Datatype mystruct;
 	
@@ -215,10 +217,14 @@ map<string, vector<segment *> > MPI_comm::send_out_single_fit_assignments(vector
 	
 	MPI_Type_create_struct( 3, blocklens, displacements, old_types, &mystruct );
 	MPI_Type_commit( &mystruct );
+	/********  END Setup the MPI communication datastructure *****/
 
 	vector<simple_seg_struct> runs;
 	int start, stop;
 	int S;
+
+	// If "parent" node will send to each process a number of jobs expected
+	// Then you'll send them the datastructure put together above.
 	if (rank == 0){
 		//first send out the number you are going to send
 		for (int j =0; j < nprocs; j++){
@@ -256,6 +262,7 @@ map<string, vector<segment *> > MPI_comm::send_out_single_fit_assignments(vector
 				if (j >0){
 					MPI_Send(&SSS, 2, mystruct, j, u, MPI_COMM_WORLD  );
 				}else{
+					// Even the parent gets a runs set.
 					runs.push_back(SSS);
 				}
 				u++;
@@ -263,20 +270,23 @@ map<string, vector<segment *> > MPI_comm::send_out_single_fit_assignments(vector
 		}
 
 	}else{
+    // If you aren't the parent, it's you job to receive the # jobs and datastructure
+
 		MPI_Recv(&S, 1, MPI_INT, 0, 1, MPI_COMM_WORLD,MPI_STATUS_IGNORE);
 		for (int u = 0; u < S; u++){
 			MPI_Recv(&sss, 2, mystruct, 0,u,MPI_COMM_WORLD, MPI_STATUS_IGNORE);	
 			runs.push_back(sss);
 		}	
 	}
-	//now convert to GG type
+
+	//now convert to GG type -- but what is this?
 	for (int i = 0; i < runs.size(); i++){
 		segment * ns 	= new segment(runs[i].chrom, runs[i].st_sp[0], runs[i].st_sp[1], runs[i].st_sp[2], runs[i].strand);
 		ns->counts 		= runs[i].st_sp[3];
 		GG[ns->chrom].push_back(ns) ;
 	}
 
-	typedef map<string, vector<segment *> >::iterator it_type;
+	// typedef map<string, vector<segment *> >::iterator it_type;
 
 	return GG;
 }

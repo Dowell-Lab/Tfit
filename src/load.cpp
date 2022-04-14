@@ -123,7 +123,7 @@ double segment::getXLength () {
  */
 string segment::write_interval(){
         string  text= ("#" + chrom + ":" + to_string(start) + "-" 
-		+ to_string(stop) + "," + to_string(int(N))+ "\n");
+		+ to_string(stop) + "," + to_string(int(N)) );
 	return text;
 }
 
@@ -440,9 +440,9 @@ void node::insert_coverage(vector<double> x, int s){
   for (int i = 0 ; i < current.size(); i++){
     if (x[0] > current[i]->start and  x[0] < current[i]->stop  ){
       if (s==1){
-	current[i]->forward.push_back(x);
+	      current[i]->forward.push_back(x);
       }else{
-	current[i]->reverse.push_back(x);	
+	      current[i]->reverse.push_back(x);	
       }
     }
   }	
