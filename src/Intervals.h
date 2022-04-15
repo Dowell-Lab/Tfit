@@ -123,11 +123,7 @@ public:
 
   double sum_Region();  // both strands
 
-  void load_forward_strand();
-  void load_reverse_strand();
-  void scale_and_bin();
-
-private:
+private:    // Should these be private?
 	/**
 	 * @brief This (X) is the internal representation of the data.
 	 * Vector[0] is coordinate (possibly scaled); [1] is forward (summed for bin)
@@ -141,8 +137,6 @@ private:
 	double ** X;  //!< Smoothed data inner is [3] dimensions
 	double XN; //!< total number of bins
 	double SCALE;  //!< scaling factor
-
-	// I think these are for convenience (calculate once)
 	double N;	//!< Total sum of values 
 };
 
