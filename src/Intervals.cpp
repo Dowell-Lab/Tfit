@@ -216,25 +216,16 @@ void bed6::setfromBedLine(std::string line) {
  * The data Interval class contains both strands of data associated
  * with a particular region.  There is an empty constructor option. 
  *
- * @param identifier 
- * @param st   Start
- * @param sp   Stop
- * @param Integer identifier (opt)
- * @param STR  Strand (as string) (opt)
- *
- * @bug STR should be a char with only '.' '+' and '-' as valid.
- *
+ * @param v_identifier  A name/identifier for this interval
  */
-dInterval::dInterval(std::string v_identifier, int v_min, int v_max) {
+dInterval::dInterval(std::string v_identifier) {
   ID = v_identifier;
-  minX = v_min;
-  maxX = v_max;
-  XN = 1;
+  minX = 0;
+  maxX = 0;
+  X = NULL;
+  XN = 0;
   SCALE = 1;
-
   N = 0;
-  fN = 0;
-  rN = 0;
 }
 
 // empty constructor
@@ -242,11 +233,10 @@ dInterval::dInterval() {
   ID = "empty";
   minX = 0;
   maxX = 0;
-  XN = 1;
+  X = NULL;
+  XN = 0;
   SCALE = 1;
   N = 0;
-  fN = 0;
-  rN = 0;
 }
 
 /**
@@ -256,8 +246,8 @@ dInterval::dInterval() {
  * @return std::string 
  */
 std::string dInterval::write_out() {
-  std::string text = ("#" + ID + ":d:" + std::to_string((int)minX) + "-" 
-		+ std::to_string((int)maxX) + "," + std::to_string((int)XN) + ","
+  std::string text = ("#" + ID + ":min:" + std::to_string((int)minX) + ":max:" 
+		+ std::to_string((int)maxX) + ":num_bins:" + std::to_string((int)XN) + ":total:"
     + std::to_string((int)N));
   return text;
 }
@@ -304,7 +294,7 @@ double dInterval::reverse(int x) {
  * @brief Position at the xth index.
  * 
  * @arg x The index of a data element.
- * Note that this is not a position (genomic or scaled).
+ * Note that this is not necessarily a genomic position.
  * 
  * @return double 
  */
@@ -314,10 +304,4 @@ double dInterval::position(int x) {
   
 double dInterval::sum_Region() {
   return N;
-}
-double dInterval::sum_forward() {
-  return fN;
-}
-double dInterval::sum_reverse() {
-  return rN;
 }

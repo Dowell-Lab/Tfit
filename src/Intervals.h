@@ -96,7 +96,6 @@ public:
  * @author Robin Dowell
  */
 class dInterval {
-
 public:
   std::string ID; //!< Does each data interval need a unique name?
 
@@ -105,7 +104,7 @@ public:
   double maxX;   //!< This is the maximum value of the interval 
 
   // Constructors
-  dInterval(std::string, int , int);
+  dInterval(std::string);
   dInterval();
 
   /* FUCTIONS: */
@@ -123,8 +122,6 @@ public:
   double position(int);
 
   double sum_Region();  // both strands
-  double sum_forward(); // forward only
-  double sum_reverse(); // reverse only
 
   void load_forward_strand();
   void load_reverse_strand();

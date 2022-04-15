@@ -24,7 +24,7 @@ TEST(Load, loadBedGraph)
 
   // Assert: Verify the outcome
   // cout << segments[0]->write_withData() << std::endl;
-  EXPECT_EQ(segments[0]->write_interval(),"#chr21:33400500-33409597,56761\n");
+  EXPECT_EQ(segments[0]->write_interval(),"#chr21:33400500-33409597,56761");
 
 }
 

@@ -74,17 +74,3 @@ TEST(Intervals, gInt_BED6io)
     // Assert: Verify the outcome
     EXPECT_THAT(temp.write_out(), sut.write_out());
 }
-
-TEST(Intervals, dInt_RecoverIdentity)
-{
-    // Arrange: bring SUT to desired state
-    std::string name;
-    name = "TestName";
-    dInterval sut = dInterval(name, 100, 1000); 
-
-    // Act: call methods on SUT, capture output
-    name = sut.write_out(); 
-
-    // Assert: Verify the outcome
-    EXPECT_THAT(name, "#TestName:d:100-1000,1,0");
-}
