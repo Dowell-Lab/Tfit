@@ -126,3 +126,23 @@ std::string Bedfile::reportBedfileContents() {
    return report;    
 }
 
+/*******************  BEDGRAPH ********************/
+
+Bedgraph::Bedgraph() {
+    
+}
+
+std::string Bedgraph::reportBedGraphContents() {
+   // Summary should include: name of file:
+   std::string report = filename;
+   // And the rest of the object!!!
+   return report;
+}
+
+void Bedgraph::load_file (std::string v_filename) {
+   filename = v_filename;
+
+   // LOAD a bedGraph
+}
+
+

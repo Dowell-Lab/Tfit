@@ -1,7 +1,7 @@
 /**
- * @file test_coreEM.cpp 
+ * @file test_loadBedGraph.cpp 
  * @author Robin Dowell
- * @brief Exploring the core EM algorithm
+ * @brief Testing loading of a BED file.  
  * @date 2022-02-24
  * 
  */
