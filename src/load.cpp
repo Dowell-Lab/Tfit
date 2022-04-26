@@ -707,7 +707,7 @@ vector<segment*> load::load_bedgraphs_total(string forward_strand, string revers
 	  // For every line in this file...
 	  while (getline(FH, line)){
 		  lineArray=string_split(line, '\t');
-		  // Have a hard requirement for a four column bed input
+		  // Have a hard requirement for a four column bedgraph input
 		  if (lineArray.size()!=4){
 			  EXIT 	= true;
 			  printf("\nLine number %d  in file %s was not formatted properly\nPlease see manual\n",line_number, FILES[u].c_str() );
