@@ -1,15 +1,14 @@
 /**
  * @file Intervals.h
  * @author Robin Dowell
- * @brief Header file for data interval class (dInterval)
+ * @brief Header file for genomic interval class (gInterval and bed6)
  *
- * Two kinds of intervals:  genomic (gIntervals) and data (dIntervals)
  * gIntervals maintain genomic coordinates and are the fundamental datatype
  * within the Interval trees (see ITree.cpp).  These are all obtained from 
  * bed files (bed3, bed4, bed6, bed9, bed12).  
  * 
- * dIntervals contain data (two strands) per an interval but do so in zero
- * based coordinates.  Can translate back to gInterval if correspondance is setup.
+ * They have a pointer to data when the interval contains data.  If the interval
+ * does not contain data, this pointer is NULL.
  * 
  * @version 0.1
  */
@@ -18,6 +17,8 @@
 
 #include <string>
 #include <vector>
+
+class Segment;    // Forward declaration
 
 /**
  * @brief gInterval
@@ -35,6 +36,8 @@ public:
   std::string chromosome;  // field 1 in BED
   double start, stop;   // genomic coordinates, fields 2 and 3 in bed
 
+  Segment *data;  // pointer to data if this interval has it.
+
   // Constructors
   gInterval(std::string, double, double, std::string);  // input is BED4
   gInterval();
@@ -48,6 +51,8 @@ public:
 
   bool Overlap(gInterval *);
   bool Contains(double point);
+
+  // Needs functions for "expanding" the interval to include new data.
 
 protected:
   void setBED4fromStrings(std::vector<std::string> lineArray); // helper function
@@ -70,8 +75,8 @@ public:
   int score;
 
   // Constructors
-  bed6(std::string, double, double, std::string, int, std::string);
   bed6();
+  bed6(std::string, double, double, std::string, int, std::string);
 
   /* FUCTIONS: */
   // Reporting out 
@@ -79,65 +84,6 @@ public:
   std::string write_asBED();
 
   void setfromBedLine(std::string);  // converts from a single line from file 
-};
-
-/**
- * @brief dInterval 
- * 
- * Data interval class which contains two strands of data
- * over an interval.  Data is expected to be forward and reverse
- * strand info (as double). 
- * 
- * The data may, or may not, be scaled and binned relative 
- * to genomic coordinates.
- * 
- * Goals: Storage of the data should be hidden from the user.
- * 
- * @author Robin Dowell
- */
-class dInterval {
-public:
-  std::string ID; //!< Does each data interval need a unique name?
-
-  // Ultimately unsure if we need to keep these.
-  double minX; //!< This is the minimum value of the interval
-  double maxX;   //!< This is the maximum value of the interval 
-
-  // Constructors
-  dInterval(std::string);
-  dInterval();
-
-  /* FUCTIONS: */
-  // Reporting out 
-  std::string write_out();
-
-  /*
-   * Wrappers to effectively obtain an iterator across data.
-   * This is a bit clunky currently, but a step in the right direction.
-   * In all of these cases, you are expected to iterate from 0 to num_elements()
-   */
-  double num_elements();
-  double forward(int);
-  double reverse(int);
-  double position(int);
-
-  double sum_Region();  // both strands
-
-private:    // Should these be private?
-	/**
-	 * @brief This (X) is the internal representation of the data.
-	 * Vector[0] is coordinate (possibly scaled); [1] is forward (summed for bin)
-	 * [2] is reverse (summed for bin).  
-	 * 
-	 * This is the meat and potatoes data representation that is used in the EM (fit2).  
-	 * 
-	 * These data elements are currently identical to how originally written 
-	 * in segment class.
-	 */
-	double ** X;  //!< Smoothed data inner is [3] dimensions
-	double XN; //!< total number of bins
-	double SCALE;  //!< scaling factor
-	double N;	//!< Total sum of values 
 };
 
 #endif

@@ -11,7 +11,9 @@
 #include <string>
 #include <vector>
 
-#include "Intervals.h"
+#include "Intervals.h"      // gInterval, bed6
+#include "Data.h"       // RawData, dInterval
+#include "Regions.h"    // SetROI, Segment
 #include "ITree.h"
 #include "helper.h"
 
@@ -26,34 +28,32 @@
 class Bedfile {
 public:
    std::string filename;       // read in file name
-   std::map<int, CITree *> intervals;   // index to interval tree 
-   Bimap chr_names;     // system for converting names to indexes (& vice versa)
-
-	// Constructors
+   SetROI regions;        // Container for set of bed6  regions 
+ 
+   // Constructors
 	Bedfile();	// empty constructor
 
 	/* FUNCTIONS: */
-    // Debugging functions:
-    std::string print_tree_at_chromosome(std::string);
-    std::string reportBedfileContents();        // used for debugging
+  // Debugging functions:
+  std::string reportBedfileContents();        // used for debugging
 
-    // Read the file
-    void load_file (std::string);
-
-    // Find overlapping intervals (search)
-    std::vector<gInterval *>findOverlapIntervals(gInterval *);
+  // Read the file
+  void load_file (std::string);
 
 };
 
 /**
  * @brief The complete contents of a bedGraph.
+ * We think of a bedgraph as regions of interest (similar to a bed file),
+ * but with data.
+ * 
+ * Thus a large part of the responsibility of this class is to ensure
+ * that data exists for each gInterval. 
  * 
  */
-class Bedgraph{
+class Bedgraph: public Bedfile {
 public:
-   std::string filename;       // read in file name
-   Bimap chr_names;     // system for converting names to indexes (& vice versa)
-   std::map<int, CITree *> intervals;   // index (to segments?!?!)
+    int useExistingIntervals;       // has ROI from bed separately or not?
 
 	// Constructors
 	Bedgraph();	// empty constructor
@@ -63,9 +63,7 @@ public:
     std::string reportBedGraphContents();        // used for debugging
 
     // Read the file
-    void load_file (std::string); 
-
-    // Find overlapping intervals (search)
+    void load_file (std::string);
 
 };
 

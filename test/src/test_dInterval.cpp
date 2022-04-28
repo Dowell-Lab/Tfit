@@ -6,7 +6,7 @@
  * 
  */
 #include "gmock/gmock.h"
-#include "Intervals.h"
+#include "Data.h"
 
 TEST(Intervals, dInt_RecoverIdentity)
 {

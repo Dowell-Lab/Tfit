@@ -25,6 +25,15 @@
 
 #include "split.h"
 
+
+gInterval::gInterval() {
+  chromosome = "NA";
+  identifier = "empty";
+  start = 0;
+  stop = 0;
+  data = NULL;
+}
+
 /**
  * @brief Construct a new g Interval::g Interval object
  * 
@@ -42,14 +51,10 @@ gInterval::gInterval(std::string v_chromosome, double v_start, double v_stop, st
   stop = v_stop;
   // Should we check that start < stop?  Throw an error when it doesn't?
   identifier = v_identifier;
+
+  data = NULL;
 }
 
-gInterval::gInterval() {
-  chromosome = "NA";
-  identifier = "empty";
-  start = 0;
-  stop = 0;
-}
 
 /**
  * @brief This is a standard content dump function.  Primarily
@@ -123,6 +128,12 @@ void gInterval::setBED4fromStrings(std::vector<std::string> lineArray) {
 
 /********************  BED6 ***********************/
 
+bed6::bed6():gInterval() {
+  score = 0;
+  strand = '.';
+}
+
+
 /**
  * @brief Construct a new bed6::bed6 object
  * 
@@ -147,11 +158,6 @@ bed6::bed6(std::string v_chromosome, double v_start, double v_stop,
   } else {
     strand = '.';
   }
-}
-
-bed6::bed6():gInterval() {
-  score = 0;
-  strand = '.';
 }
 
 /**
@@ -205,103 +211,3 @@ void bed6::setfromBedLine(std::string line) {
   }
 }
 
-/****************** dInterval *********************/
-
-/**
- * @brief Constructors: dInterval class
- * @author Robin Dowell
- *
- * Purpose: create/allocate instances of a data Interval 
- *
- * The data Interval class contains both strands of data associated
- * with a particular region.  There is an empty constructor option. 
- *
- * @param v_identifier  A name/identifier for this interval
- */
-dInterval::dInterval(std::string v_identifier) {
-  ID = v_identifier;
-  minX = 0;
-  maxX = 0;
-  X = NULL;
-  XN = 0;
-  SCALE = 1;
-  N = 0;
-}
-
-// empty constructor
-dInterval::dInterval() {
-  ID = "empty";
-  minX = 0;
-  maxX = 0;
-  X = NULL;
-  XN = 0;
-  SCALE = 1;
-  N = 0;
-}
-
-/**
- * @brief This is a standard content dump function.  Primarily
- * used in debugging.  Notice the string does NOT end in a newline.
- * 
- * @return std::string 
- */
-std::string dInterval::write_out() {
-  std::string text = ("#" + ID + ":min:" + std::to_string((int)minX) + ":max:" 
-		+ std::to_string((int)maxX) + ":num_bins:" + std::to_string((int)XN) + ":total:"
-    + std::to_string((int)N));
-  return text;
-}
-
-
-/**
- * @brief The number of data points in the interval.  
- * This could be nucleotides (smallest unit) to bins (groups of nts)
- * to the number of (possibly random) points along the interval.
- * 
- * @return double  Size of the interval in usable steps.
- */
-double dInterval::num_elements() {
-  return XN;
-}
-/**
- * @brief Data from forward strand at xth index.
- * Note a "unit" here could be nucleotides, bins (groups of nts),
- * or points along the interval.
- * 
- * @arg x The index of an element of the forward strand data.
- * Note that this is not a position (genomic or scaled).
- * 
- * @return double 
- */
-double dInterval::forward(int x) {
-  return X[1][x];
-}
-/**
- * @brief Data from reverse strand at xth index.
- * Note a "unit" here could be nucleotides, bins (groups of nts),
- * or points along the interval.
- * 
- * @arg x The index an element of the reverse strand data.
- * Note that this is not a position (genomic or scaled).
- * 
- * @return double 
- */
-double dInterval::reverse(int x) {
-  return X[2][x];
-}
-
-/**
- * @brief Position at the xth index.
- * 
- * @arg x The index of a data element.
- * Note that this is not necessarily a genomic position.
- * 
- * @return double 
- */
-double dInterval::position(int x) {
-  return X[0][x];
-}
-  
-double dInterval::sum_Region() {
-  return N;
-}
