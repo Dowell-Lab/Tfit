@@ -39,7 +39,6 @@ public:
 
   // Read the file
   void load_file (std::string);
-
 };
 
 /**

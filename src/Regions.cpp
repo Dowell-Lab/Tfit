@@ -61,6 +61,8 @@ void SetROI::createSearchIndex() {
  * 
  */
 std::vector<gInterval *> SetROI::findOverlapIntervals(gInterval *input) {
+  // std::cout << input->write_out() << std::endl;
+
   int index = chr_names.lookupIndex(input->chromosome);
   //  std::cout << "Index: " << index << std::endl;
   if (index >= 0) {  // exists in the bimap, search the right tree

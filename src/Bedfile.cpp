@@ -84,8 +84,10 @@ std::string Bedfile::reportBedfileContents() {
 
 /*******************  BEDGRAPH ********************/
 
-Bedgraph::Bedgraph() {
-    
+Bedgraph::Bedgraph() 
+  : regions() {
+  filename = "";
+  useExistingIntervals = 0;  
 }
 
 std::string Bedgraph::reportBedGraphContents() {
@@ -123,6 +125,8 @@ void Bedgraph::load_file(std::string v_filename) {
           printf("\nLine number %d  in file %s was not formatted properly\nPlease see manual\n", linenum, filename.c_str());
           break;
         } else {
+
+
          if (useExistingIntervals) { // Add points to existing intervals.
            // Add this point to all the relevant segments
          } else { // There are no ROI, we are creating ROI as we go ...
@@ -144,10 +148,6 @@ void Bedgraph::load_file(std::string v_filename) {
 
   // Post file parsing setup steps:
   if (!EXIT) {
-    // No regions of interest, set gInterval coords based on data 
-    if (useExistingIntervals) {  
-
-    }
     // Condition all data
   }
 }
