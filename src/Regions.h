@@ -44,7 +44,7 @@ class SetROI {
   // Find overlapping intervals (search)
   void createSearchIndex();   // Builds the interval trees given the regions 
   std::vector<gInterval *>findOverlapIntervals(gInterval *);
-
+  void clearTree();
 
 };
 

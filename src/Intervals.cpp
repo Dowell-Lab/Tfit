@@ -1,18 +1,13 @@
 /**
  * @file Intervals.cpp
  * @author Robin Dowell 
- * @brief Class code for data intervals
- * Two kinds of intervals:  genomic (gIntervals) and data (dIntervals)
+ * @brief Class code for genomic intervals
  * 
  * Current design: 
  * gIntervals maintain genomic coordinates and are the fundamental datatype
  * within the Interval trees (see ITree.cpp). Basic gInterval assumes BED4,
  * exists a bed6 class that extends for score and strand.
  * 
- * dIntervals contain data (two strands) per an interval but do so in zero
- * based coordinates.  Can translate back to gInterval if correspondance is setup.
- * 
- * Data intervals must have rapid data access for EM algorithm.
  * @version 0.1
  * @date 2022-01-27
  * 

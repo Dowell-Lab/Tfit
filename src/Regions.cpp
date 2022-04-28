@@ -75,6 +75,15 @@ std::vector<gInterval *> SetROI::findOverlapIntervals(gInterval *input) {
 }
 
 /**
+ * @brief Destroy the Interval Tree (clear up memory)
+ * 
+ */
+void SetROI::clearTree() {
+  searchable.clear(); // Removes Interval Trees to save space
+  treesExist = 0;  
+}
+
+/**
  * @brief Debugging function for printing ITree for a chromosome
  * 
  * @param chromo 
