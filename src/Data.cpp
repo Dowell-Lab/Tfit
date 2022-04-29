@@ -184,15 +184,17 @@ dInterval::dInterval() {
  */
 dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
   raw = data;
-  // We should now sort the vectors in raw and remove duplicate points.
+  raw->RemoveDuplicates();      // Is this necessary?  It's potentially time consuming!
   delta = v_delta;  scale = v_scale;  bins =  raw->Length()/delta;
-  if (bins < 1) { bins = 1; } // Min value
-  std::cout << to_string(delta) + " " + to_string(scale) + " " + to_string(bins) << std::endl;
-  std::cout << to_string(raw->Length()) << std::endl;
-  // raw->RemoveDuplicates();      // Is this necessary?  It's potentially time consuming!
-  initializeData(raw->Length());
-  BinOneStrand(1,raw->forward);
-  // BinOneStrand(2,raw->reverse);
+  if (bins < 1) { // Min value
+    bins = 1; 
+  } else {
+    if (delta*bins < raw->Length()) {
+      bins += 1;    // The end stuff which isn't of length delta!
+    }
+  } 
+  initializeData(raw->minX);
+  BinStrands(raw);
   // ScaleDown(raw->minX);
   // CompressZeros();
 }
@@ -224,6 +226,7 @@ void dInterval::initializeData(int minX) {
     X[j] 		= new double[bins];
   }
   X[0][0] 		= double(minX);
+  std::cout << "MIN: " + to_string(minX) << std::endl;
   X[1][0]=0,X[2][0]=0;
 	
   for (int i = 1; i < bins; i++){
@@ -235,20 +238,33 @@ void dInterval::initializeData(int minX) {
 
 /**
  * @brief   Converts rawData into binned data. 
+ * We have three arrays to walk through: 
+ *   X[3][binnum] : conditioned data  i = 0; i < bins
+ *   forward[fi][2]  : raw data for forward strand  fi = 0; fi < forward.size()
+ *   reverse[ri][2]  : raw data for reverse strand  ri = 0; ri < reverse.size()
  * 
- * @param strand  Expects:  1 for forward; 2 for reverse
+ * @param data  the RawData container for the strand coverage info
  */
-void dInterval::BinOneStrand(int strand, std::vector<std::vector<double>>sdata) {
-  if ((strand >= 1) && (strand <= 2)) { // Only valid strand input
-    int j = 0;
-    for (int i = 0; i < sdata.size(); i++) {
-      while (j < delta and X[0][j] <= sdata[i][0]) {
-        j++;
-      }
-      if (j < delta and sdata[i][0] <= X[0][j]) {
-        X[strand][j - 1] += sdata[i][1];
-        N += sdata[i][1];
-      }
+void dInterval::BinStrands(RawData *data) {
+  int fi = 0; int ri = 0;
+  double binStart, binEnd;
+  for (int i = 0; i < bins; i++) {  // Each bin in X
+    // Genomic coordinate range for this bin:
+    binStart = X[0][i];  binEnd = binStart + delta;
+    // If this data point is in the coordinates of this bin:
+    while ((fi < data->forward.size()) && 
+           (data->forward[fi][0] >= binStart) && 
+           (data->forward[fi][0] < binEnd)) {
+      X[1][i] += data->forward[fi][1];
+      N += data->forward[fi][1];
+      fi++;
+    }
+    while ((ri < data->reverse.size()) && 
+          (data->reverse[ri][0] >= binStart) && 
+          (data->reverse[ri][0] < binEnd)) {
+      X[2][i] += data->reverse[ri][1];
+      N += data->reverse[ri][1];
+      ri++;
     }
   }
 }

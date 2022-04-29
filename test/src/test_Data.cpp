@@ -50,16 +50,20 @@ TEST(Data, dInt_bin)
 {
     // Arrange: bring SUT to desired state
     RawData data;
-    data.addDataPoints(10, 13, 4);   
+    data.addDataPoints(10, 14, 4);   
     data.addDataPoints(13, 15, 1);
     data.addDataPoints(8, 10, -2);
 
+    std::cout << data.write_out() << std::endl;
+    std::cout << data.data_dump() << std::endl;
+
     // Act: call methods on SUT, capture output
     dInterval sut(&data,2,1);
+    std::cout << data.data_dump() << std::endl;
     std::cout << sut.data_dump() << std::endl;
 
-    std::cout << sut.write_out() << std::endl;
+    //std::cout << sut.write_out() << std::endl;
 
     // Assert: Verify the outcome
-    EXPECT_EQ(sut.num_elements(), 3);
+    EXPECT_EQ(sut.num_elements(), 4);
 }

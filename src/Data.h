@@ -96,13 +96,14 @@ public:
 
   // Functions for doing the conditioning.
   void initializeData(int length);  // Sets up the internal matrix
-  void BinOneStrand(int strand, std::vector<std::vector<double>>sdata);  // Bin data
+  void BinStrands(RawData *data);
   void ScaleDown(int);    // Convert to zero based coords
   void CompressZeros();   // Remove positions that are zero on both strands
 
   void ClearX();   // Deallocates X, leaves other variables intact.
 
   std::string data_dump();
+
 
 	};
 
