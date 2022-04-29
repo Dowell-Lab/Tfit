@@ -28,7 +28,8 @@ class gInterval;   // Forward declaration
  */
 class RawData {
   public:
-    // These are coordinate coverage vectors that are used temporarily to load in bedgraph
+    // These are coordinate coverage vectors that are used to load in bedgraph
+    // We read the bedgraph contents in directly, without checking for repeated entries.
 	std::vector< std::vector<double> > forward; 
 	std::vector< std::vector<double> > reverse; 
 
@@ -45,6 +46,11 @@ class RawData {
   double Length();
   void ClearData ();    // Deallocates the forward and reverse vectors;
   void addDataPoints(double st, double sp, double cov);
+
+  std::string data_dump();
+
+  void Sort();
+  void RemoveDuplicates();
 };
 
 /**

@@ -87,11 +87,13 @@ void gInterval::setfromBedLine(std::string line) {
 }
 
 bool gInterval::Overlap(gInterval *i2) {
-   return ((start <= i2->stop) && (i2->start <= stop));
+  // Because coordinates are half open, these are strickly less than.
+  return ((start < i2->stop) && (i2->start < stop));
 }
 
 bool gInterval::Contains(double point) {
-  return ((point <= stop) && (point >= start));
+  // Note that stop is half open (e.g. strickly less than)
+  return ((point < stop) && (point >= start));
 }
 
 /**

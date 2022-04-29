@@ -40,7 +40,7 @@ list(APPEND sources
                 src/test_main.cpp
                 src/test_split.cpp
                 src/test_Intervals.cpp
-                src/test_dInterval.cpp
+                src/test_Data.cpp
                 src/test_segment.cpp
                 src/reproduce_Nested.cpp
                 src/test_EMGparameters.cpp

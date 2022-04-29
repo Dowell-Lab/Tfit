@@ -17,6 +17,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 #include "split.h"
 #include "Intervals.h"
@@ -27,15 +28,35 @@ RawData::RawData() {
   belongsTo = NULL; 
 }
 
+/**
+ * @brief Length of the RawData (max-min)
+ * Assumes half open coordinates
+ * 
+ * @return double 
+ */
 double RawData::Length() {
-  return (maxX-minX+1); 
+  return (maxX-minX);   // Half open coordinates means no +1
 }
 
+/**
+ * @brief Release the memory of raw data
+ * This will be useful/necesary for min memory version.
+ */
 void RawData::ClearData () {
   forward.clear();
   reverse.clear();
 }
 
+/**
+ * @brief Adds RawData.  Assumes the joint bedGraph conventions, 
+ * namely zero based, half open coordinates and the sign of the 
+ * coverage indicates strand.  A range of points is input as 
+ * each individual point within the set.
+ * 
+ * @param st  start (this point is included)
+ * @param sp   stop (with half open, this is strickly less than!)
+ * @param cov  signed count/coverage at this point
+ */
 void RawData::addDataPoints(double st, double sp, double cov) {
   if (maxX == 0) { minX = st; maxX = sp; } // first data point
 
@@ -43,8 +64,9 @@ void RawData::addDataPoints(double st, double sp, double cov) {
   if (st < minX) minX = st;
   if (sp > maxX) maxX = sp;
 
-  // Now add per position coverage info.
-  for (int i = st; i <= sp; i++) {
+  // Now add per position coverage info, 
+  // Half open coordinates make this strickly less than!
+  for (int i = st; i < sp; i++) {
     double c = abs(cov);
     std::vector<double> point {(double)i,c}; 
     if (cov >= 0) {
@@ -55,19 +77,82 @@ void RawData::addDataPoints(double st, double sp, double cov) {
   }
 }
 
-std::string RawData::write_out() {
-  std::string ID;
-  if (belongsTo != NULL ) ID = belongsTo->identifier;
-  else ID = "noID";
-
-  std::string output = ID + ":";
-  output += to_string(minX) + "-" + to_string(maxX);
-
-  output += "  " + forward.size();
-  output += "  " + reverse.size();
-  return output;
+/**
+ * @brief Once all the data is read in, we can sort the
+ * forward and reverse strands and remove duplicate entries.
+ * 
+ */
+void RawData::Sort() {
+  // Sort vector<double> by  first entity (e.g. coordinates)
+  std::sort(forward.begin(),forward.end(), 
+      [](const std::vector<double>& a, const std::vector<double>& b) { 
+        return a[0] < b[0]; });
+  std::sort(reverse.begin(),reverse.end(), 
+      [](const std::vector<double>& a, const std::vector<double>& b) { 
+        return a[0] < b[0]; });
 
 }
+
+/**
+ * @brief Remove duplicate entries for any position.
+ * Arbitrarily take one of the entries or max or avg?
+ * Erase is notoriously slow, so this could be costly for big datasets.
+ */
+void RawData::RemoveDuplicates() {
+  Sort();
+  vector<vector<double>>::iterator it;
+  for (int i = 1; i < forward.size(); i++) {
+    if (forward[i-1][0] == forward[i][0])  {
+      it = forward.begin() + i;
+      // This is a duplicate!  Should we throw an error!?!?
+      forward.erase(it);
+    }
+  }  
+  for (int i = 1; i < reverse.size(); i++) {
+    if (reverse[i-1][0] == reverse[i][0])  {
+      it = reverse.begin() + i;
+      // This is a duplicate!  Should we throw an error!?!?
+      reverse.erase(it);
+    }
+  }  
+}
+
+/**
+ * @brief  Debuggging output of object
+ * 
+ * @return std::string 
+ */
+std::string RawData::write_out() {
+  std::string ID;
+  if (belongsTo != NULL ) { ID = belongsTo->identifier; }
+  else { ID = "noID"; }
+
+  std::string output = ID + ":";
+  output += to_string(minX) + ":" + to_string(maxX);
+
+  output += "  " + to_string(forward.size());
+  output += "  " + to_string(reverse.size());
+  return output;
+}
+
+/**
+ * @brief Outputs full contents of the points, this can be large
+ * use with caution!
+ * 
+ * @return std::string 
+ */
+std::string RawData::data_dump() {
+  std::string output = "Forward: ";
+  for (int i=0; i < forward.size(); i++) {
+    output += "[" + to_string(forward[i][0]) + "," + to_string(forward[i][1]) + "]";
+  }
+  output += "\nReverse: ";
+  for (int i=0; i < reverse.size(); i++) {
+    output += "[" + to_string(reverse[i][0]) + "," + to_string(reverse[i][1]) + "]";
+  }
+  return output;
+}
+
 
 /****************** dInterval *********************/
 
@@ -99,7 +184,9 @@ dInterval::dInterval() {
  */
 dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
   raw = data;
+  // We should now sort the vectors in raw and remove duplicate points.
   delta = v_delta;  scale = v_scale;  bins =  raw->Length()/delta;
+  raw->RemoveDuplicates();      // Is this necessary?  It's potentially time consuming!
   initializeData(raw->Length());
   BinOneStrand(1,raw->forward);
   BinOneStrand(2,raw->reverse);
