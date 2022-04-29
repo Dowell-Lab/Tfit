@@ -52,17 +52,16 @@ public:
  */
 class Bedgraph: public Bedfile {
 public:
-    int useExistingIntervals;       // has ROI from bed separately or not?
+  int useExistingIntervals;       // has ROI from bed separately or not?
 
 	// Constructors
 	Bedgraph();	// empty constructor
 
 	/* FUNCTIONS: */
-    // Debugging functions:
-    std::string reportBedGraphContents();        // used for debugging
+  std::string reportBedGraphContents();        // used for debugging
 
-    // Read the file
-    void load_file (std::string);
+  // Read the file
+  void load_file (std::string);
 
 };
 

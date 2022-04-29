@@ -25,16 +25,16 @@
  * and bedGraphs (et. al.) have implicit the whole chromosome/contig as a gInterval.
  */
 class SetROI {
-  public:
-   Bimap chr_names;     // system for converting names to indexes (& vice versa)
-   std::map<int, std::vector<gInterval *>> regions;  // Unstructured collection
+public:
+  Bimap chr_names;     // system for converting names to indexes (& vice versa)
+  std::map<int, std::vector<gInterval *>> regions;  // Unstructured collection
 
-   // The Interval tree is really only needed when searching.  
-   std::map<int, CITree *> searchable;   // index to interval tree 
-   int treesExist;    // Indicator for Interval tree built 
+  // The Interval tree is really only needed when searching.  
+  std::map<int, CITree *> searchable;   // index to interval tree 
+  int treesExist;    // Indicator for Interval tree built 
 
-   // Constructors
-   SetROI();
+  // Constructors
+  SetROI();
 
   // Functions
   void addRegionToSet(gInterval *);
@@ -46,6 +46,10 @@ class SetROI {
   std::vector<gInterval *>findOverlapIntervals(gInterval *);
   void clearTree();
 
+  // Adding data to the set of regions (with vs without roi)
+  void addDataToROI(std::string chr, double start, double stop, double coverage);
+  void addDataToSegments(std::string chr, double start, double stop, double coverage);
+
 };
 
 /**
@@ -55,18 +59,20 @@ class SetROI {
  */
 class Segment {
 public:
-  bed6  *genCoords;
-  dInterval  *data;
+  gInterval *genCoords;
+
+  RawData *rawdata;   // Raw data
+  dInterval  *cdata;  // Conditioned data (what the EM works on)
 
   // Constructors
   Segment();
-  Segment(std::string); // from just a chr name 
-  // Segment(bed6);  // from an existing roi (bed6 assumed)
+  Segment(gInterval *);
 
   /* FUCTIONS: */
   // Reporting out 
   std::string write_out();
 
+  void addDataPoints(double, double, double);
 };
 
 

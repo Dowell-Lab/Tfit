@@ -32,6 +32,8 @@ class RawData {
 	std::vector< std::vector<double> > forward; 
 	std::vector< std::vector<double> > reverse; 
 
+  //Constructors
+  RawData();
 };
 
 /**

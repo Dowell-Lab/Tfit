@@ -84,10 +84,10 @@ std::string Bedfile::reportBedfileContents() {
 
 /*******************  BEDGRAPH ********************/
 
-Bedgraph::Bedgraph() 
-  : regions() {
-  filename = "";
-  useExistingIntervals = 0;  
+
+Bedgraph::Bedgraph()
+  : Bedfile() {
+  useExistingIntervals = 0; 
 }
 
 std::string Bedgraph::reportBedGraphContents() {
@@ -125,17 +125,13 @@ void Bedgraph::load_file(std::string v_filename) {
           printf("\nLine number %d  in file %s was not formatted properly\nPlease see manual\n", linenum, filename.c_str());
           break;
         } else {
-
-
          if (useExistingIntervals) { // Add points to existing intervals.
            // Add this point to all the relevant segments
+           regions.addDataToROI(lineArray[0], std::stod(lineArray[1]), 
+                      std::stod(lineArray[2]),std::stod(lineArray[3]));
          } else { // There are no ROI, we are creating ROI as we go ...
-           if (regions.chr_names.lookupIndex(lineArray[0]) < 0) { // if this identifier is new
-             regions.chr_names.addIdentifier(lineArray[0]);   // adds to bimap
-             // Create Segment for this identifier
-             prevChrom = lineArray[0];
-           }
-           // Add this data point to the current Segment
+           regions.addDataToSegments(lineArray[0], std::stod(lineArray[1]),
+                        std::stod(lineArray[2]),std::stod(lineArray[3]));
          }
         }
       }

@@ -127,3 +127,8 @@ double dInterval::sum_Region() {
   return N;
 }
 
+/**********************  RawData ********************/
+RawData::RawData() {
+   
+}
+

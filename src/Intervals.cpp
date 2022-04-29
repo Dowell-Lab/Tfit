@@ -19,7 +19,7 @@
 #include <iostream>
 
 #include "split.h"
-
+#include "Regions.h"
 
 gInterval::gInterval() {
   chromosome = "NA";
@@ -95,6 +95,29 @@ bool gInterval::Contains(double point) {
 }
 
 /**
+ * @brief Add a set of points (per bedGraph info) to this interval.
+ * 
+ */
+void gInterval::addDataPoint(double st, double sp, double cov, bool expand) {
+  // If pointer to segment doesn't exist, create it.
+  if (data == NULL) {
+    data = new Segment(this);
+  }
+  // Adjust for edge cases, expanding the region if permissible.
+  double pt_edge = st;
+  if (st < start) {
+    if (expand) start = st;   // Adjust the gInterval
+    pt_edge = start;    // Don't add non-overlapping points (edge case)
+  }
+  double pt_edge2 = st;
+  if (sp > stop) {
+    if (expand) stop = sp;  // Adjust the gInterval
+    pt_edge2 = st;    // Don't add non-overlapping points (edge case)
+  }
+  data->addDataPoints(pt_edge, pt_edge2, cov);
+}
+
+/**
  * @brief Helper function that sets the basic BED4 contents from a vector of strings.
  * 
  * @param lineArray expects: chromosome start stop ID in lineArray and ignores rest.
@@ -112,7 +135,6 @@ void gInterval::setBED4fromStrings(std::vector<std::string> lineArray) {
   // Check start >= 0?
   start = stod(lineArray[1]);
   stop = stod(lineArray[2]);
-
 
   if (lineArray.size() >= 4) {  // At least a BED4, so identifier is present.
     identifier = lineArray[3];

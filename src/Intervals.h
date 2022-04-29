@@ -39,8 +39,8 @@ public:
   Segment *data;  // pointer to data if this interval has it.
 
   // Constructors
+  gInterval();  // default
   gInterval(std::string, double, double, std::string);  // input is BED4
-  gInterval();
 
   /* FUCTIONS: */
   // Reporting out 
@@ -49,10 +49,10 @@ public:
 
   void setfromBedLine(std::string);  // converts from a single line from file 
 
-  bool Overlap(gInterval *);
-  bool Contains(double point);
+  bool Overlap(gInterval *);    // Does your interval of interest overlap this one?
+  bool Contains(double point);  // Is a coordinate in this region?
 
-  // Needs functions for "expanding" the interval to include new data.
+  void addDataPoint(double,double,double,bool);
 
 protected:
   void setBED4fromStrings(std::vector<std::string> lineArray); // helper function
