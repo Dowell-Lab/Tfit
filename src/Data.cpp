@@ -246,19 +246,19 @@ void dInterval::initializeData(int minX) {
  * @param data  the RawData container for the strand coverage info
  */
 void dInterval::BinStrands(RawData *data) {
-  int fi = 0; int ri = 0;
-  double binStart, binEnd;
+  int fi = 0; int ri = 0;   // forward and reverse indicies
+  double binStart, binEnd;    // genomic coordinate bounds for a given bin
   for (int i = 0; i < bins; i++) {  // Each bin in X
     // Genomic coordinate range for this bin:
     binStart = X[0][i];  binEnd = binStart + delta;
-    // If this data point is in the coordinates of this bin:
-    while ((fi < data->forward.size()) && 
-           (data->forward[fi][0] >= binStart) && 
-           (data->forward[fi][0] < binEnd)) {
-      X[1][i] += data->forward[fi][1];
-      N += data->forward[fi][1];
-      fi++;
+    while ((fi < data->forward.size()) &&     // Still more forward data
+           (data->forward[fi][0] >= binStart) &&  // This coordinate is above start
+           (data->forward[fi][0] < binEnd)) {   // And below end of range for this bin
+      X[1][i] += data->forward[fi][1];    // Add to the bin
+      N += data->forward[fi][1];      // Add to the full total (both strands)
+      fi++;       // Increment the forward index
     }
+    // As above, but now for the reverse strand:
     while ((ri < data->reverse.size()) && 
           (data->reverse[ri][0] >= binStart) && 
           (data->reverse[ri][0] < binEnd)) {
