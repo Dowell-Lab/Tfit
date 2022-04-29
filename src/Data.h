@@ -19,7 +19,7 @@
 #include <string>
 #include <vector>
 
-class bed6;   // Forward declaration
+class gInterval;   // Forward declaration
 
 /**
  * @brief This is a container for the raw data as read from a bedgraph.  
@@ -32,8 +32,19 @@ class RawData {
 	std::vector< std::vector<double> > forward; 
 	std::vector< std::vector<double> > reverse; 
 
+  double minX; //!< This is the minimum value of the interval
+  double maxX;   //!< This is the maximum value of the interval 
+
+  gInterval *belongsTo;  // The coordinates associated with this data
+
   //Constructors
   RawData();
+
+  std::string write_out();  // Debugging
+
+  double Length();
+  void ClearData ();    // Deallocates the forward and reverse vectors;
+  void addDataPoints(double st, double sp, double cov);
 };
 
 /**
@@ -52,27 +63,24 @@ class RawData {
  */
 class dInterval {
 public:
-  std::string ID; //!< Does each data interval need a unique name?
+	double ** X;  //!< Smoothed data inner is [3] dimensions
+	int bins;  //!< total number of bins
+  int delta;  // step size (nts per bin)
+  int scale;  // all positions are divided by this factor e.g. 1 -> 1/scale
 
-  // Ultimately unsure if we need to keep these.
-  double minX; //!< This is the minimum value of the interval
-  double maxX;   //!< This is the maximum value of the interval 
+	double N;	//!< Total sum of values 
 
-  bed6 *belongsTo;  // The coordinates associated with this data
+  RawData *raw;  // The raw data from which this was built.
 
   // Constructors
-  dInterval(std::string);
   dInterval();
+  dInterval(RawData *, int, int); // Convert RawData into binned/scaled data 
 
   /* FUCTIONS: */
   // Reporting out 
-  std::string write_out();
+  std::string write_out();  // debugging
 
-  /*
-   * Wrappers to effectively obtain an iterator across data.
-   * This is a bit clunky currently, but a step in the right direction.
-   * In all of these cases, you are expected to iterate from 0 to num_elements()
-   */
+  // These can be used as an iterator:
   double num_elements();
   double forward(int);
   double reverse(int);
@@ -80,21 +88,14 @@ public:
 
   double sum_Region();  // both strands
 
-private:    // Should these be private?
-	/**
-	 * @brief This (X) is the internal representation of the data.
-	 * Vector[0] is coordinate (possibly scaled); [1] is forward (summed for bin)
-	 * [2] is reverse (summed for bin).  
-	 * 
-	 * This is the meat and potatoes data representation that is used in the EM (fit2).  
-	 * 
-	 * These data elements are currently identical to how originally written 
-	 * in segment class.
-	 */
-	double ** X;  //!< Smoothed data inner is [3] dimensions
-	double XN; //!< total number of bins
-	double SCALE;  //!< scaling factor
-	double N;	//!< Total sum of values 
-};
+  // Functions for doing the conditioning.
+  void initializeData(int length);  // Sets up the internal matrix
+  void BinOneStrand(int strand, std::vector<std::vector<double>>sdata);  // Bin data
+  void ScaleDown(int);    // Convert to zero based coords
+  void CompressZeros();   // Remove positions that are zero on both strands
+
+  void ClearX();   // Deallocates X, leaves other variables intact.
+
+	};
 
 #endif

@@ -172,7 +172,7 @@ Segment::Segment(gInterval *v_genomicCoords) {
 
 std::string Segment::write_out() {
   std::string output = genCoords->write_out();
-  output += "\n" + cdata->write_out(); 
+  output += "\n" + rawdata->write_out(); 
   return output;
 }
 
@@ -181,17 +181,14 @@ std::string Segment::write_out() {
  * this region. 
  */
 void Segment::addDataPoints(double st, double sp, double cov) {
-  if (rawdata == NULL) {
-     rawdata = new RawData(); 
-  }
-  for (int i = st; i <= sp; i++) {
-    double c = abs(cov);
-    std::vector<double> point {(double)i,c}; 
-    if (cov >= 0) {
-      rawdata->forward.push_back(point);
-    } else { 
-      rawdata->reverse.push_back(point);
-    }
-  }
+  if (rawdata == NULL) { // First point
+    rawdata = new RawData(); 
+    rawdata->belongsTo = this->genCoords;   // Link data to gInterval
+  } 
+  rawdata->addDataPoints(st, sp, cov);
 }
 
+void Segment::ConditionData(int v_delta, int v_scale) {
+  if (rawdata == NULL) { return; }
+  cdata = new dInterval(rawdata, v_delta, v_scale);
+}

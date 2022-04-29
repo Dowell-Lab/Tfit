@@ -21,6 +21,53 @@
 #include "split.h"
 #include "Intervals.h"
 
+/**********************  RawData ********************/
+RawData::RawData() {
+  minX = maxX = 0;
+  belongsTo = NULL; 
+}
+
+double RawData::Length() {
+  return (maxX-minX+1); 
+}
+
+void RawData::ClearData () {
+  forward.clear();
+  reverse.clear();
+}
+
+void RawData::addDataPoints(double st, double sp, double cov) {
+  if (maxX == 0) { minX = st; maxX = sp; } // first data point
+
+  // Adjust min/max as gather data points
+  if (st < minX) minX = st;
+  if (sp > maxX) maxX = sp;
+
+  // Now add per position coverage info.
+  for (int i = st; i <= sp; i++) {
+    double c = abs(cov);
+    std::vector<double> point {(double)i,c}; 
+    if (cov >= 0) {
+      forward.push_back(point);
+    } else { 
+      reverse.push_back(point);
+    }
+  }
+}
+
+std::string RawData::write_out() {
+  std::string ID;
+  if (belongsTo != NULL ) ID = belongsTo->identifier;
+  else ID = "noID";
+
+  std::string output = ID + ":";
+  output += to_string(minX) + "-" + to_string(maxX);
+
+  output += "  " + forward.size();
+  output += "  " + reverse.size();
+  return output;
+
+}
 
 /****************** dInterval *********************/
 
@@ -32,47 +79,131 @@
  *
  * The data Interval class contains both strands of data associated
  * with a particular region.  There is an empty constructor option. 
- *
- * @param v_identifier  A name/identifier for this interval
  */
-dInterval::dInterval(std::string v_identifier) {
-  ID = v_identifier;
-  minX = 0;
-  maxX = 0;
-  X = NULL;
-  XN = 0;
-  SCALE = 1;
-  N = 0;
-
-  belongsTo = NULL;
-}
-
-// empty constructor
 dInterval::dInterval() {
-  ID = "empty";
-  minX = 0;
-  maxX = 0;
   X = NULL;
-  XN = 0;
-  SCALE = 1;
+  delta = 1;
+  scale = 1;
+  bins = -1;  // illegal value since we dont know this yet.
   N = 0;
 
-  belongsTo = NULL;
+  raw = NULL;
 }
 
 /**
- * @brief This is a standard content dump function.  Primarily
- * used in debugging.  Notice the string does NOT end in a newline.
+ * @brief Construct a new dInterval::dInterval object
  * 
- * @return std::string 
+ * @param data      The rawdata
+ * @param v_delta   The binning size (nts per bin)
+ * @param v_scale   The scaling factor
  */
-std::string dInterval::write_out() {
-  std::string text = ("#" + ID + ":min:" + std::to_string((int)minX) + ":max:" 
-		+ std::to_string((int)maxX) + ":num_bins:" + std::to_string((int)XN) + ":total:"
-    + std::to_string((int)N));
-  return text;
+dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
+  raw = data;
+  delta = v_delta;  scale = v_scale;  bins =  raw->Length()/delta;
+  initializeData(raw->Length());
+  BinOneStrand(1,raw->forward);
+  BinOneStrand(2,raw->reverse);
+  ScaleDown(raw->minX);
+  CompressZeros();
 }
 
+/**
+ * @brief Cleans up existing X matrix (memory clearing)
+ * 
+ */
+void dInterval::ClearX() {
+  for (int i = 0; i < 3; i++) {
+    delete X[i];
+  }
+  delete X;
+  X = NULL;
+}
+
+/**
+ * @brief Allocate and setup the X matrix given the size of the RawData
+ * 
+ * @param length 
+ */
+void dInterval::initializeData(int minX) {
+  if (X != NULL) ClearX(); 
+  X = new double*[3];
+  for (int j = 0 ; j < 3;j++){
+    X[j] 		= new double[bins];
+  }
+  X[0][0] 		= double(minX);
+  X[1][0]=0,X[2][0]=0;
+	
+  for (int i = 1; i < bins; i++){
+    X[0][i] 	= X[0][i-1] + delta;
+    X[1][i] 	= 0;
+    X[2][i] 	= 0;
+  }
+}
+
+/**
+ * @brief   Converts rawData into binned data. 
+ * 
+ * @param strand  Expects:  1 for forward; 2 for reverse
+ */
+void dInterval::BinOneStrand(int strand, std::vector<std::vector<double>>sdata) {
+  if ((strand >= 1) && (strand <= 2)) { // Only valid strand input
+    int j = 0;
+    for (int i = 0; i < sdata.size(); i++) {
+      while (j < delta and X[0][j] <= sdata[i][0]) {
+        j++;
+      }
+      if (j < delta and sdata[i][0] <= X[0][j]) {
+        X[strand][j - 1] += sdata[i][1];
+        N += sdata[i][1];
+      }
+    }
+  }
+}
+
+/**
+ * @brief Scales down the coordinates to Zero based.
+ * 
+ * @param minX 
+ */
+void dInterval::ScaleDown(int minX) {
+  for (int i = 0; i < bins; i ++ ){
+    X[0][i] 	= (X[0][i]-minX)/scale;
+  }
+}
+
+/**
+ * @brief Get rid of data points where both strands are zero.
+ * 
+ */
+void dInterval::CompressZeros() {
+  int realN 		= 0;	// number of non-zero bins
+  for (int i = 0; i < bins;i++){
+    if (X[1][i]>0 or X[2][i]>0){
+      realN++;
+    }
+  }
+  // going to remove the zero bins
+  double **newX = new double *[3];
+  for (int j = 0; j < 3; j++)
+  {
+    newX[j] = new double[realN];
+  }
+  int j = 0;
+  for (int i = 0; i < bins; i++) {
+    if (X[1][i] > 0 or X[2][i] > 0) {
+      newX[0][j] = X[0][i];
+      newX[1][j] = X[1][i];
+      newX[2][j] = X[2][i];
+      j++;
+    }
+  }
+  if (realN != j) {
+    printf("WHAT? %d,%d\n", j, realN);
+  }
+  this->ClearX();
+  X = newX;
+  bins = realN;
+}
 
 /**
  * @brief The number of data points in the interval.  
@@ -82,7 +213,7 @@ std::string dInterval::write_out() {
  * @return double  Size of the interval in usable steps.
  */
 double dInterval::num_elements() {
-  return XN;
+  return bins;
 }
 /**
  * @brief Data from forward strand at xth index.
@@ -127,8 +258,11 @@ double dInterval::sum_Region() {
   return N;
 }
 
-/**********************  RawData ********************/
-RawData::RawData() {
-   
+std::string dInterval::write_out() {
+  std::string output;
+  if (raw != NULL) {
+    output = raw->write_out();
+  }
+  output += "\t" + to_string(bins) + "," + to_string(delta) + "," + to_string(scale);
+  return output;
 }
-

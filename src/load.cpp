@@ -269,7 +269,8 @@ void segment::bin(double delta, double scale, bool erase){
   //BIN forward strand
   int j 	=0;
   for (int i = 0 ; i < forward.size(); i++){
-	  // RDD: To me this seems klunky.  Why do it this way?
+	  // X[0][j] is coordinate of jth entry
+    // forward[i][0] is coordinates 
     while (j < BINS and X[0][j] <=forward[i][0]){
       j++;
     }

@@ -49,7 +49,6 @@ public:
   // Adding data to the set of regions (with vs without roi)
   void addDataToROI(std::string chr, double start, double stop, double coverage);
   void addDataToSegments(std::string chr, double start, double stop, double coverage);
-
 };
 
 /**
@@ -73,6 +72,7 @@ public:
   std::string write_out();
 
   void addDataPoints(double, double, double);
+  void ConditionData(int v_delta, int v_scale);
 };
 
 

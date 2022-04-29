@@ -11,13 +11,11 @@
 TEST(Intervals, dInt_RecoverIdentity)
 {
     // Arrange: bring SUT to desired state
-    std::string name;
-    name = "TestName";
-    dInterval sut = dInterval(name);
+    dInterval sut = dInterval();
 
     // Act: call methods on SUT, capture output
-    name = sut.write_out(); 
+    std::string name = sut.write_out(); 
 
     // Assert: Verify the outcome
-    EXPECT_THAT(name, "#TestName:min:0:max:0:num_bins:0:total:0");
+    EXPECT_THAT(name, "\t-1,1,1");
 }
