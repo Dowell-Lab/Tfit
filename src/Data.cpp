@@ -186,12 +186,15 @@ dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
   raw = data;
   // We should now sort the vectors in raw and remove duplicate points.
   delta = v_delta;  scale = v_scale;  bins =  raw->Length()/delta;
-  raw->RemoveDuplicates();      // Is this necessary?  It's potentially time consuming!
+  if (bins < 1) { bins = 1; } // Min value
+  std::cout << to_string(delta) + " " + to_string(scale) + " " + to_string(bins) << std::endl;
+  std::cout << to_string(raw->Length()) << std::endl;
+  // raw->RemoveDuplicates();      // Is this necessary?  It's potentially time consuming!
   initializeData(raw->Length());
   BinOneStrand(1,raw->forward);
-  BinOneStrand(2,raw->reverse);
-  ScaleDown(raw->minX);
-  CompressZeros();
+  // BinOneStrand(2,raw->reverse);
+  // ScaleDown(raw->minX);
+  // CompressZeros();
 }
 
 /**
@@ -212,7 +215,10 @@ void dInterval::ClearX() {
  * @param length 
  */
 void dInterval::initializeData(int minX) {
-  if (X != NULL) ClearX(); 
+  // if (X != NULL) {
+    // std::cout << "Clearing old data!" << std::endl;
+    // ClearX(); 
+  // }
   X = new double*[3];
   for (int j = 0 ; j < 3;j++){
     X[j] 		= new double[bins];
@@ -345,6 +351,11 @@ double dInterval::sum_Region() {
   return N;
 }
 
+/**
+ * @brief Debugging contents of object
+ * 
+ * @return std::string 
+ */
 std::string dInterval::write_out() {
   std::string output;
   if (raw != NULL) {
@@ -353,3 +364,20 @@ std::string dInterval::write_out() {
   output += "\t" + to_string(bins) + "," + to_string(delta) + "," + to_string(scale);
   return output;
 }
+
+/**
+ * @brief Outputs full contents of the points, this can be large
+ * use with caution!
+ * 
+ * @return std::string 
+ */
+std::string dInterval::data_dump() {
+  std::string output = "Points: ";
+  for (int i = 0; i < bins; i ++ ){
+    output += "[" + to_string(X[0][i]) + ":" + 
+          to_string(X[1][i]) + "," + to_string(X[2][i]) + "]";
+  }
+  return output;
+  
+}
+

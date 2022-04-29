@@ -102,6 +102,8 @@ public:
 
   void ClearX();   // Deallocates X, leaves other variables intact.
 
+  std::string data_dump();
+
 	};
 
 #endif
