@@ -87,6 +87,7 @@ void RawData::Sort() {
   std::sort(forward.begin(),forward.end(), 
       [](const std::vector<double>& a, const std::vector<double>& b) { 
         return a[0] < b[0]; });
+  // std::cout << "After sort: " + data_dump() << std::endl;
   std::sort(reverse.begin(),reverse.end(), 
       [](const std::vector<double>& a, const std::vector<double>& b) { 
         return a[0] < b[0]; });
@@ -106,6 +107,9 @@ void RawData::RemoveDuplicates() {
       it = forward.begin() + i;
       // This is a duplicate!  Should we throw an error!?!?
       forward.erase(it);
+      // Because this shifts the index, need to compare the
+      // new i so we'll shift the index.
+      i--;
     }
   }  
   for (int i = 1; i < reverse.size(); i++) {
@@ -113,6 +117,7 @@ void RawData::RemoveDuplicates() {
       it = reverse.begin() + i;
       // This is a duplicate!  Should we throw an error!?!?
       reverse.erase(it);
+      i--;
     }
   }  
 }
@@ -185,7 +190,10 @@ dInterval::dInterval() {
 dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
   raw = data;
   raw->RemoveDuplicates();      // Is this necessary?  It's potentially time consuming!
-  delta = v_delta;  scale = v_scale;  bins =  raw->Length()/delta;
+  delta = v_delta;  scale = v_scale;  
+  
+  // Establish num of bins
+  bins =  raw->Length()/delta;
   if (bins < 1) { // Min value
     bins = 1; 
   } else {
@@ -195,8 +203,10 @@ dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
   } 
   initializeData(raw->minX);
   BinStrands(raw);
-  // ScaleDown(raw->minX);
-  // CompressZeros();
+  ScaleDown(raw->minX);
+  // std::cout << data_dump() << std::endl;
+  CompressZeros();
+  //std::cout << "AFTER: " + to_string(bins) << std::endl;
 }
 
 /**
@@ -239,7 +249,7 @@ void dInterval::initializeData(int minX) {
 /**
  * @brief   Converts rawData into binned data. 
  * We have three arrays to walk through: 
- *   X[3][binnum] : conditioned data  i = 0; i < bins
+ *   X[3][binnum] : conditioned data  i = 0 to bins-1
  *   forward[fi][2]  : raw data for forward strand  fi = 0; fi < forward.size()
  *   reverse[ri][2]  : raw data for reverse strand  ri = 0; ri < reverse.size()
  * 

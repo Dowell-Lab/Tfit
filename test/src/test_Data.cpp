@@ -53,17 +53,12 @@ TEST(Data, dInt_bin)
     data.addDataPoints(10, 14, 4);   
     data.addDataPoints(13, 15, 1);
     data.addDataPoints(8, 10, -2);
-
-    std::cout << data.write_out() << std::endl;
-    std::cout << data.data_dump() << std::endl;
+    data.addDataPoints(11,17, 0);
 
     // Act: call methods on SUT, capture output
     dInterval sut(&data,2,1);
-    std::cout << data.data_dump() << std::endl;
-    std::cout << sut.data_dump() << std::endl;
-
-    //std::cout << sut.write_out() << std::endl;
+    // std::cout << sut.data_dump() << std::endl;
 
     // Assert: Verify the outcome
-    EXPECT_EQ(sut.num_elements(), 4);
+    EXPECT_EQ(sut.bins, 4);
 }
