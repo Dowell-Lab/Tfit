@@ -46,7 +46,7 @@ TEST(Data, rawData_removeDup)
     EXPECT_EQ(sut.forward.size(), 5);
 }
 
-TEST(Data, dInt_bin)
+TEST(Data, dInt_bin_scale)
 {
     // Arrange: bring SUT to desired state
     RawData data;
