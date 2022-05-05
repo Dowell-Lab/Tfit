@@ -37,16 +37,16 @@ list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/arg
 list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/main.cpp")
 list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/MainTesting.cpp")
 list(APPEND sources
+                src/explore_coreEM.cpp
+                src/Itest_loadBedGraph.cpp
+                src/reproduce_Nested.cpp
                 src/test_main.cpp
                 src/test_split.cpp
                 src/test_Intervals.cpp
                 src/test_Data.cpp
                 src/test_segment.cpp
-                src/reproduce_Nested.cpp
                 src/test_EMGparameters.cpp
                 src/test_SetEMGparam.cpp
-                src/test_coreEM.cpp
-                src/test_loadBedGraph.cpp
                 src/test_Random.cpp
                 src/test_ITree.cpp
                 src/test_Bedfile.cpp

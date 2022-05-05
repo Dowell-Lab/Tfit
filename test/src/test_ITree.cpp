@@ -1,7 +1,8 @@
 /**
  * @file test_ITree.cpp 
  * @author Robin Dowell
- * @brief Testing the centered Interval Tree
+ * @brief Testing the centered Interval Tree: \ref CITree 
+ * Notice that the testing of \ref Inode is only implicit
  * @date 2022-03-18
  * 
  */

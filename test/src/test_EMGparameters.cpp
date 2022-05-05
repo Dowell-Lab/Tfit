@@ -1,7 +1,7 @@
 /**
  * @file test_EMGparameters.cpp
  * @author Robin Dowell
- * @brief Unit Testing: testing Tfit/src/single_model.cpp
+ * @brief Unit Testing: testing Tfit/src/single_model.cpp \ref EMGparameters
  * @version 0.1
  * @date 2022-02-10
  * 

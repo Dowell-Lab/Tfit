@@ -1,7 +1,7 @@
 /**
  * @file test_segment.cpp 
  * @author Robin Dowell
- * @brief Testing the old segment class (to be refactored) 
+ * @brief Testing the old (Joey's) \ref segment class (to be refactored) 
  * @date 2022-02-01
  * 
  */

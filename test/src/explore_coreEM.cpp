@@ -1,7 +1,8 @@
 /**
- * @file test_coreEM.cpp 
+ * @file explore_coreEM.cpp 
  * @author Robin Dowell
- * @brief Exploring the core EM algorithm
+ * @brief Exploring the core EM algorithm, not a test so much as a framework 
+ * for debugging.
  * @date 2022-02-24
  * 
  */

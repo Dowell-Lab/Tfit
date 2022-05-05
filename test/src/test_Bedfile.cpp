@@ -1,7 +1,7 @@
 /**
  * @file test_Bedfile.cpp 
  * @author Robin Dowell
- * @brief Testing the Bedfile class (reading in a bedfile) 
+ * @brief Testing the Bedfile class: \ref Bedfile 
  * @date 2022-03-18
  * 
  */

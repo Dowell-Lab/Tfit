@@ -1,7 +1,7 @@
 /**
  * @file test_Intervals.cpp 
  * @author Robin Dowell
- * @brief Testing the data interval class/objects:  dInterval, gInterval
+ * @brief Testing the data interval classes: \ref gInterval \ref bed6
  * @date 2022-01-27
  * 
  */

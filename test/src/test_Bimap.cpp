@@ -1,7 +1,7 @@
 /**
  * @file test_Bimap.cpp
  * @author Robin Dowell
- * @brief Unit Testing: testing Tfit/src/helper.cpp Bimap object
+ * @brief Unit Testing: testing the \ref Bimap object (in helper.h)
  * @version 0.1
  * @date 2022-04-07
  * 

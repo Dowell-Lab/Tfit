@@ -1,7 +1,7 @@
 /**
  * @file test_Random.cpp
  * @author Robin Dowell
- * @brief Unit Testing: testing Tfit/src/helper.cpp Random object
+ * @brief Unit Testing: testing \ref Random (in helper.h)
  * @version 0.1
  * @date 2022-02-28
  * 

@@ -1,7 +1,7 @@
 /**
  * @file test_SetROI.cpp 
  * @author Robin Dowell
- * @brief Testing the set of ROI data class
+ * @brief Testing the set of ROI data class: \ref SetROI
  * @date 2022-04-15
  * 
  */
