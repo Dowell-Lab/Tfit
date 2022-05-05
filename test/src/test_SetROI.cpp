@@ -79,3 +79,35 @@ TEST(SetROI, addDataToExistingROI)
     }
 }
 
+TEST(SetROI, addDataCreateROI)
+{
+    // Arrange: bring SUT to desired state
+    SetROI sut;
+
+    sut.addDataCreateROI("Chr1", 10, 20, -3);        // The data (bedGraph)
+            // Note now using negative strand!
+
+    int idx = sut.chr_names.lookupIndex("Chr1");    // Index for Chr1 
+    std::vector<gInterval *> outRegions;
+    outRegions = sut.regions[idx];
+
+    //std::cout << outRegions[0]->data->data_dump() << std::endl;
+
+    // Act: call methods on SUT, capture output
+    sut.ConditionDataSet(2,1);      // Creates dIntervals for all regions.
+    //std::cout << outRegions[0]->data->cdata->data_dump() << std::endl;
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(outRegions[0]->chromosome, "Chr1");
+    if (outRegions[0]->data != NULL) {
+      EXPECT_EQ(outRegions[0]->data->maxX, 20);     // This time check max!
+      if (outRegions[0]->data->cdata != NULL) {
+          EXPECT_EQ(outRegions[0]->data->cdata->N, 30);
+      } else {
+        FAIL() << "We should have conditioned data!";
+      }
+    } else {
+        FAIL() << "We should have data!";
+    }
+}
+
