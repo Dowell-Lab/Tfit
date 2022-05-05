@@ -150,18 +150,9 @@ void Bedgraph::load_file(std::string v_filename, bool useExisting) {
   }
 
   // Post file parsing setup steps:
-  int delta = 10;  int scale = 1;   // These need to come from parameters
+  int delta = 10; int scale = 1;  // These should come from params;
   if (!EXIT) {
     // Condition all data
-    std::map<int, std::vector<gInterval *>>::iterator mit;    // Outer Map iterator
-    std::vector<gInterval *>::iterator  it;   //Inner vector iterator
-    for (mit = setRegions.regions.begin(); mit != setRegions.regions.end(); mit++) {
-      // For every index, lets go through the vector of gIntervals.
-      for (it = mit->second.begin(); it != mit->second.end(); it++) {
-        if ((*it)->data != NULL) {
-          (*it)->data->cdata = new dInterval((*it)->data, delta, scale);
-        }
-      }
-    }
+    setRegions.ConditionDataSet(delta, scale);
   }
 }

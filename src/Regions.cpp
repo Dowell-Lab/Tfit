@@ -130,9 +130,10 @@ bool SetROI::addDataToExistingROI(std::string chr, double start, double stop, do
    setToAdd = findOverlapIntervals(&dataInterval);
 
    if (setToAdd.size() == 0) {    // We found no overlapping intervals
-      //std::cout << "NOT FOUND!" + dataInterval.write_out() << std::endl;
+      // std::cout << "NOT FOUND!" + dataInterval.write_out() << std::endl;
       return 0;
    }
+   // std::cout << "FOUND!" + dataInterval.write_out() << std::endl;
 
    // Add this point to the overlapping gIntervals
    std::vector<gInterval *>::iterator it;
@@ -140,6 +141,19 @@ bool SetROI::addDataToExistingROI(std::string chr, double start, double stop, do
      (*it)->addDataPoint(start,stop,coverage,0);
    }
    return 1;
+}
+
+void SetROI::ConditionDataSet(int v_delta, int v_scale) {
+  std::map<int, std::vector<gInterval *>>::iterator mit;    // Outer Map iterator
+  std::vector<gInterval *>::iterator  it;   //Inner vector iterator
+  for (mit = regions.begin(); mit != regions.end(); mit++) {
+    // For every index, lets go through the vector of gIntervals.
+    for (it = mit->second.begin(); it != mit->second.end(); it++) {
+      if ((*it)->data != NULL) {
+        (*it)->data->cdata = new dInterval((*it)->data, v_delta, v_scale);
+      }
+    }
+  }
 }
 
 /**

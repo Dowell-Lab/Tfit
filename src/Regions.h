@@ -49,6 +49,7 @@ public:
   // Adding data to the set of regions (with vs without roi)
   void addDataCreateROI(std::string chr, double start, double stop, double coverage);
   bool addDataToExistingROI(std::string chr, double start, double stop, double coverage);
+  void ConditionDataSet(int v_delta, int v_scale);
 };
 
 

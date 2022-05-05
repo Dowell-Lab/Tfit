@@ -61,4 +61,5 @@ TEST(Data, dInt_bin_scale)
 
     // Assert: Verify the outcome
     EXPECT_EQ(sut.bins, 4);
+    EXPECT_EQ(sut.N, 21);
 }

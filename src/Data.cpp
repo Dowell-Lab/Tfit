@@ -76,6 +76,7 @@ void RawData::addDataPoints(double st, double sp, double cov) {
   for (int i = st; i < sp; i++) {
     double c = abs(cov);
     std::vector<double> point {(double)i,c}; 
+    // std::cout << "Point: " + to_string(point[0]) + "," + to_string(point[1]) << std::endl;
     if (cov >= 0) {
       forward.push_back(point);
     } else { 
@@ -197,6 +198,7 @@ dInterval::dInterval() {
 dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
   raw = data;
   raw->RemoveDuplicates();      // Is this necessary?  It's potentially time consuming!
+  N = 0;  // initial value
   delta = v_delta;  scale = v_scale; 
   if (scale <= 0) { scale = 1;}
   
@@ -244,7 +246,7 @@ void dInterval::initializeData(int minX) {
     X[j] 		= new double[bins];
   }
   X[0][0] 		= double(minX);
-  std::cout << "MIN: " + to_string(minX) << std::endl;
+  // std::cout << "MIN: " + to_string(minX) << std::endl;
   X[1][0]=0,X[2][0]=0;
 	
   for (int i = 1; i < bins; i++){

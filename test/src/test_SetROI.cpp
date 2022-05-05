@@ -50,16 +50,32 @@ TEST(SetROI, addDataToExistingROI)
 {
     // Arrange: bring SUT to desired state
     SetROI sut;
-    bed6 testregion("Chr1", 1000, 4000, "ID1", 300, "+");
-    sut.addRegionToSet(&testregion);
+    bed6 testregion("Chr1", 10, 40, "ID1", 300, "+");
+    sut.addRegionToSet(&testregion);        // The interval (bed)
 
-    sut.addDataToExistingROI("Chr1", 1000, 2000, 3);
-    sut.addDataToExistingROI("Chr1", 1500, 4000, -3);
-    sut.addDataToExistingROI("Chr1", 2000, 3000, 1);
+    sut.addDataToExistingROI("Chr1", 10, 20, 3);        // The data (bedGraph)
+
+    int idx = sut.chr_names.lookupIndex("Chr1");    // Index for Chr1 
+    std::vector<gInterval *> outRegions;
+    outRegions = sut.regions[idx];
+
+    //std::cout << outRegions[0]->data->data_dump() << std::endl;
 
     // Act: call methods on SUT, capture output
+    sut.ConditionDataSet(2,1);      // Creates dIntervals for all regions.
+    //std::cout << outRegions[0]->data->cdata->data_dump() << std::endl;
 
     // Assert: Verify the outcome
-    EXPECT_EQ(sut.regions.size(), 0);
+    EXPECT_EQ(outRegions[0]->chromosome, "Chr1");
+    if (outRegions[0]->data != NULL) {
+      EXPECT_EQ(outRegions[0]->data->minX, 10);
+      if (outRegions[0]->data->cdata != NULL) {
+          EXPECT_EQ(outRegions[0]->data->cdata->N, 30);
+      } else {
+        FAIL() << "We should have conditioned data!";
+      }
+    } else {
+        FAIL() << "We should have data!";
+    }
 }
 
