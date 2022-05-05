@@ -103,7 +103,7 @@ bool gInterval::Contains(double point) {
 void gInterval::addDataPoint(double st, double sp, double cov, bool expand) {
   // If pointer to segment doesn't exist, create it.
   if (data == NULL) {
-    data = new Segment(this);
+    data = new RawData(this);
   }
   // Adjust for edge cases, expanding the region if permissible.
   double pt_edge = st;

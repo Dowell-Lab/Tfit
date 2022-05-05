@@ -28,7 +28,7 @@
 class Bedfile {
 public:
    std::string filename;       // read in file name
-   SetROI regions;        // Container for set of bed6  regions 
+   SetROI setRegions;        // Container for set of bed6  regions 
  
    // Constructors
 	Bedfile();	// empty constructor
@@ -52,16 +52,16 @@ public:
  */
 class Bedgraph: public Bedfile {
 public:
-  int useExistingIntervals;       // has ROI from bed separately or not?
+  bool useExistingIntervals;       // has ROI from bed separately or not?
 
 	// Constructors
-	Bedgraph();	// empty constructor
+  Bedgraph();
 
 	/* FUNCTIONS: */
   std::string reportBedGraphContents();        // used for debugging
 
   // Read the file
-  void load_file (std::string);
+  void load_file (std::string, bool);
 
 };
 

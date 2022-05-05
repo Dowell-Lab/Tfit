@@ -47,32 +47,8 @@ public:
   void clearTree();
 
   // Adding data to the set of regions (with vs without roi)
-  void addDataToROI(std::string chr, double start, double stop, double coverage);
-  void addDataToSegments(std::string chr, double start, double stop, double coverage);
-};
-
-/**
- * @brief A segment is a portion of the genome with data.
- * Cross references a gInterval to a dInterval
- * 
- */
-class Segment {
-public:
-  gInterval *genCoords;
-
-  RawData *rawdata;   // Raw data
-  dInterval  *cdata;  // Conditioned data (what the EM works on)
-
-  // Constructors
-  Segment();
-  Segment(gInterval *);
-
-  /* FUCTIONS: */
-  // Reporting out 
-  std::string write_out();
-
-  void addDataPoints(double, double, double);
-  void ConditionData(int v_delta, int v_scale);
+  void addDataCreateROI(std::string chr, double start, double stop, double coverage);
+  bool addDataToExistingROI(std::string chr, double start, double stop, double coverage);
 };
 
 

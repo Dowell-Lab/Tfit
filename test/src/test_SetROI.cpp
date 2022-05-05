@@ -45,3 +45,21 @@ TEST(SetROI, search)
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 1);
 }
+
+TEST(SetROI, addDataToExistingROI)
+{
+    // Arrange: bring SUT to desired state
+    SetROI sut;
+    bed6 testregion("Chr1", 1000, 4000, "ID1", 300, "+");
+    sut.addRegionToSet(&testregion);
+
+    sut.addDataToExistingROI("Chr1", 1000, 2000, 3);
+    sut.addDataToExistingROI("Chr1", 1500, 4000, -3);
+    sut.addDataToExistingROI("Chr1", 2000, 3000, 1);
+
+    // Act: call methods on SUT, capture output
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(sut.regions.size(), 0);
+}
+

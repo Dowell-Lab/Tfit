@@ -123,17 +123,23 @@ std::string SetROI::write_out() {
  * Used when adding data to roi, typically loaded in from a bed file
  * 
  */
-void SetROI::addDataToROI(std::string chr, double start, double stop, double coverage) {
+bool SetROI::addDataToExistingROI(std::string chr, double start, double stop, double coverage) {
    std::vector<gInterval *> setToAdd;
    gInterval dataInterval(chr, start, stop, "temp");
    // Search existing CITree for overlapping intervals
    setToAdd = findOverlapIntervals(&dataInterval);
 
-   // Add this point to those gIntervals
+   if (setToAdd.size() == 0) {    // We found no overlapping intervals
+      //std::cout << "NOT FOUND!" + dataInterval.write_out() << std::endl;
+      return 0;
+   }
+
+   // Add this point to the overlapping gIntervals
    std::vector<gInterval *>::iterator it;
    for (it=setToAdd.begin(); it != setToAdd.end(); it++) {
      (*it)->addDataPoint(start,stop,coverage,0);
    }
+   return 1;
 }
 
 /**
@@ -142,7 +148,7 @@ void SetROI::addDataToROI(std::string chr, double start, double stop, double cov
  * bedGraph without pre-existing ROI. 
  * 
  */
-void SetROI::addDataToSegments(std::string chr, double start, double stop, double coverage) {
+void SetROI::addDataCreateROI(std::string chr, double start, double stop, double coverage) {
    // Fetch index for this chromosome (adding if necessary)
   chr_names.addIdentifier(chr);
   int idx = chr_names.lookupIndex(chr);
@@ -155,40 +161,3 @@ void SetROI::addDataToSegments(std::string chr, double start, double stop, doubl
   regions[idx].front()->addDataPoint(start,stop,coverage,1);
 }
 
-
-/************  Segments ****************/
-
-Segment::Segment() {
-  genCoords = NULL;
-  rawdata = NULL;
-  cdata = NULL;
-}
-
-Segment::Segment(gInterval *v_genomicCoords) {
-  genCoords = v_genomicCoords;
-  cdata = NULL;
-  rawdata = NULL;
-}
-
-std::string Segment::write_out() {
-  std::string output = genCoords->write_out();
-  output += "\n" + rawdata->write_out(); 
-  return output;
-}
-
-/**
- * @brief Add data points (a line from bedGraph) to
- * this region. 
- */
-void Segment::addDataPoints(double st, double sp, double cov) {
-  if (rawdata == NULL) { // First point
-    rawdata = new RawData(); 
-    rawdata->belongsTo = this->genCoords;   // Link data to gInterval
-  } 
-  rawdata->addDataPoints(st, sp, cov);
-}
-
-void Segment::ConditionData(int v_delta, int v_scale) {
-  if (rawdata == NULL) { return; }
-  cdata = new dInterval(rawdata, v_delta, v_scale);
-}

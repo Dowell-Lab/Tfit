@@ -20,6 +20,7 @@
 #include <vector>
 
 class gInterval;   // Forward declaration
+class dInterval;
 
 /**
  * @brief This is a container for the raw data as read from a bedgraph.  
@@ -37,9 +38,11 @@ class RawData {
   double maxX;   //!< This is the maximum value of the interval 
 
   gInterval *belongsTo;  // The coordinates associated with this data
+  dInterval *cdata;   // The conditioned data.
 
   //Constructors
   RawData();
+  RawData(gInterval *);
 
   std::string write_out();  // Debugging
 

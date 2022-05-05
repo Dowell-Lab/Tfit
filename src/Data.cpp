@@ -26,6 +26,13 @@
 RawData::RawData() {
   minX = maxX = 0;
   belongsTo = NULL; 
+  cdata = NULL;
+}
+
+RawData::RawData(gInterval *v_ginterval) {
+  minX = maxX = 0;
+  belongsTo = v_ginterval; 
+  cdata = NULL;
 }
 
 /**
@@ -190,7 +197,8 @@ dInterval::dInterval() {
 dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
   raw = data;
   raw->RemoveDuplicates();      // Is this necessary?  It's potentially time consuming!
-  delta = v_delta;  scale = v_scale;  
+  delta = v_delta;  scale = v_scale; 
+  if (scale <= 0) { scale = 1;}
   
   // Establish num of bins
   bins =  raw->Length()/delta;

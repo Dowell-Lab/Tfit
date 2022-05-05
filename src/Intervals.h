@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 
-class Segment;    // Forward declaration
+class RawData;    // Forward declaration
 
 /**
  * @brief gInterval
@@ -36,7 +36,7 @@ public:
   std::string chromosome;  // field 1 in BED
   double start, stop;   // genomic coordinates, fields 2 and 3 in bed
 
-  Segment *data;  // pointer to data if this interval has it.
+  RawData *data;  // pointer to data if this interval has it.
 
   // Constructors
   gInterval();  // default

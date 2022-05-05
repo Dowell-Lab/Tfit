@@ -22,14 +22,14 @@ TEST(Bedfile, multiChromCheck)
 
    int chrcount = 0;
    std::map<int, CITree *>::iterator it;
-   for (it = sut.regions.searchable.begin(); it != sut.regions.searchable.end(); it++) {
+   for (it = sut.setRegions.searchable.begin(); it != sut.setRegions.searchable.end(); it++) {
        chrcount++;
    }
 
 //   std::cout << sut.reportBedfileContents() << std::endl;
 
    // Assert: Verify the outcome
-   EXPECT_EQ(sut.regions.chr_names.num_elements, chrcount);
+   EXPECT_EQ(sut.setRegions.chr_names.num_elements, chrcount);
 }
 
 TEST(Bedfile, checkSearch_noChr) 
@@ -43,7 +43,7 @@ TEST(Bedfile, checkSearch_noChr)
    gInterval query("chr51", 19731000, 19768000, "example");
 
    // Act: call methods on SUT, capture output
-   results = sut.regions.findOverlapIntervals(&query);
+   results = sut.setRegions.findOverlapIntervals(&query);
 
 //   std::cout << sut.reportBedfileContents() << std::endl;
 
@@ -63,7 +63,7 @@ TEST(Bedfile, checkSearch_hasoverlap)
 
    // std::cout << sut.reportBedfileContents() << std::endl;
    // Act: call methods on SUT, capture output
-   results = sut.regions.findOverlapIntervals(&query);
+   results = sut.setRegions.findOverlapIntervals(&query);
 
    // Assert: Verify the outcome
    EXPECT_EQ(results.size(), 2);
@@ -80,7 +80,7 @@ TEST(Bedfile, checkSearch_noOverlap)
    gInterval query("chr21", 19731000, 19768000, "example");
 
    // Act: call methods on SUT, capture output
-   results = sut.regions.findOverlapIntervals(&query);
+   results = sut.setRegions.findOverlapIntervals(&query);
 
 //   std::cout << sut.reportBedfileContents() << std::endl;
 

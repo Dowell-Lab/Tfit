@@ -26,7 +26,7 @@
  * @brief Construct a new Bedfile::Bedfile object
  */
 Bedfile::Bedfile()
-  : regions() {
+  : setRegions() {
   filename = "";
 }
 
@@ -54,7 +54,7 @@ void Bedfile::load_file(std::string file) {
       iregion->setfromBedLine(line);  // This interval's info.
 
       // Add region to collection.
-      regions.addRegionToSet(iregion);
+      setRegions.addRegionToSet(iregion);
 
       } // for all lines in bedfile that aren't comments 
       linenum++;    // line counter, could be useful later.
@@ -66,7 +66,7 @@ void Bedfile::load_file(std::string file) {
 
   // Post file parsing setup steps.
   if (!EXIT) {
-    regions.createSearchIndex();
+    setRegions.createSearchIndex();
   }
 }
 
@@ -78,7 +78,7 @@ void Bedfile::load_file(std::string file) {
 std::string Bedfile::reportBedfileContents() {
    // Summary should include: name of file:
    std::string report = filename;
-   report += regions.write_out();
+   report += setRegions.write_out();
    return report;    
 }
 
@@ -92,8 +92,14 @@ Bedgraph::Bedgraph()
 
 std::string Bedgraph::reportBedGraphContents() {
    // Summary should include: name of file:
-   std::string report = filename;
+   std::string report;
+   if (useExistingIntervals) {
+     report += "Use: TRUE";
+   } else {
+     report  += "Use: FALSE";
+   }
    // And the rest of the object!!!
+   report += reportBedfileContents();
    return report;
 }
 
@@ -102,10 +108,11 @@ std::string Bedgraph::reportBedGraphContents() {
  * 
  * @param v_filename   assumes a joint bedgraph file
  */
-void Bedgraph::load_file(std::string v_filename) {
+void Bedgraph::load_file(std::string v_filename, bool useExisting) {
   filename = v_filename;
   ifstream FH(filename);
 
+  useExistingIntervals = useExisting;
   bool EXIT 		= false;  // file error indicator
   // Variables needed temporarily
   vector<string> lineArray; // Contents of file, split on tab (\t) 
@@ -127,10 +134,10 @@ void Bedgraph::load_file(std::string v_filename) {
         } else {
          if (useExistingIntervals) { // Add points to existing intervals.
            // Add this point to all the relevant segments
-           regions.addDataToROI(lineArray[0], std::stod(lineArray[1]), 
+           setRegions.addDataToExistingROI(lineArray[0], std::stod(lineArray[1]), 
                       std::stod(lineArray[2]),std::stod(lineArray[3]));
          } else { // There are no ROI, we are creating ROI as we go ...
-           regions.addDataToSegments(lineArray[0], std::stod(lineArray[1]),
+           setRegions.addDataCreateROI(lineArray[0], std::stod(lineArray[1]),
                         std::stod(lineArray[2]),std::stod(lineArray[3]));
          }
         }
@@ -143,7 +150,18 @@ void Bedgraph::load_file(std::string v_filename) {
   }
 
   // Post file parsing setup steps:
+  int delta = 10;  int scale = 1;   // These need to come from parameters
   if (!EXIT) {
     // Condition all data
+    std::map<int, std::vector<gInterval *>>::iterator mit;    // Outer Map iterator
+    std::vector<gInterval *>::iterator  it;   //Inner vector iterator
+    for (mit = setRegions.regions.begin(); mit != setRegions.regions.end(); mit++) {
+      // For every index, lets go through the vector of gIntervals.
+      for (it = mit->second.begin(); it != mit->second.end(); it++) {
+        if ((*it)->data != NULL) {
+          (*it)->data->cdata = new dInterval((*it)->data, delta, scale);
+        }
+      }
+    }
   }
 }
