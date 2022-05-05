@@ -1,7 +1,7 @@
 /**
  * @file Data.h
  * @author Robin Dowell
- * @brief Header file for data interval classes (RawData, dInterval, Segment)
+ * @brief Header file for data interval classes (RawData, dInterval)
  * 
  * RawData holds the raw, unnormalized, unconditioned data.
  *
