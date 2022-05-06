@@ -5,6 +5,11 @@
  * This is a very overloaded file -- has \ref segment, segment_fits, and \ref node classes
  * their corresponding code as well as large functions for loading data. 
  * Also contains some helper functions.   Should be refactored.
+ * 
+ * CURRENTLY (May 6, 2022): Have genomic intervals (Intervals), data (Data), and a
+ * class called SetROI (genome level collection) to replace Joey's segment.  Also have
+ * ITree to replace the centered interval tree. 
+ * 
  * @version 0.1
  * @date 2016-05-20
  * 

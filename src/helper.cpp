@@ -76,5 +76,3 @@ std::string Bimap::print_index_names() {
    return output;
 }
 
-
-

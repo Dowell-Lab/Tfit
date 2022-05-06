@@ -1,9 +1,14 @@
 /**
  * @file load.h
- * @author Joey Azofeifa, Robin Dowell
+ * @author Joey Azofeifa 
  * @brief Header file for overloaded load.cpp.
  * This is a very overloaded file -- has \ref segment, segment_fits, and \ref node classes
  * Also contains some helper functions.   Should be refactored.
+ * 
+ * CURRENTLY (May 6, 2022; RDD): Have genomic intervals (Intervals), data (Data), and a
+ * class called SetROI (genome level collection) to replace Joey's segment.  Also have
+ * ITree to replace the centered interval tree. 
+ * 
  * @version 0.1
  */
 #ifndef load_H
