@@ -114,7 +114,7 @@ simple_c_free_mode::simple_c_free_mode(bool FOUND, double ll,
 			ps[i] 	= 0;
 		}
 	}else{
-		ps[0]=C.bidir.mu,ps[1]=C.bidir.si,ps[2]=C.bidir.l, ps[3]=C.bidir.w, ps[4]=C.bidir.pi;
+		ps[0]=C.bidir.mu,ps[1]=C.bidir.sigma,ps[2]=C.bidir.lambda, ps[3]=C.bidir.w, ps[4]=C.bidir.pi;
 		ps[5]=C.forward.b, ps[6]=C.forward.w, ps[7]=C.forward.pi;
 		ps[8]=C.reverse.a, ps[9]=C.reverse.w, ps[10]=C.reverse.pi;
 		ps[11]=C.bidir.foot_print;
@@ -312,8 +312,8 @@ vector<double> compute_average_model(vector<segment *> segments, params * P){
 	vector<double> parameters(5);
 
 
-	parameters[0]=	best_clf.components[0].bidir.si*ns;
-	parameters[1]=	ns/best_clf.components[0].bidir.l;
+	parameters[0]=	best_clf.components[0].bidir.sigma*ns;
+	parameters[1]=	ns/best_clf.components[0].bidir.lambda;
 	parameters[2]=	best_clf.components[0].bidir.foot_print*ns;
 	parameters[3]=	best_clf.components[0].bidir.pi;
 	parameters[4]=	best_clf.components[0].bidir.w;

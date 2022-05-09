@@ -94,7 +94,7 @@ void NLR::set_new_parameters(double N){
 	wl 	= WR / N;
 	wr 	= WF / N;
 
-	bidir.mu 	= mu, bidir.si = si, bidir.l = l, bidir.pi = pi, bidir.w=wn;
+	bidir.mu 	= mu, bidir.sigma = si, bidir.lambda = l, bidir.pi = pi, bidir.w=wn;
 	forward.w 	= wr, forward.a = mu + (1.0 / l);
 	reverse.w 	= wl, reverse.b = mu - (1.0 / l);
 

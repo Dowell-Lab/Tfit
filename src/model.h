@@ -28,7 +28,7 @@ public:
 	double w;
 	double pi;	// strand (=1 if + strand; =0 if - strand)
 	int j,k,l; //so j and k are the bounds the uniform can move through, l is the current one
-	double left_SUM, right_SUM;
+	// double left_SUM, right_SUM;
 	int st;		// Strand
 	int pos;	
 
@@ -56,9 +56,9 @@ double LOG(double );
  * @author Joey Azofeifa  
  * 
  */
-class EMG{
+class EMG {
 public:
-	double mu, si, l, pi, w;
+	double mu, sigma, lambda, pi, w;
 	double foot_print;
 
 	//sufficient stats

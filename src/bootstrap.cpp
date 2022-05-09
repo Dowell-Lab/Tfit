@@ -211,8 +211,8 @@ void run_bootstrap_across(vector<segment *> segments, params * P, ofstream& log_
 				for (int k = 0; k < K; k++){
 					vector<double> current_parameters(6);
 					current_parameters[0] = fits[b].components[k].bidir.mu;
-					current_parameters[1] = fits[b].components[k].bidir.si;
-					current_parameters[2] = fits[b].components[k].bidir.l;
+					current_parameters[1] = fits[b].components[k].bidir.sigma;
+					current_parameters[2] = fits[b].components[k].bidir.lambda;
 					current_parameters[3] = fits[b].components[k].bidir.w;
 					current_parameters[4] = fits[b].components[k].bidir.pi;
 					current_parameters[5] = fits[b].components[k].bidir.foot_print;

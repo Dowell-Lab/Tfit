@@ -36,7 +36,7 @@
  * @param x 
  * @return double 
  */
-double IN(double x){ //Standard Normal PDF 
+double NormalPDF(double x){ //Standard Normal PDF 
 	return exp(-pow(x,2)*0.5)/sqrt(2*M_PI);
 }
 /**
@@ -45,21 +45,21 @@ double IN(double x){ //Standard Normal PDF
  * @param x 
  * @return double 
  */
-double IC(double x){ //Standard Normal CDF
+double NormalCDF(double x){ //Standard Normal CDF
 	return 0.5*(1+erf(x/sqrt(2)));
 }
 /**
- * @brief Mills Ratio (R)
+ * @brief Mills Ratio (formerly just "R")
  * 
  * @param x 
  * @return double 
  */
-double R(double x){ //Mills Ratio
+double MillsRatio(double x){ //Mills Ratio
 	if (x > 4){
 		return 1.0 / x;
 	}
-	double N = IC(x);
-	double D = IN(x);
+	double N = NormalCDF(x);
+	double D = NormalPDF(x);
 	if (D < pow(10,-15)){ //machine epsilon
 		return 1.0 / pow(10,-15);
 	}
@@ -175,13 +175,12 @@ UNI::UNI(double start, double stop, double w_i, int strand, int POS, double Pi){
  */
 double UNI::pdf(double x, int strand){
 	double p;
-	if (w==0){
-		return 0;
-	}
+	if (w==0){ return 0; }
 
 	if ( a<= x and x <=b){
-
+		// std::cout << "w: " + to_string(w) + " " + to_string(b) + " " + to_string(a) << std::endl;
 		p= w / abs(b- a);
+		// std::cout << "pi: " + to_string(pi) + " " + to_string(pow(pi,max(0,strand))) << std::endl;
 		p= p*pow(pi, max(0, strand) )*pow(1.-pi, max(0, -strand) );
 		return p;
 	}
@@ -212,8 +211,8 @@ EMG::EMG(){} //empty constructor
  */
 EMG::EMG(double MU, double SI, double L, double W, double PI ){
 	mu 	= MU;
-	si 	= SI;
-	l  	= L;
+	sigma 	= SI;
+	lambda  	= L;
 	w 	= W;
 	pi 	= PI;
 	prev_mu = 0 ;
@@ -225,8 +224,8 @@ EMG::EMG(double MU, double SI, double L, double W, double PI ){
  * @return string 
  */
 string EMG::write(){
-	string text 	= ("EMG: " + to_string(mu)+ "," + to_string(si)
-		+ "," + to_string(l) + "," + to_string(w) + "," + to_string(pi) 
+	string text 	= ("EMG: " + to_string(mu)+ "," + to_string(sigma)
+		+ "," + to_string(lambda) + "," + to_string(w) + "," + to_string(pi) 
 		+ "," + to_string(foot_print) );
 	return text;
 }
@@ -263,14 +262,15 @@ double EMG::pdf(double z, int s ){
 	}else{
 		z+=foot_print;
 	}
-	double vl 		= (l/2.0)*(s*2*(mu-z) + l*pow(si,2));
+	double vl 		= (lambda/2.0)*(s*2*(mu-z) + lambda*pow(sigma,2));
 	double p;
 	if (vl > 100){ //potential for overflow, inaccuracies
-		p 			= l*IN((z-mu)/si)*R(l*si - s*((z-mu)/si));
+		p 			= lambda*NormalPDF((z-mu)/sigma)*MillsRatio(lambda*sigma - s*((z-mu)/sigma));
 	}else{
-		p 			= (l/2)*exp(vl)*erfc((s*(mu-z) + l*pow(si ,2) )/(sqrt(2)*si));
+		p 			= (lambda/2)*exp(vl)*erfc((s*(mu-z) + lambda*pow(sigma ,2) )/(sqrt(2)*sigma));
 	}
-	p     = (l/2)*exp(vl)*erfc((s*(mu-z) + l*pow(si ,2) )/(sqrt(2)*si));
+	// Doesn't this line negate the whole "if" statement above??
+	p     = (lambda/2)*exp(vl)*erfc((s*(mu-z) + lambda*pow(sigma ,2) )/(sqrt(2)*sigma));
 	p     = p*w*pow(pi, max(0, s) )*pow(1-pi, max(0, -s) );
 	if (p < pow(10,7) and not isnan(float(p)) ){
 	  return p; 
@@ -291,7 +291,7 @@ double EMG::EY(double z, int s){
 		z+=foot_print;
 	}
 	
-	return max(0. , s*(z-mu) - l*pow(si, 2) + (si / R(l*si - s*((z-mu)/si))));
+	return max(0. , s*(z-mu) - lambda*pow(sigma, 2) + (sigma / MillsRatio(lambda*sigma - s*((z-mu)/sigma))));
 }
 /**
  * @brief conditional expectation of Y^2 given z_i
@@ -306,7 +306,7 @@ double EMG::EY2(double z, int s){
 	}else{
 		z+=foot_print;
 	}
-	return pow(l,2)*pow(si,4) + pow(si, 2)*(2*l*s*(mu-z)+1 ) + pow(mu-z,2) - ((si*(l*pow(si,2) + s*(mu-z)))/R(l*si - s*((z-mu)/si) )); 
+	return pow(lambda,2)*pow(sigma,4) + pow(sigma, 2)*(2*lambda*s*(mu-z)+1 ) + pow(mu-z,2) - ((sigma*(lambda*pow(sigma,2) + s*(mu-z)))/MillsRatio(lambda*sigma - s*((z-mu)/sigma) )); 
 }
 
 //===============================================================================
@@ -378,7 +378,7 @@ void update_j_k( component * components,segment * data, int K, double N){
 		while ( j < K and components[j].forward_neighbor!=NULL and  components[j].forward_neighbor->bidir.w  < pow(10,-2)   ){
 			j++;
 		}
-		double delta 				= (1.0 / components[k].bidir.l);
+		double delta 				= (1.0 / components[k].bidir.lambda);
 		components[k].forward.j 	= get_nearest_position(data, components[k].bidir.mu, delta  );
 		
 		if (j < K and components[j].forward_neighbor!=NULL  ){
@@ -740,11 +740,11 @@ void component::update_parameters(double N, int K){
 		bidir.mu 	= bidir.ex / (r+0.001);
 
 		
-		bidir.si 	= pow(abs((1. /(r + 3 + ALPHA_0 ))*(bidir.ex2-2*bidir.mu*bidir.ex + 
+		bidir.sigma 	= pow(abs((1. /(r + 3 + ALPHA_0 ))*(bidir.ex2-2*bidir.mu*bidir.ex + 
 			r*pow(bidir.mu,2) + 2*BETA_0  )), 0.5) ;
 		if ((r / N) < pow(10,-5) ){ EXIT 	= true; }
-		bidir.l 	= min((r+ALPHA_1) / (bidir.ey + BETA_1), 5.);
-		bidir.l 	= max(bidir.l, 0.05);
+		bidir.lambda 	= min((r+ALPHA_1) / (bidir.ey + BETA_1), 5.);
+		bidir.lambda 	= max(bidir.lambda, 0.05);
 		if (abs(bidir.mu-bidir.prev_mu)< 0.01 ){
 			bidir.move_fp 	= true;
 		}

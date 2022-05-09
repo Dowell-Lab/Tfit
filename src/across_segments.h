@@ -52,7 +52,7 @@ struct simple_c_free_mode{
 	int ID[5] ;  //index of the segment that this belongs,start, stop, converged?
 	char chrom[6];
 
-/* 	ps[0]=C.bidir.mu,ps[1]=C.bidir.si,ps[2]=C.bidir.l, ps[3]=C.bidir.w, ps[4]=C.bidir.pi;
+/* 	ps[0]=C.bidir.mu,ps[1]=C.bidir.sigma,ps[2]=C.bidir.lambda, ps[3]=C.bidir.w, ps[4]=C.bidir.pi;
 		ps[5]=C.forward.b, ps[6]=C.forward.w, ps[7]=C.forward.pi;
 		ps[8]=C.reverse.a, ps[9]=C.reverse.w, ps[10]=C.reverse.pi;
 		ps[11]=C.bidir.foot_print;

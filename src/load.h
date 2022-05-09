@@ -78,7 +78,7 @@ public:
 	double rN;	//!< Sum of reverse values 
 
 	vector<vector<double> > bidirectional_bounds; //!< Used by the MPI
-	vector<vector<double>> fitted_bidirs; //!< mu, si, l, pi : used in bin()
+	vector<vector<double>> fitted_bidirs; //!< mu, sigma, lambda, pi : used in bin()
 
 	// Constructors
 	segment(string, int , int);
