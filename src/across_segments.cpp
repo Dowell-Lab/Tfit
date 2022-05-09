@@ -73,6 +73,7 @@ map<int, vector<classifier> > make_classifier_struct_free_model(params * P, segm
 			A[k].push_back(classifier(k, stod(P->p["-ct"]), stoi(P->p["-mi"]), stod(P->p["-max_noise"]), 
 			stod(P->p["-r_mu"]), stod(P->p["-ALPHA_0"]), stod(P->p["-BETA_0"]), stod(P->p["-ALPHA_1"]), 
 			stod(P->p["-BETA_1"]), stod(P->p["-ALPHA_2"]) , stod(P->p["-ALPHA_3"]),0 ));
+			// if (k == 2) { std::cout << "r: " + to_string(r) + A[k][r].write_components() << std::endl;}
 		}
 	
 	}
