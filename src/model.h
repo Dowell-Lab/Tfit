@@ -29,7 +29,7 @@ public:
 	double pi;	// strand (=1 if + strand; =0 if - strand)
 	int j,k,l; //so j and k are the bounds the uniform can move through, l is the current one
 	// double left_SUM, right_SUM;
-	int st;		// Strand
+	int st;		// Strand -- how is this differnet from pi?
 	int pos;	
 
 	//sufficient stats
