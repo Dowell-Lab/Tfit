@@ -26,8 +26,8 @@
 #===========================================================================
 #EM algorithm specific parameters
 -r_mu 			= 1 #seed EM randomly from the peak finder
--minK 			= 1 #min model complexity to consider
--maxK 			= 10 #
+-minK 			= 2 #min model complexity to consider
+-maxK 			= 2 #
 -rounds                 = 63 #number of random EM initializations
 -ct                     = 0.0001 #EM convergence threshold difference
 -mi                     = 4000 #Number of EM iterations before it is aborted

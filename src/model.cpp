@@ -1170,8 +1170,8 @@ string classifier::write_classifier_setup() {
 }
 string classifier::write_classifier_status() {
 	string contents;
-	if (converged) { contents = contents + " Y"; } 
-	else { contents = contents + " N"; }
+	if (converged) { contents = contents + " Converged "; } 
+	else { contents = contents + " Not converged "; }
 	contents = contents + " " + to_string(ll);
 
 	return contents;
@@ -1179,8 +1179,11 @@ string classifier::write_classifier_status() {
 
 string classifier::write_components() {
 	string text = components->write();
-	if ((components->forward_neighbor != NULL) || (components->reverse_neighbor != NULL)) {
-      text = text + " more ";
+	if (components->forward_neighbor != NULL) {
+      text = text + " FN: " + components->forward_neighbor->write();
+	}
+	if (components->reverse_neighbor != NULL) {
+      text = text + " RN: " + components->reverse_neighbor->write();
 	}
 	return text;
 }
