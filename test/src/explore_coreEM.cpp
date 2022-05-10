@@ -17,8 +17,8 @@ TEST(classifier, exerciseFit2)
   string emptyfilename;
 
   // Lets load a typical small bedgraph file.
-   string joint_bedgraph = "../examples/reduced.bg";    //chr21 	
-  // string joint_bedgraph = "../examples/typical_region.bg";    //chr21 	32823781  34367362
+  // string joint_bedgraph = "../examples/reduced.bg";    //chr21 	
+  string joint_bedgraph = "../examples/typical_region.bg";    //chr21 33401693 33407411	
 
   // loading sets up these mappings, we are going to ignore them.
 	map<string, int> chrom_to_ID;
@@ -30,12 +30,14 @@ TEST(classifier, exerciseFit2)
 			emptyfilename, joint_bedgraph, 25, 100, "chr21", chrom_to_ID, ID_to_chrom );  
   segment *data = segments[0];  // We just want the first one
 
+  // std::cout << data->write_Data_Columns() << std::endl;
+
   classifier sut = classifier(2, 0.0001, 2000, 0.05, 0, 1, 1, 1, 1, 1, 1, 0);
 
-  double center = 33404552;   // Unclear what coord system this should be on.
+  double center = 20;
   data->centers.push_back(center);
-
-  cout << "Center: " + to_string(center) << std::endl;
+  center = 45;
+  data->centers.push_back(center);
 
   // Act on sut (run EM!)
   cout << "Before: " +  sut.write_classifier_status() << std::endl;

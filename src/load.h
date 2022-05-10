@@ -101,6 +101,8 @@ public:
 	// add2 appears to add a single data point (coord) to an interval
 	void add2(int, double, double); // strand, x, y 
 
+	string write_Data_Columns();
+
 };
 
 /**

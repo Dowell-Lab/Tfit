@@ -167,7 +167,8 @@ bool check_hit(double a, double b, double c, double x, double y, double z){
 
 //================================================================================================
 /**
- * @brief 
+ * @brief This populates the bidirectional_bounds vectors in segments which 
+ * are then used to calulate centers.
  * 
  * @param segments 
  * @param out_dir 

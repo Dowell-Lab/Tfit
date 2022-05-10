@@ -168,6 +168,17 @@ string segment::write_withData() {
   return (allscalar + data);
 }
 
+string segment::write_Data_Columns() {
+  std::string data;
+  for (int j = 0; j < XN; j++) {
+      data = data + "\n" + 
+         to_string(X[0][j]).substr(0,std::to_string(X[0][j]).find(".") + 3)  + "\t"
+         + to_string(X[1][j]).substr(0,std::to_string(X[1][j]).find(".") + 3) + "\t"
+         + to_string(X[2][j]).substr(0,std::to_string(X[2][j]).find(".") + 3);
+  }
+  return data;
+}
+
 /**
  * @brief Print out the contents of the centers vector
  * 
