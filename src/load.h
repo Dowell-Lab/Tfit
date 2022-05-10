@@ -55,6 +55,7 @@ public:
 	int counts; //!< sets min_k in across_segments?
 
 	vector<double> centers; //!< used in the scaling and binning and mu_seeds to fit2 
+	vector<vector<double> > bidirectional_bounds; //!< Used by the MPI & slice ratio.
 
 	// Both of below are used in boostrapping code only.  Unclear what they do.
 	vector<vector<double>> parameters; 
@@ -77,7 +78,6 @@ public:
 	double fN;	//!< Sum of forward values 
 	double rN;	//!< Sum of reverse values 
 
-	vector<vector<double> > bidirectional_bounds; //!< Used by the MPI
 	vector<vector<double>> fitted_bidirs; //!< mu, sigma, lambda, pi : used in bin()
 
 	// Constructors
@@ -94,6 +94,7 @@ public:
 	string write_allScalar();	// All doubles, strings and ints
 	string write_withData();  // includes X
 	string write_centers(); 	// Just the centers vector
+	string write_bidirectional_bounds(); 	// Just the centers vector
 
 	// bin does the scaling and smoothing of input data (builds X)
 	void bin(double, double, bool); // delta, scale, erase

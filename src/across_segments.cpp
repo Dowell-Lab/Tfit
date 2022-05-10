@@ -226,6 +226,7 @@ vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<
 		}
 
 		segment * data 	= FSI[i];
+		std::cout << data->write_centers() << std::endl;
 		map<int, vector<classifier> > A 	= make_classifier_struct_free_model(P, FSI[i]);
 		for (it_type k = A.begin(); k!= A.end(); k++){
 			int N 	=  k->second.size();

@@ -79,6 +79,8 @@ class slice_ratio{
   void insert(double);
   double pvalue(double);
   int get_closest(double);
+
+  std::string write_contents();
 };
 slice_ratio get_slice(vector<segment *> , int,double,params * P );
 

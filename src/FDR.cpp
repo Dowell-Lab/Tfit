@@ -160,6 +160,23 @@ int slice_ratio::get_closest(double x){
   return 0;
 
 }
+std::string slice_ratio::write_contents() {
+  std::string output = "\nSliceRatio: ";
+  output += to_string(start) + "-" + to_string(stop);
+  output += " b:" + bins;
+  output += " mean:" + to_string(mean) + " std:" + to_string(std);
+  output += " w:"+ to_string(w) + " c:" + to_string(c) + " thresh:" + to_string(threshold);
+  if (converged) {
+    output += "\nConverged";
+  } else {
+    output += "\nNOTConverged";
+  }
+  // vector<vector<double> > XY ; //bins X 3
+  // vector<normal> NORMS;
+  // normal norm_all;
+  return (output);
+}
+
 void slice_ratio::insert(double y){
   int c = this->get_closest(y);
   this->XY[c][1]+=1;

@@ -140,7 +140,7 @@ string segment::write_interval(){
 string segment::write_allScalar() {
 	std::string identifier = this->write_interval();
   std::string text = (";n: " + to_string(minX) + ",x: " + to_string(maxX) + 
-    ":c" + to_string(counts) +  ";XN: " + to_string(XN) + ";SCALE: " + to_string(SCALE)
+    ":c " + to_string(counts) +  ";XN: " + to_string(XN) + ";SCALE: " + to_string(SCALE)
     + "**" + to_string(N) + ":" + to_string(fN) + "," + to_string(rN));
   return (identifier + " " + strand + " " + text);
 }
@@ -174,11 +174,26 @@ string segment::write_withData() {
  * @return centers vector as string
  */
 string segment::write_centers() {
-  std::string centers_as_string;
+  std::string centers_as_string = "\nCenters: ";
   for (auto & element : centers) {
-    centers_as_string = centers_as_string + " " + to_string(element);
+    centers_as_string += " " + to_string(element);
   }
   return centers_as_string;
+}
+
+string segment::write_bidirectional_bounds() {
+	std::string bidirbounds = "\nBidirectional_Bounds: ";
+  if (!bidirectional_bounds.empty()) {
+    std::vector<std::vector<double>>::iterator it;
+    std::vector<double>::iterator inner;
+    for (it = bidirectional_bounds.begin(); it != bidirectional_bounds.end(); it++) {
+      for (inner = it->begin(); inner != it->end(); inner++) {
+        bidirbounds += " " + to_string(*inner);
+      }
+      bidirbounds += "\n";
+    }
+  }
+  return bidirbounds;
 }
 
 /**

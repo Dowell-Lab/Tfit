@@ -65,11 +65,22 @@ int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_
 	LG->write("inserting bedgraph data.................................",verbose);
 	vector<segment*> integrated_segments= load::insert_bedgraph_to_segment_joint(GG, 
 		forward_bed_graph_file, reverse_bed_graph_file, joint_bed_graph_file, rank);
+
+    std::cout << "Loaded: " << std::endl;
+    vector<segment*>::iterator it;
+	for(it=integrated_segments.begin(); it!=integrated_segments.end(); it++) {
+       std::cout << (*it)->write_withData() << std::endl;
+	}
+
 	//(2b) for each segment we are going to bin and scale and center, numerical stability
 	LG->write("done\n",verbose);
 	LG->write("binning, centering, scaling.............................",verbose);
 	load::BIN(integrated_segments, stod(P->p["-br"]), stod(P->p["-ns"]),true);	
 	LG->write("done\n",verbose);
+
+	for(it=integrated_segments.begin(); it!=integrated_segments.end(); it++) {
+       std::cout << (*it)->write_withData() << std::endl;
+	}
 
 	//=======================================================================================
 	//(3a) now run template matching for seeding the EM  
@@ -80,8 +91,12 @@ int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_
 	SC.set_2(stod(P->p["-bct"]));
 	
 	run_global_template_matching(integrated_segments, out_file_dir, P, SC);	
-
+    std::cout << SC.write_contents() << std::endl;
+	for(it=integrated_segments.begin(); it!=integrated_segments.end(); it++) {
+       std::cout << (*it)->write_bidirectional_bounds() << std::endl;
+	}
 	LG->write("done\n",verbose);
+
 	//=======================================================================================
 	//(4a) now going to run the model across all segments
 	vector<map<int, vector<simple_c_free_mode> >> FITS 		= run_model_across_free_mode(integrated_segments,
