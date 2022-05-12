@@ -10,6 +10,31 @@
 
 #include <string>
 
+class Bidirectional {
+  public:
+	double mu, sigma, lambda;	// These are "tied" between the two strands
+	double pi;		// strand bias
+	double footprint;		// the ad hoc footprint parameter 
+
+  // Constructor
+  Bidirectional();
+  Bidirectional(double, double, double, double, double);
+
+  // Functions
+  std::string write_out();
+
+  double pdf(double z, char s);
+  double ExpY(double z, char s);
+  double ExpY2(double z, char s);
+
+private:
+  double normalPDF(double);
+  double millsRatio(double);
+  int indicatorStrand(char s);
+  double applyFootprint (double z, char s);
+};
+
+
 /**
  * @brief Class that handles a single instance of the model.
  *  Also contains the priors.   
@@ -35,7 +60,7 @@ public:
 	//bayesian priors for parameters, MAP
 	//FOR SIGMA ; variance in loading, gamma
 	double ALPHA_0, BETA_0;
-	//FOR LAMBA ; rate of initiation, gamma
+	//FOR LAMBDA ; rate of initiation, gamma
 	double ALPHA_1, BETA_1;
 	//FOR W ; weight , Dirichlet
 	double ALPHA_2;
@@ -61,15 +86,15 @@ class NoiseModel {
   // Constructor
   NoiseModel();
 
+  // Expectation: pG(b-a)/S where S is length of genome, G is # reads mapped, p is prob noise
+
   // Functions
   std::string write_out();
 };
 
 class FullModel {
   public:
-	EMG F_bidir;
-	EMG R_bidir;
-	double pi; 	// strand bias
+    Bidirectional bidir;
 	Uniform forward;
 	Uniform reverse;
 
