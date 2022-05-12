@@ -9,4 +9,23 @@
  */
 #include "Distros.h"
 
-// Classes for Uniform, Expoential, EMG, Normal, and such go here.
+Uniform::Uniform() {
+   a = b = 0;	
+}
+
+std::string Uniform::write_out() {
+	std::string output = "U(" + std::to_string(a) + "," + to_string(b) + ")";
+    return output;
+}
+
+EMG2::EMG2() {
+  mu = sigma = lambda = 0.0;
+}
+
+std::string EMG2::write_out() {
+	std::string output = "EMG(" + std::to_string(mu) + "," + to_string(sigma) 
+            + "," + std::to_string(lambda) + ")";
+    return output;
+}
+
+
