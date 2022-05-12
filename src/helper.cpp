@@ -69,10 +69,10 @@ std::string Bimap::lookupName(int index) {
 
 std::string Bimap::print_index_names() {
   std::string output;
-   for (int i=0; i< num_elements; i++) {
-      if (i > 0) { output += " ";}
-      output += index2str[i];
-   }
-   return output;
+  for (int i=0; i< num_elements; i++) {
+    if (i > 0) { output += " ";}
+    output += index2str[i];
+  }
+  return output;
 }
 

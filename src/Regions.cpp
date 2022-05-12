@@ -108,12 +108,14 @@ std::string SetROI::print_tree_at_chromosome(std::string chromo) {
  */
 std::string SetROI::write_out() {
    std::string report;
-   // Then one per line:  chromosome name \t # intervals on that chromosome
    // Currently only chromosome names reported.
-   std::map<int, CITree *>::iterator it;
-   for (it = searchable.begin(); it != searchable.end(); it++) {
-       report += "\nIndex: " + std::to_string(it->first) + " " + chr_names.lookupName(it->first);
-          // + "\t" + std::to_string(searchable[it->first]->getSize());
+   report = "\n" + chr_names.print_index_names();
+   std::map<int, std::vector<gInterval *>>::iterator it;
+   std::vector<gInterval *>::iterator intervals;
+   for (it = regions.begin(); it != regions.end(); it++)  {
+     for (intervals = it->second.begin(); intervals != it->second.end(); intervals++)  {
+       report += "\n\t" + (*intervals)->write_out();
+     }
    }
    return report;    
 }

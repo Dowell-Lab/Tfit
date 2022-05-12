@@ -87,3 +87,25 @@ TEST(Bedfile, checkSearch_noOverlap)
    // Assert: Verify the outcome
    EXPECT_EQ(results.size(), 0);
 }
+
+TEST(Bedfile, load_Bedgraph) 
+{
+    // Arrange: bring SUT to desired state
+   std::string file_name = "../examples/typical_region.bg"; 
+   Bedgraph bg;
+
+   // Act: call methods on SUT, capture output
+   bg.load_file(file_name,0);   // Load without exiting bed
+
+   // std::cout << bg.reportBedfileContents() << std::endl;
+   std::vector<gInterval*> roi = bg.setRegions.regions[0];
+   gInterval *output = roi[0];
+
+   // Assert: Verify the outcome
+   EXPECT_EQ(output->chromosome, "chr21");
+   ASSERT_NE(output->data, nullptr);
+   ASSERT_NE(output->data->cdata, nullptr);
+   EXPECT_EQ(output->data->cdata->delta, 10);
+}
+
+

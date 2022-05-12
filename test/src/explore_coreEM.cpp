@@ -10,6 +10,8 @@
 #include "load.h"  // contains segment_fits class
 #include "model.h" // contains fit2 implementation (classifier object)
 
+#include "Bedfile.h"
+
 /* This is a very heavy "test" -- more like trying to peel away most of Tfit's
 cruft to get to the core Em alg2rithm (fit2).  */
 TEST(classifier, exerciseFit2)
@@ -40,13 +42,33 @@ TEST(classifier, exerciseFit2)
   data->centers.push_back(center);
 
   // Act on sut (run EM!)
-  cout << "Before: " +  sut.write_classifier_status() << std::endl;
+  // cout << "Before: " +  sut.write_classifier_status() << std::endl;
   sut.fit2(data, data->centers, 0, 0);    
-  cout << "components: " + sut.write_components() << std::endl;
-  cout << "After: " +  sut.write_classifier_status() << std::endl;
+  // cout << "components: " + sut.write_components() << std::endl;
+  // cout << "After: " +  sut.write_classifier_status() << std::endl;
 
   // Assert: Verify the outcome
   EXPECT_EQ(sut.K, 2);
   // EXPECT_EQ(sut.ll, -10);  Why is this -inf here?
 }
+
+TEST(classifier, rewritten)
+{
+  // Lets load a typical small bedgraph file.
+  // string joint_bedgraph = "../examples/reduced.bg";    //chr21 	
+  string joint_bedgraph = "../examples/typical_region.bg";    //chr21 33401693 33407411	
+
+  Bedgraph bg; 
+  bg.load_file(joint_bedgraph, 0);
+
+  // Grab first interval for testing
+  std::vector<gInterval*> roi = bg.setRegions.regions[0];
+  gInterval *testregion = roi[0];
+
+  // Now we need to run the model on this data!
+
+  // Assert: Verify the outcome
+  EXPECT_EQ(bg.setRegions.chr_names.num_elements, 1);
+}
+
 
