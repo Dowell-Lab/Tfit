@@ -8,6 +8,7 @@
  */
 #include "Model.h"
 
+#include <iostream>
 #include "helper.h"
 
 // Empty Constructor
@@ -17,7 +18,7 @@ Bidirectional::Bidirectional(double v_mu, double v_sigma, double v_lambda, doubl
 	mu 	= v_mu;
 	sigma 	= v_sigma;
 	lambda  	= v_lambda;
-	pi 	= v_pi;
+	pi 	= v_pi;     // Check that it's a probability?
    footprint = v_footprint;
 }
 
@@ -45,9 +46,10 @@ double Bidirectional::normalCDF(double x){
  * @return double 
  */
 double Bidirectional::millsRatio(double x){ 
-	if (x > 4){
-		return 1.0 / x;
-	}
+   // Mill's Ratio asymptotic behavior as x->inf
+	if (x > 10){ return 1.0 / x; }
+
+   // for smaller x: 
 	double N = normalCDF(x);
 	double D = normalPDF(x);
 	if (D < pow(10,-15)){ //machine epsilon
@@ -113,27 +115,61 @@ double Bidirectional::pdf(double z, char s){
 }
 
 /**
- * @brief conditional expectation of Y given z_i
+ * @brief conditional expectation of Y given z_i 
+ * Eq 9 E[Y|params] in Azofeifa 2018
  * 
  * @param z 
  * @param s 
  * @return double 
  */
-double Bidirectional::ExpY(double z, char s){
-   z = applyFootprint(z,s);
-	return std::max(0. , s*(z-mu) - lambda*pow(sigma, 2) + (sigma / millsRatio(lambda*sigma - s*((z-mu)/sigma))));
+double Bidirectional::ExpY(double z, char strand){
+   z = applyFootprint(z,strand);
+   double s = indicatorStrand(strand);
+	return std::max(0. , s*(z-mu) - lambda*pow(sigma, 2) 
+      + (sigma / millsRatio(lambda*sigma - s*((z-mu)/sigma))));
+}
+
+/**
+ * @brief conditional expectation of Y given z_i 
+ * Eq 9 E[X|params] in Azofeifa 2018
+ * 
+ * @param z 
+ * @param s 
+ * @return double 
+ */
+double Bidirectional::ExpX(double z, char strand){
+   z = applyFootprint(z,strand);
+   double s = indicatorStrand(strand);
+   return (z - s*(ExpY(z,strand)-footprint));
 }
 
 /**
  * @brief conditional expectation of Y^2 given z_i
+ * Eq 9 E[Y^2|params] in Azofeifa 2018
  * 
  * @param z 
  * @param s 
  * @return double 
  */
-double Bidirectional::ExpY2(double z, char s){
-   z = applyFootprint(z,s);
-	return pow(lambda,2)*pow(sigma,4) + pow(sigma, 2)*(2*lambda*s*(mu-z)+1 ) + pow(mu-z,2) - ((sigma*(lambda*pow(sigma,2) + s*(mu-z)))/millsRatio(lambda*sigma - s*((z-mu)/sigma) )); 
+double Bidirectional::ExpY2(double z, char strand){
+   z = applyFootprint(z,strand);
+   double s = indicatorStrand(strand);
+	return pow(lambda,2)*pow(sigma,4) + pow(sigma, 2)*(2*lambda*s*(mu-z)+1 ) 
+     + pow(mu-z,2) 
+     - ((sigma*(lambda*pow(sigma,2) + s*(mu-z)))/millsRatio(lambda*sigma - s*((z-mu)/sigma))); 
+}
+
+/**
+ * @brief conditional expectation of Y^2 given z_i
+ * Eq 9 E[X^2|params] in Azofeifa 2018
+ * 
+ * @param z 
+ * @param s 
+ * @return double 
+ */
+double Bidirectional::ExpX2(double z, char strand){
+   z = applyFootprint(z,strand);
+	return (pow(ExpX(z,strand),2)+ExpY2(z,strand)-ExpY(z,strand));
 }
 
 std::string Bidirectional::write_out() {
@@ -149,13 +185,23 @@ std::string Bidirectional::write_out() {
  * @param n          Number of samples to create
  * @return std::vector<double> 
  */
-std::vector<double> Bidirectional::generate_data(int n, char s) {
+std::vector<double> Bidirectional::generate_data(int n) {
    Random num_gen;
-   int signStrand = indicatorStrand(s);
 
    std::vector<double> results;
+   double rnum;  int signStrand = 1;
    for (int i = 0; i < n; i++) {
-    results[i] = num_gen.fetchNormal(mu,sigma) + signStrand * num_gen.fetchExponential(lambda);
+    // Flip the coin on strand, based on pi (strand bias)
+    rnum = num_gen.fetchProbability();
+    if (rnum <= pi) {
+      signStrand = 1;
+    } else {
+      signStrand = -1;
+    }
+    // Given that strand, generate a read from EMG
+    double norm = num_gen.fetchNormal(mu,sigma);
+    double expon = num_gen.fetchExponential(lambda);
+    results.push_back(signStrand *(norm + signStrand * expon));
    }
    return results;
 }

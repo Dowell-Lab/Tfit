@@ -25,10 +25,12 @@ class Bidirectional {
   std::string write_out();
 
   double pdf(double z, char s);
+  double ExpX(double z, char strand);
   double ExpY(double z, char s);
+  double ExpX2(double z, char strand);
   double ExpY2(double z, char s);
 
-  std::vector<double> generate_data(int n, char s);
+  std::vector<double> generate_data(int n);
 
 // private:
   double normalPDF(double);
@@ -36,6 +38,7 @@ class Bidirectional {
   double normalCDF(double x);
   int indicatorStrand(char s);
   double applyFootprint (double z, char s);
+
 };
 
 
