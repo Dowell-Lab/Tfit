@@ -1,5 +1,5 @@
 /**
- * @file test_dInterval.cpp 
+ * @file test_Data.cpp 
  * @author Robin Dowell
  * @brief Testing the data interval classes: \ref RawData and \ref dInterval
  * @date 2022-04-15
