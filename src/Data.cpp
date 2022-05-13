@@ -20,6 +20,7 @@
 #include <algorithm>
 
 #include "split.h"
+#include "helper.h"
 #include "Intervals.h"
 
 /**********************  RawData ********************/
@@ -141,10 +142,10 @@ std::string RawData::write_out() {
   else { ID = "noID"; }
 
   std::string output = ID + ":";
-  output += to_string(minX) + ":" + to_string(maxX);
+  output += tfit::prettyDecimal(minX,2) + ":" + tfit::prettyDecimal(maxX,2);
 
-  output += "  " + to_string(forward.size());
-  output += "  " + to_string(reverse.size());
+  output += "  " + tfit::prettyDecimal(forward.size(), 2);
+  output += "  " + tfit::prettyDecimal(reverse.size(), 2);
   return output;
 }
 
@@ -157,11 +158,13 @@ std::string RawData::write_out() {
 std::string RawData::data_dump() {
   std::string output = "Forward: ";
   for (int i=0; i < forward.size(); i++) {
-    output += "[" + to_string(forward[i][0]) + "," + to_string(forward[i][1]) + "]";
+    output += "[" + tfit::prettyDecimal(forward[i][0],2) + "," 
+          + tfit::prettyDecimal(forward[i][1],2) + "]";
   }
   output += "\nReverse: ";
   for (int i=0; i < reverse.size(); i++) {
-    output += "[" + to_string(reverse[i][0]) + "," + to_string(reverse[i][1]) + "]";
+    output += "[" + tfit::prettyDecimal(reverse[i][0],2) + "," 
+      + tfit::prettyDecimal(reverse[i][1], 2) + "]";
   }
   return output;
 }
@@ -397,7 +400,8 @@ std::string dInterval::write_out() {
   if (raw != NULL) {
     output = raw->write_out();
   }
-  output += "\t" + to_string(bins) + "," + to_string(delta) + "," + to_string(scale);
+  output += "\t" + tfit::prettyDecimal(bins,0) + "," 
+      + tfit::prettyDecimal(delta,4) + "," + tfit::prettyDecimal(scale,3);
   return output;
 }
 
@@ -410,8 +414,8 @@ std::string dInterval::write_out() {
 std::string dInterval::data_dump() {
   std::string output = "Points: ";
   for (int i = 0; i < bins; i ++ ){
-    output += "[" + to_string(X[0][i]) + ":" + 
-          to_string(X[1][i]) + "," + to_string(X[2][i]) + "]";
+    output += "[" + tfit::prettyDecimal(X[0][i],2) + ":" + 
+          tfit::prettyDecimal(X[1][i],2) + "," + tfit::prettyDecimal(X[2][i],2) + "]";
   }
   return output;
   

@@ -171,7 +171,8 @@ NoiseModel::NoiseModel(double v_a, double v_b) {
 }
 
 std::string NoiseModel::write_out() {
-   std::string output = "Noise: U(" + std::to_string(a) + "," + std::to_string(b) + ")";
+   std::string output = "Noise: U(" + tfit::prettyDecimal(a,4) + "," 
+      + tfit::prettyDecimal(b,4) + ")";
    return(output);
 }
 

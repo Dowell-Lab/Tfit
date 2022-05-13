@@ -58,8 +58,9 @@ gInterval::gInterval(std::string v_chromosome, double v_start, double v_stop, st
  * @return std::string 
  */
 std::string gInterval::write_out() {
-  std::string text = ("#" + chromosome + ":" + std::to_string((int)start) + "-" 
-		+ std::to_string((int)stop) + "," + identifier);
+  // Note: prettyDecimal with -1 sigfigs removes the decimal!
+  std::string text = ("#" + chromosome + ":" + tfit::prettyDecimal(start,-1) + "-" 
+		+ tfit::prettyDecimal(stop,-1) + "," + identifier);
   return text;
 }
 
@@ -70,8 +71,8 @@ std::string gInterval::write_out() {
  * @return std::string 
  */
 std::string gInterval::write_asBED() {
-  std::string text = (chromosome + "\t" + std::to_string((int)start) + "\t" 
-		+ std::to_string((int)stop) + "\t" + identifier);
+  std::string text = (chromosome + "\t" + tfit::prettyDecimal(start,-1) + "\t" 
+		+ tfit::prettyDecimal(stop,-1) + "\t" + identifier);
   return text;
 }
 
@@ -189,7 +190,7 @@ bed6::bed6(std::string v_chromosome, double v_start, double v_stop,
  */
 std::string bed6::write_out() {
   std::string text = gInterval::write_out();
-  text += "," + std::to_string(score) + "," + strand;
+  text += "," + tfit::prettyDecimal(score,4) + "," + strand;
   return text;
 }
 
@@ -201,7 +202,7 @@ std::string bed6::write_out() {
  */
 std::string bed6::write_asBED() {
   std::string text = gInterval::write_asBED();
-  text += "\t" + std::to_string(score) + "\t" + strand;
+  text += "\t" + tfit::prettyDecimal(score, 4) + "\t" + strand;
   return text;
 }
 
