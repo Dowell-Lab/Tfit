@@ -8,6 +8,8 @@
  */
 #include "Model.h"
 
+#include "helper.h"
+
 // Empty Constructor
 Bidirectional::Bidirectional() { }
 
@@ -27,6 +29,14 @@ Bidirectional::Bidirectional(double v_mu, double v_sigma, double v_lambda, doubl
 double Bidirectional::normalPDF(double x) { 
 	return exp(-pow(x,2)*0.5)/sqrt(2*M_PI);
 }
+/**
+ * @brief the standard Normal CDF
+ * @param x 
+ * @return double 
+ */
+double Bidirectional::normalCDF(double x){ 
+	return 0.5*(1+erf(x/sqrt(2)));
+}
 
 /**
  * @brief Mill's Ratio (formerly just "R")
@@ -38,8 +48,8 @@ double Bidirectional::millsRatio(double x){
 	if (x > 4){
 		return 1.0 / x;
 	}
-	double N = NormalCDF(x);
-	double D = NormalPDF(x);
+	double N = normalCDF(x);
+	double D = normalPDF(x);
 	if (D < pow(10,-15)){ //machine epsilon
 		return 1.0 / pow(10,-15);
 	}
@@ -61,16 +71,17 @@ int Bidirectional::indicatorStrand(char s) {
 
 double Bidirectional::applyFootprint (double z, char s) {
 	if (s == '+'){ 
-      z-=foot_print; 
+      z-=footprint; 
 
    }else{
-		z+=foot_print;
+		z+=footprint;
 	}
    return z;
 }
 
 /**
- * @brief EMG density function
+ * @brief EMG probability density function
+ * h(z,s; mu, sigma, lambda, pi) in Azofeifa 2018
  * 
  * @param z current position/read
  * @param s strand 
@@ -78,23 +89,25 @@ double Bidirectional::applyFootprint (double z, char s) {
  */
 double Bidirectional::pdf(double z, char s){
    // if (w==0){ return 0.0; }
+   double w = 1;     // dummy placeholder -- no w yet.
 
    // Offset the position by the footprint 
    z = applyFootprint(z,s);
 
 	double vl 		= (lambda/2.0)*(indicatorStrand(s)*2*(mu-z) + lambda*pow(sigma,2));
-	double p;
+
+	double h;   // Called h(z,s;mu, sigma, lambda, pi) in the paper.
 	if (vl > 100){ //potential for overflow, inaccuracies
-		p 			= lambda*NormalPDF((z-mu)/sigma)*MillsRatio(lambda*sigma - indicatorStrand(s)*((z-mu)/sigma));
+		h 			= lambda*normalPDF((z-mu)/sigma)*millsRatio(lambda*sigma - indicatorStrand(s)*((z-mu)/sigma));
 	}else{
-		p 			= (lambda/2)*exp(vl)*erfc((indicatorStrand(s)*(mu-z) + lambda*pow(sigma ,2) )/(sqrt(2)*sigma));
+		h 			= (lambda/2)*exp(vl)*erfc((indicatorStrand(s)*(mu-z) + lambda*pow(sigma ,2) )/(sqrt(2)*sigma));
 	}
 	// Doesn't this line negate the whole "if" statement above??
-	p     = (lambda/2)*exp(vl)*erfc((indicatorStrand(s)*(mu-z) + lambda*pow(sigma ,2) )/(sqrt(2)*sigma));
-	p     = p*w*pow(pi, max(0, indicatorStrand(s)) )*pow(1-pi, max(0, -1*indicatorStrand(s)));
+	h     = (lambda/2)*exp(vl)*erfc((indicatorStrand(s)*(mu-z) + lambda*pow(sigma ,2) )/(sqrt(2)*sigma));
+	h     = h*w*pow(pi, std::max(0, indicatorStrand(s)) )*pow(1-pi, std::max(0, -1*indicatorStrand(s)));
 
-	if (p < pow(10,7) and not isnan(float(p)) ){
-	  return p; 
+	if (h < pow(10,7) and not std::isnan(float(h)) ){
+	  return h; 
 	}
 	return 0.0;
 }
@@ -108,7 +121,7 @@ double Bidirectional::pdf(double z, char s){
  */
 double Bidirectional::ExpY(double z, char s){
    z = applyFootprint(z,s);
-	return max(0. , s*(z-mu) - lambda*pow(sigma, 2) + (sigma / MillsRatio(lambda*sigma - s*((z-mu)/sigma))));
+	return std::max(0. , s*(z-mu) - lambda*pow(sigma, 2) + (sigma / millsRatio(lambda*sigma - s*((z-mu)/sigma))));
 }
 
 /**
@@ -120,40 +133,75 @@ double Bidirectional::ExpY(double z, char s){
  */
 double Bidirectional::ExpY2(double z, char s){
    z = applyFootprint(z,s);
-	return pow(lambda,2)*pow(sigma,4) + pow(sigma, 2)*(2*lambda*s*(mu-z)+1 ) + pow(mu-z,2) - ((sigma*(lambda*pow(sigma,2) + s*(mu-z)))/MillsRatio(lambda*sigma - s*((z-mu)/sigma) )); 
+	return pow(lambda,2)*pow(sigma,4) + pow(sigma, 2)*(2*lambda*s*(mu-z)+1 ) + pow(mu-z,2) - ((sigma*(lambda*pow(sigma,2) + s*(mu-z)))/millsRatio(lambda*sigma - s*((z-mu)/sigma) )); 
+}
+
+std::string Bidirectional::write_out() {
+   std::string output = "Bidir(" + tfit::prettyDecimal(mu,2) + "," + tfit::prettyDecimal(sigma,2)
+            + "," + tfit::prettyDecimal(lambda,4) + "," + tfit::prettyDecimal(pi,3) + "," 
+            + tfit::prettyDecimal(footprint,2) + ")";
+   return output;
+}
+
+/**
+ * @brief Generate n samples from this bidirectional model
+ * 
+ * @param n          Number of samples to create
+ * @return std::vector<double> 
+ */
+std::vector<double> Bidirectional::generate_data(int n, char s) {
+   Random num_gen;
+   int signStrand = indicatorStrand(s);
+
+   std::vector<double> results;
+   for (int i = 0; i < n; i++) {
+    results[i] = num_gen.fetchNormal(mu,sigma) + signStrand * num_gen.fetchExponential(lambda);
+   }
+   return results;
 }
 
 
 /******************** Noise Model ************************/
 
-NoiseModel::NoiseModel()
-	: noise() {
-	
+NoiseModel::NoiseModel(){} //empty constructor
+
+NoiseModel::NoiseModel(double v_a, double v_b) {
+	a=v_a;
+	b=v_b;
 }
 
 std::string NoiseModel::write_out() {
-   std::string output;
-   output = noise.write_out();	
+   std::string output = "Noise: U(" + std::to_string(a) + "," + std::to_string(b) + ")";
    return(output);
 }
 
+/**
+ * @brief NOISE density function
+ * Note that NOISE is just a uniform.
+ * 
+ * @param x          NOT used!
+ * @param strand 
+ * @return double 
+ */
+double NoiseModel::pdf(double x, char s){
+   double w = 1;     // Place holder!
+   double pi = 1;    // Place hodler!
+	if (s == '+'){
+		return (w*pi) / abs(b-a);
+	}
+	return (w*(1-pi)) / abs(b-a);
+}
+
+
+
 /**********************  Full model (with Elongationg) *************/
 
-FullModel::FullModel()
-	: F_bidir(),
-	  R_bidir(),
-	  forward(),
-	  reverse() {
+FullModel::FullModel() {
 	
 }
 
 std::string FullModel::write_out() {
-   std::string output;
-   output = F_bidir.write_out();	
-   output += " " + forward.write_out();	
-   output += " " + R_bidir.write_out();	
-   output += " " + reverse.write_out();	
-   output += " " + to_string(pi);
+   std::string output = bidir.write_out();
    return(output);
 }
 

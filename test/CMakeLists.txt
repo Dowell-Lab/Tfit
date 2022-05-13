@@ -52,6 +52,7 @@ list(APPEND sources
                 src/test_Bedfile.cpp
                 src/test_Bimap.cpp
                 src/test_SetROI.cpp
+                src/test_Bidirectional.cpp
                 )
 
 # Set Include directories

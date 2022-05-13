@@ -9,6 +9,7 @@
 #define Model_H
 
 #include <string>
+#include <vector>
 
 class Bidirectional {
   public:
@@ -27,9 +28,12 @@ class Bidirectional {
   double ExpY(double z, char s);
   double ExpY2(double z, char s);
 
-private:
+  std::vector<double> generate_data(int n, char s);
+
+// private:
   double normalPDF(double);
   double millsRatio(double);
+  double normalCDF(double x);
   int indicatorStrand(char s);
   double applyFootprint (double z, char s);
 };
@@ -81,22 +85,26 @@ public:
  */
 
 class NoiseModel {
-  Uniform noise;
+	double a, b;
 
   // Constructor
   NoiseModel();
+  NoiseModel(double v_a, double v_b);
 
   // Expectation: pG(b-a)/S where S is length of genome, G is # reads mapped, p is prob noise
 
   // Functions
   std::string write_out();
+
+  double pdf(double x, char s);
+
 };
 
 class FullModel {
   public:
     Bidirectional bidir;
-	Uniform forward;
-	Uniform reverse;
+	// Uniform forward;
+	// Uniform reverse;
 
   // Constructor
 	FullModel();
