@@ -37,6 +37,11 @@ double Random::fetchNormal(double mean, double std) {
 	return ndist(mt);
 }
 
+double Random::fetchExponential(double lambda) {
+	std::exponential_distribution<double> edist(lambda);
+	return edist(mt);
+}
+
 double Random::fetchProbability() {
 	return Random::fetchUniform(0,1);
 }
@@ -76,3 +81,7 @@ std::string Bimap::print_index_names() {
   return output;
 }
 
+std::string tfit::prettyDecimal (double x, double sigfig) {
+   int sfig = sigfig + 1;      // Necessary to get decimal + signfig!
+  return std::to_string(x).substr(0,std::to_string(x).find(".") + sfig);
+}

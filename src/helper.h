@@ -30,6 +30,8 @@ class Random {
     double fetchUniform(double,double);
     double fetchNormal(double,double);  // return a random number in this interval, normal dist.
     double fetchProbability();
+
+    double fetchExponential(double lambda);
 };
 
 /**
@@ -56,5 +58,10 @@ class Bimap {
    std::string print_index_names();  
 
 };
+
+// Helper functions
+namespace tfit {
+  std::string prettyDecimal (double x, double sigfig);
+}
 
 #endif
