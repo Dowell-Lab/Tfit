@@ -160,12 +160,13 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	LG->write("done\n", verbose);
 	//===========================================================================
 	//(4) if MLE option was provided than need to run the model_main::run()
-	//
+	/**	Removing this HEADACHE (rdd)
 	if (stoi(P->p["-MLE"])){
 		P->p["-k"] 	= P->p["-o"]+ job_name+ "-" + to_string(job_ID)+ "_prelim_bidir_hits.bed";
 		model_run(P, rank, nprocs,0, job_ID, LG);
 		
 	}
+	**/
 	LG->write("exiting bidir module....................................done\n\n", verbose);
 	return 1;
 }

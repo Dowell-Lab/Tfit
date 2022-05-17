@@ -113,16 +113,16 @@ void BIC_template(segment * data,  double * BIC_values, double * densities, doub
     int j = start, k =start;
     double N_pos=0,N_neg=0;
     double total_density;
-    for (int i = start; i < stop; i++){
-      while (j < data->XN and (data->X[0][j] - data->X[0][i]) < -window){
-	N_pos-=data->X[1][j];
-	N_neg-=data->X[2][j];
-	j++;
+    for (int i = start; i < stop; i++) {
+      while (j < data->XN and (data->X[0][j] - data->X[0][i]) < -window) {
+        N_pos -= data->X[1][j];
+        N_neg -= data->X[2][j];
+        j++;
       }
-      while (k < data->XN and (data->X[0][k] - data->X[0][i]) < window){
-	N_pos+=data->X[1][k];
-	N_neg+=data->X[2][k];
-	k++;
+      while (k < data->XN and (data->X[0][k] - data->X[0][i]) < window) {
+        N_pos += data->X[1][k];
+        N_neg += data->X[2][k];
+        k++;
       }
       int aa=k < data->XN;
       int bb=j < data->XN;
@@ -242,7 +242,81 @@ double run_global_template_matching(vector<segment*> segments,
   return 1.0;
 }
 
+/**
+ * @brief This populates the bidirectional_bounds vectors in segments which 
+ * are then used to calulate centers.
+ * 
+ * @param segments 
+ * @param out_dir 
+ * @param P     the ubiquitous parameters hash
+ * @param SC    the slice ratio (some preset values)
+ * @return double 
+ */
+double RF_run_global_template_matching(vector<segment*> segments, 
+				    string out_dir,  params * P, slice_ratio SC){
+	
+  double CTT                    = 5; //filters for low coverage regions, WHY hard coded?!!?
 
+  double ns 			= stod(P->p["-ns"]);
+  double window 		= stod(P->p["-pad"])/ns;
+  double sigma, lambda, foot_print, pi, w;
+  double ct 			= stod(P->p["-bct"]);
+  
+  sigma 	= stod(P->p["-sigma"])/ns , lambda= ns/stod(P->p["-lambda"]);
+  foot_print= stod(P->p["-foot_print"])/ns , pi= stod(P->p["-pi"]), w= stod(P->p["-w"]);
+  
+  bool SCORES 		= not P->p["-scores"].empty();
+  
+  ofstream FHW_scores;
+  
+  if (SCORES){ FHW_scores.open(P->p["-scores"]); }
+  string annotation;
+  int prev, prev_start, stop;
+  int N;
+  int start, center;
+
+  for (int i = 0; i < segments.size(); i++){
+    double * BIC_values 	= new double[int(segments[i]->XN)];
+    double * densities 		= new double[int(segments[i]->XN)];
+    double * densities_r 	= new double[int(segments[i]->XN)];
+
+    double l 		=  segments[i]->getXLength(); // maxX-segments[i]->minX;
+    double ef 		= segments[i]->fN*( 2*(window*ns)*0.05  /(l*ns ));
+    double er 		= segments[i]->rN*( 2*(window*ns)*0.05 /(l*ns ));
+    double stdf 	= sqrt(ef*(1- (  2*(window*ns)*0.05/(l*ns )  ) )  );
+    double stdr 	= sqrt(er*(1- (  2*(window*ns)*0.05 /(l*ns ) ) )  );
+    BIC_template(segments[i],  BIC_values, densities, densities_r, window, sigma, lambda, foot_print, pi, w, P->threads);   
+    double start=-1, rN=0.0 , rF=0.0, rR=0.0, rB=0.0;
+    vector<vector<double>> HITS;
+    for (int j = 1; j<segments[i]->XN-1; j++){
+      if (SCORES){
+        double vl 	= BIC_values[j];
+        if (std::isnan(double(vl))){
+          vl 		= 0;
+        }
+        FHW_scores<<segments[i]->chrom<<"\t"<<to_string(int(segments[i]->X[0][j-1]*ns+segments[i]->start))<<"\t";
+        FHW_scores<<to_string(int(segments[i]->X[0][j]*ns+segments[i]->start ))<<"\t" <<to_string(vl)<<endl;
+      }
+      bool HIT = check_hit(BIC_values[j], densities[j], densities_r[j], SC.threshold, ef + CTT*stdf, er + CTT*stdr  );
+      if ( HIT ) {
+        if (start < 0){
+          start = segments[i]->X[0][j-1]*ns+segments[i]->start;
+        }
+        start+=1, rN+=1 , rF+=densities[j], rR+=densities_r[j], rB+=log10( SC.pvalue(BIC_values[j]) + pow(10,-20)) ;	
+      } 
+      if(not HIT and start > 0 ){
+        vector<double> row = {start , segments[i]->X[0][j-1]*ns+segments[i]->start, rB/rN , rF/rN, rR/rN  };
+        HITS.push_back(row);
+        start=-1, rN=0.0 , rF=0.0, rR=0.0, rB=0.0;
+      } 		
+    }
+    for (int j = 0; j < HITS.size();j++){
+      segments[i]->bidirectional_bounds.push_back(HITS[j]);	
+    }
+    segments[i]->bidirectional_bounds 	= merge(segments[i]->bidirectional_bounds, window*0.5);    
+  }
+  return 1.0;
+}
 
 
 

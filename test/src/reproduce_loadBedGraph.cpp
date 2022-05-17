@@ -1,7 +1,7 @@
 /**
- * @file Itest_loadBedGraph.cpp 
+ * @file reproduce_loadBedGraph.cpp 
  * @author Robin Dowell
- * @brief Integration testing the loading of a BED file
+ * @brief recreate joey's method of loading bedgraphs
  * @date 2022-02-24
  * 
  */

@@ -64,6 +64,7 @@ TEST(Models, bidir_generateData)
 
     // Assert: Verify the outcome
     EXPECT_EQ(gdata.size(), 1000);
+    // Should test some statistical properties of generated data.
 }
 
 /*
