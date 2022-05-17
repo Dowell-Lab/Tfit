@@ -171,13 +171,12 @@ bool check_hit(double a, double b, double c, double x, double y, double z){
  * are then used to calulate centers.
  * 
  * @param segments 
- * @param out_dir 
  * @param P     the ubiquitous parameters hash
  * @param SC    the slice ratio (some preset values)
  * @return double 
  */
 double run_global_template_matching(vector<segment*> segments, 
-				    string out_dir,  params * P, slice_ratio SC){
+            params * P, slice_ratio SC){
 	
   double CTT                    = 5; //filters for low coverage regions, WHY hard coded?!!?
 
@@ -247,13 +246,12 @@ double run_global_template_matching(vector<segment*> segments,
  * are then used to calulate centers.
  * 
  * @param segments 
- * @param out_dir 
  * @param P     the ubiquitous parameters hash
  * @param SC    the slice ratio (some preset values)
  * @return double 
  */
 double RF_run_global_template_matching(vector<segment*> segments, 
-				    string out_dir,  params * P, slice_ratio SC){
+            params * P, slice_ratio SC){
 	
   double CTT                    = 5; //filters for low coverage regions, WHY hard coded?!!?
 

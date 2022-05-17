@@ -139,7 +139,7 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	//(3a) now going to run the template matching algorithm based on pseudo-
 	//moment estimator and compute BIC ratio (basically penalized LLR)
 	LG->write("running template matching algorithm.....................", verbose);
-	double threshold 	= run_global_template_matching(segments, out_file_dir, P, SC);	
+	double threshold 	= run_global_template_matching(segments, P, SC);	
 	//(3b) now need to send out, gather and write bidirectional intervals 
 	LG->write("done\n", verbose);
 	

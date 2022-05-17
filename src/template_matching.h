@@ -21,8 +21,9 @@ using namespace std;
 
 int sample_centers(vector<double>, double);
 
-double run_global_template_matching(vector<segment*> , string,  params * ,slice_ratio );
-double RF_run_global_template_matching(vector<segment*> segments, string out_dir,  
+double run_global_template_matching(vector<segment*> segments, 
+            params * P, slice_ratio SC);
+double RF_run_global_template_matching(vector<segment*> segments, 
                                     params * P, slice_ratio SC);
 
 
