@@ -72,6 +72,7 @@ class slice_ratio{
   vector<vector<double> > XY ; //bins X 3
   vector<normal> NORMS;
   normal norm_all;
+
   slice_ratio(double, double, int);
   slice_ratio();
   void set(double); //this computes the mean/std of each and makes the normal class

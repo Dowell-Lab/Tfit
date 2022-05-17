@@ -29,8 +29,10 @@ TEST(Bidir, templatematch)
 	SC.mean = 0.78, SC.std = 0.08; //this dependent on -w 0.9 !!!
 	SC.set_2(0.95);
 
+  P->p["-scores"] = "new.tm.out";
+
   // Act: call methods on SUT, capture output
-	double threshold 	= run_global_template_matching(segments, P, SC);	
+	double threshold 	= RF_run_global_template_matching(segments, P, SC);	
 
   // Assert: Verify the outcome
   // cout << segments[0]->write_withData() << std::endl;

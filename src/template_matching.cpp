@@ -146,6 +146,7 @@ void BIC_template(segment * data,  double * BIC_values, double * densities, doub
     }
   }
 }
+
 /**
  * @brief 
  * 
@@ -167,8 +168,7 @@ bool check_hit(double a, double b, double c, double x, double y, double z){
 
 //================================================================================================
 /**
- * @brief This populates the bidirectional_bounds vectors in segments which 
- * are then used to calulate centers.
+ * @brief The template matching algorithm from Azofeifa 2018
  * 
  * @param segments 
  * @param P     the ubiquitous parameters hash
@@ -241,12 +241,16 @@ double run_global_template_matching(vector<segment*> segments,
   return 1.0;
 }
 
+/***********************************************************************/
+/***********************************************************************/
+/***********************************************************************/
+/***********************************************************************/
+
 /**
- * @brief This populates the bidirectional_bounds vectors in segments which 
- * are then used to calulate centers.
+ * @brief The refactored template matching algorithm
  * 
- * @param segments 
- * @param P     the ubiquitous parameters hash
+ * @param segments  All the chunks on which to run template matching
+ * @param P     Joey's ubiquitous parameters hash
  * @param SC    the slice ratio (some preset values)
  * @return double 
  */
@@ -264,6 +268,9 @@ double RF_run_global_template_matching(vector<segment*> segments,
   foot_print= stod(P->p["-foot_print"])/ns , pi= stod(P->p["-pi"]), w= stod(P->p["-w"]);
   
   bool SCORES 		= not P->p["-scores"].empty();
+
+  std::cout << "ns: "+ to_string(ns) + " win: " + to_string(window) + " ct: " + to_string(ct)
+    << std::endl;
   
   ofstream FHW_scores;
   
@@ -272,8 +279,10 @@ double RF_run_global_template_matching(vector<segment*> segments,
   int prev, prev_start, stop;
   int N;
   int start, center;
-
+ 
+  std::cout << "segment num: " + to_string(segments.size()) << std::endl;
   for (int i = 0; i < segments.size(); i++){
+    std::cout << "i: " + to_string(i) << std::endl;
     double * BIC_values 	= new double[int(segments[i]->XN)];
     double * densities 		= new double[int(segments[i]->XN)];
     double * densities_r 	= new double[int(segments[i]->XN)];
@@ -283,7 +292,19 @@ double RF_run_global_template_matching(vector<segment*> segments,
     double er 		= segments[i]->rN*( 2*(window*ns)*0.05 /(l*ns ));
     double stdf 	= sqrt(ef*(1- (  2*(window*ns)*0.05/(l*ns )  ) )  );
     double stdr 	= sqrt(er*(1- (  2*(window*ns)*0.05 /(l*ns ) ) )  );
-    BIC_template(segments[i],  BIC_values, densities, densities_r, window, sigma, lambda, foot_print, pi, w, P->threads);   
+    std::cout << "l: "+ to_string(l) + " ef: " + to_string(ef) + " er: " + to_string(er)
+      + " stdf: "+ to_string(stdf) + " stdr: " + to_string(stdr) << std::endl;
+
+    RF_BIC_template(segments[i],  BIC_values, densities, densities_r, window, sigma, lambda, foot_print, pi, w, P->threads);   
+
+  /*
+    for (int z = 0; z < int(segments[i]->XN); z++) {
+      std::cout << "BIC: " + to_string(BIC_values[z])
+         + " den: " + to_string(densities[z])
+         + " denR: " + to_string(densities_r[z]) << std::endl;
+    }
+    */
+
     double start=-1, rN=0.0 , rF=0.0, rR=0.0, rB=0.0;
     vector<vector<double>> HITS;
     for (int j = 1; j<segments[i]->XN-1; j++){
@@ -316,15 +337,101 @@ double RF_run_global_template_matching(vector<segment*> segments,
   return 1.0;
 }
 
+/**
+ * @brief Refactored BIC_template function (for understand this damn thing!)
+ * 
+ */
+void RF_BIC_template(segment *data, double *BIC_values, double *densities, double *densities_r, double window,
+                     double sigma, double lambda, double foot_print, double pi, double w, int thr)
+{
+  double vl;
+  int NN = int(data->XN);
+
+  int start = 0; int stop = NN;
+  int j = start, k = start;
+  double N_pos = 0, N_neg = 0;
+  double total_density;
+
+  // std::cout << data->write_withData() << std::endl;
+  std::cout << data->write_allScalar() << std::endl;
+
+  for (int i = start; i < stop; i++) {
+    std::cout << "i: " + to_string(i); 
+    // std::cout << "j: " + to_string(j);
+    while (j < data->XN and (data->X[0][j] - data->X[0][i]) < -window) {
+      //std::cout << " " + to_string(j);
+      N_pos -= data->X[1][j];
+      N_neg -= data->X[2][j];
+      j++;
+    }
+    // std::cout << std::endl;
+    // std::cout << "k: " + to_string(k);
+    while (k < data->XN and (data->X[0][k] - data->X[0][i]) < window) {
+      // std::cout << " " + to_string(k);
+      N_pos += data->X[1][k];
+      N_neg += data->X[2][k];
+      k++;
+    }
+    // std::cout << std::endl;
+    std::cout << " j: " + to_string(j);
+    std::cout << " k: " + to_string(k) << std::endl;
+
+    int aa = k < data->XN;
+    int bb = j < data->XN;
+    int cc = N_neg > 0;
+    int dd = N_pos > 0;
+
+/*
+    std::cout << "aa: " + to_string(aa) << std::endl;
+    std::cout << "bb: " + to_string(bb) << std::endl;
+    std::cout << "cc: " + to_string(cc) << std::endl;
+    std::cout << "dd: " + to_string(dd) << std::endl;
+    */
+
+    if (k < data->XN and j < data->XN and k != j and N_neg > 0 and N_pos > 0 and (data->X[0][k] - data->X[0][j]) > 1.75 * window)
+    {
+      total_density = (N_pos / (data->X[0][k] - data->X[0][j])) + (N_neg / (data->X[0][k] - data->X[0][j]));
+      densities[i] = N_pos;
+      densities_r[i] = N_neg;
+
+      double mu = (data->X[0][k] + data->X[0][j]) / 2.;
+
+      BIC_values[i] = RF_BIC3(data->X, j, k, i, N_pos, N_neg,
+                           sigma, lambda, foot_print, pi, w);
+    }
+    else
+    {
+      BIC_values[i] = 0;
+      densities[i] = 0;
+      densities_r[i] = 0;
+    }
+  }
+}
+
+double RF_BIC3(double ** X, int j, int k, int i,
+	    double N_pos, double N_neg,  double sigma, double lambda, double fp, double pi, double w){
+
+  double N                = N_pos + N_neg;
+  double l     = X[0][k] - X[0][j];
+
+  double uni_ll= LOG(pi/  (l))*N_pos + LOG((1-pi)/ (l))*N_neg;
 
 
+  double pi2      = (N_pos+10000) / (N_neg + N_pos+20000);
 
-
-
-
-
-
-
-
+  double emg_ll   = 0, p1=0.0,p2=0.0;
+  EMG EMG_clf(X[0][i], sigma, lambda, w, pi2  );
+  EMG_clf.foot_print      = fp;
+  
+  for (int i = j; i < k;i++ ){
+    p1 = EMG_clf.pdf(X[0][i],1) + (1.0-w)*pi*(1.0/l) , p2 = EMG_clf.pdf(X[0][i],-1) + (1.0-w)*(1.0-pi)*(1.0/l) ;
+    if (p1 > 0 and p2 > 0 ){//this should always evalulate!!
+      emg_ll+=LOG( p1 )*X[1][i] + LOG( p2 )*X[2][i];
+    }else{
+    }
+  }
+  double emg_ratio        = (-2*uni_ll + LOG(N)) / (-2*emg_ll + 20*LOG(N))  ;
+  return emg_ratio;
+}
 
 
