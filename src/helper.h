@@ -20,18 +20,18 @@
  * 
  */
 class Random {
-    public:
+  public:
 	std::mt19937 mt;
 
-    // Constructors
-    Random();
+  // Constructors
+  Random();
 
-    // Wrapper functions
-    double fetchUniform(double,double);
-    double fetchNormal(double,double);  // return a random number in this interval, normal dist.
-    double fetchProbability();
+  // Wrapper functions
+  double fetchUniform(double,double);
+  double fetchNormal(double,double);  // return a random number in this interval, normal dist.
+  double fetchProbability();
 
-    double fetchExponential(double lambda);
+  double fetchExponential(double lambda);
 };
 
 /**

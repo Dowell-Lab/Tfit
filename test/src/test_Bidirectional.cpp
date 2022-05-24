@@ -13,13 +13,14 @@ TEST(Models, bidir_standardnorms)
 {
     // Arrange: bring SUT to desired state
     Bidirectional sut(35., 0.5, 0.25, 0.5, 2.);
+    Normal standard;
 
     // Act: call methods on SUT, capture output
-    double result = sut.normalPDF(0.3);
-    double result2 = sut.normalCDF(0.3);
+    double result = standard.pdf(0.3);
+    double result2 = standard.cdf(0.3);
 
     // Assert: Verify the outcome
-    EXPECT_EQ(sut.write_out(), "Bidir(35.00,0.50,0.2500,0.500,2.00)");
+    EXPECT_EQ(sut.write_out(), "Bidir(N(35.00,0.50);E(0.25);0.500,2.00)");
     ASSERT_LE(abs(result - 0.381388), 0.0001);  // From R's dnorm(x=0.3)
     ASSERT_LE(abs(result2 - 0.617911), 0.0001);  // From R's pnorm(x=0.3)
 }

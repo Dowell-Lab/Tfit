@@ -10,33 +10,22 @@
 
 #include <iostream>
 #include "helper.h"
+#include "Distro.h"
 
 // Empty Constructor
-Bidirectional::Bidirectional() { }
+
+Bidirectional::Bidirectional()
+	: loading(), initiation() {
+   pi = 0.5;
+   footprint = 40;	
+}
 
 Bidirectional::Bidirectional(double v_mu, double v_sigma, double v_lambda, double v_pi, double v_footprint) {
-	mu 	= v_mu;
-	sigma 	= v_sigma;
-	lambda  	= v_lambda;
+   loading.mu = v_mu;
+   loading.sigma = v_sigma;
+   initiation.lambda = v_lambda;
 	pi 	= v_pi;     // Check that it's a probability?
    footprint = v_footprint;
-}
-
-/** 
- * @brief the standard Normal PDF
- * @param x  position
- * @return double 
- */
-double Bidirectional::normalPDF(double x) { 
-	return exp(-pow(x,2)*0.5)/sqrt(2*M_PI);
-}
-/**
- * @brief the standard Normal CDF
- * @param x 
- * @return double 
- */
-double Bidirectional::normalCDF(double x){ 
-	return 0.5*(1+erf(x/sqrt(2)));
 }
 
 /**
@@ -49,9 +38,12 @@ double Bidirectional::millsRatio(double x){
    // Mill's Ratio asymptotic behavior as x->inf
 	if (x > 10){ return 1.0 / x; }
 
+   Normal standard;
+
    // for smaller x: 
-	double N = normalCDF(x);
-	double D = normalPDF(x);
+	double N = standard.cdf(x); // normalCDF(x);
+	double D = standard.pdf(x); // normalPDF(x);
+   // This needs to be adjusted to avoid that pow() call.
 	if (D < pow(10,-15)){ //machine epsilon
 		return 1.0 / pow(10,-15);
 	}
@@ -96,16 +88,17 @@ double Bidirectional::pdf(double z, char s){
    // Offset the position by the footprint 
    z = applyFootprint(z,s);
 
-	double vl 		= (lambda/2.0)*(indicatorStrand(s)*2*(mu-z) + lambda*pow(sigma,2));
+	double vl 		= (initiation.lambda/2.0)*(indicatorStrand(s)*2*(loading.mu-z) + initiation.lambda*pow(loading.sigma,2));
 
 	double h;   // Called h(z,s;mu, sigma, lambda, pi) in the paper.
 	if (vl > 100){ //potential for overflow, inaccuracies
-		h 			= lambda*normalPDF((z-mu)/sigma)*millsRatio(lambda*sigma - indicatorStrand(s)*((z-mu)/sigma));
+      Normal standard;
+		h 			= initiation.lambda*standard.pdf((z-loading.mu)/loading.sigma)*millsRatio(initiation.lambda*loading.sigma - indicatorStrand(s)*((z-loading.mu)/loading.sigma));
 	}else{
-		h 			= (lambda/2)*exp(vl)*erfc((indicatorStrand(s)*(mu-z) + lambda*pow(sigma ,2) )/(sqrt(2)*sigma));
+		h 			= (initiation.lambda/2)*exp(vl)*erfc((indicatorStrand(s)*(loading.mu-z) + initiation.lambda*pow(loading.sigma ,2) )/(sqrt(2)*loading.sigma));
 	}
 	// Doesn't this line negate the whole "if" statement above??
-	h     = (lambda/2)*exp(vl)*erfc((indicatorStrand(s)*(mu-z) + lambda*pow(sigma ,2) )/(sqrt(2)*sigma));
+	h     = (initiation.lambda/2)*exp(vl)*erfc((indicatorStrand(s)*(loading.mu-z) + initiation.lambda*pow(loading.sigma ,2) )/(sqrt(2)*loading.sigma));
 	h     = h*w*pow(pi, std::max(0, indicatorStrand(s)) )*pow(1-pi, std::max(0, -1*indicatorStrand(s)));
 
 	if (h < pow(10,7) and not std::isnan(float(h)) ){
@@ -125,8 +118,8 @@ double Bidirectional::pdf(double z, char s){
 double Bidirectional::ExpY(double z, char strand){
    z = applyFootprint(z,strand);
    double s = indicatorStrand(strand);
-	return std::max(0. , s*(z-mu) - lambda*pow(sigma, 2) 
-      + (sigma / millsRatio(lambda*sigma - s*((z-mu)/sigma))));
+	return std::max(0. , s*(z-loading.mu) - initiation.lambda*pow(loading.sigma, 2) 
+      + (loading.sigma / millsRatio(initiation.lambda*loading.sigma - s*((z-loading.mu)/loading.sigma))));
 }
 
 /**
@@ -154,9 +147,9 @@ double Bidirectional::ExpX(double z, char strand){
 double Bidirectional::ExpY2(double z, char strand){
    z = applyFootprint(z,strand);
    double s = indicatorStrand(strand);
-	return pow(lambda,2)*pow(sigma,4) + pow(sigma, 2)*(2*lambda*s*(mu-z)+1 ) 
-     + pow(mu-z,2) 
-     - ((sigma*(lambda*pow(sigma,2) + s*(mu-z)))/millsRatio(lambda*sigma - s*((z-mu)/sigma))); 
+	return pow(initiation.lambda,2)*pow(loading.sigma,4) + pow(loading.sigma, 2)*(2*initiation.lambda*s*(loading.mu-z)+1 ) 
+     + pow(loading.mu-z,2) 
+     - ((loading.sigma*(initiation.lambda*pow(loading.sigma,2) + s*(loading.mu-z)))/millsRatio(initiation.lambda*loading.sigma - s*((z-loading.mu)/loading.sigma))); 
 }
 
 /**
@@ -173,9 +166,8 @@ double Bidirectional::ExpX2(double z, char strand){
 }
 
 std::string Bidirectional::write_out() {
-   std::string output = "Bidir(" + tfit::prettyDecimal(mu,2) + "," + tfit::prettyDecimal(sigma,2)
-            + "," + tfit::prettyDecimal(lambda,4) + "," + tfit::prettyDecimal(pi,3) + "," 
-            + tfit::prettyDecimal(footprint,2) + ")";
+   std::string output = "Bidir(" + loading.write_out() + ";" + initiation.write_out()
+            + ";" + tfit::prettyDecimal(pi,3) + "," + tfit::prettyDecimal(footprint,2) + ")";
    return output;
 }
 
@@ -199,8 +191,8 @@ std::vector<double> Bidirectional::generate_data(int n) {
       signStrand = -1;
     }
     // Given that strand, generate a read from EMG
-    double norm = num_gen.fetchNormal(mu,sigma);
-    double expon = num_gen.fetchExponential(lambda);
+    double norm = num_gen.fetchNormal(loading.mu,loading.sigma);
+    double expon = num_gen.fetchExponential(initiation.lambda);
     results.push_back(signStrand *(norm + signStrand * expon));
    }
    return results;
@@ -209,17 +201,17 @@ std::vector<double> Bidirectional::generate_data(int n) {
 
 /******************** Noise Model ************************/
 
-NoiseModel::NoiseModel(){} //empty constructor
+NoiseModel::NoiseModel()
+	: noise() {
+}
 
 NoiseModel::NoiseModel(double v_a, double v_b) {
-	a=v_a;
-	b=v_b;
+   noise.lower = v_a;
+   noise.upper = v_b;
 }
 
 std::string NoiseModel::write_out() {
-   std::string output = "Noise: U(" + tfit::prettyDecimal(a,4) + "," 
-      + tfit::prettyDecimal(b,4) + ")";
-   return(output);
+   return ("Noise: " + noise.write_out());
 }
 
 /**
@@ -234,17 +226,18 @@ double NoiseModel::pdf(double x, char s){
    double w = 1;     // Place holder!
    double pi = 1;    // Place hodler!
 	if (s == '+'){
-		return (w*pi) / abs(b-a);
+		return (w*pi) / abs(noise.upper-noise.lower);
 	}
-	return (w*(1-pi)) / abs(b-a);
+	return (w*(1-pi)) / abs(noise.upper-noise.lower);
 }
-
-
 
 /**********************  Full model (with Elongationg) *************/
 
-FullModel::FullModel() {
-	
+
+FullModel::FullModel()
+	: bidir(), forwardElongation(), reverseElongation() {
+   w_forward = 0.5;
+   w_reverse = 0.5;	
 }
 
 std::string FullModel::write_out() {
