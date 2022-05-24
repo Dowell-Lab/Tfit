@@ -62,6 +62,7 @@ class Bimap {
 // Helper functions
 namespace tfit {
   std::string prettyDecimal (double x, double sigfig);
+  double LOG(double x);
 }
 
 #endif

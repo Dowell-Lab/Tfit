@@ -13,6 +13,7 @@
 #include <random>	// random numbers within distributions
 
 extern int g_testing;
+extern double nINF;     // currently defined in template_matching?
 
 Random::Random() { 
    int truerandom = 1;
@@ -85,3 +86,18 @@ std::string tfit::prettyDecimal (double x, double sigfig) {
    int sfig = sigfig + 1;      // Necessary to get decimal + signfig!
   return std::to_string(x).substr(0,std::to_string(x).find(".") + sfig);
 }
+
+/**
+ * @brief wrapper around log(x) that returns nINF if x <=0
+ * 
+ * @param x 
+ * @return double 
+ */
+double tfit::LOG(double x){
+	if (x <= 0){
+		return nINF;
+	}
+	return log(x);//will return nINF if x <= 0
+}
+
+
