@@ -4,8 +4,9 @@
  * @brief Contains \ref UNI (uniform), \ref EMG (full model), \ref NOISE,
  *  \ref component (full set of distros, priors), and \ref classifier (EM convergence
  * info and k number of components) classes.  
- * Note that the EMG class contains both the EMG of initiation and the L of the uniform of 
- * elongation.  Also that the UNI and NOISE are both uniform.  
+ * Note that the EMG class is actually two "tied" EMG on opposite strands with 
+ * the same parameters. 
+ * Also that the UNI and NOISE are both uniform.  
  * @bug Contains lots of deadends -- as code clearly used to generate from the model and
  * other functions and classes (e.g. NORMAL) that are now missing.
  * @bug HEAVILY overloaded, should be refactored.

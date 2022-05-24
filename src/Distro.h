@@ -40,6 +40,10 @@ class Exponential {
   std::string write_out();
 
   std::vector<double> generate_data(int n);
+
+  double pdf (double x);
+
+  double cdf (double x);
 };
 
 class Uniform {
@@ -53,6 +57,10 @@ public:
   // Functions
   std::string write_out();
   std::vector<double> generate_data(int n);
+
+  double pdf(double x);
+
+  double cdf(double x);
 
 };
 

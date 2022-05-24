@@ -9,22 +9,6 @@
 #include <fstream>
 #include "Model.h"
 
-TEST(Models, bidir_standardnorms)
-{
-    // Arrange: bring SUT to desired state
-    Bidirectional sut(35., 0.5, 0.25, 0.5, 2.);
-    Normal standard;
-
-    // Act: call methods on SUT, capture output
-    double result = standard.pdf(0.3);
-    double result2 = standard.cdf(0.3);
-
-    // Assert: Verify the outcome
-    EXPECT_EQ(sut.write_out(), "Bidir(N(35.00,0.50);E(0.25);0.500,2.00)");
-    ASSERT_LE(abs(result - 0.381388), 0.0001);  // From R's dnorm(x=0.3)
-    ASSERT_LE(abs(result2 - 0.617911), 0.0001);  // From R's pnorm(x=0.3)
-}
-
 TEST(Models, bidir_MillsRatio)
 {
     // Arrange: bring SUT to desired state
@@ -43,43 +27,18 @@ TEST(Models, bidir_MillsRatio)
 TEST(Models, bidir_generateData)
 {
     // Arrange: bring SUT to desired state
-    Bidirectional sut(35., 0.5, 0.25, 0.5, 2.);
+    Bidirectional sut(35., 0.5, 0.25, 1.0, 2.);
 
     // Act: call methods on SUT, capture output
-    std::vector<double> gdata = sut.generate_data(1000);
+    std::vector<double> gdata = sut.generate_data(100000);
 
-    /*
-    std::string filename = "temp.out";
-    std::ofstream OUT;
-    OUT.open(filename);
+    double total = 0;
     std::vector<double>::iterator it;
     for (it = gdata.begin(); it != gdata.end(); it++) {
-       if (*it < 0) {
-         OUT << "0\t" + std::to_string(*it) << std::endl;
-       } else {
-         OUT << std::to_string(*it) + "\t0" << std::endl;
-       }
+      total += (*it);
     }
-    OUT.close();
-    */
+    double mean = total / gdata.size();
 
     // Assert: Verify the outcome
-    EXPECT_EQ(gdata.size(), 1000);
-    // Should test some statistical properties of generated data.
+    ASSERT_LE(mean - (sut.loading.mu + (1/sut.initiation.lambda)), 0.01);  
 }
-
-/*
-TEST(Models, bidir_ExpectedValues)
-{
-    // Arrange: bring SUT to desired state
-    Bidirectional sut(35., 0.5, 0.25, 0.5, 2.);
-
-    // Act: call methods on SUT, capture output
-    double result = sut.ExpY(40, '+');
-    double result2 = sut.ExpY2(40, '+');
-    double result = sut.ExpX(40, '+');
-    double result2 = sut.ExpX2(40, '+');
-
-    // Assert: Verify the outcome
-}
-*/

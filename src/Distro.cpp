@@ -78,6 +78,16 @@ std::vector<double> Exponential::generate_data(int n) {
   return output;
 }
 
+double Exponential::pdf (double x) {
+   return (lambda * exp(-1 *lambda * x));
+}
+
+double Exponential::cdf (double x) {
+   return (1 - exp(-1 * lambda * x));
+}
+
+
+
 /******************** Uniform Distribution *********************/
 
 Uniform::Uniform() {
@@ -103,6 +113,19 @@ std::vector<double> Uniform::generate_data(int n) {
   return output;
 }
 
+double Uniform::pdf(double x) {
+  if ((x > lower) && (x < upper)) {
+	   return (1.0 / abs(upper - lower));
+  }
+  return 0.0;
+}
 
-
-
+double Uniform::cdf(double x) {
+  if (x < lower) {
+    return 0.0; 
+  } else if (x > upper) {
+    return 1.0;
+  } else {
+    return ((x-lower)/abs(upper-lower));
+  }
+}

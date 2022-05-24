@@ -247,6 +247,10 @@ FullModel::FullModel()
 
 std::string FullModel::write_out() {
    std::string output = bidir.write_out();
+   output += " " + forwardElongation.write_out();
+   output += " " + tfit::prettyDecimal(w_forward, 4);
+   output += " " + reverseElongation.write_out();
+   output += " " + tfit::prettyDecimal(w_reverse, 4);
    return(output);
 }
 
