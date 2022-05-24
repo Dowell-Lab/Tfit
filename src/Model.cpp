@@ -118,8 +118,10 @@ double Bidirectional::pdf(double z, char s){
 double Bidirectional::ExpY(double z, char strand){
    z = applyFootprint(z,strand);
    double s = indicatorStrand(strand);
-	return std::max(0. , s*(z-loading.mu) - initiation.lambda*pow(loading.sigma, 2) 
-      + (loading.sigma / millsRatio(initiation.lambda*loading.sigma - s*((z-loading.mu)/loading.sigma))));
+	return std::max(0. , s*(z-loading.mu) 
+      - initiation.lambda*pow(loading.sigma, 2) 
+      + (loading.sigma / millsRatio(initiation.lambda*loading.sigma 
+            - s*((z-loading.mu)/loading.sigma))));
 }
 
 /**
@@ -147,9 +149,12 @@ double Bidirectional::ExpX(double z, char strand){
 double Bidirectional::ExpY2(double z, char strand){
    z = applyFootprint(z,strand);
    double s = indicatorStrand(strand);
-	return pow(initiation.lambda,2)*pow(loading.sigma,4) + pow(loading.sigma, 2)*(2*initiation.lambda*s*(loading.mu-z)+1 ) 
+	return pow(initiation.lambda,2)*pow(loading.sigma,4) 
+     + pow(loading.sigma, 2)*(2*initiation.lambda*s*(loading.mu-z)+1 ) 
      + pow(loading.mu-z,2) 
-     - ((loading.sigma*(initiation.lambda*pow(loading.sigma,2) + s*(loading.mu-z)))/millsRatio(initiation.lambda*loading.sigma - s*((z-loading.mu)/loading.sigma))); 
+     - ((loading.sigma*(initiation.lambda*pow(loading.sigma,2) 
+        + s*(loading.mu-z)))/millsRatio(initiation.lambda*loading.sigma 
+        - s*((z-loading.mu)/loading.sigma))); 
 }
 
 /**
