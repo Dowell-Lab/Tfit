@@ -269,8 +269,8 @@ double RF_run_global_template_matching(vector<segment*> segments,
   
   bool SCORES 		= not P->p["-scores"].empty();
 
-  std::cout << "ns: "+ to_string(ns) + " win: " + to_string(window) + " ct: " + to_string(ct)
-    << std::endl;
+  // std::cout << "ns: "+ to_string(ns) + " win: " + to_string(window) + " ct: " + to_string(ct)
+    // << std::endl;
   
   ofstream FHW_scores;
   
@@ -280,9 +280,9 @@ double RF_run_global_template_matching(vector<segment*> segments,
   int N;
   int start, center;
  
-  std::cout << "segment num: " + to_string(segments.size()) << std::endl;
+  // std::cout << "segment num: " + to_string(segments.size()) << std::endl;
   for (int i = 0; i < segments.size(); i++){
-    std::cout << "i: " + to_string(i) << std::endl;
+    // std::cout << "i: " + to_string(i) << std::endl;
     double * BIC_values 	= new double[int(segments[i]->XN)];
     double * densities 		= new double[int(segments[i]->XN)];
     double * densities_r 	= new double[int(segments[i]->XN)];
@@ -292,8 +292,8 @@ double RF_run_global_template_matching(vector<segment*> segments,
     double er 		= segments[i]->rN*( 2*(window*ns)*0.05 /(l*ns ));
     double stdf 	= sqrt(ef*(1- (  2*(window*ns)*0.05/(l*ns )  ) )  );
     double stdr 	= sqrt(er*(1- (  2*(window*ns)*0.05 /(l*ns ) ) )  );
-    std::cout << "l: "+ to_string(l) + " ef: " + to_string(ef) + " er: " + to_string(er)
-      + " stdf: "+ to_string(stdf) + " stdr: " + to_string(stdr) << std::endl;
+    // std::cout << "l: "+ to_string(l) + " ef: " + to_string(ef) + " er: " + to_string(er)
+    //  + " stdf: "+ to_string(stdf) + " stdr: " + to_string(stdr) << std::endl;
 
     RF_BIC_template(segments[i],  BIC_values, densities, densities_r, window, sigma, lambda, foot_print, pi, w, P->threads);   
 
@@ -353,10 +353,10 @@ void RF_BIC_template(segment *data, double *BIC_values, double *densities, doubl
   double total_density;
 
   // std::cout << data->write_withData() << std::endl;
-  std::cout << data->write_allScalar() << std::endl;
+  // std::cout << data->write_allScalar() << std::endl;
 
   for (int i = start; i < stop; i++) {
-    std::cout << "i: " + to_string(i); 
+    // std::cout << "i: " + to_string(i); 
     // std::cout << "j: " + to_string(j);
     while (j < data->XN and (data->Coordinate(j) - data->Coordinate(i)) < -window) {
       //std::cout << " " + to_string(j);
@@ -373,8 +373,8 @@ void RF_BIC_template(segment *data, double *BIC_values, double *densities, doubl
       k++;
     }
     // std::cout << std::endl;
-    std::cout << " j: " + to_string(j);
-    std::cout << " k: " + to_string(k) << std::endl;
+    // std::cout << " j: " + to_string(j);
+    // std::cout << " k: " + to_string(k) << std::endl;
 
     int aa = k < data->XN;
     int bb = j < data->XN;
