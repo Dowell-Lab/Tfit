@@ -324,12 +324,12 @@ int get_nearest_position(segment * data, double center, double dist){
 
 	if (dist < 0 ){
 		i=0;
-		while (i < (data->XN-1) and (data->X[0][i] -center) < dist){
+		while (i < (data->XN-1) and (data->Coordinate(i) -center) < dist){
 			i++;
 		}
 	}else{
 		i=data->XN-1;
-		while (i >0 and (data->X[0][i] - center) > dist){
+		while (i >0 and (data->Coordinate(i) - center) > dist){
 			i--;
 		}
 	}
@@ -432,9 +432,9 @@ void update_l(component * components, segment * data, int K){
 		int arg_l 	= components[k].forward.k;
 
 		for (int l = components[k].forward.j; l < components[k].forward.k; l++ ){
-			left_SUM+=data->X[1][l];
-			right_SUM-=data->X[1][l];
-			vl 		= 1.0/(data->X[0][l]-data->X[0][components[k].forward.j]);
+			left_SUM+=data->ForwardCoverage(l);
+			right_SUM-=data->ForwardCoverage(l);
+			vl 		= 1.0/(data->Coordinate(l)-data->Coordinate(components[k].forward.j));
 			w 		= left_SUM/(N);
 			mod_ll 	= LOG(w*vl)*left_SUM + LOG(null_vl)*right_SUM ;
 			mod_BIC = -2*mod_ll + 5*LOG(N);
@@ -447,7 +447,7 @@ void update_l(component * components, segment * data, int K){
 			prev_prev=prev;
 			prev 	= current;			
 		}
-		components[k].forward.b 	= data->X[0][arg_l];
+		components[k].forward.b 	= data->Coordinate(arg_l);
 		//reverse
 		arg_l 	= components[k].reverse.j;
 		left_SUM=0, right_SUM=get_sum(data,components[k].reverse.j,components[k].reverse.k,2 );
@@ -456,9 +456,9 @@ void update_l(component * components, segment * data, int K){
 		null_BIC = -2*null_ll + LOG(N);
 		prev_prev=0, prev=0, current=0,BIC_best = 0;
 		for (int l = components[k].reverse.j; l < components[k].reverse.k; l++ ){
-			left_SUM+=data->X[2][l];
-			right_SUM-=data->X[2][l];
-			vl 		= 1.0/(data->X[0][components[k].reverse.k] - data->X[0][l]);
+			left_SUM+=data->ReverseCoverage(l);
+			right_SUM-=data->ReverseCoverage(l);
+			vl 		= 1.0/(data->Coordinate(components[k].reverse.k) - data->Coordinate(l));
 			w 		= right_SUM/(N);
 			mod_ll 	= LOG(null_vl)*left_SUM + LOG(w*vl)*right_SUM ;
 			mod_BIC = -2*mod_ll + 5*LOG(N);
@@ -471,7 +471,7 @@ void update_l(component * components, segment * data, int K){
 			prev_prev=prev;
 			prev 	= current;
 		}
-		components[k].reverse.a 	= data->X[0][arg_l];
+		components[k].reverse.a 	= data->Coordinate(arg_l);
 	}
 }
 
@@ -1056,28 +1056,28 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 			
 			// Equation 7 in Azofeifa 2017: calculate r_i^k
 			for (int k=0; k < K+add; k++){ //computing the responsibility terms
-				if (data->X[1][i]){//if there is actually data point here...
-					norm_forward+=components[k].evaluate(data->X[0][i],1);
+				if (data->ForwardCoverage(i)) { //if there is actually data point here...
+					norm_forward+=components[k].evaluate(data->Coordinate(i),1);
 				}
-				if (data->X[2][i]){//if there is actually data point here...
-					norm_reverse+=components[k].evaluate(data->X[0][i],-1);
+				if (data->ReverseCoverage(i)){//if there is actually data point here...
+					norm_reverse+=components[k].evaluate(data->Coordinate(i),-1);
 				}
 			}
 			if (norm_forward > 0){
-				ll+=LOG(norm_forward)*data->X[1][i];
+				ll+=LOG(norm_forward)*data->ForwardCoverage(i);
 			}
 			if (norm_reverse > 0){
-				ll+=LOG(norm_reverse)*data->X[2][i];
+				ll+=LOG(norm_reverse)*data->ReverseCoverage(i);
 			}
 			
 			//now we need to add the sufficient statistics, need to compute expectations
 			// Equation 9 in Azofeifa 2017
 			for (int k=0; k < K+add; k++){
 				if (norm_forward){
-					components[k].add_stats(data->X[0][i], data->X[1][i], 1, norm_forward);
+					components[k].add_stats(data->Coordinate(i), data->ForwardCoverage(i), 1, norm_forward);
 				}
 				if (norm_reverse){
-					components[k].add_stats(data->X[0][i], data->X[2][i], -1, norm_reverse);
+					components[k].add_stats(data->Coordinate(i), data->ReverseCoverage(i), -1, norm_reverse);
 				}
 			}
 		}
@@ -1128,18 +1128,18 @@ void classifier::computeUniform(segment *data)
 	double neg = 0;
 	// Sum per strand
 	for (int i = 0; i < data->XN; i++) {
-		pos += data->X[1][i];
-		neg += data->X[2][i];
+		pos += data->ForwardCoverage(i);
+		neg += data->ReverseCoverage(i);
 	}
 	double pi = pos / (pos + neg); // strand bias?
 
 	// Calculate MLE = -n log (pi/l) where pi is strand (1 -> +; -1 -> -)
 	for (int i = 0; i < data->XN; i++) {
 		if (pi > 0) {
-			ll += log(pi / l) * data->X[1][i];
+			ll += log(pi / l) * data->ForwardCoverage(i);
 		}
 		if (pi < 1) {
-			ll += log((1 - pi) / l) * data->X[2][i];
+			ll += log((1 - pi) / l) * data->ReverseCoverage(i);
 		}
 	}
 	// Add a single "noise" component

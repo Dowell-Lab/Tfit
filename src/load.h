@@ -63,12 +63,9 @@ public:
 
 	/**
 	 * @brief This (X) is the smoothed representation of the data.
-	 * Vector[0] is coordinate (possibly scaled); [1] is forward (summed for bin)
-	 * [2] is reverse (summed for bin).  This is the meat and potatoes data
-	 * representation that is used in the EM (fit2).
 	 */
 	double ** X;  //!< Smoothed data inner is [3] dimensions
-	double XN; //!< total number of bins
+	double XN; //!< total number of bins  (e.g. size of X[.]?)
 	double SCALE;  //!< scaling factor
 
 	// I think these are for convenience (calculate once)
@@ -95,6 +92,11 @@ public:
 	string write_withData();  // includes X
 	string write_centers(); 	// Just the centers vector
 	string write_bidirectional_bounds(); 	// Just the centers vector
+
+    // Accessor functions for X:
+    double Coordinate(int);
+	double ForwardCoverage(int);
+	double ReverseCoverage(int);
 
 	// bin does the scaling and smoothing of input data (builds X)
 	void bin(double, double, bool); // delta, scale, erase

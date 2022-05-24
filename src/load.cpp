@@ -42,7 +42,6 @@
 #include "template_matching.h"
 
 using namespace std;
-
 /**
  * @brief Constructors: segment class
  * @author Joey Azofeifa 
@@ -122,6 +121,19 @@ double segment::getXLength () {
 	 return maxX-minX;
 }
 
+double segment::Coordinate(int i) {
+   return X[0][i];
+}
+
+double segment::ForwardCoverage(int i) {
+   return X[1][i];
+}
+
+double segment::ReverseCoverage(int i) {
+   return X[2][i];
+}
+
+
 /**
  * @brief Print region identification for segment 
  * @return printable string of format #chr:start-stop,identifier
@@ -172,9 +184,9 @@ string segment::write_Data_Columns() {
   std::string data;
   for (int j = 0; j < XN; j++) {
       data = data + "\n" + 
-         to_string(X[0][j]).substr(0,std::to_string(X[0][j]).find(".") + 3)  + "\t"
-         + to_string(X[1][j]).substr(0,std::to_string(X[1][j]).find(".") + 3) + "\t"
-         + to_string(X[2][j]).substr(0,std::to_string(X[2][j]).find(".") + 3);
+         to_string(Coordinate(j)).substr(0,std::to_string(Coordinate(j)).find(".") + 3)  + "\t"
+         + to_string(ForwardCoverage(j)).substr(0,std::to_string(ForwardCoverage(j)).find(".") + 3) + "\t"
+         + to_string(ReverseCoverage(j)).substr(0,std::to_string(ReverseCoverage(j)).find(".") + 3);
   }
   return data;
 }
@@ -262,10 +274,6 @@ void segment::bin(double delta, double scale, bool erase){
 
   bool debug = false;
 
-  // X is a 3 x XN 2D array of doubles
-  // X[0] is scaled coordinate
-  // X[1] is sum of forward values over bin width (delta)
-  // X[2] is sum of reverse values over bin width (delta)
   X 				= new double*[3];
   SCALE 			= scale;
 
@@ -286,7 +294,7 @@ void segment::bin(double delta, double scale, bool erase){
   X[1][0]=0,X[2][0]=0;
 	
   for (int i = 1; i < BINS; i++){
-    X[0][i] 	= X[0][i-1] + delta;
+    X[0][i] 	= Coordinate(i-1) + delta;
     X[1][i] 	= 0;
     X[2][i] 	= 0;
   }
@@ -302,10 +310,10 @@ void segment::bin(double delta, double scale, bool erase){
   for (int i = 0 ; i < forward.size(); i++){
 	  // X[0][j] is coordinate of jth entry
     // forward[i][0] is coordinates 
-    while (j < BINS and X[0][j] <=forward[i][0]){
+    while (j < BINS and Coordinate(j) <= forward[i][0]){
       j++;
     }
-    if (j < BINS and forward[i][0]<= X[0][j]){
+    if (j < BINS and forward[i][0]<= Coordinate(j)) {
       X[1][j-1]+=forward[i][1];
       N+=forward[i][1];
       fN+=forward[i][1];
@@ -316,10 +324,10 @@ void segment::bin(double delta, double scale, bool erase){
   j 	=0;
   for (int i = 0 ; i < reverse.size(); i++){
 	  // RDD: To me this seems klunky.  Why do it this way?
-    while (j < BINS and X[0][j] <=reverse[i][0]){
+    while (j < BINS and Coordinate(j) <=reverse[i][0]){
       j++;
     }
-    if (j < BINS and reverse[i][0]<= X[0][j]){
+    if (j < BINS and reverse[i][0]<= Coordinate(j)){
       X[2][j-1]+=reverse[i][1];
       N+=reverse[i][1];
       rN+=reverse[i][1];
@@ -331,7 +339,7 @@ void segment::bin(double delta, double scale, bool erase){
   if (scale){
     for (int i = 0; i < BINS; i ++ ){
       
-      X[0][i] 	= (X[0][i]-minX)/scale;
+      X[0][i] 	= (Coordinate(i)-minX)/scale;
       // X[1][i]/=delta;
       // X[2][i]/=delta;
     }
@@ -343,7 +351,7 @@ void segment::bin(double delta, double scale, bool erase){
   // RDD: WHY???
   int realN 		= 0;	// number of non-zero bins
   for (int i = 0; i < BINS;i++){
-    if (X[1][i]>0 or X[2][i]>0){
+    if (ForwardCoverage(i)>0 or ReverseCoverage(i)>0){
       realN++;
     }
   }
@@ -355,10 +363,10 @@ void segment::bin(double delta, double scale, bool erase){
     }
     j = 0;
     for (int i = 0; i < BINS; i ++){
-      if (X[1][i]>0 or X[2][i]>0){
-	newX[0][j] 	= X[0][i];
-	newX[1][j] 	= X[1][i];
-	newX[2][j] 	= X[2][i];
+      if (ForwardCoverage(i)>0 or ReverseCoverage(i)>0){
+	newX[0][j] 	= Coordinate(i);
+	newX[1][j] 	= ForwardCoverage(i);
+	newX[2][j] 	= ReverseCoverage(i);
 	j++;
       }
     }
@@ -403,7 +411,7 @@ void segment::bin(double delta, double scale, bool erase){
   }
   double S=0;
   for (int i = 0; i < XN; i++){
-    S+=X[1][i];
+    S+=ForwardCoverage(i);
   }
   // Why do we throw away the raw data?
   forward.clear();

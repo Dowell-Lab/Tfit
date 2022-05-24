@@ -114,14 +114,14 @@ void BIC_template(segment * data,  double * BIC_values, double * densities, doub
     double N_pos=0,N_neg=0;
     double total_density;
     for (int i = start; i < stop; i++) {
-      while (j < data->XN and (data->X[0][j] - data->X[0][i]) < -window) {
-        N_pos -= data->X[1][j];
-        N_neg -= data->X[2][j];
+      while (j < data->XN and (data->Coordinate(j) - data->Coordinate(i)) < -window) {
+        N_pos -= data->ForwardCoverage(j);
+        N_neg -= data->ReverseCoverage(j);
         j++;
       }
-      while (k < data->XN and (data->X[0][k] - data->X[0][i]) < window) {
-        N_pos += data->X[1][k];
-        N_neg += data->X[2][k];
+      while (k < data->XN and (data->Coordinate(k) - data->Coordinate(i)) < window) {
+        N_pos += data->ForwardCoverage(k);
+        N_neg += data->ReverseCoverage(k);
         k++;
       }
       int aa=k < data->XN;
@@ -129,12 +129,12 @@ void BIC_template(segment * data,  double * BIC_values, double * densities, doub
       int cc=N_neg > 0;
       int dd=N_pos > 0;
       
-      if (k < data->XN  and j < data->XN and k!=j and N_neg > 0 and N_pos > 0 and (data->X[0][k] - data->X[0][j]) > 1.75*window  ){
-	total_density 	= (N_pos / (data->X[0][k] - data->X[0][j])) + (N_neg / (data->X[0][k] - data->X[0][j]));
+      if (k < data->XN  and j < data->XN and k!=j and N_neg > 0 and N_pos > 0 and (data->Coordinate(k) - data->Coordinate(j)) > 1.75*window  ){
+	total_density 	= (N_pos / (data->Coordinate(k) - data->Coordinate(j))) + (N_neg / (data->Coordinate(k) - data->Coordinate(j)));
 	densities[i] 	= N_pos ;
 	densities_r[i] 	= N_neg ;
 	
-	double mu 	= (data->X[0][k] + data->X[0][j]) /2.;
+	double mu 	= (data->Coordinate(k) + data->Coordinate(j)) /2.;
 		
 	BIC_values[i] 	= BIC3(data->X,  j,  k,  i, N_pos,  N_neg, 
 			       sigma, lambda, foot_print, pi, w);
@@ -217,18 +217,18 @@ double run_global_template_matching(vector<segment*> segments,
         if (std::isnan(double(vl))){
           vl 		= 0;
         }
-        FHW_scores<<segments[i]->chrom<<"\t"<<to_string(int(segments[i]->X[0][j-1]*ns+segments[i]->start))<<"\t";
-        FHW_scores<<to_string(int(segments[i]->X[0][j]*ns+segments[i]->start ))<<"\t" <<to_string(vl)<<endl;
+        FHW_scores<<segments[i]->chrom<<"\t"<<to_string(int(segments[i]->Coordinate(j-1)*ns+segments[i]->start))<<"\t";
+        FHW_scores<<to_string(int(segments[i]->Coordinate(j)*ns+segments[i]->start ))<<"\t" <<to_string(vl)<<endl;
       }
       bool HIT = check_hit(BIC_values[j], densities[j], densities_r[j], SC.threshold, ef + CTT*stdf, er + CTT*stdr  );
       if ( HIT ) {
         if (start < 0){
-          start = segments[i]->X[0][j-1]*ns+segments[i]->start;
+          start = segments[i]->Coordinate(j-1)*ns+segments[i]->start;
         }
         start+=1, rN+=1 , rF+=densities[j], rR+=densities_r[j], rB+=log10( SC.pvalue(BIC_values[j]) + pow(10,-20)) ;	
       } 
       if(not HIT and start > 0 ){
-        vector<double> row = {start , segments[i]->X[0][j-1]*ns+segments[i]->start, rB/rN , rF/rN, rR/rN  };
+        vector<double> row = {start , segments[i]->Coordinate(j-1)*ns+segments[i]->start, rB/rN , rF/rN, rR/rN  };
         HITS.push_back(row);
         start=-1, rN=0.0 , rF=0.0, rR=0.0, rB=0.0;
       } 		
@@ -313,18 +313,18 @@ double RF_run_global_template_matching(vector<segment*> segments,
         if (std::isnan(double(vl))){
           vl 		= 0;
         }
-        FHW_scores<<segments[i]->chrom<<"\t"<<to_string(int(segments[i]->X[0][j-1]*ns+segments[i]->start))<<"\t";
-        FHW_scores<<to_string(int(segments[i]->X[0][j]*ns+segments[i]->start ))<<"\t" <<to_string(vl)<<endl;
+        FHW_scores<<segments[i]->chrom<<"\t"<<to_string(int(segments[i]->Coordinate(j-1)*ns+segments[i]->start))<<"\t";
+        FHW_scores<<to_string(int(segments[i]->Coordinate(j)*ns+segments[i]->start ))<<"\t" <<to_string(vl)<<endl;
       }
       bool HIT = check_hit(BIC_values[j], densities[j], densities_r[j], SC.threshold, ef + CTT*stdf, er + CTT*stdr  );
       if ( HIT ) {
         if (start < 0){
-          start = segments[i]->X[0][j-1]*ns+segments[i]->start;
+          start = segments[i]->Coordinate(j-1)*ns+segments[i]->start;
         }
         start+=1, rN+=1 , rF+=densities[j], rR+=densities_r[j], rB+=log10( SC.pvalue(BIC_values[j]) + pow(10,-20)) ;	
       } 
       if(not HIT and start > 0 ){
-        vector<double> row = {start , segments[i]->X[0][j-1]*ns+segments[i]->start, rB/rN , rF/rN, rR/rN  };
+        vector<double> row = {start , segments[i]->Coordinate(j-1)*ns+segments[i]->start, rB/rN , rF/rN, rR/rN  };
         HITS.push_back(row);
         start=-1, rN=0.0 , rF=0.0, rR=0.0, rB=0.0;
       } 		
@@ -358,18 +358,18 @@ void RF_BIC_template(segment *data, double *BIC_values, double *densities, doubl
   for (int i = start; i < stop; i++) {
     std::cout << "i: " + to_string(i); 
     // std::cout << "j: " + to_string(j);
-    while (j < data->XN and (data->X[0][j] - data->X[0][i]) < -window) {
+    while (j < data->XN and (data->Coordinate(j) - data->Coordinate(i)) < -window) {
       //std::cout << " " + to_string(j);
-      N_pos -= data->X[1][j];
-      N_neg -= data->X[2][j];
+      N_pos -= data->ForwardCoverage(j);
+      N_neg -= data->ReverseCoverage(j);
       j++;
     }
     // std::cout << std::endl;
     // std::cout << "k: " + to_string(k);
-    while (k < data->XN and (data->X[0][k] - data->X[0][i]) < window) {
+    while (k < data->XN and (data->Coordinate(k) - data->Coordinate(i)) < window) {
       // std::cout << " " + to_string(k);
-      N_pos += data->X[1][k];
-      N_neg += data->X[2][k];
+      N_pos += data->ForwardCoverage(k);
+      N_neg += data->ReverseCoverage(k);
       k++;
     }
     // std::cout << std::endl;
@@ -388,13 +388,13 @@ void RF_BIC_template(segment *data, double *BIC_values, double *densities, doubl
     std::cout << "dd: " + to_string(dd) << std::endl;
     */
 
-    if (k < data->XN and j < data->XN and k != j and N_neg > 0 and N_pos > 0 and (data->X[0][k] - data->X[0][j]) > 1.75 * window)
+    if (k < data->XN and j < data->XN and k != j and N_neg > 0 and N_pos > 0 and (data->Coordinate(k) - data->Coordinate(j)) > 1.75 * window)
     {
-      total_density = (N_pos / (data->X[0][k] - data->X[0][j])) + (N_neg / (data->X[0][k] - data->X[0][j]));
+      total_density = (N_pos / (data->Coordinate(k) - data->Coordinate(j))) + (N_neg / (data->Coordinate(k) - data->Coordinate(j)));
       densities[i] = N_pos;
       densities_r[i] = N_neg;
 
-      double mu = (data->X[0][k] + data->X[0][j]) / 2.;
+      double mu = (data->Coordinate(k) + data->Coordinate(j)) / 2.;
 
       BIC_values[i] = RF_BIC3(data->X, j, k, i, N_pos, N_neg,
                            sigma, lambda, foot_print, pi, w);

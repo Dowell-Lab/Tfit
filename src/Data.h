@@ -107,6 +107,7 @@ public:
 
   std::string data_dump();
 
+  // Need functions for converting between three coordinate systems: genomic, conditioned, indexed.
 
 	};
 
