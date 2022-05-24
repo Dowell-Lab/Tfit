@@ -42,8 +42,9 @@ class Exponential {
   std::vector<double> generate_data(int n);
 
   double pdf (double x);
-
   double cdf (double x);
+
+  double ExpX();   // Expected value = 1/lambda
 };
 
 class Uniform {

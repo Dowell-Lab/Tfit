@@ -58,7 +58,7 @@ double Normal::cdf(double x){
 /******************** Exponential Distribution *********************/
 
 Exponential::Exponential() {
-  lambda = 1; 
+  lambda = 1.0; 
 }
 
 Exponential::Exponential(double v_lambda) {
@@ -79,11 +79,15 @@ std::vector<double> Exponential::generate_data(int n) {
 }
 
 double Exponential::pdf (double x) {
-   return (lambda * exp(-1 *lambda * x));
+   return (lambda * exp(-1.0 *lambda * x));
 }
 
 double Exponential::cdf (double x) {
-   return (1 - exp(-1 * lambda * x));
+   return (1.0 - exp(-1.0 * lambda * x));
+}
+
+double Exponential::ExpX() {
+   return (1.0 / lambda);  
 }
 
 
