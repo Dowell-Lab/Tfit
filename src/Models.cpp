@@ -98,30 +98,43 @@ double Bidirectional::applyFootprint (double z, char s) {
  * @brief EMG probability density function
  * h(z,s; mu, sigma, lambda, pi) in Azofeifa 2018
  * 
+ * In Azofeifa 2018, its defined as:
+ * lambda Norm((z-mu)/sigma) * MillsRatio(lambda*sigma - s ((z-mu)/sigma)*Indicator
+ * Where Indicator = pi if s = 1 and (1-pi) if s = -1
+ * 
+ * Wikipedia states the PDF as:
+ * lambda/2 * exp (s*lambda/2 * (2* mu + lambda * sigma^2 - 2z)) 
+ *       * erfc (s*(mu + lambda*sigma^2 - z)/sqrt(2)*sigma)
+ * Which would still have to be multiplied by the Indicator.
+ * 
+ * And offers an alternative formulation for computing (see Wikipedia).
+ * 
  * @param z current position/read
  * @param s strand 
  * @return double 
  */
 double Bidirectional::pdf(double z, char s){
-   // if (w==0){ return 0.0; }
-   double w = 1;     // dummy placeholder -- no w yet.
-
    // Offset the position by the footprint 
    z = applyFootprint(z,s);
-
-	double vl 		= (initiation.lambda/2.0)*(indicatorStrand(s)*2*(loading.mu-z) + initiation.lambda*pow(loading.sigma,2));
-
 	double h;   // Called h(z,s;mu, sigma, lambda, pi) in the paper.
-	if (vl > 100){ //potential for overflow, inaccuracies
-      Normal standard;
-		h 			= initiation.lambda*standard.pdf((z-loading.mu)/loading.sigma)*millsRatio(initiation.lambda*loading.sigma - indicatorStrand(s)*((z-loading.mu)/loading.sigma));
-	}else{
-		h 			= (initiation.lambda/2)*exp(vl)*erfc((indicatorStrand(s)*(loading.mu-z) + initiation.lambda*pow(loading.sigma ,2) )/(sqrt(2)*loading.sigma));
-	}
-	// Doesn't this line negate the whole "if" statement above??
-	h     = (initiation.lambda/2)*exp(vl)*erfc((indicatorStrand(s)*(loading.mu-z) + initiation.lambda*pow(loading.sigma ,2) )/(sqrt(2)*loading.sigma));
-	h     = h*w*pow(pi, std::max(0, indicatorStrand(s)) )*pow(1-pi, std::max(0, -1*indicatorStrand(s)));
 
+   // Reused intermediates in calculation:
+   double lambdaSigmaSQ = initiation.lambda * pow(loading.sigma,2);
+   double halfLambda = initiation.lambda/2.0;
+   double pointMeandiff = loading.mu - z;
+	double exponentvalue = (halfLambda)*
+      (indicatorStrand(s)*2*(pointMeandiff) + lambdaSigmaSQ);
+
+   // This is the Wikipedia PDF formulation with s and Indicator added:
+	h     = (halfLambda)*exp(exponentvalue)*
+      erfc((indicatorStrand(s)*pointMeandiff + lambdaSigmaSQ)/(sqrt(2)*loading.sigma));
+   if (indicatorStrand(s) > 0) {
+      h = h*pi; // pow(pi, std::max(0, indicatorStrand(s)) = 0 if s = -1; 1 otherwise 
+   } else {
+      h = h*(1-pi);
+   }
+
+   // Check for outofbounds issues?
 	if (h < pow(10,7) and not std::isnan(float(h)) ){
 	  return h; 
 	}

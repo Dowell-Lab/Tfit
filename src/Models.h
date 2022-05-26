@@ -45,7 +45,6 @@ class HyperParameters {
   HyperParameters();
 };
 
-
 class Bidirectional {
   public:
   Normal loading;
@@ -114,7 +113,5 @@ class NoiseModel {
   double pdf(double x, char s);
 
 };
-
-
 
 #endif

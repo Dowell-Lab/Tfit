@@ -13,8 +13,11 @@
 TEST(BidirEQ, reproducePDF)
 {
     // Arrange: bring SUT to desired state
-    Bidirectional sut(35., 0.5, 0.25, 0.5, 2.);
-    EMG oldmethod(35., 0.5, 0.25, 1, 0.5);
+    Bidirectional sut(35., 1.5, 0.25, 0.5, 0.);
+    EMG oldmethod(35., 1.5, 0.25, 1, 0.5);
+
+    std::cout << oldmethod.write() << std::endl;
+    std::cout << sut.write_out() << std::endl;
 
     // Act: call methods on SUT, capture output
     double newresult = sut.pdf(37.,'+');

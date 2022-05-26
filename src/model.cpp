@@ -263,7 +263,9 @@ double EMG::pdf(double z, int s ){
 	}else{
 		z+=foot_print;
 	}
+
 	double vl 		= (lambda/2.0)*(s*2*(mu-z) + lambda*pow(sigma,2));
+
 	double p;
 	if (vl > 100){ //potential for overflow, inaccuracies
 		p 			= lambda*NormalPDF((z-mu)/sigma)*MillsRatio(lambda*sigma - s*((z-mu)/sigma));
