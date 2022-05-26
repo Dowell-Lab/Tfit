@@ -98,15 +98,19 @@ double Bidirectional::applyFootprint (double z, char s) {
  * @brief EMG probability density function
  * h(z,s; mu, sigma, lambda, pi) in Azofeifa 2018
  * 
- * In Azofeifa 2018, its defined as:
- * lambda Norm((z-mu)/sigma) * MillsRatio(lambda*sigma - s ((z-mu)/sigma)*Indicator
- * Where Indicator = pi if s = 1 and (1-pi) if s = -1
+ * In Azofeifa 2018, \f$h(z,s;\mu,\sigma,\lambda,\pi)\f$ is defined as:
+ * \f$\lambda \phi(\frac{z-\mu}{\sigma}) R(\lambda\sigma - s \frac{z-\mu}{\sigma}) \f$
+ * where \f$\phi\f$ is the standard normal distribution.
  * 
- * Wikipedia states the PDF as:
- * lambda/2 * exp (lambda/2 * (2* mu + lambda * sigma^2 - 2z)) 
- *       * erfc ((mu + lambda*sigma^2 - z)/sqrt(2)*sigma)
- * Which would still have to be multiplied by the Indicator.
+ * Wikipedia states the PDF as given in Grushka 1972 as:
+ * \f$\frac{\lambda}{2} e^{\frac{\lambda}{2}(2\mu + \lambda\sigma^2 - 2z)}
+ *       erfc (\frac{\mu + \lambda\sigma^2 - z}{\sqrt{2}\sigma)})\f$
+ *
+ * In both cases, the mean difference is multipled by -1 for negative strand
+ * and the entire pdf is multipled by an indicator function \f$I = \pi\f$ 
+ * if pos strand and \f$I = (1-\pi)\f$ if neg strand.
  * 
+ * The Wikipedia version has fewer numerical issues and is used here.
  * @param z current position/read
  * @param s strand 
  * @return double 
@@ -140,26 +144,35 @@ double Bidirectional::pdf(double z, char s){
 
 /**
  * @brief This is the "alternative formulation for computation" of the 
- * EMG PDF as described at Wikipedia.  Briefly:
+ * EMG PDF \f$f(x;\mu,\sigma,\lambda)\f$ as described in Kalambet et. al. 2011.  
+ * Briefly:
+ * NOTE: \f$\pi\f$ here is the numerical constant (3.14...) NOT the strand bias.
+ * 
  * EQ#1: 
- * (h * sigma)/tau * sqrt( pi /2) * exp (0.5*(sigma/tau)^2 - (x-mu)/tau)
- *    * erfc (1/sqrt(2) *(sigma/tau - (x-mu)/sigma))
+ * \f$\frac{h\sigma}{\tau} \sqrt{\frac{\pi}{2}} e^{0.5(\frac{\sigma}{\tau})^2 - \frac{x-\mu}{\tau}}
+ *    erfc(\frac{1}{\sqrt{2}}(\frac{\sigma}{\tau} - \frac{x-\mu}{\sigma})) \f$
  * where:
- * h = 1/(sigma * sqrt(2*pi))
- * tau = 1/lambda
+ * \f$ * h = \frac{1}{\sigma \sqrt{2*\pi}} \f$
+ * \f$\tau = \frac{1}{\lambda} \f$
  * 
  * EQ#2:
- * h* exp (-0.5 * ((x-mu)/sigma)^2) * sigma/tau * sqrt( pi/2)
- *    * erfcx (1/sqrt(2) *(sigma/tau - (x-mu)/sigma))
- * where: erfcx t = exp t^2 * erfc(t)
+ * \f$ h e^{-0.5 (\frac{x-\mu}{\sigma})^2} \frac{\sigma}{\tau} \sqrt{\frac{\pi}{2}}
+ *    erfcx (\frac{1}{\sqrt{2}} ( \frac{\sigma}{\tau} - \frac{x-\mu}{\sigma}))\f$
+ * where: \f$erfcx(t) = exp(t^2) * erfc(t)\f$
  * 
  * EQ#3: 
- * (h* exp (-0.5 * ((x-mu)/sigma)^2)) / (1 + ((x-mu)*tau)sigma^2)
+ * \f$  (h e^{-0.5(\frac{x-\mu}{\sigma})^2}) / (1 + \frac{(x-\mu)\tau}{\sigma^2})\f$
  * 
- * Where DECISION on formula is based on z = 1/sqrt(2) * (sigma/tau - (x-mu)/sigma)
+ * Where DECISION on formula is based on 
+ * \f$z = \frac{1}{\sqrt{2}}(\frac{\sigma}{\tau} - \frac{x-\mu}{\sigma})\f$
  * if z < 0 use EQ #1
  * if 0 <= z <= 6.71 x 10^7 use EQ #2
  * if z > 6.71 x 10^7 use EQ#3 
+ * 
+ * In all cases, the mean difference is multipled by -1 for negative strand
+ * and the entire pdf is multipled by an indicator function \f$I = \pi\f$ 
+ * if pos strand and \f$I = (1-\pi)\f$ if neg strand, i.e. this is where we 
+ * incorporate strand bias (the parameter \f$\pi\f$).
  *     
  * @param z 
  * @param s 

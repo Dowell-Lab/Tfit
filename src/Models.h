@@ -62,7 +62,9 @@ class Bidirectional {
   // Functions
   std::string write_out();
 
-  double pdf(double z, char s);
+  double pdf(double z, char s);   // standard (Grushka 1972) formula for pdf
+  double pdf_alt(double z, char s);   // Kalambet 2011 pdf for numerical stability
+
   double ExpX(double z, char strand);
   double ExpY(double z, char s);
   double ExpX2(double z, char strand);
@@ -72,12 +74,11 @@ class Bidirectional {
 
 // private:
   double normalPDF(double);
-  double millsRatio(double);
+  double millsRatio(double);    // May be depricated?
   double normalCDF(double x);
   int indicatorStrand(char s);
   double applyFootprint (double z, char s);
 
-  double pdf_alt(double z, char s);
 
 };
 
