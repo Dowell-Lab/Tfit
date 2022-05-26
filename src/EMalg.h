@@ -23,10 +23,10 @@ class AlgorithmControl {
   AlgorithmControl();
 };
 
-
 class EMalg {
 	public:
 	bool converged;	// indicator
+	// AlgorithmControl *control;  // Do we want to include this as a link?
 
 	// Constructor
 	EMalg();
@@ -34,7 +34,7 @@ class EMalg {
 	//Functions
 	std::string write_out();
 
-	int fit ();
+	int fit (); // A data interval, a set of models, algorithm control, priors
 
 };
 
