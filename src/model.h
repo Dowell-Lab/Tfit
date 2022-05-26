@@ -63,7 +63,8 @@ public:
 
 	//sufficient stats
 	double ri_forward, ri_reverse; //current responsibility
-	double ey, ex, ex2, r_forward, r_reverse;//running total
+	double r_forward, r_reverse;//running total
+	double ey, ex, ex2; 
 	double ex_r;
 
 	// Internals?
@@ -123,7 +124,7 @@ public:
 
 	//=====================================
 	//parameters to simulate from
-	double alpha_0, alpha_1, alpha_2, beta_0, beta_1, beta_2;
+	// double alpha_0, alpha_1, alpha_2, beta_0, beta_1, beta_2;
 	//=====================================
 	//bayesian priors for parameters, MAP
 	//FOR SIGMA ; variance in loading, gamma
@@ -164,7 +165,7 @@ public:
 	bool seed; //seed with a gross peak finder
 	// If noise_max > 0, include a noise component (e.g. it's actually K+1)
 	double noise_max; //fit a uniform noise component, never let it get above this weight
-	double move; //variance in moving the uniform supports
+	// double move; //variance in moving the uniform supports
 	//===================================================================================
 	//Bayesian Priors
 	double p;

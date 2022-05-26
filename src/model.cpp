@@ -502,6 +502,7 @@ component::component(){//empty constructor
  */
 void component::set_priors(double s_0, double s_1, 
 	double l_0, double l_1, double w_0,double strand_0, double N, int K) { 
+		/*
 	//============================
 	//for sigma
 	alpha_0 	= 20.46;
@@ -514,6 +515,7 @@ void component::set_priors(double s_0, double s_1,
 	//for initial length of Uniforms
 	alpha_2 	= 1.297;
 	beta_2 		= 8260;
+	*/
 
 	//*****************************************************
 	//Priors on parameters for MAP Estimate
@@ -610,7 +612,7 @@ string component::write(){
 	return text;
 }
 /**
- * @brief compute the density at x_i,s_i
+ * @brief compute the density at x_i, s_i
  * 
  * @param x 
  * @param st 
@@ -706,8 +708,8 @@ void component::reset(){
 }
 string component::write_priors() {
 	string text = "Priors: S1: ";
-	text = text + to_string(alpha_0) + "," + to_string(alpha_1) + "," + to_string(alpha_2);
-	text = text + "," + to_string(beta_0) + "," + to_string(beta_1) + "," + to_string(beta_2);
+	// text = text + to_string(alpha_0) + "," + to_string(alpha_1) + "," + to_string(alpha_2);
+	// text = text + "," + to_string(beta_0) + "," + to_string(beta_1) + "," + to_string(beta_2);
 	text = text + "\nsigma: gamma(" + to_string(ALPHA_0) + "," + to_string(BETA_0) + ")";
 	text = text + "\nlambda: gamma(" + to_string(ALPHA_1) + "," + to_string(BETA_1) + ")";
 	text = text + "\nW: dirichlet(" + to_string(ALPHA_2) + ")";
@@ -986,7 +988,7 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 	double mus[K];
 	// These are the seeds for the initial location.
 	Random ran_num_generator;
-	for (int k = 0; k < K; k++){
+	for (int k = 0; k < K; k++){ // Each model
 		if (mu_seeds.size()>0  ){
 			i 	= sample_centers(mu_seeds ,  p);
 			mu 	= mu_seeds[i];
@@ -1010,7 +1012,8 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 		
 	}
 	sort_components(components, K);
-	for (int k = 0; k < K; k++){
+	// Is this just resetting the linked list based on the sort?
+	for (int k = 0; k < K; k++){	// each model
 		if (k > 0){
 			components[k].reverse_neighbor 	= &components[k-1];
 		}else{
@@ -1051,12 +1054,12 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 		//E-step, grab all the stats and responsibilities
 		ll 	= 0;
 		// i -> |D| (Azofeifa 2017 pseudocode) 
-		for (int i =0; i < data->XN;i++){
+		for (int i =0; i < data->XN;i++){	// For every data point
 			norm_forward=0;
 			norm_reverse=0;
 			
 			// Equation 7 in Azofeifa 2017: calculate r_i^k
-			for (int k=0; k < K+add; k++){ //computing the responsibility terms
+			for (int k=0; k < K+add; k++){ //computing the responsibility terms per model
 				if (data->ForwardCoverage(i)) { //if there is actually data point here...
 					norm_forward+=components[k].evaluate(data->Coordinate(i),1);
 				}
@@ -1154,7 +1157,7 @@ string classifier::write_classifier_setup() {
 	contents = contents + " " + to_string(convergence_threshold);
 	contents = contents + " " + to_string(max_iterations);
 	contents = contents + " " + to_string(noise_max);
-	contents = contents + " " + to_string(move);
+	// contents = contents + " " + to_string(move);
 	if (seed) { contents = contents + " Y"; } 
 	else { contents = contents + " N"; }
 	contents = contents + " " + to_string(p) + " " + to_string(foot_print);

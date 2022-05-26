@@ -60,7 +60,6 @@ public:
   std::vector<double> generate_data(int n);
 
   double pdf(double x);
-
   double cdf(double x);
 
 };
