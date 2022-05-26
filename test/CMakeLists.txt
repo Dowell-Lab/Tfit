@@ -38,23 +38,23 @@ list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/mai
 list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/MainTesting.cpp")
 list(APPEND sources
                 src/explore_coreEM.cpp
+                src/reproduce_Bidirectional.cpp
                 src/reproduce_loadBedGraph.cpp
                 src/reproduce_Nested.cpp
+                src/reproduce_segment.cpp
                 src/reproduce_templatematching.cpp
                 src/test_main.cpp
-                src/test_split.cpp
-                src/test_Intervals.cpp
-                src/test_Data.cpp
-                src/test_segment.cpp
-                src/test_EMGparameters.cpp
-                src/test_SetEMGparam.cpp
-                src/test_Random.cpp
-                src/test_ITree.cpp
                 src/test_Bedfile.cpp
                 src/test_Bimap.cpp
-                src/test_SetROI.cpp
+                src/test_Data.cpp
                 src/test_Distros.cpp
-                src/test_Bidirectional.cpp
+                src/test_EMGparams.cpp
+                src/test_Intervals.cpp
+                src/test_ITree.cpp
+                src/test_Models.cpp
+                src/test_Random.cpp
+                src/test_Regions.cpp
+                src/test_split.cpp
                 )
 
 # Set Include directories
