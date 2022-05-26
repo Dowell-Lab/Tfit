@@ -73,9 +73,7 @@ class Bidirectional {
   std::vector<double> generate_data(int n);
 
 // private:
-  double normalPDF(double);
-  double millsRatio(double);    // May be depricated?
-  double normalCDF(double x);
+  double millsRatio(double);    
   int indicatorStrand(char s);
   double applyFootprint (double z, char s);
 
