@@ -1,5 +1,5 @@
 /**
- * @file test_SetROI.cpp 
+ * @file test_Regions.cpp 
  * @author Robin Dowell
  * @brief Testing the set of ROI data class: \ref SetROI
  * @date 2022-04-15

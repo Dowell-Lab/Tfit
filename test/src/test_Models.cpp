@@ -1,5 +1,5 @@
 /**
- * @file test_Bidirectional.cpp 
+ * @file test_Models.cpp 
  * @author Robin Dowell
  * @brief Testing the bidirectional model class
  * @date 2022-05-13
