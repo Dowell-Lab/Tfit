@@ -77,6 +77,8 @@ class Bidirectional {
   int indicatorStrand(char s);
   double applyFootprint (double z, char s);
 
+  double pdf_alt(double z, char s);
+
 };
 
 class FullModel {

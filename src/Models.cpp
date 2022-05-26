@@ -103,11 +103,9 @@ double Bidirectional::applyFootprint (double z, char s) {
  * Where Indicator = pi if s = 1 and (1-pi) if s = -1
  * 
  * Wikipedia states the PDF as:
- * lambda/2 * exp (s*lambda/2 * (2* mu + lambda * sigma^2 - 2z)) 
- *       * erfc (s*(mu + lambda*sigma^2 - z)/sqrt(2)*sigma)
+ * lambda/2 * exp (lambda/2 * (2* mu + lambda * sigma^2 - 2z)) 
+ *       * erfc ((mu + lambda*sigma^2 - z)/sqrt(2)*sigma)
  * Which would still have to be multiplied by the Indicator.
- * 
- * And offers an alternative formulation for computing (see Wikipedia).
  * 
  * @param z current position/read
  * @param s strand 
@@ -119,15 +117,14 @@ double Bidirectional::pdf(double z, char s){
 	double h;   // Called h(z,s;mu, sigma, lambda, pi) in the paper.
 
    // Reused intermediates in calculation:
+   double pointMeandiff = indicatorStrand(s) * (loading.mu - z);
    double lambdaSigmaSQ = initiation.lambda * pow(loading.sigma,2);
    double halfLambda = initiation.lambda/2.0;
-   double pointMeandiff = loading.mu - z;
-	double exponentvalue = (halfLambda)*
-      (indicatorStrand(s)*2*(pointMeandiff) + lambdaSigmaSQ);
+	double exponentvalue = (halfLambda)* (2*(pointMeandiff) + lambdaSigmaSQ);
 
-   // This is the Wikipedia PDF formulation with s and Indicator added:
+   // This has s and Indicator added:
 	h     = (halfLambda)*exp(exponentvalue)*
-      erfc((indicatorStrand(s)*pointMeandiff + lambdaSigmaSQ)/(sqrt(2)*loading.sigma));
+      erfc((pointMeandiff + lambdaSigmaSQ)/(sqrt(2)*loading.sigma));
    if (indicatorStrand(s) > 0) {
       h = h*pi; // pow(pi, std::max(0, indicatorStrand(s)) = 0 if s = -1; 1 otherwise 
    } else {
@@ -139,6 +136,70 @@ double Bidirectional::pdf(double z, char s){
 	  return h; 
 	}
 	return 0.0;
+}
+
+/**
+ * @brief This is the "alternative formulation for computation" of the 
+ * EMG PDF as described at Wikipedia.  Briefly:
+ * EQ#1: 
+ * (h * sigma)/tau * sqrt( pi /2) * exp (0.5*(sigma/tau)^2 - (x-mu)/tau)
+ *    * erfc (1/sqrt(2) *(sigma/tau - (x-mu)/sigma))
+ * where:
+ * h = 1/(sigma * sqrt(2*pi))
+ * tau = 1/lambda
+ * 
+ * EQ#2:
+ * h* exp (-0.5 * ((x-mu)/sigma)^2) * sigma/tau * sqrt( pi/2)
+ *    * erfcx (1/sqrt(2) *(sigma/tau - (x-mu)/sigma))
+ * where: erfcx t = exp t^2 * erfc(t)
+ * 
+ * EQ#3: 
+ * (h* exp (-0.5 * ((x-mu)/sigma)^2)) / (1 + ((x-mu)*tau)sigma^2)
+ * 
+ * Where DECISION on formula is based on z = 1/sqrt(2) * (sigma/tau - (x-mu)/sigma)
+ * if z < 0 use EQ #1
+ * if 0 <= z <= 6.71 x 10^7 use EQ #2
+ * if z > 6.71 x 10^7 use EQ#3 
+ *     
+ * @param z 
+ * @param s 
+ * @return double 
+ */
+double Bidirectional::pdf_alt(double z, char s){
+  // Offset the position by the footprint 
+   z = applyFootprint(z,s);
+
+   double pointMeandiff = indicatorStrand(s) * (z - loading.mu);
+   double tau = 1.0/initiation.lambda;
+
+   double decision = 1.0/sqrt(2) * 
+      (loading.sigma*initiation.lambda - (pointMeandiff/loading.sigma));
+   double h = 1.0/(loading.sigma * sqrt(2*M_PI));
+
+   double f = 0;     // As described in Kalambet et. al. 2011
+   if (decision > 6.71e7) {     // Equation #3
+      f = h * exp(-0.5 * pow((pointMeandiff/loading.sigma),2));
+      f = f / (1.0 + (pointMeandiff*tau) / pow(loading.sigma,2));
+   } else {
+      double sigmaLambda = loading.sigma*initiation.lambda; // sigma/tau
+      double CON = sqrt(M_PI/2); // constant
+      double secondTerm = 1.0/sqrt(2) * (sigmaLambda - (pointMeandiff/loading.sigma));
+      if (decision < 0) {  // Equation #1
+         double firstTerm = exp(0.5 * pow(sigmaLambda,2) - (pointMeandiff/tau));
+         f = h * sigmaLambda * CON * firstTerm * erfc(secondTerm);
+      } else {  // Equation #2
+         double fTerm = exp(-0.5 * pow((pointMeandiff/loading.sigma),2));
+         f = h * fTerm * sigmaLambda * CON * erfc(secondTerm) * exp(pow(secondTerm,2));
+      }
+   }
+
+   // Factor in strand bias
+   if (indicatorStrand(s) > 0) {
+      f = f*pi; // pow(pi, std::max(0, indicatorStrand(s)) = 0 if s = -1; 1 otherwise 
+   } else {
+      f = f*(1-pi);
+   }
+   return f;
 }
 
 /**
