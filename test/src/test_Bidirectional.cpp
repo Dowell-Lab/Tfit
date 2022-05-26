@@ -7,7 +7,7 @@
  */
 #include "gmock/gmock.h"
 #include <fstream>
-#include "Model.h"
+#include "Models.h"
 
 TEST(Models, bidir_MillsRatio)
 {
