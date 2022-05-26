@@ -165,7 +165,7 @@ public:
 	bool seed; //seed with a gross peak finder
 	// If noise_max > 0, include a noise component (e.g. it's actually K+1)
 	double noise_max; //fit a uniform noise component, never let it get above this weight
-	// double move; //variance in moving the uniform supports
+	// double move; 
 	//===================================================================================
 	//Bayesian Priors
 	double p;
