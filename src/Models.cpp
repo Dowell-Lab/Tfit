@@ -1,16 +1,37 @@
 /**
- * @file Model.cpp
+ * @file Models.cpp
  * @author Robin Dowell 
  * @brief Contains the model objects
  * @version 0.1
  * @date 2022-05-22
  * 
  */
-#include "Model.h"
+#include "Models.h"
 
 #include <iostream>
 #include "helper.h"
 #include "Distro.h"
+
+
+
+Responsibilities::Responsibilities() {
+   r_forward = 0;
+	r_reverse = 0;
+}
+
+void Responsibilities::reset() {
+   r_forward = 0;
+	r_reverse = 0;
+}
+
+HyperParameters::HyperParameters() {
+  ALPHA_0 = 1;
+  ALPHA_1 = 1;
+  ALPHA_2 = 1;
+  ALPHA_3 = 1;
+  BETA_0 = 1;
+  BETA_1 = 1;
+}
 
 // Empty Constructor
 
@@ -203,9 +224,25 @@ std::vector<double> Bidirectional::generate_data(int n) {
    return results;
 }
 
+/**********************  Full model (with Elongationg) *************/
+
+FullModel::FullModel()
+	: bidir(), forwardElongation(), reverseElongation() {
+   w_forward = 0.5;
+   w_reverse = 0.5;	
+}
+
+std::string FullModel::write_out() {
+   std::string output = bidir.write_out();
+   output += " " + forwardElongation.write_out();
+   output += " " + tfit::prettyDecimal(w_forward, 4);
+   output += " " + reverseElongation.write_out();
+   output += " " + tfit::prettyDecimal(w_reverse, 4);
+   return(output);
+}
+
 
 /******************** Noise Model ************************/
-
 NoiseModel::NoiseModel()
 	: noise() {
 }
@@ -235,25 +272,4 @@ double NoiseModel::pdf(double x, char s){
 	}
 	return (w*(1-pi)) / abs(noise.upper-noise.lower);
 }
-
-/**********************  Full model (with Elongationg) *************/
-
-
-FullModel::FullModel()
-	: bidir(), forwardElongation(), reverseElongation() {
-   w_forward = 0.5;
-   w_reverse = 0.5;	
-}
-
-std::string FullModel::write_out() {
-   std::string output = bidir.write_out();
-   output += " " + forwardElongation.write_out();
-   output += " " + tfit::prettyDecimal(w_forward, 4);
-   output += " " + reverseElongation.write_out();
-   output += " " + tfit::prettyDecimal(w_reverse, 4);
-   return(output);
-}
-
-
-
 

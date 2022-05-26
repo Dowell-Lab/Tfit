@@ -1,17 +1,50 @@
 /**
- * @file Model.h
+ * @file Models.h
  * @author Robin Dowell 
  * @version 0.1
  * @date 2022-05-12
  * 
  */
-#ifndef Model_H
-#define Model_H
+#ifndef Models_h
+#define Models_h
 
 #include <string>
 #include <vector>
 
 #include "Distro.h"
+
+
+/**
+ * @brief Every model component must be able to report on its 
+ * responsiblities, e.g. Prob(k|data point, params) in the EM 
+ * algorithm. 
+ * 
+ */
+class Responsibilities {
+  public:
+  double r_forward, r_reverse; //responsibilities per strand
+
+  //Constructor
+  Responsibilities();
+
+  //Functions
+  void reset();
+};
+
+class HyperParameters {
+  //FOR SIGMA ; variance in loading, gamma
+	double ALPHA_0, BETA_0;
+	//FOR LAMBA ; rate of initiation, gamma
+	double ALPHA_1, BETA_1;
+	//FOR W ; weight , Dirichlet
+	double ALPHA_2;
+	//FOR PI ; strand prob. , beta
+	double ALPHA_3;
+
+  //Constructor
+  HyperParameters();
+};
+
 
 class Bidirectional {
   public:
@@ -19,6 +52,9 @@ class Bidirectional {
   Exponential initiation;
   double pi;		// strand bias
   double footprint;		// the ad hoc footprint parameter 
+
+  Responsibilities rTerms;
+  Responsibilities currentRterms;
 
   // Constructor
   Bidirectional();
@@ -44,8 +80,28 @@ class Bidirectional {
 
 };
 
+class FullModel {
+  public:
+  Bidirectional bidir;
+  Uniform forwardElongation;
+  Uniform reverseElongation;
+  double w_forward, w_reverse;
+
+  Responsibilities rTerms;
+  Responsibilities currentRterms;
+
+  // Constructor
+  FullModel();
+
+  // Functions
+  std::string write_out();
+};
+
 class NoiseModel {
+  public:
   Uniform noise;
+  Responsibilities rTerms;
+  Responsibilities currentRterms;
 
   // Constructor
   NoiseModel();
@@ -59,19 +115,6 @@ class NoiseModel {
 
 };
 
-class FullModel {
-  public:
-  Bidirectional bidir;
-  Uniform forwardElongation;
-  Uniform reverseElongation;
-  double w_forward, w_reverse;
-
-  // Constructor
-  FullModel();
-
-  // Functions
-  std::string write_out();
-};
 
 
 #endif
