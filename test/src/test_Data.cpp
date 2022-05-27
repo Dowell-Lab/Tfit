@@ -64,7 +64,7 @@ TEST(Data, dInt_bin_scale)
     EXPECT_EQ(sut.N, 21);
 }
 
-TEST(Data, coordinateTranslation)
+TEST(Data, coordIndex2Genomic)
 {
     // Arrange: bring SUT to desired state
     RawData data;
@@ -74,7 +74,7 @@ TEST(Data, coordinateTranslation)
     data.addDataPoints(11,17, 0);
 
     dInterval sut(&data,2,1);
-    std::cout << sut.data_dump() << std::endl;
+    // std::cout << sut.data_dump() << std::endl;
 
     // Act: call methods on SUT, capture output
     double result1 = sut.getGenomeCoordfromIndex(2);
@@ -86,4 +86,23 @@ TEST(Data, coordinateTranslation)
     // Assert: Verify the outcome
     EXPECT_EQ(result2, 2);      // index -> genomic -> index
     EXPECT_EQ(result3, 13);     // genomic -> index -> genomic
+}
+
+TEST(Data, coordData2Index)
+{
+    // Arrange: bring SUT to desired state
+    RawData data;
+    data.addDataPoints(10, 14, 4);   
+    data.addDataPoints(13, 15, 1);
+    data.addDataPoints(8, 10, -2);
+    data.addDataPoints(11,17, 0);
+
+    dInterval sut(&data,2,1);
+
+    // Act: call methods on SUT, capture output
+    //double result1 = sut.getIndexfromData(3);
+    int result1 = sut.getIndexfromData(4);
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(result1, 2);      // index -> genomic -> index
 }

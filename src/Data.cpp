@@ -204,7 +204,7 @@ dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
   N = 0;  // initial value
   delta = v_delta;  scale = v_scale; 
   if (scale <= 0) { scale = 1;}
-  
+
   // Establish num of bins
   bins =  raw->Length()/delta;
   if (bins < 1) { // Min value
@@ -214,6 +214,7 @@ dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
       bins += 1;    // The end stuff which isn't of length delta!
     }
   } 
+
   initializeData(raw->minX);
   BinStrands(raw);
   ScaleDown(raw->minX);
@@ -227,7 +228,7 @@ std::string dInterval::write_out() {
   if (raw != NULL) {
     output = raw->write_out();
   }
-  output += "\t" + tfit::prettyDecimal(bins,0) + "," 
+  output += "\tbins: " + tfit::prettyDecimal(bins,0) + "," 
       + tfit::prettyDecimal(delta,4) + "," + tfit::prettyDecimal(scale,3);
   return output;
 }
@@ -356,7 +357,9 @@ int dInterval::getIndexfromData(double dataCoord) {
     if ((dataCoord > X[0][indexMin]) && (dataCoord < X[0][indexCenter])) {
       indexMax = indexCenter;
     } else { 
-      indexMin = indexCenter;
+      // Edge case
+      if (indexCenter == indexMin) { indexMin += 1;}
+      else {indexMin = indexCenter;}
     }
     if (indexMax < indexMin) { found = true;}
   }
