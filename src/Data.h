@@ -73,11 +73,11 @@ class RawData {
 class dInterval {
 public:
 	double ** X;  //!< Smoothed data inner is [3] dimensions
-	int bins;  //!< total number of bins
+	int bins;  //!< total number of bins (e.g. size of X[])
   int delta;  // step size (nts per bin)
   int scale;  // all positions are divided by this factor e.g. 1 -> 1/scale
 
-	double N;	//!< Total sum of values 
+	double N;	//!< Total sum of values (convenience variable)
 
   RawData *raw;  // The raw data from which this was built.
 
@@ -88,14 +88,22 @@ public:
   /* FUCTIONS: */
   // Reporting out 
   std::string write_out();  // debugging
+  std::string data_dump();
 
-  // These can be used as an iterator:
+  // Accessors, can be used as an iterator:
   double num_elements();
   double forward(int);
   double reverse(int);
   double position(int);
 
-  double sum_Region();  // both strands
+  // Summary information on this data
+  double sumInterval(int, int, char);  // on single strand
+  double sumAlldata();  // both strands
+
+  //Convert between data and genomic coordinates 
+  int getIndex(double);   // given genomic coordinate, give index to dInterval
+  double getGenomeCoord(int);  // given an index to the dInterval, what is the genomic Coord
+
 
   // Functions for doing the conditioning.
   void initializeData(int length);  // Sets up the internal matrix
@@ -104,10 +112,6 @@ public:
   void CompressZeros();   // Remove positions that are zero on both strands
 
   void ClearX();   // Deallocates X, leaves other variables intact.
-
-  std::string data_dump();
-
-  // Need functions for converting between three coordinate systems: genomic, conditioned, indexed.
 
 	};
 

@@ -222,16 +222,125 @@ dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
   //std::cout << "AFTER: " + to_string(bins) << std::endl;
 }
 
-/**
- * @brief Cleans up existing X matrix (memory clearing)
- * 
- */
-void dInterval::ClearX() {
-  for (int i = 0; i < 3; i++) {
-    delete X[i];
+std::string dInterval::write_out() {
+  std::string output;
+  if (raw != NULL) {
+    output = raw->write_out();
   }
-  delete X;
-  X = NULL;
+  output += "\t" + tfit::prettyDecimal(bins,0) + "," 
+      + tfit::prettyDecimal(delta,4) + "," + tfit::prettyDecimal(scale,3);
+  return output;
+}
+
+
+/**
+ * @brief Outputs full contents of the points, this can be large
+ * use with caution!
+ * 
+ * @return std::string 
+ */
+std::string dInterval::data_dump() {
+  std::string output = "Points: ";
+  for (int i = 0; i < bins; i ++ ){
+    output += "[" + tfit::prettyDecimal(X[0][i],2) + ":" + 
+          tfit::prettyDecimal(X[1][i],2) + "," + tfit::prettyDecimal(X[2][i],2) + "]";
+  }
+  return output;
+  
+}
+
+/**
+ * @brief The number of data points in the interval.  
+ * This could be nucleotides (smallest unit) to bins (groups of nts)
+ * to the number of (possibly random) points along the interval.
+ * 
+ * @return double  Size of the interval in usable steps.
+ */
+double dInterval::num_elements() {
+  return bins;
+}
+/**
+ * @brief Data from forward strand at xth index.
+ * Note a "unit" here could be nucleotides, bins (groups of nts),
+ * or points along the interval.
+ * 
+ * @arg x The index of an element of the forward strand data.
+ * Note that this is not a position (genomic or scaled).
+ * 
+ * @return double 
+ */
+double dInterval::forward(int x) {
+  return X[1][x];
+}
+/**
+ * @brief Data from reverse strand at xth index.
+ * Note a "unit" here could be nucleotides, bins (groups of nts),
+ * or points along the interval.
+ * 
+ * @arg x The index an element of the reverse strand data.
+ * Note that this is not a position (genomic or scaled).
+ * 
+ * @return double 
+ */
+double dInterval::reverse(int x) {
+  return X[2][x];
+}
+
+/**
+ * @brief Position at the xth index.
+ * 
+ * @arg x The index of a data element.
+ * Note that this is not necessarily a genomic position.
+ * 
+ * @return double 
+ */
+double dInterval::position(int x) {
+  return X[0][x];
+}
+  
+double dInterval::sumAlldata() {
+  return N;
+}
+
+/**
+ * @brief Sum the data on one strand between indicies
+ * 
+ * @return std::string 
+ */
+double dInterval::sumInterval(int start, int stop, char strand) {
+  double sum = 0;
+  int strandidx = 1;
+  if (strand == '-') { strandidx = 2;}
+
+  for (int i= start; i< stop; i++) {
+    sum += X[strandidx][i];
+  }
+  return sum;
+}
+
+/**
+ * @brief Convert genomic coordinate into the correct index
+ * 
+ * @param genomicCoord   genomic Index
+ * @return int    correct index into X[]
+ */
+int dInterval::getIndex(double genomicCoord) {
+  return int((genomicCoord - raw->minX)/scale);
+}
+
+/**
+ * @brief Convert index to genomic coordinate
+ * Note that because of binning these will always be on 
+ * minX + delta intervals.
+ * 
+ * @param index  position index into X[]
+ * @return double   genomic Coordinate cooresponding
+ */
+double dInterval::getGenomeCoord(int index) {
+  double coord = ((index * scale) + raw->minX);
+  // Necessary to account for the last bin being uneven sized.
+  if (coord > raw->maxX) { return raw->maxX; }
+  else { return coord; }
 }
 
 /**
@@ -262,7 +371,7 @@ void dInterval::initializeData(int minX) {
 /**
  * @brief   Converts rawData into binned data. 
  * We have three arrays to walk through: 
- *   X[3][binnum] : conditioned data  i = 0 to bins-1
+ *   X[][binnum] : conditioned data  i = 0 to bins-1
  *   forward[fi][2]  : raw data for forward strand  fi = 0; fi < forward.size()
  *   reverse[ri][2]  : raw data for reverse strand  ri = 0; ri < reverse.size()
  * 
@@ -338,86 +447,14 @@ void dInterval::CompressZeros() {
 }
 
 /**
- * @brief The number of data points in the interval.  
- * This could be nucleotides (smallest unit) to bins (groups of nts)
- * to the number of (possibly random) points along the interval.
+ * @brief Cleans up existing X matrix (memory clearing)
  * 
- * @return double  Size of the interval in usable steps.
  */
-double dInterval::num_elements() {
-  return bins;
-}
-/**
- * @brief Data from forward strand at xth index.
- * Note a "unit" here could be nucleotides, bins (groups of nts),
- * or points along the interval.
- * 
- * @arg x The index of an element of the forward strand data.
- * Note that this is not a position (genomic or scaled).
- * 
- * @return double 
- */
-double dInterval::forward(int x) {
-  return X[1][x];
-}
-/**
- * @brief Data from reverse strand at xth index.
- * Note a "unit" here could be nucleotides, bins (groups of nts),
- * or points along the interval.
- * 
- * @arg x The index an element of the reverse strand data.
- * Note that this is not a position (genomic or scaled).
- * 
- * @return double 
- */
-double dInterval::reverse(int x) {
-  return X[2][x];
-}
-
-/**
- * @brief Position at the xth index.
- * 
- * @arg x The index of a data element.
- * Note that this is not necessarily a genomic position.
- * 
- * @return double 
- */
-double dInterval::position(int x) {
-  return X[0][x];
-}
-  
-double dInterval::sum_Region() {
-  return N;
-}
-
-/**
- * @brief Debugging contents of object
- * 
- * @return std::string 
- */
-std::string dInterval::write_out() {
-  std::string output;
-  if (raw != NULL) {
-    output = raw->write_out();
+void dInterval::ClearX() {
+  for (int i = 0; i < 3; i++) {
+    delete X[i];
   }
-  output += "\t" + tfit::prettyDecimal(bins,0) + "," 
-      + tfit::prettyDecimal(delta,4) + "," + tfit::prettyDecimal(scale,3);
-  return output;
-}
-
-/**
- * @brief Outputs full contents of the points, this can be large
- * use with caution!
- * 
- * @return std::string 
- */
-std::string dInterval::data_dump() {
-  std::string output = "Points: ";
-  for (int i = 0; i < bins; i ++ ){
-    output += "[" + tfit::prettyDecimal(X[0][i],2) + ":" + 
-          tfit::prettyDecimal(X[1][i],2) + "," + tfit::prettyDecimal(X[2][i],2) + "]";
-  }
-  return output;
-  
+  delete X;
+  X = NULL;
 }
 
