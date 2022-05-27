@@ -38,6 +38,8 @@ TEST(Itree, treeConstruction)
 
     // Assert: Verify the outcome
     EXPECT_THAT(output, sut.write_Full_Tree());
+
+    // sut.DestroyTree();
 }
 
 // Need to test a known result, an edge case (edge of interval), and not in tree.
@@ -127,8 +129,12 @@ TEST(ITree, SearchPointMissing)
       //  std::cout << (*it)->write_out() << std::endl;
     //}
 
+    // std::cout << sut.write_Full_Tree() << std::endl;
+
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 0);
+
+    sut.DestroyTree();
 }
 
 TEST(ITree, SearchIntervalExact) 

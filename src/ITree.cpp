@@ -135,6 +135,33 @@ std::vector<gInterval *>CITree::overlapSearch(gInterval *query) {
   return hits;
 }
 
+void CITree::DestroyTree() {
+   std::vector<Inode *> nodesOfTree;
+   nodesOfTree = grabTreeNodes(root);
+   std::vector<Inode *>::iterator it;
+   for (it = nodesOfTree.begin(); it != nodesOfTree.end(); it++) {
+     std::cout << (*it)->write_currentIntervals() << std::endl;
+      free(*it);
+   }
+   nodesOfTree.clear();
+   root = NULL;
+}
+
+std::vector<Inode *> CITree::grabTreeNodes(Inode *root) {
+  std::vector<Inode *> childrenNodes;
+  std::vector<Inode *> temp;
+  if (root->left != NULL) {
+    temp = grabTreeNodes(root->left);
+    childrenNodes.insert(childrenNodes.end(),temp.begin(), temp.end());
+  }
+  if (root->right != NULL) {
+    temp = grabTreeNodes(root->right);
+    childrenNodes.insert(childrenNodes.end(),temp.begin(), temp.end());
+  }
+  childrenNodes.push_back(root);
+  return childrenNodes;
+}
+
 /**
  * @brief writes out the entire subtree at root
  * 
@@ -217,4 +244,5 @@ Inode *CITree::constructTree(std::vector<gInterval *>segments){
   // return current node (tree)
   return root;
 }
+
 
