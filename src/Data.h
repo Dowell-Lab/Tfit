@@ -100,9 +100,13 @@ public:
   double sumInterval(int, int, char);  // on single strand
   double sumAlldata();  // both strands
 
-  //Convert between data and genomic coordinates 
-  int getIndex(double);   // given genomic coordinate, give index to dInterval
-  double getGenomeCoord(int);  // given an index to the dInterval, what is the genomic Coord
+  //Convert between index, data and genomic coordinates 
+  int getIndexfromGenomic(double);   // given genomic coordinate, give index 
+  int getIndexfromData(double);  // given data coordinate, get closest index
+  double getGenomeCoordfromIndex(int);  // given an index to the dInterval, what is the genomic Coord
+  double getGenomefromData(double);
+  double getDataCoordfromIndex(int);
+  double getDataCoordfromGenomeCoord(double);
 
 
   // Functions for doing the conditioning.

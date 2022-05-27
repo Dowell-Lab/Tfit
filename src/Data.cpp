@@ -286,17 +286,6 @@ double dInterval::reverse(int x) {
   return X[2][x];
 }
 
-/**
- * @brief Position at the xth index.
- * 
- * @arg x The index of a data element.
- * Note that this is not necessarily a genomic position.
- * 
- * @return double 
- */
-double dInterval::position(int x) {
-  return X[0][x];
-}
   
 double dInterval::sumAlldata() {
   return N;
@@ -318,14 +307,61 @@ double dInterval::sumInterval(int start, int stop, char strand) {
   return sum;
 }
 
+/*****Convert between coordinate systems *****/
+
 /**
  * @brief Convert genomic coordinate into the correct index
  * 
  * @param genomicCoord   genomic Index
  * @return int    correct index into X[]
  */
-int dInterval::getIndex(double genomicCoord) {
+int dInterval::getIndexfromGenomic(double genomicCoord) {
   return int((genomicCoord - raw->minX)/scale);
+}
+
+/**
+ * @brief Get the Index from a data coordinate 
+ * Uses a binary search approach.  Returns the index with 
+ * the closest data coordinate.
+ * 
+ * @param dataCoord 
+ * @return * int 
+ */
+int dInterval::getIndexfromData(double dataCoord) {
+  int indexMin = 0;
+  int indexMax = bins-1;
+  int indexCenter;
+  bool found = false;
+
+  while (!found) {
+    if ((indexMax - indexMin) < 2) {
+      found = true;
+      // Take closest
+      int distmin = abs(dataCoord - X[0][indexMin]);
+      int distmax = abs(dataCoord - X[0][indexMax]);
+      if(distmin < distmax) {
+        return indexMin;         
+      } else {
+        return indexMax;         
+      }
+    } else if (dataCoord == X[0][indexMin]) {
+      found = true;
+      return indexMin;
+    } else if (dataCoord == X[0][indexMax]) {
+      found = true;
+      return indexMax;
+    }
+    indexCenter = (int)(indexMax -indexMin)/2;
+
+    if ((dataCoord > X[0][indexMin]) && (dataCoord < X[0][indexCenter])) {
+      indexMax = indexCenter;
+    } else { 
+      indexMin = indexCenter;
+    }
+    if (indexMax < indexMin) { found = true;}
+  }
+  std::cout << "Error!!" << std::endl;
+  return -1;
 }
 
 /**
@@ -336,12 +372,44 @@ int dInterval::getIndex(double genomicCoord) {
  * @param index  position index into X[]
  * @return double   genomic Coordinate cooresponding
  */
-double dInterval::getGenomeCoord(int index) {
+double dInterval::getGenomeCoordfromIndex(int index) {
   double coord = ((index * scale) + raw->minX);
   // Necessary to account for the last bin being uneven sized.
   if (coord > raw->maxX) { return raw->maxX; }
   else { return coord; }
 }
+
+/**
+ * @brief Convert data coordinates to genomic coordinates
+ * 
+ * @return double 
+ */
+double dInterval::getGenomefromData(double dataCoord) {
+   int index = getIndexfromData(dataCoord);
+   return getGenomeCoordfromIndex(index);
+}
+
+/**
+ * @brief given an index, what is the data coordinate?
+ * 
+ * @return double 
+ */
+double dInterval::getDataCoordfromIndex(int index) {
+  return X[0][index];
+}
+
+/**
+ * @brief Given Genomic coordinates, what are data coordinates?
+ * 
+ * @return double 
+ */
+double dInterval::getDataCoordfromGenomeCoord(double Gcoord) {
+  int index = getIndexfromGenomic(Gcoord);
+  return getDataCoordfromIndex(index);
+}
+
+
+/***** Conditioning / Scaling / Binning Data *****/
 
 /**
  * @brief Allocate and setup the X matrix given the size of the RawData

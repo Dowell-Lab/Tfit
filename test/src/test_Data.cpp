@@ -77,11 +77,11 @@ TEST(Data, coordinateTranslation)
     std::cout << sut.data_dump() << std::endl;
 
     // Act: call methods on SUT, capture output
-    double result1 = sut.getGenomeCoord(2);
-    double result2 = sut.getIndex(result1);
+    double result1 = sut.getGenomeCoordfromIndex(2);
+    double result2 = sut.getIndexfromGenomic(result1);
 
-    double result4 = sut.getIndex(13);
-    double result3 = sut.getGenomeCoord(result4);
+    double result4 = sut.getIndexfromGenomic(13);
+    double result3 = sut.getGenomeCoordfromIndex(result4);
 
     // Assert: Verify the outcome
     EXPECT_EQ(result2, 2);      // index -> genomic -> index

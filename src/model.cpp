@@ -567,7 +567,6 @@ void component::initialize_bounds(double mu, segment * data , int K, double scal
 		//====================================
 		//start sampling
 		//for the bidirectional/EMG component
-		gamma_distribution<double> dist_lengths(1,( (data->getXLength())/(K)));
 		Random ran_num_gen;
 
 		sigma 				= ran_num_gen.fetchUniform(1,250)/scale;
@@ -583,10 +582,10 @@ void component::initialize_bounds(double mu, segment * data , int K, double scal
 		}
 		forward 			= UNI(mu+(1.0/lambda), data->maxX, 1.0 / (complexity*K), 1, j, pi);
 		forward.j=j, forward.k=k;
-		
 
 		bidir 				= EMG(mu, sigma, lambda, 1.0 / (complexity*K), 0.5);
 		bidir.foot_print 	= fp;
+
 		dist 				=  -(1.0/lambda);
 		j 					= get_nearest_position(  data, mu, dist);
 		k 					= get_nearest_position(data, mu, reverse_bound-mu);
