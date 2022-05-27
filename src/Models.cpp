@@ -144,7 +144,8 @@ double Bidirectional::pdf(double z, char s){
 
 /**
  * @brief This is the "alternative formulation for computation" of the 
- * EMG PDF \f$f(x;\mu,\sigma,\lambda)\f$ as described in Kalambet et. al. 2011.  
+ * exponentially modified gaussian probability density function:
+ * \f$f(x;\mu,\sigma,\lambda)\f$ as described in Kalambet et. al. 2011.  
  * Briefly:
  * NOTE: \f$\pi\f$ here is the numerical constant (3.14...) NOT the strand bias.
  * 
@@ -217,7 +218,10 @@ double Bidirectional::pdf_alt(double z, char s){
 
 /**
  * @brief conditional expectation of Y given z_i 
- * Eq 9 E[Y|params] in Azofeifa 2018
+ * Eq 9 E[Y|params] in Azofeifa 2018:
+ * \f$ E[Y|g_i,\theta^t] = s_i(z-\mu) - \lambda\sigma^2
+ * + \frac{\sigma}{R(\lambda\sigma - s_i(z_i-mu)/\sigma)}
+ * \f$
  * 
  * @param z 
  * @param s 
@@ -235,6 +239,7 @@ double Bidirectional::ExpY(double z, char strand){
 /**
  * @brief conditional expectation of Y given z_i 
  * Eq 9 E[X|params] in Azofeifa 2018
+ * \f$ E[X|g_i,\theta^t = z_i - s_i E[Y|g_i,\theta^t] \f$
  * 
  * @param z 
  * @param s 
@@ -249,6 +254,9 @@ double Bidirectional::ExpX(double z, char strand){
 /**
  * @brief conditional expectation of Y^2 given z_i
  * Eq 9 E[Y^2|params] in Azofeifa 2018
+ * \f$ E[Y^2|g_i,\theta^t] = \lambda^2\sigma^4 +
+ * \sigma^2(2\lambda(\mu-z)s_i+1) + (z_i - \mu)^2 
+ * \frac{\sigma(\lambda\sigma^2 + s_i(\mu - z_i))}{R(\lambda\sigma - s_i(z_i-\mu)/\sigma}\f$
  * 
  * @param z 
  * @param s 
@@ -267,7 +275,9 @@ double Bidirectional::ExpY2(double z, char strand){
 
 /**
  * @brief conditional expectation of Y^2 given z_i
- * Eq 9 E[X^2|params] in Azofeifa 2018
+ * Eq 9 E[X^2|params] in Azofeifa 2018:
+ * \f$ E[X^2|g_i,\theta^t] = E[X|g_i,\theta^t] +
+ * E[Y^2|g_i,\theta^t] - E[Y|g_i,\theta^t] \f$
  * 
  * @param z 
  * @param s 

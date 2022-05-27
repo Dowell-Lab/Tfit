@@ -620,7 +620,7 @@ string component::write(){
  * @param st 
  * @return double 
  */
-double component::evaluate(double x, int st){
+double component::calculateRi(double x, int st){
 	if (type ==0){ //this is the uniform noise component
 		return noise.pdf(x, st);
 	}
@@ -1063,10 +1063,10 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 			// Equation 7 in Azofeifa 2017: calculate r_i^k
 			for (int k=0; k < K+add; k++){ //computing the responsibility terms per model
 				if (data->ForwardCoverage(i)) { //if there is actually data point here...
-					norm_forward+=components[k].evaluate(data->Coordinate(i),1);
+					norm_forward+=components[k].calculateRi(data->Coordinate(i),1);
 				}
 				if (data->ReverseCoverage(i)){//if there is actually data point here...
-					norm_reverse+=components[k].evaluate(data->Coordinate(i),-1);
+					norm_reverse+=components[k].calculateRi(data->Coordinate(i),-1);
 				}
 			}
 			if (norm_forward > 0){

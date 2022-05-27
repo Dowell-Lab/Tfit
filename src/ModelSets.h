@@ -34,6 +34,7 @@ class ModelWrapper {
 
   // Weights and responsibilities associated with this model
   double weight;
+  Responsibilities rTerms;
 
   // Constructor
   ModelWrapper();

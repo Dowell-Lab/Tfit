@@ -143,7 +143,7 @@ public:
 	component();
 	// Functions
 	void initialize_bounds(double,  segment *, int , double , double, double, double, double, double);
-	double evaluate(double, int);
+	double calculateRi(double, int);
 	void add_stats(double, double , int, double);
 	void update_parameters(double,int);
 	void set_priors(double,double,double,double,double,double,double, int);

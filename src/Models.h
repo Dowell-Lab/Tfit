@@ -53,7 +53,6 @@ class Bidirectional {
   double footprint;		// the ad hoc footprint parameter 
 
   Responsibilities rTerms;
-  Responsibilities currentRterms;
 
   // Constructor
   Bidirectional();
@@ -77,18 +76,17 @@ class Bidirectional {
   int indicatorStrand(char s);
   double applyFootprint (double z, char s);
 
-
 };
 
 class FullModel {
   public:
   Bidirectional bidir;
-  Uniform forwardElongation;
-  Uniform reverseElongation;
-  double w_forward, w_reverse;
+  Uniform forwardElongation; // s = 1
+  Uniform reverseElongation;  // s = -1
+  double w_forward, w_reverse;    // weights / pausing ratio
+
 
   Responsibilities rTerms;
-  Responsibilities currentRterms;
 
   // Constructor
   FullModel();
