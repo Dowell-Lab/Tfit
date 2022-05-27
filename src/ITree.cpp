@@ -140,7 +140,7 @@ void CITree::DestroyTree() {
    nodesOfTree = grabTreeNodes(root);
    std::vector<Inode *>::iterator it;
    for (it = nodesOfTree.begin(); it != nodesOfTree.end(); it++) {
-     std::cout << (*it)->write_currentIntervals() << std::endl;
+     // std::cout << (*it)->write_currentIntervals() << std::endl;
       free(*it);
    }
    nodesOfTree.clear();

@@ -274,7 +274,7 @@ double EMG::pdf(double z, int s ){
 	p     = (lambda/2)*exp(vl)*erfc((s*(mu-z) + lambda*pow(sigma ,2) )/(sqrt(2)*sigma));
 	p     = p*w*pow(pi, max(0, s) )*pow(1-pi, max(0, -s) );
 
-	std::cout << std::to_string(p) << std::endl;
+	// std::cout << std::to_string(p) << std::endl;
 	if ((p < 1e7) && (! isnan(float(p))) ){
 	  return p; 
 	}
