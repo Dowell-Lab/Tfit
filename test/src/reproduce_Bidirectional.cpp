@@ -24,8 +24,8 @@ TEST(BidirEQ, reproducePDF)
     double newresult = sut.pdf(37.,'+');
     double oldresult = oldmethod.pdf(37., 1);
 
-    // std::cout << to_string(oldresult) + " is now "
-      // + to_string(newresult) << std::endl;
+    std::cout << to_string(oldresult) + " is now "
+      + to_string(newresult) << std::endl;
 
     // Assert: Verify the outcome
     ASSERT_LE(abs(oldresult - newresult), 0.0001);  

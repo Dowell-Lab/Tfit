@@ -255,9 +255,7 @@ string EMG::write_internals() {
  * @return double 
  */
 double EMG::pdf(double z, int s ){
-        if (w==0){
-	  return 0.0;
-	}
+    if (w==0){ return 0.0; }
 	if (s==1){
 		z-=foot_print;
 	}else{
@@ -275,7 +273,9 @@ double EMG::pdf(double z, int s ){
 	// Doesn't this line negate the whole "if" statement above??
 	p     = (lambda/2)*exp(vl)*erfc((s*(mu-z) + lambda*pow(sigma ,2) )/(sqrt(2)*sigma));
 	p     = p*w*pow(pi, max(0, s) )*pow(1-pi, max(0, -s) );
-	if (p < pow(10,7) and not isnan(float(p)) ){
+
+	std::cout << std::to_string(p) << std::endl;
+	if ((p < 1e7) && (! isnan(float(p))) ){
 	  return p; 
 	}
 	return 0.0;
