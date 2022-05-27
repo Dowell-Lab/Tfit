@@ -136,7 +136,7 @@ double Bidirectional::pdf(double z, char s){
    }
 
    // Check for outofbounds issues?
-	if (h < 10e7 and not std::isnan(float(h)) ){
+	if ((h < 1e7) && (! std::isnan(float(h)))){
 	  return h; 
 	}
 	return 0.0;

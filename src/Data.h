@@ -108,13 +108,14 @@ public:
   double getDataCoordfromIndex(int);
   double getDataCoordfromGenomeCoord(double);
 
-
   // Functions for doing the conditioning.
   void initializeData(int length);  // Sets up the internal matrix
   void BinStrands(RawData *data);
   void ScaleDown(int);    // Convert to zero based coords
   void CompressZeros();   // Remove positions that are zero on both strands
 
+  // Other useful functions
+  int getWithinRangeofPosition(double position, double dist);
   void ClearX();   // Deallocates X, leaves other variables intact.
 
 	};

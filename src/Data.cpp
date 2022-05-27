@@ -363,7 +363,7 @@ int dInterval::getIndexfromData(double dataCoord) {
     }
     if (indexMax < indexMin) { found = true;}
   }
-  std::cout << "Error!!" << std::endl;
+  std::cerr << "Error!! Unreachable in getIndexfromData." << std::endl;
   return -1;
 }
 
@@ -515,6 +515,31 @@ void dInterval::CompressZeros() {
   this->ClearX();
   X = newX;
   bins = realN;
+}
+
+/**
+ * @brief  This is currently a rewrite of Joey's get_nearest_position
+ * into this data structure.
+ * 
+ * @param position  Typically a mu
+ * @param dist    Typically s(1/lambda)
+ * @return int    index of the position closest to position + dist (signed dist)
+ */
+int dInterval::getWithinRangeofPosition(double position, double dist) {
+	int i;
+
+	if (dist < 0 ){   // negative strand
+		i=0;
+		while (i < (bins-1) and (X[0][i] -position) < dist){
+			i++;
+		}
+	}else{
+		i=bins-1;
+		while (i >0 and (X[0][i] - position) > dist){
+			i--;
+		}
+	}
+	return i;
 }
 
 /**
