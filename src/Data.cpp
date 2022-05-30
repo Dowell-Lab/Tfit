@@ -14,10 +14,11 @@
  */
 #include "Data.h"
 
+#include <algorithm>
+#include <iostream>
+#include <memory>
 #include <string>
 #include <vector>
-#include <iostream>
-#include <algorithm>
 
 #include "split.h"
 #include "helper.h"
@@ -169,6 +170,15 @@ std::string RawData::data_dump() {
   return output;
 }
 
+RawData::~RawData() {
+  ClearData();
+  // What about belongsTo and cdata?
+  if (cdata != NULL) {
+    delete(cdata);
+  }
+}
+
+
 
 /****************** dInterval *********************/
 
@@ -221,6 +231,10 @@ dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
   // std::cout << data_dump() << std::endl;
   CompressZeros();
   //std::cout << "AFTER: " + to_string(bins) << std::endl;
+}
+
+dInterval::~dInterval() {
+  if (X != NULL) { ClearX();}
 }
 
 std::string dInterval::write_out() {
@@ -547,10 +561,10 @@ int dInterval::getWithinRangeofPosition(double position, double dist) {
  * 
  */
 void dInterval::ClearX() {
+  if (X == NULL) return;
   for (int i = 0; i < 3; i++) {
-    delete X[i];
+    delete [] X[i];
   }
-  delete X;
+  delete [] X;
   X = NULL;
 }
-

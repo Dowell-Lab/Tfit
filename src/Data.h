@@ -43,6 +43,8 @@ class RawData {
   //Constructors
   RawData();
   RawData(gInterval *);
+  //Destructor
+  ~RawData();
 
   std::string write_out();  // Debugging
 
@@ -84,6 +86,8 @@ public:
   // Constructors
   dInterval();
   dInterval(RawData *, int, int); // Convert RawData into binned/scaled data 
+
+  ~dInterval();   // Destructor
 
   /* FUCTIONS: */
   // Reporting out 

@@ -30,6 +30,11 @@ Inode::Inode(double v_center, std::vector<gInterval *> current) {
    left = right = NULL;
 }
 
+Inode::~Inode() {
+  if (left != NULL) delete left;
+  if (right != NULL) delete right;
+}
+
 /**
  * @brief Output function for THIS node.
  * 
@@ -55,6 +60,10 @@ CITree::CITree() {
 
 CITree::CITree(Inode *v_root) {
   root = v_root;
+}
+
+CITree::~CITree() {
+  // delete(root);
 }
 
 CITree::CITree(std::vector<gInterval *> setIntervals) {
@@ -133,33 +142,6 @@ std::vector<gInterval *>CITree::overlapSearch(gInterval *query) {
   }
 
   return hits;
-}
-
-void CITree::DestroyTree() {
-   std::vector<Inode *> nodesOfTree;
-   nodesOfTree = grabTreeNodes(root);
-   std::vector<Inode *>::iterator it;
-   for (it = nodesOfTree.begin(); it != nodesOfTree.end(); it++) {
-     // std::cout << (*it)->write_currentIntervals() << std::endl;
-      free(*it);
-   }
-   nodesOfTree.clear();
-   root = NULL;
-}
-
-std::vector<Inode *> CITree::grabTreeNodes(Inode *root) {
-  std::vector<Inode *> childrenNodes;
-  std::vector<Inode *> temp;
-  if (root->left != NULL) {
-    temp = grabTreeNodes(root->left);
-    childrenNodes.insert(childrenNodes.end(),temp.begin(), temp.end());
-  }
-  if (root->right != NULL) {
-    temp = grabTreeNodes(root->right);
-    childrenNodes.insert(childrenNodes.end(),temp.begin(), temp.end());
-  }
-  childrenNodes.push_back(root);
-  return childrenNodes;
 }
 
 /**
@@ -245,4 +227,7 @@ Inode *CITree::constructTree(std::vector<gInterval *>segments){
   return root;
 }
 
-
+void CITree::destroyTree() {
+    delete(root);
+    root = NULL;
+}

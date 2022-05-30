@@ -30,6 +30,8 @@ public:
 	// Constructors
 	Inode();	// empty constructor
     Inode(double, std::vector<gInterval *>);
+    // Destructor
+    ~Inode();
 
 	/* FUNCTIONS: */
     std::string write_currentIntervals(); // print intervals on current node.
@@ -41,13 +43,15 @@ public:
  * 
  */
 class CITree {
+public:
     Inode *root;
 
-public:
 	// Constructors
     CITree();
     CITree(Inode *);
     CITree(std::vector<gInterval *>);  // sorts intervals then builds tree.
+    //Destructor
+    ~CITree();
 
     // Functions:
     // Debugging functions:
@@ -59,13 +63,12 @@ public:
     // Search tree for all intervals that overlap a given interval 
     std::vector<gInterval *>overlapSearch(gInterval *);
 
-    void DestroyTree();
+    // std::vector<Inode *> grabTreeNodes(Inode *root);
 
-    std::vector<Inode *> grabTreeNodes(Inode *root);
-
-private: 
+// private: 
     // Recursively builds tree, assumes sorted vector of intervals
     Inode *constructTree(std::vector<gInterval *>);
+    void destroyTree();
 };
 
 #endif

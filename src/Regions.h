@@ -21,8 +21,10 @@
  * With no pre-defined ROI, this ends up being one gInterval
  * per chromosome/contig. 
  * 
- * Thus a bed file defines regions of interest (subsets of coords)
- * and bedGraphs (et. al.) have implicit the whole chromosome/contig as a gInterval.
+ * If created from a bed file, then ROI are read directly from the file.
+ * If created from a bedGraph, then ROI must be "made" and adjusted to
+ * include all points in the bedGraph.
+ * 
  */
 class SetROI {
 public:
@@ -31,10 +33,12 @@ public:
 
   // The Interval tree is really only needed when searching.  
   std::map<int, CITree *> searchable;   // index to interval tree 
-  int treesExist;    // Indicator for Interval tree built 
+  bool treesExist;    // Indicator for Interval tree built 
 
   // Constructors
   SetROI();
+  // Destructor
+  ~SetROI();
 
   // Functions
   void addRegionToSet(gInterval *);
@@ -44,7 +48,7 @@ public:
   // Find overlapping intervals (search)
   void createSearchIndex();   // Builds the interval trees given the regions 
   std::vector<gInterval *>findOverlapIntervals(gInterval *);
-  void clearTree();
+  void clearTrees();
 
   // Adding data to the set of regions (with vs without roi)
   void addDataCreateROI(std::string chr, double start, double stop, double coverage);

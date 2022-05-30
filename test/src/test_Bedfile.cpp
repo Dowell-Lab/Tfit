@@ -30,6 +30,9 @@ TEST(Bedfile, multiChromCheck)
 
    // Assert: Verify the outcome
    EXPECT_EQ(sut.setRegions.chr_names.num_elements, chrcount);
+
+   sut.setRegions.clearTrees();
+
 }
 
 TEST(Bedfile, checkSearch_noChr) 
@@ -49,6 +52,7 @@ TEST(Bedfile, checkSearch_noChr)
 
    // Assert: Verify the outcome
    EXPECT_EQ(results.empty(), 1);   // Expects empty
+   sut.setRegions.clearTrees();
 }
 
 TEST(Bedfile, checkSearch_hasoverlap) 
@@ -67,6 +71,7 @@ TEST(Bedfile, checkSearch_hasoverlap)
 
    // Assert: Verify the outcome
    EXPECT_EQ(results.size(), 2);
+   sut.setRegions.clearTrees();
 }
 
 TEST(Bedfile, checkSearch_noOverlap) 
@@ -86,6 +91,7 @@ TEST(Bedfile, checkSearch_noOverlap)
 
    // Assert: Verify the outcome
    EXPECT_EQ(results.size(), 0);
+   sut.setRegions.clearTrees();
 }
 
 TEST(Bedfile, load_Bedgraph) 

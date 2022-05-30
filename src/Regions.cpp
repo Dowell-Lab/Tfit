@@ -23,6 +23,25 @@
  */
 SetROI::SetROI()
     : chr_names() {
+  treesExist = false;
+}
+
+/**
+ * @brief Destroy the SetROI object
+ * 
+ */
+SetROI::~SetROI() {
+  for (int i = 0; i < chr_names.num_elements; i++) {
+    if (treesExist) {
+      searchable[i]->destroyTree();
+    }
+    for (auto& it : regions[i]) {
+      if (it->data != NULL) {
+        delete it->data;
+      }
+      delete it;
+    }
+  }
   treesExist = 0;
 }
 
@@ -50,7 +69,7 @@ void SetROI::createSearchIndex() {
     for (it = regions.begin(); it != regions.end(); it++) {
       searchable[it->first] = new CITree(it->second);
     }
-    treesExist = 1;
+    treesExist = true;
 }
 
 /**
@@ -80,9 +99,14 @@ std::vector<gInterval *> SetROI::findOverlapIntervals(gInterval *input) {
  * @brief Destroy the Interval Tree (clear up memory)
  * 
  */
-void SetROI::clearTree() {
-  searchable.clear(); // Removes Interval Trees to save space
-  treesExist = 0;  
+void SetROI::clearTrees() {
+  if (treesExist) {
+    for (int i = 0; i < chr_names.num_elements; i++) {
+      searchable[i]->destroyTree();
+      delete(searchable[i]);
+    }
+    treesExist = false;
+  }
 }
 
 /**

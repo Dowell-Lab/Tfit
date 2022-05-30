@@ -20,4 +20,5 @@ TEST(nested, reproduceNested)
 
   // Assert: Verify the outcome
   EXPECT_EQ(fits[0]->model, 5);
+  delete(P);
 }

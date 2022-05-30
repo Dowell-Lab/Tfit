@@ -11,7 +11,7 @@
 #include "Intervals.h"
 
 
-TEST(Itree, treeConstruction)
+TEST(ITree, treeConstruction)
 {
     // Arrange: bring SUT to desired state
     std::vector<gInterval *>setofIntervals;
@@ -39,7 +39,7 @@ TEST(Itree, treeConstruction)
     // Assert: Verify the outcome
     EXPECT_THAT(output, sut.write_Full_Tree());
 
-    // sut.DestroyTree();
+    sut.destroyTree();
 }
 
 // Need to test a known result, an edge case (edge of interval), and not in tree.
@@ -71,6 +71,8 @@ TEST(ITree, SearchPointContains)
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 2);
+
+    sut.destroyTree();
 }
 
 TEST(ITree, SearchPointEdge)
@@ -101,6 +103,7 @@ TEST(ITree, SearchPointEdge)
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 2);
+    sut.destroyTree();
 }
 
 TEST(ITree, SearchPointMissing)
@@ -134,7 +137,7 @@ TEST(ITree, SearchPointMissing)
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 0);
 
-    sut.DestroyTree();
+    sut.destroyTree();
 }
 
 TEST(ITree, SearchIntervalExact) 
@@ -165,6 +168,8 @@ TEST(ITree, SearchIntervalExact)
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 2);
+
+    sut.destroyTree();
 }
 
 TEST(ITree, SearchIntervalMissing) 
@@ -196,6 +201,8 @@ TEST(ITree, SearchIntervalMissing)
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 0);
+
+    sut.destroyTree();
 }
 
 TEST(ITree, SearchIntervalContained) 
@@ -227,5 +234,7 @@ TEST(ITree, SearchIntervalContained)
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 2);
+
+    sut.destroyTree();
 }
 
