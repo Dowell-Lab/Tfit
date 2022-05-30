@@ -10,7 +10,7 @@
 #include "Models.h"
 #include "model.h"
 
-// Need to test edge cases!
+// Need to test edge cases and negative strand!
 TEST(BidirEQ, reproducePDF)
 {
     // Arrange: bring SUT to desired state

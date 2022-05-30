@@ -32,37 +32,41 @@ class ModelWrapper {
   FullModel *gene;
   Bidirectional *bidir;
 
-  // Weights and responsibilities associated with this model
-  double weight;
-  Responsibilities rTerms;
-
   // Constructor
   ModelWrapper();
   ModelWrapper(FullModel *);
   ModelWrapper(Bidirectional *);
+  // Destructor
+  ~ModelWrapper();
 
   // Functions
   void resetSufficiencyStats();
+  std::string write_out();
 };
 
 /**
  * @brief The container holds K total models.   This is what
  * the EM will be using to run on and returning from each run.
  * 
+ * Note that somewhere else we've got to decide what K is.
+ * 
  */
 class ModelContainer {		
   public:
-  NoiseModel noise;
+  UniformModel noise;
+
   int K;
-  ModelWrapper *setModels;
+  std::vector<ModelWrapper *> setModels;
   double ll,pi; // log likelihood, 
 
   // Constructor
   ModelContainer();
   ModelContainer(int, ModTypes);
+  //Destructor
+  ~ModelContainer();
 
   // Functions;
+  std::string write_out();
 };
-
 
 #endif

@@ -35,7 +35,6 @@ class EMalg {
 	std::string write_out();
 
 	int fit (); // A data interval, a set of models, algorithm control, priors
-
 };
 
 

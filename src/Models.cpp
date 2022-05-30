@@ -12,17 +12,21 @@
 #include "helper.h"
 #include "Distro.h"
 
-
+/********* Sufficiency Statistics *****/
 
 Responsibilities::Responsibilities() {
    r_forward = 0;
 	r_reverse = 0;
+   ri_forward = 0;
+	ri_reverse = 0;
 }
 
 void Responsibilities::reset() {
-   r_forward = 0;
-	r_reverse = 0;
+   ri_forward = 0;
+	ri_reverse = 0;
 }
+
+/************** HyperParmaeters *******************/
 
 HyperParameters::HyperParameters() {
   ALPHA_0 = 1;
@@ -33,15 +37,28 @@ HyperParameters::HyperParameters() {
   BETA_1 = 1;
 }
 
+/************** Basic functionality required of all models ************/
+
+BasicModel::BasicModel()
+  : sufficiencyStats() {
+  weight = 0.; 
+}
+
+void BasicModel::resetSufficiency() {
+   sufficiencyStats.reset();
+}
+
+/***** BIDIRECTIONAL MODEL *****/
 // Empty Constructor
 
 Bidirectional::Bidirectional()
-	: loading(), initiation() {
+  : BasicModel(), loading(), initiation() {
    pi = 0.5;
    footprint = 40;	
 }
 
-Bidirectional::Bidirectional(double v_mu, double v_sigma, double v_lambda, double v_pi, double v_footprint) {
+Bidirectional::Bidirectional(double v_mu, double v_sigma, double v_lambda, 
+   double v_pi, double v_footprint) : BasicModel(), loading(), initiation() {
    loading.mu = v_mu;
    loading.sigma = v_sigma;
    initiation.lambda = v_lambda;
@@ -321,6 +338,32 @@ std::vector<double> Bidirectional::generate_data(int n) {
    return results;
 }
 
+/*************** Uniform Model (Elongation and Noise) ************************/
+UniformModel::UniformModel(): BasicModel(), uni() {
+  // Just calls the parents currently.
+}
+
+UniformModel::UniformModel(double v_a, double v_b): BasicModel(), uni() {
+   uni.lower = v_a;
+   uni.upper = v_b;
+}
+
+std::string UniformModel::write_out() {
+   return ("Uni: " + uni.write_out());
+}
+
+/**
+ * @brief Uniform Model density function
+ * 
+ * @param x      
+ * @param strand     currently NOT used!
+ * @return double 
+ */
+double UniformModel::pdf(double x, char s){
+   // Do we need to do *anything* with strand info?
+   return (weight * uni.pdf(x));
+}
+
 /**********************  Full model (with Elongationg) *************/
 
 FullModel::FullModel()
@@ -338,35 +381,9 @@ std::string FullModel::write_out() {
    return(output);
 }
 
-
-/******************** Noise Model ************************/
-NoiseModel::NoiseModel()
-	: noise() {
-}
-
-NoiseModel::NoiseModel(double v_a, double v_b) {
-   noise.lower = v_a;
-   noise.upper = v_b;
-}
-
-std::string NoiseModel::write_out() {
-   return ("Noise: " + noise.write_out());
-}
-
-/**
- * @brief NOISE density function
- * Note that NOISE is just a uniform.
- * 
- * @param x          NOT used!
- * @param strand 
- * @return double 
- */
-double NoiseModel::pdf(double x, char s){
-   double w = 1;     // Place holder!
-   double pi = 1;    // Place hodler!
-	if (s == '+'){
-		return (w*pi) / abs(noise.upper-noise.lower);
-	}
-	return (w*(1-pi)) / abs(noise.upper-noise.lower);
+void FullModel::resetSufficiencyStats() {
+   bidir.resetSufficiency();
+   forwardElongation.resetSufficiency();
+   reverseElongation.resetSufficiency();
 }
 

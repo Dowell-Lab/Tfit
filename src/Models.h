@@ -22,7 +22,8 @@
  */
 class Responsibilities {
   public:
-  double r_forward, r_reverse; //responsibilities per strand
+  double ri_forward, ri_reverse; //responsibilities per strand
+  double r_forward, r_reverse;  // Running totals (sum over i)
 
   //Constructor
   Responsibilities();
@@ -45,14 +46,26 @@ class HyperParameters {
   HyperParameters();
 };
 
-class Bidirectional {
+class BasicModel {
+  public:
+  double weight;
+  Responsibilities sufficiencyStats;   // The current read
+
+  //Constructor
+  BasicModel();
+
+  std::string write_out();
+  double pdf(double z, char s);   // pdf on strand s for position z
+
+  void resetSufficiency();
+};
+
+class Bidirectional: public BasicModel {
   public:
   Normal loading;
   Exponential initiation;
   double pi;		// strand bias
   double footprint;		// the ad hoc footprint parameter 
-
-  Responsibilities rTerms;
 
   // Constructor
   Bidirectional();
@@ -78,39 +91,39 @@ class Bidirectional {
 
 };
 
+class UniformModel: public BasicModel {
+  public:
+  Uniform uni;
+
+  // Constructor
+  UniformModel();
+  UniformModel(double v_a, double v_b);
+
+  // Expectation: pG(b-a)/S where S is length of genome, 
+  //  G is # reads mapped, p is prob noise
+
+  // Functions
+  std::string write_out();
+  double pdf(double x, char s);
+};
+
+
+
 class FullModel {
   public:
   Bidirectional bidir;
-  Uniform forwardElongation; // s = 1
-  Uniform reverseElongation;  // s = -1
+  UniformModel forwardElongation; // s = 1
+  UniformModel reverseElongation;  // s = -1
   double w_forward, w_reverse;    // weights / pausing ratio
-
-
-  Responsibilities rTerms;
 
   // Constructor
   FullModel();
 
   // Functions
   std::string write_out();
-};
+  double pdf(double z, char s);
 
-class NoiseModel {
-  public:
-  Uniform noise;
-  Responsibilities rTerms;
-  Responsibilities currentRterms;
-
-  // Constructor
-  NoiseModel();
-  NoiseModel(double v_a, double v_b);
-
-  // Expectation: pG(b-a)/S where S is length of genome, G is # reads mapped, p is prob noise
-
-  // Functions
-  std::string write_out();
-  double pdf(double x, char s);
-
+  void resetSufficiencyStats();   
 };
 
 #endif
