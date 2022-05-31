@@ -40,8 +40,16 @@ class ModelWrapper {
   ~ModelWrapper();
 
   // Functions
-  void resetSufficiencyStats();
   std::string write_out();
+
+  void setPriors();
+  void initializeBounds(double mu_seed);
+  void resetSufficiencyStats();
+  double getResponsibility();
+
+  double getMu();
+
+  void updateParameters(double N, int K);
 };
 
 /**
@@ -67,6 +75,14 @@ class ModelContainer {
 
   // Functions;
   std::string write_out();
+  void initializeComponents(dInterval *data);
+  void Seed_SetBounds();
+
+  std::vector<double> RandomSeeds();
+  void SortByMu();
+
+  void resetSufficiencyStats();
+  double getAllResponsibilities();
 };
 
 #endif

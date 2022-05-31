@@ -9,6 +9,7 @@
 #include "Models.h"
 
 #include <iostream>
+#include <algorithm>  // min and max
 #include "helper.h"
 #include "Distro.h"
 #include "Data.h"
@@ -270,6 +271,26 @@ double Bidirectional::getMu() {
   return (loading.mu);
 }
 
+double Bidirectional::getSigma() {
+  return (loading.sigma);
+}
+
+double Bidirectional::getLambda() {
+  return (initiation.lambda);
+}
+
+void Bidirectional::setMu(double newmu) {
+  loading.mu = newmu; 
+}
+
+void Bidirectional::setSigma(double newsigma) {
+   loading.sigma = newsigma;
+}
+
+void Bidirectional::setLambda(double newlambda) {
+  initiation.lambda = newlambda;
+}
+
 /**
  * @brief conditional expectation of Y^2 given z_i
  * Eq 9 E[X^2|params] in Azofeifa 2018:
@@ -316,6 +337,33 @@ std::vector<double> Bidirectional::generate_data(int n) {
     results.push_back(signStrand *(norm + signStrand * expon));
    }
    return results;
+}
+
+double Bidirectional::getResponsibility() {  // formerly called get_all_repo
+   return (sufficiencyStats.r_forward + sufficiencyStats.r_reverse);
+}
+
+void Bidirectional::updateParameters(double N, double K) {
+   double r = getResponsibility();
+   double prevmu = getMu();
+
+/*
+   pi = (sufficiencyStats.r_forward + ALPHA_3) / (r + ALPHA_3 * 2);
+   weight = (r + ALPHA_2) / (N + ALPHA_2 * K * 3 + K * 3);
+   setMu(bidir.ex / (r + 0.001));
+   setSigma(pow(abs((1. / (r + 3 + ALPHA_0)) * (bidir.ex2 - 2 * bidir.mu * bidir.ex +
+                                                     r * pow(bidir.mu, 2) + 2 * BETA_0)),
+                     0.5);
+   setLambda(min((r + ALPHA_1) / (bidir.ey + BETA_1), 5.));
+   /*
+
+   // We have an established minimum for lambda?!?!
+   setLambda(std::max(getLambda(),0.05));
+   /* This is not exactly Joey's logic.  See update_parameters() for the
+   interplay of bidir.move_fp, bidir_prev_mu!!! */
+   if (abs(getMu() - prevmu) < 0.01) {
+    // footprint = min(max(bidir.C / (r + 0.1), 0.0), 2.5);
+   }
 }
 
 /*************** Uniform Model (Elongation and Noise) ************************/
@@ -368,10 +416,12 @@ void UniformModel::setBounds(double v_lower, double v_upper) {
 }
 
 double UniformModel::getResponsibility() {
-   // Strand??
-   return (sufficiencyStats.r_forward);
+   return (sufficiencyStats.r_forward + sufficiencyStats.r_reverse);
 }
 
+void UniformModel::updateParameters(double N,double K) {
+   //sufficiencyStats.w = (sufficiencyStats.r_forward + ALPHA_2) / (N + ALPHA_2 * K * 3 + K * 3);
+}
 
 
 /**********************  Full model (with Elongationg) *************/
@@ -406,4 +456,22 @@ double FullModel::getResponsibility() {  // formerly called get_all_repo
    return (bidir.sufficiencyStats.r_forward + bidir.sufficiencyStats.r_reverse
          + forwardElongation.sufficiencyStats.r_forward 
          + reverseElongation.sufficiencyStats.r_reverse);
+}
+
+void FullModel::updateParameters(double N, double K) {
+   bidir.updateParameters(N,K);
+   forwardElongation.updateParameters(N,K);
+   reverseElongation.updateParameters(N,K);
+
+   // Updates necessary to keep this properly tied together:
+   forwardElongation.uni.lower = bidir.getMu();
+   reverseElongation.uni.upper = bidir.getMu();
+   forwardElongation.pi = (forwardElongation.sufficiencyStats.r_forward + 1) /
+                           (forwardElongation.getResponsibility() + 2);
+   reverseElongation.pi = (reverseElongation.sufficiencyStats.r_forward + 1) /
+                           (reverseElongation.getResponsibility() + 2);
+   if (bidir.weight == 0) {
+      forwardElongation.weight = 0;
+      reverseElongation.weight = 0;
+   }
 }

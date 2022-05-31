@@ -9,7 +9,8 @@
 #define EMalg_H 
 
 #include <string>
-#include "Models.h"
+#include "ModelSets.h"
+#include "Data.h"
 
 class AlgorithmControl { 
   public:
@@ -19,6 +20,8 @@ class AlgorithmControl {
 	double noise_max; //fit a uniform noise component, never let it get above this weight
 	bool move_l;	// indicator
 	double r_mu;
+	int maxUniformIter;
+	bool elon_move;	// should we move the uniform bounds?
 
   AlgorithmControl();
 };
@@ -26,7 +29,8 @@ class AlgorithmControl {
 class EMalg {
 	public:
 	bool converged;	// indicator
-	// AlgorithmControl *control;  // Do we want to include this as a link?
+	AlgorithmControl control;  // parameters that can be altered in the EM
+	ModelContainer models;		// This is the set of models we're trying to infer
 
 	// Constructor
 	EMalg();
@@ -34,7 +38,13 @@ class EMalg {
 	//Functions
 	std::string write_out();
 
-	int fit (); // A data interval, a set of models, algorithm control, priors
+	int fit (dInterval *data); // How to priors factor in?
+
+	double computeBackgroundModel(dInterval *data);
+	void adjustBounds ();
+
+	void Mstep(dInterval *data);
+	void Estep(dInterval *data);
 };
 
 

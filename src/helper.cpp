@@ -101,5 +101,5 @@ double tfit::LOG(double x){
 }
 
 bool tfit::compareMu(ModelWrapper *mod1, ModelWrapper *mod2) {
-   return (mod1->getMu < mod2->getMu);
+   return (mod1->getMu() < mod2->getMu());
 }

@@ -12,7 +12,8 @@
 #include <vector>
 
 #include "Distro.h"
-#include "ModelSupport.h"
+#include "ModelSupport.h"   
+#include "Data.h"   // gInterval
 
 
 class BasicModel {
@@ -43,19 +44,28 @@ class Bidirectional: public BasicModel {
   // Functions
   std::string write_out();
 
+  // Get and Set the EMG parameters
+  double getMu();
+  double getSigma();
+  double getLambda();
+  void setMu(double);
+  void setSigma(double);
+  void setLambda(double);
+
+  // Calculate the pdf and expected values
   double pdf(double z, char s);   // standard (Grushka 1972) formula for pdf
   double pdf_alt(double z, char s);   // Kalambet 2011 pdf for numerical stability
-
   double ExpX(double z, char strand);
   double ExpY(double z, char s);
   double ExpX2(double z, char strand);
   double ExpY2(double z, char s);
 
-  double getMu();
-
+  // Functions of all Models
   std::vector<double> generate_data(int n);
+  double getResponsibility();   
+  void updateParameters(double,double);
 
-// private:
+  // Supporting Functions (could be private?)
   double millsRatio(double);    
   int indicatorStrand(char s);
   double applyFootprint (double z, char s);
@@ -73,7 +83,10 @@ class UniformModel: public BasicModel {
   // Functions
   std::string write_out();
   double pdf(double x, char s);
+
+  // Functions of all Models
   double getResponsibility();   
+  void updateParameters(double,double);
 
   // These are functions specifically for when its NOISE?
   // Noise Expectation: pG(b-a)/S where S is length of genome, 
@@ -81,7 +94,6 @@ class UniformModel: public BasicModel {
   void setPi(double v_pi);
   double calculateLikelihood(dInterval *data);
   void setBounds(double v_lower, double v_upper);
-
 };
 
 
@@ -98,8 +110,10 @@ class FullModel {
   std::string write_out();
   double pdf(double z, char s);
 
+  // Functions of all Models
   void resetSufficiencyStats();
   double getResponsibility();   
+  void updateParameters(double,double);
 };
 
 

@@ -14,6 +14,8 @@
 #include <map>
 #include <random>
 
+#include "ModelSets.h"
+
 /**
  * @brief Allows for all spots of random calls to become
  * predictable when necessary for testing.
