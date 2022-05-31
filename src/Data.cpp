@@ -4,8 +4,13 @@
  * @brief Class code for data intervals
  * 
  * Current design: 
- * dIntervals contain data (two strands) per an interval but do so in zero
- * based coordinates.  Can translate back to gInterval if correspondance is setup.
+ * 
+ * RawData keeps points [coord,coverage] for both strands.  It's a container for
+ * reading in from bedGraphs.  Once the bedGraph is fully read, then we can
+ * convert the RawData into a dInterval.
+ * 
+ * A dInterval contains points [coord,forward_coverage,reverse_coverage] that 
+ * is zero based (e.g. RawData->minX becomes Zero), binned (delta) and scaled.
  * 
  * Data intervals must have rapid data access for EM algorithm.
  * @version 0.1
@@ -39,9 +44,9 @@ RawData::RawData(gInterval *v_ginterval) {
 
 /**
  * @brief Length of the RawData (max-min)
- * Assumes half open coordinates
+ * Assumes half open coordinates.
  * 
- * @return double 
+ * @return double returns length of this segment
  */
 double RawData::Length() {
   return (maxX-minX);   // Half open coordinates means no +1
@@ -51,7 +56,7 @@ double RawData::Length() {
  * @brief Release the memory of raw data
  * This will be useful/necesary for min memory version.
  */
-void RawData::ClearData () {
+void RawData::freeDataMemory () {
   forward.clear();
   reverse.clear();
 }
@@ -89,8 +94,7 @@ void RawData::addDataPoints(double st, double sp, double cov) {
 
 /**
  * @brief Once all the data is read in, we can sort the
- * forward and reverse strands and remove duplicate entries.
- * 
+ * forward and reverse strands.
  */
 void RawData::Sort() {
   // Sort vector<double> by  first entity (e.g. coordinates)
@@ -106,7 +110,7 @@ void RawData::Sort() {
 
 /**
  * @brief Remove duplicate entries for any position.
- * Arbitrarily take one of the entries or max or avg?
+ * Arbitrarily keeps the first one of duplicates
  * Erase is notoriously slow, so this could be costly for big datasets.
  */
 void RawData::RemoveDuplicates() {
@@ -133,9 +137,9 @@ void RawData::RemoveDuplicates() {
 }
 
 /**
- * @brief  Debuggging output of object
+ * @brief Stringify the object for debugging purposes
  * 
- * @return std::string 
+ * @return std::string  contents of object as a string.
  */
 std::string RawData::write_out() {
   std::string ID;
@@ -154,7 +158,7 @@ std::string RawData::write_out() {
  * @brief Outputs full contents of the points, this can be large
  * use with caution!
  * 
- * @return std::string 
+ * @return std::string  The complete contents of data as string (will be big!).
  */
 std::string RawData::data_dump() {
   std::string output = "Forward: ";
@@ -170,15 +174,16 @@ std::string RawData::data_dump() {
   return output;
 }
 
+/**
+ * @brief Cleanup function.  Necessary to avoid memory leaks.
+ */
 RawData::~RawData() {
-  ClearData();
+  freeDataMemory();
   // What about belongsTo and cdata?
   if (cdata != NULL) {
     delete(cdata);
   }
 }
-
-
 
 /****************** dInterval *********************/
 
@@ -187,9 +192,6 @@ RawData::~RawData() {
  * @author Robin Dowell
  *
  * Purpose: create/allocate instances of a data Interval 
- *
- * The data Interval class contains both strands of data associated
- * with a particular region.  There is an empty constructor option. 
  */
 dInterval::dInterval() {
   X = NULL;
@@ -233,10 +235,18 @@ dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
   //std::cout << "AFTER: " + to_string(bins) << std::endl;
 }
 
+/**
+ * @brief Cleanup function to avoid memory leaks!
+ */
 dInterval::~dInterval() {
-  if (X != NULL) { ClearX();}
+  if (X != NULL) { DeallocateX();}
 }
 
+/**
+ * @brief Stringify object for debugging!
+ * 
+ * @return std::string contents of object as a string.
+ */
 std::string dInterval::write_out() {
   std::string output;
   if (raw != NULL) {
@@ -247,12 +257,11 @@ std::string dInterval::write_out() {
   return output;
 }
 
-
 /**
  * @brief Outputs full contents of the points, this can be large
  * use with caution!
  * 
- * @return std::string 
+ * @return std::string Contents of X[][] array as string.
  */
 std::string dInterval::data_dump() {
   std::string output = "Points: ";
@@ -274,6 +283,7 @@ std::string dInterval::data_dump() {
 double dInterval::num_elements() {
   return bins;
 }
+
 /**
  * @brief Data from forward strand at xth index.
  * Note a "unit" here could be nucleotides, bins (groups of nts),
@@ -287,6 +297,7 @@ double dInterval::num_elements() {
 double dInterval::forward(int x) {
   return X[1][x];
 }
+
 /**
  * @brief Data from reverse strand at xth index.
  * Note a "unit" here could be nucleotides, bins (groups of nts),
@@ -301,6 +312,13 @@ double dInterval::reverse(int x) {
   return X[2][x];
 }
 
+/**
+ * @brief Return the length of this dInterval.
+ * Will use the raw object's length if available (genome coords?),
+ * otherwise assumes the last element of X[][] is the length (i.e. zero based).
+ * 
+ * @return double  Length of this region/segment.
+ */
 double dInterval::getLength() {
   if (raw == NULL) {
     return X[0][bins-1];    //Zero based length
@@ -308,6 +326,11 @@ double dInterval::getLength() {
   return (raw->Length());   //Genome coords length
 }
 
+/**
+ * @brief Helper function: sum the data on forward strand
+ * 
+ * @return double SUM (forward strand coverage)
+ */
 double dInterval::sumForward() {
   double sum = 0;
   for(int i = 0; i < bins; i++) {
@@ -316,6 +339,11 @@ double dInterval::sumForward() {
   return sum;
 }
 
+/**
+ * @brief Helper function: sum the data on reverse strand
+ * 
+ * @return double SUM (reverse strand coverage)
+ */
 double dInterval::sumReverse() {
   double sum = 0;
   for(int i = 0; i < bins; i++) {
@@ -324,21 +352,27 @@ double dInterval::sumReverse() {
   return sum;
 }
 
-  
+/**
+ * @brief Total sum of all the data. 
+ * Currently a stored value, not computed.
+ * 
+ * @return double Sum of all reads on both strands in interval.
+ */
 double dInterval::sumAlldata() {
   return N;
 }
 
 /**
- * @brief Sum the data on one strand between indicies
+ * @brief Sum the data on one strand between indicies.
+ * Assumes start and stop are indexes into dInterval (e.g. between 0 and X[0][bins-1]).
  * 
- * @return std::string 
+ * @return double Sum of data on one strand between indicies.
  */
 double dInterval::sumInterval(int start, int stop, char strand) {
-  double sum = 0;
   int strandidx = 1;
   if (strand == '-') { strandidx = 2;}
 
+  double sum = 0;
   for (int i= start; i< stop; i++) {
     sum += X[strandidx][i];
   }
@@ -350,7 +384,7 @@ double dInterval::sumInterval(int start, int stop, char strand) {
 /**
  * @brief Convert genomic coordinate into the correct index
  * 
- * @param genomicCoord   genomic Index
+ * @param genomicCoord   genomic coordinate 
  * @return int    correct index into X[]
  */
 int dInterval::getIndexfromGenomic(double genomicCoord) {
@@ -362,8 +396,8 @@ int dInterval::getIndexfromGenomic(double genomicCoord) {
  * Uses a binary search approach.  Returns the index with 
  * the closest data coordinate.
  * 
- * @param dataCoord 
- * @return * int 
+ * @param dataCoord  Scaled/binned data coordinate
+ * @return * int  correct index into X[]
  */
 int dInterval::getIndexfromData(double dataCoord) {
   int indexMin = 0;
@@ -422,7 +456,8 @@ double dInterval::getGenomeCoordfromIndex(int index) {
 /**
  * @brief Convert data coordinates to genomic coordinates
  * 
- * @return double 
+ * @param dataCoord  Scaled/binned data coordinate
+ * @return double genomic coordinates corresponding
  */
 double dInterval::getGenomefromData(double dataCoord) {
    int index = getIndexfromData(dataCoord);
@@ -432,7 +467,8 @@ double dInterval::getGenomefromData(double dataCoord) {
 /**
  * @brief given an index, what is the data coordinate?
  * 
- * @return double 
+ * @param index  position index into X[]
+ * @return double Scaled/binned data coordinate
  */
 double dInterval::getDataCoordfromIndex(int index) {
   return X[0][index];
@@ -441,22 +477,21 @@ double dInterval::getDataCoordfromIndex(int index) {
 /**
  * @brief Given Genomic coordinates, what are data coordinates?
  * 
- * @return double 
+ * @param genomicCoord   genomic coordinate 
+ * @return double Scaled/binned data coordinate
  */
 double dInterval::getDataCoordfromGenomeCoord(double Gcoord) {
   int index = getIndexfromGenomic(Gcoord);
   return getDataCoordfromIndex(index);
 }
 
-
 /***** Conditioning / Scaling / Binning Data *****/
-
 /**
  * @brief Allocate and setup the X matrix given the size of the RawData
  * 
- * @param length 
+ * @param startCoord the left edge of this interval
  */
-void dInterval::initializeData(int minX) {
+void dInterval::initializeData(int startCoord) {
   // if (X != NULL) {
     // std::cout << "Clearing old data!" << std::endl;
     // ClearX(); 
@@ -465,7 +500,7 @@ void dInterval::initializeData(int minX) {
   for (int j = 0 ; j < 3;j++){
     X[j] 		= new double[bins];
   }
-  X[0][0] 		= double(minX);
+  X[0][0] 		= double(startCoord);
   // std::cout << "MIN: " + to_string(minX) << std::endl;
   X[1][0]=0,X[2][0]=0;
 	
@@ -512,11 +547,11 @@ void dInterval::BinStrands(RawData *data) {
 /**
  * @brief Scales down the coordinates to Zero based.
  * 
- * @param minX 
+ * @param startCoord the left edge of this region (genomic coords) 
  */
-void dInterval::ScaleDown(int minX) {
+void dInterval::ScaleDown(int startCoord) {
   for (int i = 0; i < bins; i ++ ){
-    X[0][i] 	= (X[0][i]-minX)/scale;
+    X[0][i] 	= (X[0][i]-startCoord)/scale;
   }
 }
 
@@ -549,7 +584,7 @@ void dInterval::CompressZeros() {
   if (realN != j) {
     printf("WHAT? %d,%d\n", j, realN);
   }
-  this->ClearX();
+  this->DeallocateX();
   X = newX;
   bins = realN;
 }
@@ -583,7 +618,7 @@ int dInterval::getWithinRangeofPosition(double position, double dist) {
  * @brief Cleans up existing X matrix (memory clearing)
  * 
  */
-void dInterval::ClearX() {
+void dInterval::DeallocateX() {
   if (X == NULL) return;
   for (int i = 0; i < 3; i++) {
     delete [] X[i];

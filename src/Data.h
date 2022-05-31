@@ -24,7 +24,8 @@ class dInterval;
 
 /**
  * @brief This is a container for the raw data as read from a bedgraph.  
- * This class is responsible for data sanity checks.  
+ * This class is responsible for data sanity checks.  The raw data
+ * can be deleted (freeing memory). 
  * 
  */
 class RawData {
@@ -48,27 +49,28 @@ class RawData {
 
   std::string write_out();  // Debugging
 
-  double Length();
-  void ClearData ();    // Deallocates the forward and reverse vectors;
+  double Length();    
+  void freeDataMemory();    //!< Deallocates the forward and reverse vectors;
   void addDataPoints(double st, double sp, double cov);
 
-  std::string data_dump();
+  std::string data_dump();  //!< a debugging function
 
-  void Sort();
-  void RemoveDuplicates();
+  void Sort();    //!< Sorts both forward and reverse by coordinate
+  void RemoveDuplicates();  //!< Removes any coordinate with zero reads on both strands
 };
 
 /**
  * @brief dInterval 
  * 
  * Data interval class which contains two strands of data
- * over an interval.  Data is expected to be forward and reverse
- * strand info.
- * 
+ * over an interval. 
+ *
  * The data is always in zero based coordinates.  
  * 
  * The data may, or may not, be scaled and binned relative 
  * to genomic coordinates.
+ * 
+ * This is the format of data expected by the EM algorithm.
  * 
  * @author Robin Dowell
  */
@@ -76,8 +78,8 @@ class dInterval {
 public:
 	double ** X;  //!< Smoothed data inner is [3] dimensions
 	int bins;  //!< total number of bins (e.g. size of X[])
-  int delta;  // step size (nts per bin)
-  int scale;  // all positions are divided by this factor e.g. 1 -> 1/scale
+  int delta;  //!< step size (nts per bin)
+  int scale;  //!< all positions are divided by this factor e.g. 1 -> 1/scale
 
 	double N;	//!< Total sum of values (convenience variable)
 
@@ -86,15 +88,14 @@ public:
   // Constructors
   dInterval();
   dInterval(RawData *, int, int); // Convert RawData into binned/scaled data 
-
   ~dInterval();   // Destructor
 
   /* FUCTIONS: */
   // Reporting out 
   std::string write_out();  // debugging
-  std::string data_dump();
+  std::string data_dump();  // debugging
 
-  // Accessors, can be used as an iterator:
+  // Accessors, can be used to iterate through:
   double num_elements();
   double forward(int);
   double reverse(int);
@@ -115,7 +116,7 @@ public:
   double getDataCoordfromIndex(int);
   double getDataCoordfromGenomeCoord(double);
 
-  // Functions for doing the conditioning.
+  // Functions for doing the conditioning
   void initializeData(int length);  // Sets up the internal matrix
   void BinStrands(RawData *data);
   void ScaleDown(int);    // Convert to zero based coords
@@ -123,7 +124,7 @@ public:
 
   // Other useful functions
   int getWithinRangeofPosition(double position, double dist);
-  void ClearX();   // Deallocates X, leaves other variables intact.
+  void DeallocateX();   // Deallocates X, leaves other variables intact.
 
 	};
 

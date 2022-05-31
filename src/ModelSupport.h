@@ -44,6 +44,10 @@ class HyperParameters {
 	//FOR PI ; strand prob. , beta
 	double ALPHA_3;
 
+  // Other priors?
+	// double p;   // What is this?
+	// double foot_print;	//  ?? 
+
   //Constructor
   HyperParameters();
 

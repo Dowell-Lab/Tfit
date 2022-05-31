@@ -11,6 +11,10 @@
 #include <string>
 #include <vector>
 
+/**
+ * @brief A normal distribution
+ * 
+ */
 class Normal {
   public:
 	double mu, sigma;
@@ -28,6 +32,10 @@ class Normal {
 
 };
 
+/**
+ * @brief An exponential distribution
+ * 
+ */
 class Exponential {
   public:
 	double lambda;
@@ -47,6 +55,10 @@ class Exponential {
   double ExpX();   // Expected value = 1/lambda
 };
 
+/**
+ * @brief A Uniform distribution
+ * 
+ */
 class Uniform {
 public:
 	double lower, upper;

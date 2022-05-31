@@ -88,6 +88,32 @@ double Bidirectional::applyFootprint (double z, char s) {
    return z;
 }
 
+double Bidirectional::getMu() {
+  return (loading.mu);
+}
+
+double Bidirectional::getSigma() {
+  return (loading.sigma);
+}
+
+double Bidirectional::getLambda() {
+  return (initiation.lambda);
+}
+
+void Bidirectional::setMu(double newmu) {
+  loading.mu = newmu; 
+}
+
+void Bidirectional::setSigma(double newsigma) {
+   loading.sigma = newsigma;
+}
+
+void Bidirectional::setLambda(double newlambda) {
+  initiation.lambda = newlambda;
+}
+
+
+
 /**
  * @brief EMG probability density function
  * h(z,s; mu, sigma, lambda, pi) in Azofeifa 2018
@@ -214,12 +240,12 @@ double Bidirectional::pdf_alt(double z, char s){
  * @brief conditional expectation of Y given z_i 
  * Eq 9 E[Y|params] in Azofeifa 2018:
  * \f$ E[Y|g_i,\theta^t] = s_i(z-\mu) - \lambda\sigma^2
- * + \frac{\sigma}{R(\lambda\sigma - s_i(z_i-mu)/\sigma)}
+ * + \frac{\sigma}{R(\lambda\sigma - s_i(z_i-\mu)/\sigma)}
  * \f$
  * 
- * @param z 
- * @param s 
- * @return double 
+ * @param z       position
+ * @param strand  strand ('+' '-' or '.')
+ * @return double  Expected value of Y
  */
 double Bidirectional::ExpY(double z, char strand){
    z = applyFootprint(z,strand);
@@ -235,9 +261,9 @@ double Bidirectional::ExpY(double z, char strand){
  * Eq 9 E[X|params] in Azofeifa 2018
  * \f$ E[X|g_i,\theta^t = z_i - s_i E[Y|g_i,\theta^t] \f$
  * 
- * @param z 
- * @param s 
- * @return double 
+ * @param z       position
+ * @param strand  strand ('+' '-' or '.')
+ * @return double  Expected value of X
  */
 double Bidirectional::ExpX(double z, char strand){
    z = applyFootprint(z,strand);
@@ -252,9 +278,9 @@ double Bidirectional::ExpX(double z, char strand){
  * \sigma^2(2\lambda(\mu-z)s_i+1) + (z_i - \mu)^2 
  * \frac{\sigma(\lambda\sigma^2 + s_i(\mu - z_i))}{R(\lambda\sigma - s_i(z_i-\mu)/\sigma}\f$
  * 
- * @param z 
- * @param s 
- * @return double 
+ * @param z       position
+ * @param strand  strand ('+' '-' or '.')
+ * @return double Expected value of \f$ Y^2 \f$
  */
 double Bidirectional::ExpY2(double z, char strand){
    z = applyFootprint(z,strand);
@@ -267,39 +293,15 @@ double Bidirectional::ExpY2(double z, char strand){
         - s*((z-loading.mu)/loading.sigma))); 
 }
 
-double Bidirectional::getMu() {
-  return (loading.mu);
-}
-
-double Bidirectional::getSigma() {
-  return (loading.sigma);
-}
-
-double Bidirectional::getLambda() {
-  return (initiation.lambda);
-}
-
-void Bidirectional::setMu(double newmu) {
-  loading.mu = newmu; 
-}
-
-void Bidirectional::setSigma(double newsigma) {
-   loading.sigma = newsigma;
-}
-
-void Bidirectional::setLambda(double newlambda) {
-  initiation.lambda = newlambda;
-}
-
 /**
  * @brief conditional expectation of Y^2 given z_i
  * Eq 9 E[X^2|params] in Azofeifa 2018:
  * \f$ E[X^2|g_i,\theta^t] = E[X|g_i,\theta^t] +
  * E[Y^2|g_i,\theta^t] - E[Y|g_i,\theta^t] \f$
  * 
- * @param z 
- * @param s 
- * @return double 
+ * @param z       position
+ * @param strand  strand ('+' '-' or '.')
+ * @return double Expected value of \f$ X^2 \f$
  */
 double Bidirectional::ExpX2(double z, char strand){
    z = applyFootprint(z,strand);
@@ -355,7 +357,7 @@ void Bidirectional::updateParameters(double N, double K) {
                                                      r * pow(bidir.mu, 2) + 2 * BETA_0)),
                      0.5);
    setLambda(min((r + ALPHA_1) / (bidir.ey + BETA_1), 5.));
-   /*
+   */
 
    // We have an established minimum for lambda?!?!
    setLambda(std::max(getLambda(),0.05));

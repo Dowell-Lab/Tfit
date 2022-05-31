@@ -33,7 +33,7 @@ Bedfile::Bedfile()
 /**
  * @brief  load a bedfile of intervals
  * @author Robin Dowell 
- * @param fle  name of bedfile containing intervals (example: singleregion.bed)
+ * @param file  name of bedfile containing intervals (example: singleregion.bed)
  */
 void Bedfile::load_file(std::string file) {
   filename = file;
@@ -71,9 +71,9 @@ void Bedfile::load_file(std::string file) {
 }
 
 /**
- * @brief Provide a basic report on a bedfile.
+ * @brief Provide a basic report on a bed file.
  * 
- * @return std::string 
+ * @return std::string  printable string of object contents 
  */
 std::string Bedfile::reportBedfileContents() {
    // Summary should include: name of file:
@@ -90,6 +90,11 @@ Bedgraph::Bedgraph()
   useExistingIntervals = 0; 
 }
 
+/**
+ * @brief Provide a basic report on a bedGraph file.
+ * 
+ * @return std::string  printable string of object contents 
+ */
 std::string Bedgraph::reportBedGraphContents() {
    // Summary should include: name of file:
    std::string report;

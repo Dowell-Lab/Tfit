@@ -20,15 +20,12 @@
 
 /**
  * @brief The complete contents of a bedfile.
- * Entries may be bed3, bed4, or bed6 (or more, but ignored if > 6).
- * 
- * Stores in sets if ITrees, one per chromosome, also provides methods
- * for looking up intervals (i.e. with chromosome identifier).
+ * Entries may be bed3, bed4, or bed6 (bed12 treated as bed6).
  */
 class Bedfile {
 public:
-   std::string filename;       // read in file name
-   SetROI setRegions;        // Container for set of bed6  regions 
+   std::string filename;       //!< file name 
+   SetROI setRegions;        //!< Container for set of bed6 regions 
  
    // Constructors
 	Bedfile();	// empty constructor
@@ -38,7 +35,7 @@ public:
   std::string reportBedfileContents();        // used for debugging
 
   // Read the file
-  void load_file (std::string);
+  void load_file (std::string); //!< Nuts and Bolts of this class, reads bed file.
 };
 
 /**
@@ -48,11 +45,10 @@ public:
  * 
  * Thus a large part of the responsibility of this class is to ensure
  * that data exists for each gInterval. 
- * 
  */
 class Bedgraph: public Bedfile {
 public:
-  bool useExistingIntervals;       // has ROI from bed separately or not?
+  bool useExistingIntervals;       //<! has ROI from bed separately or not?
 
 	// Constructors
   Bedgraph();
@@ -61,7 +57,7 @@ public:
   std::string reportBedGraphContents();        // used for debugging
 
   // Read the file
-  void load_file (std::string, bool);
+  void load_file (std::string, bool); //!< Nuts and Bolts for reading a bedGraph file
 
 };
 

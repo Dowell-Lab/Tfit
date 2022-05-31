@@ -162,6 +162,12 @@ void ModelWrapper::initializeBounds(double mu_seed) {
    */
 }
 
+/**
+ * @brief 
+ * 
+ * @param N 
+ * @param K 
+ */
 void ModelWrapper::updateParameters(double N, int K) {
    if (type == BIDIR) {
       bidir->updateParameters(N,K);

@@ -13,7 +13,10 @@
 
 #include "helper.h" // nINF and LOG
 
-
+/**
+ * @brief These are all the control variables (knobs) that 
+ * can alter the behavior of the EM algorithm.
+ */
 AlgorithmControl::AlgorithmControl() {
 	convergence_threshold = 0.0001; //convergence check
 	max_iterations = 2000; //stop after this many iterations
@@ -24,23 +27,49 @@ AlgorithmControl::AlgorithmControl() {
    maxUniformIter = 200;
 }
 
+/**
+ * @return std::string contents of object as string
+ */
+std::string AlgorithmControl::write_out() {
+   std::string output;
+   output = "Convergence Threshold: " + tfit::prettyDecimal(convergence_threshold,5);
+   output += "\nMax Interations: " + tfit::prettyDecimal(max_iterations, 0);
+   output += "\nMaximum Background Weight: " + tfit::prettyDecimal(noise_max,2);
+   output += "\nMysterious r_mu thingy: " + tfit::prettyDecimal(r_mu,2);
+   if (seed) {
+     output += "\nSeed the EM " ;
+   } else {
+     output += "\ndo NOT Seed the EM " ;
+   }
+   output += "\nMaximum Uniform Iterations: " + tfit::prettyDecimal(maxUniformIter,0);
+   return output;
+}
+
 
 /**********************  The actual algorithm class *************/
 EMalg::EMalg(): control(), models() {
    converged = false;	
 }
 
+/**
+ * @return std::string contents of object as string
+ */
 std::string EMalg::write_out() {
-   return "No contents!";
+   std::string output;
+   if (converged) { output = "Converged!\n"; }
+   else { output = "Not Converged!\n";}
+   output += control.write_out();
+   output += models.write_out();
+   return output;
 }
 
 /**
  * @brief This is the core EM fitting algorithm!
  * 
- * @return int 
+ * @return int an indicator of success
  */
 int EMalg::fit (dInterval *data) {
-   if (models.K == 0) {
+   if (models.K == 0) {    // We only have the noise model.
      models.ll = computeBackgroundModel(data);
      return 1;
    } 
@@ -96,6 +125,19 @@ double EMalg::computeBackgroundModel(dInterval *data) {
 
 /**
  * @brief E-step, grab all the stats and responsibilities
+ * Equation 9 from Azofeifa 2017:
+ * 
+ * \f$ E[Y|g_i,\theta^t] = s_i(z-\mu) - \lambda\sigma^2
+ * + \frac{\sigma}{R(\lambda\sigma - s_i(z_i-\mu)/\sigma)} \f$
+ * 
+ * \f$ E[X|g_i,\theta^t = z_i - s_i E[Y|g_i,\theta^t] \f$
+ * 
+ * \f$ E[Y^2|g_i,\theta^t] = \lambda^2\sigma^4 +
+ * \sigma^2(2\lambda(\mu-z)s_i+1) + (z_i - \mu)^2 
+ * \frac{\sigma(\lambda\sigma^2 + s_i(\mu - z_i))}{R(\lambda\sigma - s_i(z_i-\mu)/\sigma}\f$
+ * 
+ * \f$ E[X^2|g_i,\theta^t] = E[X|g_i,\theta^t] +
+ * E[Y^2|g_i,\theta^t] - E[Y|g_i,\theta^t] \f$
  * 
  */
 void EMalg::Estep(dInterval *data) {
@@ -124,8 +166,7 @@ void EMalg::Estep(dInterval *data) {
          models.ll += tfit::LOG(norm_reverse) * data->reverse(i);
       }
 
-      // now we need to add the sufficient statistics, need to compute expectations
-      //  Equation 9 in Azofeifa 2017
+      // now we need to add the sufficient statistics 
       for (int k = 0; k < models.K ; k++) {
          /*
          if (norm_forward) {
@@ -142,14 +183,33 @@ void EMalg::Estep(dInterval *data) {
 /**
  * @brief M-step, Equation 10 in Azofeifa 2017, Theta_k^(t+1)
  * 
+ * Equation 7 from Azofeifa 2017:
+ * 
+ * \f$ r_i^k=p(k|g_i;\theta_k^g)=\frac{w_k p(g_i;\theta_k^g)}{\sum_{k\in K} 
+ * w_k p(g_i;\theta_k^g)} \f$
+ * 
+ * Equation 10 from Azofeifa 2017:
+ *
+ * \f$ w^{t+1}_k =\frac{r_k}{r} \f$
+ * 
+ * \f$ \pi^{t+1}_k =\frac{\sum_{i=1} r_i^k  I(s_i=1) }{r_k} \f$
+ * 
+ * \f$ \mu^{t+1}_k =\frac{1}{r_k} \sum_{i=1} E[X|g_i;\theta^t ]  r_i^k \f$
+ * 
+ * \f$ \frac{1}{\lambda^{t+1}_k} =\frac{1}{r_k}  \sum_{i=1} E[Y|g_i; \theta^t] r_i^k \f$
+ * 
+ * \f$ \sigma^{t+1}_k =\frac{1}{r_k} [ (\sum_{i=1} E[X^2|g_i; \theta^t]r_i^k 
+ * -2\mu_k\sum_{i=1} E[X|g_i; \theta^t] r_i^k] +  \mu_k^2   \f$ 
+ * 
  * @param data 
  */
 void EMalg::Mstep(dInterval *data) {
 		double N=0; //get normalizing constant
       N = models.getAllResponsibilities();
 		for (int k = 0; k < models.K; k++){
-			// components[k].update_parameters(N, K);
+         models.setModels[k]->updateParameters(N,models.K);
 		} // plus noise!
+      models.noise.updateParameters(N,models.K);
 	}
 
 /**
