@@ -51,6 +51,8 @@ class Bidirectional: public BasicModel {
   double ExpX2(double z, char strand);
   double ExpY2(double z, char s);
 
+  double getMu();
+
   std::vector<double> generate_data(int n);
 
 // private:
@@ -68,13 +70,18 @@ class UniformModel: public BasicModel {
   UniformModel();
   UniformModel(double v_a, double v_b);
 
-  // Noise Expectation: pG(b-a)/S where S is length of genome, 
-  //  G is # reads mapped, p is prob noise
-
   // Functions
   std::string write_out();
   double pdf(double x, char s);
   double getResponsibility();   
+
+  // These are functions specifically for when its NOISE?
+  // Noise Expectation: pG(b-a)/S where S is length of genome, 
+  //  G is # reads mapped, p is prob noise
+  void setPi(double v_pi);
+  double calculateLikelihood(dInterval *data);
+  void setBounds(double v_lower, double v_upper);
+
 };
 
 

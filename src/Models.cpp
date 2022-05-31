@@ -11,6 +11,7 @@
 #include <iostream>
 #include "helper.h"
 #include "Distro.h"
+#include "Data.h"
 
 /************** Basic functionality required of all models ************/
 
@@ -265,6 +266,10 @@ double Bidirectional::ExpY2(double z, char strand){
         - s*((z-loading.mu)/loading.sigma))); 
 }
 
+double Bidirectional::getMu() {
+  return (loading.mu);
+}
+
 /**
  * @brief conditional expectation of Y^2 given z_i
  * Eq 9 E[X^2|params] in Azofeifa 2018:
@@ -339,10 +344,35 @@ double UniformModel::pdf(double x, char s){
    return (weight * uni.pdf(x));
 }
 
+void UniformModel::setPi(double v_pi) {
+   pi = v_pi;
+}
+
+double UniformModel::calculateLikelihood(dInterval *data) {
+   double ll = 0;
+   // Calculate MLE = -n log (pi/l) where pi is strand (1 -> +; -1 -> -)
+   for (int i = 0; i < data->num_elements(); i++) {
+      if (pi > 0) {
+            ll += log(pi / data->getLength()) * data->forward(i);
+      }
+      if (pi < 1) {
+            ll += log((1 - pi) / data->getLength()) * data->reverse(i);
+      }
+   }
+   return ll;
+}
+
+void UniformModel::setBounds(double v_lower, double v_upper) {
+   uni.lower = v_lower;
+   uni.upper = v_upper;
+}
+
 double UniformModel::getResponsibility() {
    // Strand??
    return (sufficiencyStats.r_forward);
 }
+
+
 
 /**********************  Full model (with Elongationg) *************/
 
