@@ -301,6 +301,29 @@ double dInterval::reverse(int x) {
   return X[2][x];
 }
 
+double dInterval::getLength() {
+  if (raw == NULL) {
+    return X[0][bins-1];    //Zero based length
+  }
+  return (raw->Length());   //Genome coords length
+}
+
+double dInterval::sumForward() {
+  double sum = 0;
+  for(int i = 0; i < bins; i++) {
+     sum += X[1][i];
+  }
+  return sum;
+}
+
+double dInterval::sumReverse() {
+  double sum = 0;
+  for(int i = 0; i < bins; i++) {
+     sum += X[2][i];
+  }
+  return sum;
+}
+
   
 double dInterval::sumAlldata() {
   return N;

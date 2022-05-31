@@ -99,8 +99,11 @@ public:
   double forward(int);
   double reverse(int);
   double position(int);
+  double getLength();
 
   // Summary information on this data
+  double sumForward();
+  double sumReverse();
   double sumInterval(int, int, char);  // on single strand
   double sumAlldata();  // both strands
 
