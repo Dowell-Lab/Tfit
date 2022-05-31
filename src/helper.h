@@ -63,6 +63,7 @@ class Bimap {
 namespace tfit {
   std::string prettyDecimal (double x, double sigfig);
   double LOG(double x);
+  bool compareMu(ModelWrapper *mod1, ModelWrapper *mod2);
 }
 
 #endif

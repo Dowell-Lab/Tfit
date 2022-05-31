@@ -100,4 +100,6 @@ double tfit::LOG(double x){
 	return log(x);//will return nINF if x <= 0
 }
 
-
+bool tfit::compareMu(ModelWrapper *mod1, ModelWrapper *mod2) {
+   return (mod1->getMu < mod2->getMu);
+}
