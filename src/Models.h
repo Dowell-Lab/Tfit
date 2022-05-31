@@ -45,6 +45,10 @@ class HyperParameters {
 
   //Constructor
   HyperParameters();
+
+  //Functions
+  std::string write_out();
+  
 };
 
 class BasicModel {
