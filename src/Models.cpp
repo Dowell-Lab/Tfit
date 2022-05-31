@@ -26,6 +26,15 @@ void Responsibilities::reset() {
 	ri_reverse = 0;
 }
 
+std::string Responsibilities::write_out() {
+   std::string output;
+   output = "Ri: f: " + tfit::prettyDecimal(ri_forward,3);
+   output += " r: " + tfit::prettyDecimal(ri_reverse,3);
+   output = "Rk: f: " + tfit::prettyDecimal(r_forward,3);
+   output += " r: " + tfit::prettyDecimal(r_reverse,3);
+   return output;
+}
+
 /************** HyperParmaeters *******************/
 
 HyperParameters::HyperParameters() {

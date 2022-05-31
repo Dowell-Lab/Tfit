@@ -29,6 +29,7 @@ class Responsibilities {
   Responsibilities();
 
   //Functions
+  std::string write_out();
   void reset();
 };
 
@@ -94,6 +95,7 @@ class Bidirectional: public BasicModel {
 class UniformModel: public BasicModel {
   public:
   Uniform uni;
+  double pi;    // Why does this need strand bias?
 
   // Constructor
   UniformModel();
