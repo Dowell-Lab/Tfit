@@ -12,51 +12,6 @@
 #include "helper.h"
 #include "Distro.h"
 
-/********* Sufficiency Statistics *****/
-
-Responsibilities::Responsibilities() {
-   r_forward = 0;
-	r_reverse = 0;
-   ri_forward = 0;
-	ri_reverse = 0;
-}
-
-void Responsibilities::reset() {
-   ri_forward = 0;
-	ri_reverse = 0;
-}
-
-std::string Responsibilities::write_out() {
-   std::string output;
-   output = "Ri: f: " + tfit::prettyDecimal(ri_forward,3);
-   output += " r: " + tfit::prettyDecimal(ri_reverse,3);
-   output = "Rk: f: " + tfit::prettyDecimal(r_forward,3);
-   output += " r: " + tfit::prettyDecimal(r_reverse,3);
-   return output;
-}
-
-/************** HyperParmaeters *******************/
-
-HyperParameters::HyperParameters() {
-  ALPHA_0 = 1;
-  ALPHA_1 = 1;
-  ALPHA_2 = 1;
-  ALPHA_3 = 1;
-  BETA_0 = 1;
-  BETA_1 = 1;
-}
-
-std::string HyperParameters::write_out() {
-  std::string output;
-  output = "For sigma: Gamma(" + tfit::prettyDecimal(ALPHA_0, 4) + "," 
-                  + tfit::prettyDecimal(BETA_0,4) + ")";
-  output = "\nFor lambda: Gamma(" + tfit::prettyDecimal(ALPHA_1, 4) + "," 
-                  + tfit::prettyDecimal(BETA_1,4) + ")";
-  output = "\nFor weight: Dirichlet(" + tfit::prettyDecimal(ALPHA_2, 4) + ")" ;
-  output = "\nFor pi: Beta(" + tfit::prettyDecimal(ALPHA_3, 4) + ")";
-  return output;
-}
-
 /************** Basic functionality required of all models ************/
 
 BasicModel::BasicModel()
@@ -384,21 +339,31 @@ double UniformModel::pdf(double x, char s){
    return (weight * uni.pdf(x));
 }
 
+double UniformModel::getResponsibility() {
+   // Strand??
+   return (sufficiencyStats.r_forward);
+}
+
 /**********************  Full model (with Elongationg) *************/
 
 FullModel::FullModel()
 	: bidir(), forwardElongation(), reverseElongation() {
-   w_forward = 0.5;
-   w_reverse = 0.5;	
+      forwardElongation.weight = 0.5;
+      reverseElongation.weight = 0.5;
 }
 
 std::string FullModel::write_out() {
    std::string output = bidir.write_out();
    output += " " + forwardElongation.write_out();
-   output += " " + tfit::prettyDecimal(w_forward, 4);
    output += " " + reverseElongation.write_out();
-   output += " " + tfit::prettyDecimal(w_reverse, 4);
    return(output);
+}
+
+double FullModel::pdf(double z, char s) {
+   // This is weighted by component weights, is this correct?
+   return (bidir.weight*bidir.pdf(z,s) 
+   + reverseElongation.weight*reverseElongation.pdf(z,s)
+   + reverseElongation.weight*reverseElongation.pdf(z,s));
 }
 
 void FullModel::resetSufficiencyStats() {
@@ -407,3 +372,8 @@ void FullModel::resetSufficiencyStats() {
    reverseElongation.resetSufficiency();
 }
 
+double FullModel::getResponsibility() {  // formerly called get_all_repo
+   return (bidir.sufficiencyStats.r_forward + bidir.sufficiencyStats.r_reverse
+         + forwardElongation.sufficiencyStats.r_forward 
+         + reverseElongation.sufficiencyStats.r_reverse);
+}

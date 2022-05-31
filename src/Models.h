@@ -12,44 +12,8 @@
 #include <vector>
 
 #include "Distro.h"
+#include "ModelSupport.h"
 
-
-/**
- * @brief Every model component must be able to report on its 
- * responsiblities, e.g. Prob(k|data point, params) in the EM 
- * algorithm. 
- * 
- */
-class Responsibilities {
-  public:
-  double ri_forward, ri_reverse; //responsibilities per strand
-  double r_forward, r_reverse;  // Running totals (sum over i)
-
-  //Constructor
-  Responsibilities();
-
-  //Functions
-  std::string write_out();
-  void reset();
-};
-
-class HyperParameters {
-  //FOR SIGMA ; variance in loading, gamma
-	double ALPHA_0, BETA_0;
-	//FOR LAMBA ; rate of initiation, gamma
-	double ALPHA_1, BETA_1;
-	//FOR W ; weight , Dirichlet
-	double ALPHA_2;
-	//FOR PI ; strand prob. , beta
-	double ALPHA_3;
-
-  //Constructor
-  HyperParameters();
-
-  //Functions
-  std::string write_out();
-  
-};
 
 class BasicModel {
   public:
@@ -93,7 +57,6 @@ class Bidirectional: public BasicModel {
   double millsRatio(double);    
   int indicatorStrand(char s);
   double applyFootprint (double z, char s);
-
 };
 
 class UniformModel: public BasicModel {
@@ -105,22 +68,21 @@ class UniformModel: public BasicModel {
   UniformModel();
   UniformModel(double v_a, double v_b);
 
-  // Expectation: pG(b-a)/S where S is length of genome, 
+  // Noise Expectation: pG(b-a)/S where S is length of genome, 
   //  G is # reads mapped, p is prob noise
 
   // Functions
   std::string write_out();
   double pdf(double x, char s);
+  double getResponsibility();   
 };
-
 
 
 class FullModel {
   public:
   Bidirectional bidir;
-  UniformModel forwardElongation; // s = 1
-  UniformModel reverseElongation;  // s = -1
-  double w_forward, w_reverse;    // weights / pausing ratio
+  UniformModel forwardElongation; // s = '+' 
+  UniformModel reverseElongation;  // s = '-' 
 
   // Constructor
   FullModel();
@@ -129,7 +91,9 @@ class FullModel {
   std::string write_out();
   double pdf(double z, char s);
 
-  void resetSufficiencyStats();   
+  void resetSufficiencyStats();
+  double getResponsibility();   
 };
+
 
 #endif
