@@ -10,6 +10,7 @@ build
 .vscode
 tags
 docs/Doxygen
+docs/Kalambert.pdf
 temp
 Testmain
 profile
