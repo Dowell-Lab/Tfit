@@ -103,3 +103,28 @@ double tfit::LOG(double x){
 bool tfit::compareMu(ModelWrapper *mod1, ModelWrapper *mod2) {
    return (mod1->getMu() < mod2->getMu());
 }
+
+bool tfit::compareCoords(const PointCov pt1, const PointCov pt2) {
+   return (pt1.coordinate < pt2.coordinate);
+}
+
+/**
+ * @brief Convert strand character to integer
+ * '+' becomes 1
+ * '-' becomes -1
+ * and '.' becomes 1
+ * 
+ * Note that this could impart a strand bias to pos
+ * strand if things are frequently marked as '.'.
+ * 
+ * @param s    strand as a char
+ * @return int    strand as an int
+ */
+int tfit::StrandAsInt(char s) {
+   if (s == '-') {
+      return -1;
+   } 
+   return 1;
+}
+
+

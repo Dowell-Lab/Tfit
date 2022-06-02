@@ -63,9 +63,6 @@ public:
     // Search tree for all intervals that overlap a given interval 
     std::vector<gInterval *>overlapSearch(gInterval *);
 
-    // std::vector<Inode *> grabTreeNodes(Inode *root);
-
-// private: 
     // Recursively builds tree, assumes sorted vector of intervals
     Inode *constructTree(std::vector<gInterval *>);
     void destroyTree();

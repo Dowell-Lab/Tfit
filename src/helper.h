@@ -20,6 +20,9 @@
  * @brief Allows for all spots of random calls to become
  * predictable when necessary for testing.
  * 
+ * Depends on a global variable (ugh) being set: 
+ * int g_testing {};  
+ * which should be set in every main function.
  */
 class Random {
   public:
@@ -37,7 +40,7 @@ class Random {
 };
 
 /**
- * @brief Keeps a mapping function that is bidirectional,
+ * @brief Keeps a bidirectional mapping function,
  * i.e. map<name,index> and map<index,name>
  * Will be used in converting strings to indexes.
  * 
@@ -66,6 +69,8 @@ namespace tfit {
   std::string prettyDecimal (double x, double sigfig);
   double LOG(double x);
   bool compareMu(ModelWrapper *mod1, ModelWrapper *mod2);
+  bool compareCoords(const PointCov pt1, const PointCov pt2);
+  int StrandAsInt(char s);
 }
 
 #endif

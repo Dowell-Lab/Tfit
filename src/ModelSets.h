@@ -29,6 +29,7 @@ class ModelWrapper {
   ModTypes type;  
 
   // Only one of the below will be non-NULL at any one time.
+  // Where should this be checked?
   FullModel *gene;
   Bidirectional *bidir;
 
@@ -63,9 +64,9 @@ class ModelContainer {
   public:
   UniformModel noise;
 
-  int K;
+  int K;  //<! number of models in the set
   std::vector<ModelWrapper *> setModels;
-  double ll,pi; // log likelihood, 
+  double ll; // log likelihood 
 
   // Constructor
   ModelContainer();

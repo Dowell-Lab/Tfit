@@ -9,8 +9,8 @@
 #define EMalg_H 
 
 #include <string>
-#include "ModelSets.h"
-#include "Data.h"
+#include "ModelSets.h" // ModelContainer
+#include "Data.h"		// dInterval
 
 /**
  * @brief Parameters for altering the EM algorithm.
@@ -36,6 +36,9 @@ class AlgorithmControl {
 
   //Functions
   std::string write_out();
+
+  // Needs setters
+  // Needs a way to write and read from file.
 };
 
 /**

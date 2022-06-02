@@ -29,7 +29,7 @@
 class SetROI {
 public:
   Bimap chr_names;     // system for converting names to indexes (& vice versa)
-  std::map<int, std::vector<gInterval *>> regions;  // Unstructured collection
+  std::map<int, std::vector<gInterval *>> regions;  // collection, one per "chr"
 
   // The Interval tree is really only needed when searching.  
   std::map<int, CITree *> searchable;   // index to interval tree 

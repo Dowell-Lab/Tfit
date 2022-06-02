@@ -197,7 +197,6 @@ ModelContainer::ModelContainer()
 	: noise() {
   K = 0;
   ll = nINF;
-  pi = 0;	
 }
 
 ModelContainer::ModelContainer(int v_k, ModTypes type) {
@@ -216,7 +215,6 @@ ModelContainer::ModelContainer(int v_k, ModTypes type) {
      setModels.push_back(aModel);
   }
   ll = nINF;
-  pi = 0;	
 }
 
 ModelContainer::~ModelContainer() {
@@ -233,7 +231,7 @@ std::string ModelContainer::write_out() {
      output += setModels[i]->write_out();
      output += "\n";
    }
-   output += "ll: " + tfit::prettyDecimal(ll,4) + " pi: " + tfit::prettyDecimal(pi,3);
+   output += "ll: " + tfit::prettyDecimal(ll,4);
    return output; 
 }
 

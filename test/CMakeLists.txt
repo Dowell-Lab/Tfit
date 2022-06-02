@@ -48,7 +48,7 @@ list(APPEND sources
                 src/test_Bimap.cpp
                 src/test_Data.cpp
                 src/test_Distros.cpp
-                src/test_EMGparams.cpp
+                src/test_ModelParamSet.cpp
                 src/test_Intervals.cpp
                 src/test_ITree.cpp
                 src/test_Models.cpp

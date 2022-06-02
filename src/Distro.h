@@ -62,7 +62,6 @@ class Exponential {
 class Uniform {
 public:
 	double lower, upper;
-  // Should this have a strand?
 
   // Constructor
   Uniform();

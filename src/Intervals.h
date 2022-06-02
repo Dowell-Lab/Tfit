@@ -52,7 +52,8 @@ public:
   bool Overlap(gInterval *);    // Does your interval of interest overlap this one?
   bool Contains(double point);  // Is a coordinate in this region?
 
-  void addDataPoint(double,double,double,bool);
+  // add points to data (RawData):
+  void addDataPoint(double start,double stop,double cov,bool expand);
 
 protected:
   void setBED4fromStrings(std::vector<std::string> lineArray); // helper function

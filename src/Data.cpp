@@ -86,6 +86,9 @@ void RawData::freeDataMemory () {
  * coverage indicates strand.  A range of points is input as 
  * each individual point within the set.
  * 
+ * @bug Should this check to see if the point is in the range of
+ * belongsTo?
+ * 
  * @param st  start (this point is included)
  * @param sp   stop (with half open, this is strickly less than!)
  * @param cov  signed count/coverage at this point

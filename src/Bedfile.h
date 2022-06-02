@@ -11,12 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "Intervals.h"      // gInterval, bed6
-#include "Data.h"       // RawData, dInterval
 #include "Regions.h"    // SetROI, Segment
-#include "ITree.h"
-#include "helper.h"
-
 
 /**
  * @brief The complete contents of a bedfile.
@@ -36,6 +31,8 @@ public:
 
   // Read the file
   void load_file (std::string); //!< Nuts and Bolts of this class, reads bed file.
+
+  // void write_file (std::string filename);  // inverse of load
 };
 
 /**
@@ -58,6 +55,7 @@ public:
 
   // Read the file
   void load_file (std::string, bool); //!< Nuts and Bolts for reading a bedGraph file
+  // void write_file (std::string filename);  // inverse of load
 
 };
 

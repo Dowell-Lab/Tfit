@@ -111,11 +111,11 @@ public:
   std::string write_out();  // debugging
   std::string data_dump();  // debugging
 
-  // Accessors, can be used to iterate through:
-  double num_elements();
-  double forward(int);
-  double reverse(int);
-  double position(int);
+  // Accessors, makes code far more readable and can be used for iteration.
+  double num_elements();  // equivalent to bins
+  double forward(int);    // equivalent to X[0][i]
+  double reverse(int);    // equivalent to X[1][i]
+  double position(int);   // equivalent to X[2][i]
   double getLength();
 
   // Summary information on this data

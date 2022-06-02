@@ -10,9 +10,9 @@
 
 #include <iostream>
 #include <algorithm>  // min and max
-#include "helper.h"
-#include "Distro.h"
-#include "Data.h"
+#include "helper.h"     // tfit::prettyDecimal tift::StrandAsInt
+#include "Distro.h"     //Normal, Uniform, Exponential
+#include "Data.h"    // dInterval
 
 /************** Basic functionality required of all models ************/
 
@@ -63,19 +63,6 @@ double Bidirectional::millsRatio(double x){
 		return 1.0 / pow(10,-15);
 	}
 	return exp(log(1. - N)-log(D));
-}
-
-/**
- * @brief This is the indicator function on strand
- * 
- * @param s 
- * @return int 
- */
-int Bidirectional::indicatorStrand(char s) {
-   if (s == '+') {
-      return 1;
-   } 
-   return -1;
 }
 
 double Bidirectional::applyFootprint (double z, char s) {
@@ -141,7 +128,7 @@ double Bidirectional::pdf(double z, char s){
 	double h;   // Called h(z,s;mu, sigma, lambda, pi) in the paper.
 
    // Reused intermediates in calculation:
-   double pointMeandiff = indicatorStrand(s) * (loading.mu - z);
+   double pointMeandiff = tfit::StrandAsInt(s) * (loading.mu - z);
    double lambdaSigmaSQ = initiation.lambda * pow(loading.sigma,2);
    double halfLambda = initiation.lambda/2.0;
 	double exponentvalue = (halfLambda)* (2*(pointMeandiff) + lambdaSigmaSQ);
@@ -149,8 +136,8 @@ double Bidirectional::pdf(double z, char s){
    // This has s and Indicator added:
 	h     = (halfLambda)*exp(exponentvalue)*
       erfc((pointMeandiff + lambdaSigmaSQ)/(sqrt(2)*loading.sigma));
-   if (indicatorStrand(s) > 0) {
-      h = h*pi; // pow(pi, std::max(0, indicatorStrand(s)) = 0 if s = -1; 1 otherwise 
+   if (tfit::StrandAsInt(s) > 0) {
+      h = h*pi; // pow(pi, std::max(0, tfit::StrandAsInt(s)) = 0 if s = -1; 1 otherwise 
    } else {
       h = h*(1-pi);
    }
@@ -203,7 +190,7 @@ double Bidirectional::pdf_alt(double z, char s){
   // Offset the position by the footprint 
    z = applyFootprint(z,s);
 
-   double pointMeandiff = indicatorStrand(s) * (z - loading.mu);
+   double pointMeandiff = tfit::StrandAsInt(s) * (z - loading.mu);
    double tau = 1.0/initiation.lambda;
 
    double decision = 1.0/sqrt(2) * 
@@ -228,8 +215,8 @@ double Bidirectional::pdf_alt(double z, char s){
    }
 
    // Factor in strand bias
-   if (indicatorStrand(s) > 0) {
-      f = f*pi; // pow(pi, std::max(0, indicatorStrand(s)) = 0 if s = -1; 1 otherwise 
+   if (tfit::StrandAsInt(s) > 0) {
+      f = f*pi; // pow(pi, std::max(0, tfit::StrandAsInt(s)) = 0 if s = -1; 1 otherwise 
    } else {
       f = f*(1-pi);
    }
@@ -249,7 +236,7 @@ double Bidirectional::pdf_alt(double z, char s){
  */
 double Bidirectional::ExpY(double z, char strand){
    z = applyFootprint(z,strand);
-   double s = indicatorStrand(strand);
+   double s = tfit::StrandAsInt(strand);
 	return std::max(0. , s*(z-loading.mu) 
       - initiation.lambda*pow(loading.sigma, 2) 
       + (loading.sigma / millsRatio(initiation.lambda*loading.sigma 
@@ -267,7 +254,7 @@ double Bidirectional::ExpY(double z, char strand){
  */
 double Bidirectional::ExpX(double z, char strand){
    z = applyFootprint(z,strand);
-   double s = indicatorStrand(strand);
+   double s = tfit::StrandAsInt(strand);
    return (z - s*(ExpY(z,strand)-footprint));
 }
 
@@ -284,7 +271,7 @@ double Bidirectional::ExpX(double z, char strand){
  */
 double Bidirectional::ExpY2(double z, char strand){
    z = applyFootprint(z,strand);
-   double s = indicatorStrand(strand);
+   double s = tfit::StrandAsInt(strand);
 	return pow(initiation.lambda,2)*pow(loading.sigma,4) 
      + pow(loading.sigma, 2)*(2*initiation.lambda*s*(loading.mu-z)+1 ) 
      + pow(loading.mu-z,2) 
@@ -370,16 +357,17 @@ void Bidirectional::updateParameters(double N, double K) {
 
 /*************** Uniform Model (Elongation and Noise) ************************/
 UniformModel::UniformModel(): BasicModel(), uni() {
-  // Just calls the parents currently.
+  pi = 0.;
 }
 
 UniformModel::UniformModel(double v_a, double v_b): BasicModel(), uni() {
    uni.lower = v_a;
    uni.upper = v_b;
+   pi = 0.;
 }
 
 std::string UniformModel::write_out() {
-   return ("Uni: " + uni.write_out());
+   return ("Uni: " + uni.write_out() + " pi: " + tfit::prettyDecimal(pi,4));
 }
 
 /**
@@ -390,7 +378,7 @@ std::string UniformModel::write_out() {
  * @return double 
  */
 double UniformModel::pdf(double x, char s){
-   // Do we need to do *anything* with strand info?
+   // Should the strand use pi?
    return (weight * uni.pdf(x));
 }
 
@@ -468,6 +456,8 @@ void FullModel::updateParameters(double N, double K) {
    // Updates necessary to keep this properly tied together:
    forwardElongation.uni.lower = bidir.getMu();
    reverseElongation.uni.upper = bidir.getMu();
+
+   // Do these get set to zero and one?  If not why?
    forwardElongation.pi = (forwardElongation.sufficiencyStats.r_forward + 1) /
                            (forwardElongation.getResponsibility() + 2);
    reverseElongation.pi = (reverseElongation.sufficiencyStats.r_forward + 1) /

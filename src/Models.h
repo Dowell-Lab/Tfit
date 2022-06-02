@@ -71,10 +71,17 @@ class Bidirectional: public BasicModel {
   double applyFootprint (double z, char s);
 };
 
+/**
+ * @brief Adds sufficiency stats, weight, and strand bias
+ * to a Uniform distribution.
+ *
+ * Does the pi value get fixed {0,1} if this is used for
+ * elongation?
+ */
 class UniformModel: public BasicModel {
   public:
   Uniform uni;
-  double pi;    // Why does this need strand bias?
+  double pi;    // strand bias
 
   // Constructor
   UniformModel();
