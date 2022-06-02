@@ -15,13 +15,15 @@
 
 /**
  * @brief These are all the control variables (knobs) that 
- * can alter the behavior of the EM algorithm.
+ * can alter the behavior of the EM algorithm.  Reasonable
+ * defaults are applied here.
  */
 AlgorithmControl::AlgorithmControl() {
 	convergence_threshold = 0.0001; //convergence check
 	max_iterations = 2000; //stop after this many iterations
 	noise_max = 0.05; //fit a uniform noise component, never let it get above this weight
 	seed = true; //seed with a gross peak finder
+   elon_move = false;
 	//move_l = false;	// indicator
    r_mu = 0;	
    maxUniformIter = 200;

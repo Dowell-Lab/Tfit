@@ -37,7 +37,16 @@ class AlgorithmControl {
   //Functions
   std::string write_out();
 
-  // Needs setters
+  // Setters
+  void setConvergenceThreshold(double v_convergenceThreshold) { convergence_threshold = v_convergenceThreshold; }
+  void setMaxIterations(int v_maxIterations) { max_iterations = v_maxIterations; }
+  void setNoiseMax(double v_noiseMax) { noise_max = v_noiseMax; }
+  void setMaxUniformIter(int v_maxUniformIter) { maxUniformIter = v_maxUniformIter; }
+  void setRMu(double v_rMu) { r_mu = v_rMu; }
+  // Currently only toggling away from default:
+  void TurnOnElongationMove() { elon_move = true;}
+  void TurnOffSeeding() { seed = false; }
+
   // Needs a way to write and read from file.
 };
 
