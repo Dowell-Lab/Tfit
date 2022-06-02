@@ -45,14 +45,13 @@ list(APPEND sources
                 src/reproduce_templatematching.cpp
                 src/test_main.cpp
                 src/test_Bedfile.cpp
-                src/test_Bimap.cpp
                 src/test_Data.cpp
                 src/test_Distros.cpp
+                src/test_helper.cpp
                 src/test_ModelParamSet.cpp
                 src/test_Intervals.cpp
                 src/test_ITree.cpp
                 src/test_Models.cpp
-                src/test_Random.cpp
                 src/test_Regions.cpp
                 src/test_split.cpp
                 )
