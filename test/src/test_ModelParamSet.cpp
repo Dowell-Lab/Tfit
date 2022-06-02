@@ -1,19 +1,20 @@
 /**
- * @file test_EMGparams.cpp
+ * @file test_ModelParamSet.cpp
  * @author Robin Dowell
- * @brief Unit Testing: testing Tfit/src/single_model.cpp \ref EMGparameters
+ * @brief Unit Testing: Both the set of parameters associated with a 
+ * single model fit and a container of them. 
  * @version 0.1
  * @date 2022-02-10
  * 
  */
 #include "gmock/gmock.h"
-#include "EMGParams.h"
+#include "ModelParamSet.h"
 
-TEST(EMGparameters, ReadWrite)
+TEST(ModelParamSet, ReadWrite)
 {
     // Arrange
-    EMGparameters sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
-    EMGparameters input;
+    ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
+    ModelParams input;
 
     // Act
     std::string outString = sut.write();
@@ -27,24 +28,22 @@ TEST(EMGparameters, ReadWrite)
     EXPECT_EQ(sut.pi,input.pi);  
     EXPECT_EQ(sut.footprint,input.footprint);  
     EXPECT_EQ(sut.omega,input.omega);  
-
-
 }
 
-TEST(EMGparameters, Start_Stop)
+TEST(ModelParamSet, Start_Stop)
 {
     // Arrange
-    EMGparameters sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
+    ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
 
     // Assert
     EXPECT_EQ(sut.getStart(), (double)34605);  
     EXPECT_EQ(sut.getEnd(), (double)35395);  
 }
 
-TEST(EMGparameters, fetch_asStrings)
+TEST(ModelParamSet, fetch_asStrings)
 {
     // Arrange
-    EMGparameters sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
+    ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
 
     // Act
     std::vector<std::string> params = sut.fetch_as_strings();
@@ -66,7 +65,7 @@ TEST(EMGparameters, fetch_asStrings)
     params.clear();
 }
 
-TEST(Set_EMGparam, read_from_K_models)
+TEST(ModelParamSet, Set_read_from_K_models)
 {
     // Arrange
     std::string line  = (std::string)"~2,-18405.714702" + "\t" + "57970016,57974849" 
@@ -74,7 +73,7 @@ TEST(Set_EMGparam, read_from_K_models)
         + "\t" + "371.734252,408.579080" + "\t"	+ "0.486291,0.586718"
         + "\t" + "121.206766,250.000000" + "\t" + "0.617766,0.069621,0.000284|0.310201,0.000341,0.000348"
         + "\t" + "57976184.000000,57976184.000000" + "\t" + "57965508.000000,57965508.000000";
-    Set_EMGparameters sut;
+    ModelParamSet sut;
 
     // Act
     sut.read_from_K_models(line);
@@ -88,12 +87,12 @@ TEST(Set_EMGparam, read_from_K_models)
     // Teardown
 }
 
-TEST(Set_EMGparam, write)
+TEST(ModelParamSet, Set_write)
 {
     // Arrange
-    Set_EMGparameters sut(2);
-    sut.collection[0] = new EMGparameters(45333,65,44,0.345,32,0.5);
-    sut.collection[1] = new EMGparameters(11111,35,22,0.081,11,0.3);
+    ModelParamSet sut(2);
+    sut.collection[0] = new ModelParams(45333,65,44,0.345,32,0.5);
+    sut.collection[1] = new ModelParams(11111,35,22,0.081,11,0.3);
 
     // Act
     std::string Toutput = sut.write();

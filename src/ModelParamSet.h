@@ -1,11 +1,11 @@
 /**
- * @file EMGParams.h
+ * @file ModelParamSet.h
  * @author Robin Dowell
  * @brief Parameters associated with the model/program.
  * @version 0.1
  */
-#ifndef EMGParams_H 
-#define EMGParams_H 
+#ifndef ModelParamSet_H 
+#define ModelParamSet_H 
 
 #include <map>
 #include <string>
@@ -24,18 +24,20 @@
  * they are not really all doubles.  Should be checking those that are probabilities for 
  * proper bounds and storing coordinates as ints.
  */
-class EMGparameters {
+class ModelParams {
 public:
   double mu;    // Technically an int
   double sigma;
   double lambda;
   double pi;  // This one is a probability
   double footprint;
-  double omega;  // This one is a probability
+  double omega;
+
+  // weight?
 
   // Constructors & Destructors
-  EMGparameters();
-  EMGparameters(double,double,double,double,double,double);
+  ModelParams();
+  ModelParams(double,double,double,double,double,double);
 
   // Functions
   std::string write();        
@@ -49,18 +51,18 @@ public:
 };
 
 /**
- * @brief A collection of EMGparameters, i.e. K models.
+ * @brief A collection of ModelParams, i.e. K models.
  *  Should this provide iterator behavior? 
  */
-class Set_EMGparameters {
+class ModelParamSet {
   public:
-  std::vector<EMGparameters *> collection;  // Contains K models
+  std::vector<ModelParams *> collection;  // Contains K models
   double log_likelihood;
 
   //Constructors
-  Set_EMGparameters();
-  Set_EMGparameters(int);
-  ~Set_EMGparameters();
+  ModelParamSet();
+  ModelParamSet(int);
+  ~ModelParamSet();
 
   // Functions
   std::string write();

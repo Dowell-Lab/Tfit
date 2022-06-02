@@ -1,12 +1,12 @@
 /**
- * @file EMGParams.cpp
+ * @file ModelParamSet.cpp
  * @author Robin Dowell 
  * @brief Routines necessary for loading data and segments.
  * @version 0.1
  * @date 2022-02-08
  * 
  */
-#include "EMGParams.h"
+#include "ModelParamSet.h"
 
 #include <math.h>   
 #include <stdio.h>
@@ -18,22 +18,22 @@
 
 #include "split.h"
 
-EMGparameters::EMGparameters() {
+ModelParams::ModelParams() {
   // Empty constructor.
-  mu = sigma = lambda = pi = footprint = omega = 0.0;    
+  mu = sigma = lambda = pi = footprint = omega = 0.0;
 }
 
 /**
- * @brief Construct a new EMGparameters::EMGparameters object
+ * @brief Constructor
  * 
  * @param mu        The center of the bidirectional, position of loading
  * @param sigma     The variance on the loading position (mu)
  * @param lambda    The length of the exponential.  EMG = N(mu,sigma) + Exp(lambda)
  * @param pi        The strand bias
  * @param footprint     The offset parameter (aka Beta)
- * @param omega     The pausing probability. 
  */
-EMGparameters::EMGparameters(double v_mu, double v_sigma, double v_lambda, double v_pi, double v_footprint, double v_omega) {
+ModelParams::ModelParams(double v_mu, double v_sigma, double v_lambda, 
+            double v_pi, double v_footprint, double v_omega) {
     mu = v_mu;
     sigma = v_sigma;
     lambda = v_lambda;
@@ -47,12 +47,13 @@ EMGparameters::EMGparameters(double v_mu, double v_sigma, double v_lambda, doubl
  * 
  * @return std::string 
  */
-std::string EMGparameters::write() {
+std::string ModelParams::write() {
   std::string output =    std::to_string(mu) +"\t" + std::to_string(sigma) +"\t" + 
     std::to_string(lambda) + "\t" + std::to_string(pi) +"\t" + std::to_string(footprint) 
-    + "\t" + std::to_string(omega) + "\n";
+    +"\t" + std::to_string(omega) + "\n";
    return output;
 }
+
 /**
  * @brief This is the opposite of the write() function.  Expects
  * the write() function's output as its input.
@@ -60,7 +61,7 @@ std::string EMGparameters::write() {
  * @param single  Tab delimited list of parameters, 
  * in order: mu, sigma, lambda, pi, footprint, and omega.
  */
-void EMGparameters::read(std::string single) {
+void ModelParams::read(std::string single) {
    vector<std::string> split_tab = split_by_tab(single);
 
    mu = std::stod(split_tab[0]);
@@ -78,7 +79,7 @@ void EMGparameters::read(std::string single) {
  * 
  * @return std::string 
  */
-double EMGparameters::getStart() {
+double ModelParams::getStart() {
     return max(mu-(sigma+lambda), 0.0);
 }
 
@@ -87,7 +88,7 @@ double EMGparameters::getStart() {
  * 
  * @return std::string 
  */
-double EMGparameters::getEnd() {
+double ModelParams::getEnd() {
    return (mu + (sigma+lambda));
 }
 
@@ -98,7 +99,7 @@ double EMGparameters::getEnd() {
  * 
  * @return std::vector<std::string> 
  */
-std::vector<std::string> EMGparameters::fetch_as_strings() {
+std::vector<std::string> ModelParams::fetch_as_strings() {
    std::vector<std::string> asStrings(6);
    // cout << std::to_string(mu) << std::endl;
    asStrings[0] = std::to_string(mu);
@@ -111,23 +112,22 @@ std::vector<std::string> EMGparameters::fetch_as_strings() {
    return asStrings;
 }
 /******************************************************/
-/* Class: Set_EMGparameters */
+/* Class: ModelParamsSet */
 /*************************/
 
-Set_EMGparameters::Set_EMGparameters() {
+ModelParamSet::ModelParamSet() {
    K = 0;
    log_likelihood = 0;
 }
 
 /**
- * @brief Construct a new Set_EMGparameters::Set_EMGparameters object
- * This is a collection of EMGparameters.  Used for a "set of K fits".
+ * @brief Allocate a set of ModelParams
  * 
  * @param K Number of items in the collection.
  */
-Set_EMGparameters::Set_EMGparameters(int k) {
+ModelParamSet::ModelParamSet(int k) {
     K = k;
-    EMGparameters *nodata = NULL;
+    ModelParams *nodata = NULL;
     for (int i = 0; i < K; i++) {
        collection.push_back(nodata) ;
     }
@@ -135,10 +135,10 @@ Set_EMGparameters::Set_EMGparameters(int k) {
   // cout << K << "," << log_likelihood << std::endl;
 }
 /**
- * @brief Destroy the Set_EMGparameters::Set_EMGparameters object
+ * @brief Destroy the ModelParamSet
  * 
  */
-Set_EMGparameters::~Set_EMGparameters() {
+ModelParamSet::~ModelParamSet() {
    for (int i = 0; i < K; i++) {
       free(collection[i]);
    }
@@ -153,7 +153,7 @@ Set_EMGparameters::~Set_EMGparameters() {
  * 
  * @return std::string 
  */
-std::string Set_EMGparameters::write() {
+std::string ModelParamSet::write() {
   std::string asString = "~" + to_string(K) + "," + to_string(log_likelihood);
 
   // Note that output is currently all K values of mu (et. al.) 
@@ -187,7 +187,7 @@ std::string Set_EMGparameters::write() {
  * UNTESTED 
  * 
  */
-void Set_EMGparameters::read_from_K_models(std::string line) {
+void ModelParamSet::read_from_K_models(std::string line) {
    std::string data = line.substr(1, line.size() - 1); // removes the ~ first character
    std::vector<std::string> tab_split = split_by_tab(data);
 
@@ -218,8 +218,8 @@ void Set_EMGparameters::read_from_K_models(std::string line) {
    }
 
    for (int i = 0; i < K; i++) {
-      collection.push_back(new EMGparameters(par_as_double[1][i], par_as_double[2][i],
-               par_as_double[3][i], par_as_double[4][i], par_as_double[5][i], 
+      collection.push_back(new ModelParams(par_as_double[1][i], par_as_double[2][i],
+               par_as_double[3][i], par_as_double[4][i], par_as_double[5][i],
                par_as_double[6][i]));
    }
 }
