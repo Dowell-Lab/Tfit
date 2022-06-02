@@ -22,7 +22,7 @@ AlgorithmControl::AlgorithmControl() {
 	max_iterations = 2000; //stop after this many iterations
 	noise_max = 0.05; //fit a uniform noise component, never let it get above this weight
 	seed = true; //seed with a gross peak finder
-	move_l = false;	// indicator
+	//move_l = false;	// indicator
    r_mu = 0;	
    maxUniformIter = 200;
 }
