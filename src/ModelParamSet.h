@@ -12,8 +12,7 @@
 #include <vector>
 
 /**
- * @brief This is going to replace the parameters string in segment_fits.
- * This is redundant with other classes in the model, so it likely won't be here long.
+ * @brief This replaces the parameters string in segment_fits.
  * 
  * Current output is: 
  * mus+"\t"+sigmas+"\t"+lambdas+"\t" + pis+"\t" + fps+ "\t" + ws + "\t" + fbs+"\t" +ras;
@@ -22,7 +21,14 @@
  * 
  * @remark Currently keeping all parameters as doubles, as Joey did.  Reality is that
  * they are not really all doubles.  Should be checking those that are probabilities for 
- * proper bounds and storing coordinates as ints.
+ * proper bounds.
+ *
+ * This could also be reused as PRIORs.  In that scenario we'd need to be able to 
+ * read/write them (something more readable than Joey's current K-models format,
+ * perhaps JSON?!?!).
+ * We'd need a way to specify a parameter as "not specified" in the current priors 
+ * (i.e. to permit subsets of priors only).
+ * 
  */
 class ModelParams {
 public:

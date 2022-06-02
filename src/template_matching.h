@@ -21,14 +21,17 @@ using namespace std;
 
 int sample_centers(vector<double>, double);
 
+void BIC_template(segment * data,  double * BIC_values, double * densities, double * densities_r, double window, 
+		  double sigma, double lambda, double foot_print, double pi, double w, int thr);
 double run_global_template_matching(vector<segment*> segments, 
             params * P, slice_ratio SC);
+
 double RF_run_global_template_matching(vector<segment*> segments, 
                                     params * P, slice_ratio SC);
-
 void RF_BIC_template(segment * data,  double * BIC_values, double * densities, double * densities_r, double window, 
 		  double sigma, double lambda, double foot_print, double pi, double w, int thr);
 
+// BIC3 is in BIC.h
 double RF_BIC3(double ** X, int j, int k, int i,
 	    double N_pos, double N_neg,  double sigma, double lambda, double fp, double pi, double w);
 
