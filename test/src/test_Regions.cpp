@@ -77,7 +77,7 @@ TEST(SetROI, addDataToExistingROI)
     if (outRegions[0]->data != NULL) {
       EXPECT_EQ(outRegions[0]->data->minX, 10);
       if (outRegions[0]->data->cdata != NULL) {
-          EXPECT_EQ(outRegions[0]->data->cdata->N, 30);
+          EXPECT_EQ(outRegions[0]->data->cdata->sumAlldata(), 30);
       } else {
         FAIL() << "We should have conditioned data!";
       }
@@ -110,7 +110,7 @@ TEST(SetROI, addDataCreateROI)
     if (outRegions[0]->data != NULL) {
       EXPECT_EQ(outRegions[0]->data->maxX, 20);     // This time check max!
       if (outRegions[0]->data->cdata != NULL) {
-          EXPECT_EQ(outRegions[0]->data->cdata->N, 30);
+          EXPECT_EQ(outRegions[0]->data->cdata->sumAlldata(), 30);
       } else {
         FAIL() << "We should have conditioned data!";
       }
