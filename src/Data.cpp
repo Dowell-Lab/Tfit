@@ -29,6 +29,25 @@
 #include "helper.h"
 #include "Intervals.h"
 
+/**********  PointCov ****************/
+
+PointCov::PointCov() {
+  coordinate = 0;
+  coverage = 0;
+}
+
+PointCov::PointCov(double v_coord, double v_cov) {
+  coordinate = v_coord;
+  coverage = abs(v_cov);
+}
+
+std::string PointCov::write_out() {
+  std::string output;
+  output = "[" + tfit::prettyDecimal(coordinate,0) + "," 
+    + tfit::prettyDecimal(coverage, 2) + "]";
+  return output;
+}
+
 /**********************  RawData ********************/
 RawData::RawData() {
   minX = maxX = 0;
@@ -71,23 +90,21 @@ void RawData::freeDataMemory () {
  * @param sp   stop (with half open, this is strickly less than!)
  * @param cov  signed count/coverage at this point
  */
-void RawData::addDataPoints(double st, double sp, double cov) {
-  if (maxX == 0) { minX = st; maxX = sp; } // first data point
+void RawData::addDataPoints(double start, double stop, double cov) {
+  if (maxX == 0) { minX = start; maxX = stop; } // first data point
 
   // Adjust min/max as gather data points
-  if (st < minX) minX = st;
-  if (sp > maxX) maxX = sp;
+  if (start < minX) minX = start;
+  if (stop > maxX) maxX = stop;
 
   // Now add per position coverage info, 
   // Half open coordinates make this strickly less than!
-  for (int i = st; i < sp; i++) {
-    double c = abs(cov);
-    std::vector<double> point {(double)i,c}; 
-    // std::cout << "Point: " + to_string(point[0]) + "," + to_string(point[1]) << std::endl;
+  for (int i = start; i < stop; i++) {
+    PointCov newpoint((double)i, cov); // PointCov will force abs(cov)!
     if (cov >= 0) {
-      forward.push_back(point);
+      forward.push_back(newpoint);
     } else { 
-      reverse.push_back(point);
+      reverse.push_back(newpoint);
     }
   }
 }
@@ -97,15 +114,10 @@ void RawData::addDataPoints(double st, double sp, double cov) {
  * forward and reverse strands.
  */
 void RawData::Sort() {
-  // Sort vector<double> by  first entity (e.g. coordinates)
-  std::sort(forward.begin(),forward.end(), 
-      [](const std::vector<double>& a, const std::vector<double>& b) { 
-        return a[0] < b[0]; });
+  // Sort vector<double> by first entity (e.g. coordinates)
+  std::sort(forward.begin(),forward.end(), tfit::compareCoords);
   // std::cout << "After sort: " + data_dump() << std::endl;
-  std::sort(reverse.begin(),reverse.end(), 
-      [](const std::vector<double>& a, const std::vector<double>& b) { 
-        return a[0] < b[0]; });
-
+  std::sort(reverse.begin(),reverse.end(), tfit::compareCoords);
 }
 
 /**
@@ -115,22 +127,19 @@ void RawData::Sort() {
  */
 void RawData::RemoveDuplicates() {
   Sort();
-  vector<vector<double>>::iterator it;
   for (int i = 1; i < forward.size(); i++) {
-    if (forward[i-1][0] == forward[i][0])  {
-      it = forward.begin() + i;
+    if (forward[i-1].coordinate == forward[i].coordinate)  {
       // This is a duplicate!  Should we throw an error!?!?
-      forward.erase(it);
+      forward.erase(forward.begin()+i);
       // Because this shifts the index, need to compare the
       // new i so we'll shift the index.
       i--;
     }
   }  
   for (int i = 1; i < reverse.size(); i++) {
-    if (reverse[i-1][0] == reverse[i][0])  {
-      it = reverse.begin() + i;
+    if (reverse[i-1].coordinate == reverse[i].coordinate)  {
       // This is a duplicate!  Should we throw an error!?!?
-      reverse.erase(it);
+      reverse.erase(reverse.begin()+i);
       i--;
     }
   }  
@@ -163,13 +172,11 @@ std::string RawData::write_out() {
 std::string RawData::data_dump() {
   std::string output = "Forward: ";
   for (int i=0; i < forward.size(); i++) {
-    output += "[" + tfit::prettyDecimal(forward[i][0],2) + "," 
-          + tfit::prettyDecimal(forward[i][1],2) + "]";
+    output += forward[i].write_out();
   }
   output += "\nReverse: ";
   for (int i=0; i < reverse.size(); i++) {
-    output += "[" + tfit::prettyDecimal(reverse[i][0],2) + "," 
-      + tfit::prettyDecimal(reverse[i][1], 2) + "]";
+    output += reverse[i].write_out();
   }
   return output;
 }
@@ -198,8 +205,6 @@ dInterval::dInterval() {
   delta = 1;
   scale = 1;
   bins = -1;  // illegal value since we dont know this yet.
-  N = 0;
-
   raw = NULL;
 }
 
@@ -213,7 +218,6 @@ dInterval::dInterval() {
 dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
   raw = data;
   raw->RemoveDuplicates();      // Is this necessary?  It's potentially time consuming!
-  N = 0;  // initial value
   delta = v_delta;  scale = v_scale; 
   if (scale <= 0) { scale = 1;}
 
@@ -266,8 +270,8 @@ std::string dInterval::write_out() {
 std::string dInterval::data_dump() {
   std::string output = "Points: ";
   for (int i = 0; i < bins; i ++ ){
-    output += "[" + tfit::prettyDecimal(X[0][i],2) + ":" + 
-          tfit::prettyDecimal(X[1][i],2) + "," + tfit::prettyDecimal(X[2][i],2) + "]";
+    output += "[" + tfit::prettyDecimal(position(i),2) + ":" + 
+          tfit::prettyDecimal(forward(i),2) + "," + tfit::prettyDecimal(reverse(i),2) + "]";
   }
   return output;
   
@@ -313,6 +317,17 @@ double dInterval::reverse(int x) {
 }
 
 /**
+ * @brief The position (in either genomic coords or data coords) at xth index.
+ * 
+ * @arg x The index an element 
+ * 
+ * @return double 
+ */
+double dInterval::position(int x) {
+  return X[0][x];
+}
+
+/**
  * @brief Return the length of this dInterval.
  * Will use the raw object's length if available (genome coords?),
  * otherwise assumes the last element of X[][] is the length (i.e. zero based).
@@ -321,7 +336,7 @@ double dInterval::reverse(int x) {
  */
 double dInterval::getLength() {
   if (raw == NULL) {
-    return X[0][bins-1];    //Zero based length
+    return position(bins-1);
   }
   return (raw->Length());   //Genome coords length
 }
@@ -334,7 +349,7 @@ double dInterval::getLength() {
 double dInterval::sumForward() {
   double sum = 0;
   for(int i = 0; i < bins; i++) {
-     sum += X[1][i];
+     sum += forward(i);
   }
   return sum;
 }
@@ -347,7 +362,7 @@ double dInterval::sumForward() {
 double dInterval::sumReverse() {
   double sum = 0;
   for(int i = 0; i < bins; i++) {
-     sum += X[2][i];
+     sum += reverse(i);
   }
   return sum;
 }
@@ -359,7 +374,10 @@ double dInterval::sumReverse() {
  * @return double Sum of all reads on both strands in interval.
  */
 double dInterval::sumAlldata() {
-  return N;
+  double sum = 0;
+  sum += sumForward();
+  sum += sumReverse();
+  return sum;
 }
 
 /**
@@ -409,23 +427,23 @@ int dInterval::getIndexfromData(double dataCoord) {
     if ((indexMax - indexMin) < 2) {
       found = true;
       // Take closest
-      int distmin = abs(dataCoord - X[0][indexMin]);
-      int distmax = abs(dataCoord - X[0][indexMax]);
+      int distmin = abs(dataCoord - position(indexMin));
+      int distmax = abs(dataCoord - position(indexMax));
       if(distmin < distmax) {
         return indexMin;         
       } else {
         return indexMax;         
       }
-    } else if (dataCoord == X[0][indexMin]) {
+    } else if (dataCoord == position(indexMin)) {
       found = true;
       return indexMin;
-    } else if (dataCoord == X[0][indexMax]) {
+    } else if (dataCoord == position(indexMax)) {
       found = true;
       return indexMax;
     }
     indexCenter = (int)(indexMax -indexMin)/2;
 
-    if ((dataCoord > X[0][indexMin]) && (dataCoord < X[0][indexCenter])) {
+    if ((dataCoord > position(indexMin)) && (dataCoord < position(indexCenter))) {
       indexMax = indexCenter;
     } else { 
       // Edge case
@@ -525,20 +543,19 @@ void dInterval::BinStrands(RawData *data) {
   double binStart, binEnd;    // genomic coordinate bounds for a given bin
   for (int i = 0; i < bins; i++) {  // Each bin in X
     // Genomic coordinate range for this bin:
-    binStart = X[0][i];  binEnd = binStart + delta;
+    binStart = position(i); 
+    binEnd = binStart + delta;
     while ((fi < data->forward.size()) &&     // Still more forward data
-           (data->forward[fi][0] >= binStart) &&  // This coordinate is above start
-           (data->forward[fi][0] < binEnd)) {   // And below end of range for this bin
-      X[1][i] += data->forward[fi][1];    // Add to the bin
-      N += data->forward[fi][1];      // Add to the full total (both strands)
+           (data->forward[fi].coordinate >= binStart) &&  // This coordinate is above start
+           (data->forward[fi].coordinate < binEnd)) {   // And below end of range for this bin
+      X[1][i] += data->forward[fi].coverage;    // Add to the bin
       fi++;       // Increment the forward index
     }
     // As above, but now for the reverse strand:
     while ((ri < data->reverse.size()) && 
-          (data->reverse[ri][0] >= binStart) && 
-          (data->reverse[ri][0] < binEnd)) {
-      X[2][i] += data->reverse[ri][1];
-      N += data->reverse[ri][1];
+          (data->reverse[ri].coordinate >= binStart) && 
+          (data->reverse[ri].coordinate < binEnd)) {
+      X[2][i] += data->reverse[ri].coverage;
       ri++;
     }
   }
@@ -551,7 +568,7 @@ void dInterval::BinStrands(RawData *data) {
  */
 void dInterval::ScaleDown(int startCoord) {
   for (int i = 0; i < bins; i ++ ){
-    X[0][i] 	= (X[0][i]-startCoord)/scale;
+    X[0][i] 	= (position(i)-startCoord)/scale;
   }
 }
 
@@ -562,7 +579,7 @@ void dInterval::ScaleDown(int startCoord) {
 void dInterval::CompressZeros() {
   int realN 		= 0;	// number of non-zero bins
   for (int i = 0; i < bins;i++){
-    if (X[1][i]>0 or X[2][i]>0){
+    if ((forward(i) > 0) or (reverse(i) > 0)) {
       realN++;
     }
   }
@@ -574,10 +591,10 @@ void dInterval::CompressZeros() {
   }
   int j = 0;
   for (int i = 0; i < bins; i++) {
-    if (X[1][i] > 0 or X[2][i] > 0) {
-      newX[0][j] = X[0][i];
-      newX[1][j] = X[1][i];
-      newX[2][j] = X[2][i];
+    if ((forward(i) > 0) or (reverse(i) > 0)) {
+      newX[0][j] = position(i);
+      newX[1][j] = forward(i);
+      newX[2][j] = reverse(i);
       j++;
     }
   }
@@ -597,17 +614,17 @@ void dInterval::CompressZeros() {
  * @param dist    Typically s(1/lambda)
  * @return int    index of the position closest to position + dist (signed dist)
  */
-int dInterval::getWithinRangeofPosition(double position, double dist) {
+int dInterval::getWithinRangeofPosition(double qspot, double dist) {
 	int i;
 
 	if (dist < 0 ){   // negative strand
 		i=0;
-		while (i < (bins-1) and (X[0][i] -position) < dist){
+		while (i < (bins-1) and (position(i)-qspot) < dist){
 			i++;
 		}
 	}else{
 		i=bins-1;
-		while (i >0 and (X[0][i] - position) > dist){
+		while (i >0 and (position(i)-qspot) > dist){
 			i--;
 		}
 	}

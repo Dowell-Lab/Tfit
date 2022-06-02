@@ -23,6 +23,24 @@ class gInterval;   // Forward declaration
 class dInterval;
 
 /**
+ * @brief Coverage per genomic coordinate
+ * [coordinate, coverage]
+ * Forces coverage to be positive (i.e. always takes abs()).
+ */
+class PointCov {
+  public:
+  double coordinate;
+  double coverage;
+
+  //Constructor
+  PointCov();
+  PointCov(double v_coord, double v_cov);
+
+  std::string write_out();
+  bool compareCoords(PointCov *, PointCov *);
+};
+
+/**
  * @brief This is a container for the raw data as read from a bedgraph.  
  * This class is responsible for data sanity checks.  The raw data
  * can be deleted (freeing memory). 
@@ -32,8 +50,8 @@ class RawData {
   public:
     // These are coordinate coverage vectors that are used to load in bedgraph
     // We read the bedgraph contents in directly, without checking for repeated entries.
-	std::vector< std::vector<double> > forward; 
-	std::vector< std::vector<double> > reverse; 
+	std::vector<PointCov> forward;
+	std::vector<PointCov> reverse; 
 
   double minX; //!< This is the minimum value of the interval
   double maxX;   //!< This is the maximum value of the interval 
@@ -80,8 +98,6 @@ public:
 	int bins;  //!< total number of bins (e.g. size of X[])
   int delta;  //!< step size (nts per bin)
   int scale;  //!< all positions are divided by this factor e.g. 1 -> 1/scale
-
-	double N;	//!< Total sum of values (convenience variable)
 
   RawData *raw;  // The raw data from which this was built.
 
