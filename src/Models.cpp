@@ -19,6 +19,7 @@
 BasicModel::BasicModel()
   : sufficiencyStats() {
   weight = 0.; 
+  pi = 0.5;
 }
 
 void BasicModel::resetSufficiency() {
@@ -30,7 +31,6 @@ void BasicModel::resetSufficiency() {
 
 Bidirectional::Bidirectional()
   : BasicModel(), loading(), initiation() {
-   pi = 0.5;
    footprint = 40;	
 }
 

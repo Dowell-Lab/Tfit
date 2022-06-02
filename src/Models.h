@@ -19,6 +19,7 @@
 class BasicModel {
   public:
   double weight;
+  double pi;  //strand bias
   Responsibilities sufficiencyStats;   // The current read
 
   //Constructor
@@ -34,7 +35,6 @@ class Bidirectional: public BasicModel {
   public:
   Normal loading;
   Exponential initiation;
-  double pi;		// strand bias
   double footprint;		// the ad hoc footprint parameter 
 
   // Constructor
@@ -81,7 +81,6 @@ class Bidirectional: public BasicModel {
 class UniformModel: public BasicModel {
   public:
   Uniform uni;
-  double pi;    // strand bias
 
   // Constructor
   UniformModel();
