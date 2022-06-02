@@ -1,7 +1,7 @@
 /**
- * @file test_Random.cpp
+ * @file test_helper.cpp
  * @author Robin Dowell
- * @brief Unit Testing: testing \ref Random (in helper.h)
+ * @brief Unit Testing: Helper functions
  * @version 0.1
  * @date 2022-02-28
  * 
@@ -9,7 +9,7 @@
 #include "gmock/gmock.h"
 #include "helper.h"
 
-TEST(Random, fetchProbabilityRandom)
+TEST(helper, Random_fetchProbabilityRandom)
 {
     // Arrange
     Random sut;
@@ -22,7 +22,7 @@ TEST(Random, fetchProbabilityRandom)
     ASSERT_LE(abs(ran_num - 0.4610), 0.0001);  // Using a "tolerance" of 0.0001
 }
 
-TEST(Random, fetchNormalRandom)
+TEST(helper, Random_fetchNormalRandom)
 {
     // Arrange
     Random sut;
@@ -34,4 +34,15 @@ TEST(Random, fetchNormalRandom)
 
     // Assert
     ASSERT_LE(abs(ran_num - 11.1246), 0.0001);  // Using a "tolerance" of 0.0001
+}
+
+TEST(helper, Bimap_createAndSearch)
+{
+    // Arrange
+    Bimap sut;
+
+    // Act
+    
+    // Assert
+   EXPECT_EQ(sut.num_elements, 0);
 }
