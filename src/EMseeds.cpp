@@ -9,3 +9,11 @@
 #include "EMseeds.h"
 
 #include "helper.h" // nINF and LOG
+
+Seeds::Seeds() {
+  
+}
+
+std::string Seeds::write_out() {
+  return "No seeding yet!";
+}
