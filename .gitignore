@@ -15,3 +15,8 @@ temp
 Testmain
 profile
 .Rproj.user
+docs/manual/*.aux
+docs/manual/*.log
+docs/manual/*.out
+docs/manual/*.toc
+docs/manual/*.pdf
