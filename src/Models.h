@@ -18,7 +18,7 @@
 
 class BasicModel {
   public:
-  double weight;
+  double weight;    // Necessary for EM
   double pi;  //strand bias
   Responsibilities sufficiencyStats;   // The current read
 

@@ -206,13 +206,13 @@ void EMalg::Estep(dInterval *data) {
  * @param data 
  */
 void EMalg::Mstep(dInterval *data) {
-		double N=0; //get normalizing constant
-      N = models.getAllResponsibilities();
-		for (int k = 0; k < models.K; k++){
-         models.setModels[k]->updateParameters(N,models.K);
-		} // plus noise!
-      models.noise.updateParameters(N,models.K);
-	}
+	double N=0; //get normalizing constant
+   N = models.getAllResponsibilities();
+	for (int k = 0; k < models.K; k++){
+      models.setModels[k]->updateParameters(N,models.K);
+   } // plus noise!
+   models.noise.updateParameters(N,models.K);
+}
 
 /**
  * @brief Adjust the bounds of the elongation components

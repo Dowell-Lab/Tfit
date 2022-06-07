@@ -59,7 +59,7 @@ class AlgorithmControl {
 class EMalg {
 	public:
 	bool converged;	//!< indicator
-	AlgorithmControl control;  //!< parameters that can be altered in the EM
+	AlgorithmControl control;  //!< parameters that can alter the way the EM works
 	ModelContainer models;		//!< This is the set of models we're trying to infer
 
 	// Constructor
