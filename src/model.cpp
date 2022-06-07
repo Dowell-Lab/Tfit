@@ -644,48 +644,48 @@ double component::calculateRi(double x, int st){
  * @param st 
  * @param normalize 
  */
-void component::add_stats(double x, double y, int st, double normalize){
+void component::add_stats(double position, double coverage, int strand, double normalize){
 	if (type==0){//noise component
-		if (st==1){
-			noise.r_forward+=(y*noise.ri_forward/normalize);
+		if (strand==1){
+			noise.r_forward+=(coverage*noise.ri_forward/normalize);
 			noise.ri_forward=0;
 		}else{
-			noise.r_reverse+=(y*noise.ri_reverse/normalize);
+			noise.r_reverse+=(coverage*noise.ri_reverse/normalize);
 			noise.ri_reverse=0;
 		}
 
 	}else{
 		double vl, vl2, vl3;
-		if (st==1){
+		if (strand==1){
 			vl 	= bidir.ri_forward / normalize;
 			vl2 = forward.ri_forward/normalize;
 			vl3 = reverse.ri_forward/normalize;
 			bidir.ri_forward=0, forward.ri_forward=0;
-			bidir.r_forward+=(vl*y);
-			forward.r_forward+=(vl2*y);
-			reverse.r_forward+=(vl3*y);
+			bidir.r_forward+=(vl*coverage);
+			forward.r_forward+=(vl2*coverage);
+			reverse.r_forward+=(vl3*coverage);
 		
 		}else{
 			vl 	= bidir.ri_reverse / normalize;
 			vl2 = reverse.ri_reverse / normalize;
 			vl3 = forward.ri_reverse / normalize;
 			bidir.ri_reverse=0, reverse.ri_reverse=0;
-			bidir.r_reverse+=(vl*y);
+			bidir.r_reverse+=(vl*coverage);
 
-			reverse.r_reverse+=(vl2*y);
-			forward.r_reverse+=(vl3*y);
+			reverse.r_reverse+=(vl2*coverage);
+			forward.r_reverse+=(vl3*coverage);
 		}
 		//now adding all the conditional expectations for the convolution
-		if (vl > 0 and y > 0){
-			double current_EY 	= bidir.EY(x, st);
-			double current_EY2 	= bidir.EY2(x, st);
-			double current_EX 	= x-(st*current_EY)-bidir.foot_print*st;
+		if (vl > 0 and coverage > 0){
+			double current_EY 	= bidir.EY(position, strand);
+			double current_EY2 	= bidir.EY2(position, strand);
+			double current_EX 	= position-(strand*current_EY)-bidir.foot_print*strand;
 			//	self.C+=max( ((z-self.mu) -E_Y) *r,0)
 			// 	self.C+=max((-(z-self.mu) -E_Y)   *r ,0)
-			bidir.C+=max((st*(x-bidir.mu) - current_EY  )*vl*y,0.0);
-			bidir.ey+=current_EY*vl*y;
-			bidir.ex+=current_EX*vl*y;
-			bidir.ex2+=(pow(current_EX,2) + current_EY2 - pow(current_EY,2))*vl*y;	
+			bidir.C+=max((strand*(position-bidir.mu) - current_EY  )*vl*coverage,0.0);
+			bidir.ey+=current_EY*vl*coverage;
+			bidir.ex+=current_EX*vl*coverage;
+			bidir.ex2+=(pow(current_EX,2) + current_EY2 - pow(current_EY,2))*vl*coverage;	
 		}
 	}
 }
