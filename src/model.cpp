@@ -751,12 +751,10 @@ void component::update_parameters(double N, int K){
 		bidir.lambda 	= max(bidir.lambda, 0.05);
 		if (abs(bidir.mu-bidir.prev_mu)< 0.01 ){
 			bidir.move_fp 	= true;
-		}
-		else{
+		} else{
 			bidir.prev_mu 	= bidir.mu;
 		}
 		if (bidir.move_fp){
-
 			bidir.foot_print 	= min( max(bidir.C / (r+0.1),0.0) , 2.5);
 		}
 		//bidir.foot_print 	= 0.0;

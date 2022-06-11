@@ -39,25 +39,3 @@ double Responsibilities::getResponsibility() {
    return (r_forward + r_reverse);
 }
 
-/************** HyperParmaeters *******************/
-
-HyperParameters::HyperParameters() {
-  ALPHA_0 = 1;
-  ALPHA_1 = 1;
-  ALPHA_2 = 1;
-  ALPHA_3 = 1;
-  BETA_0 = 1;
-  BETA_1 = 1;
-}
-
-std::string HyperParameters::write_out() {
-  std::string output;
-  output = "For sigma: Gamma(" + tfit::prettyDecimal(ALPHA_0, 4) + "," 
-                  + tfit::prettyDecimal(BETA_0,4) + ")";
-  output = "\nFor lambda: Gamma(" + tfit::prettyDecimal(ALPHA_1, 4) + "," 
-                  + tfit::prettyDecimal(BETA_1,4) + ")";
-  output = "\nFor weight: Dirichlet(" + tfit::prettyDecimal(ALPHA_2, 4) + ")" ;
-  output = "\nFor pi: Beta(" + tfit::prettyDecimal(ALPHA_3, 4) + ")";
-  return output;
-}
-

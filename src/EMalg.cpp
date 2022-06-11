@@ -152,15 +152,16 @@ void EMalg::Estep(dInterval *data) {
 
       // Equation 7 in Azofeifa 2017: calculate r_i^k
       for (int k = 0; k < models.K; k++) { // computing the responsibility terms per model
-      /*
-         if (data->ForwardCoverage(i)) { // if there is actually data point here...
-            norm_forward += components[k].calculateRi(data->Coordinate(i), 1);
+         if (data->forward(i)) {
+           norm_forward += models.setModels[k]->calculateRi(data->getDataCoordfromIndex(i), '+');
          }
-         if (data->ReverseCoverage(i)) { // if there is actually data point here...
-            norm_reverse += components[k].calculateRi(data->Coordinate(i), -1);
+         if (data->reverse(i)) {
+           norm_reverse += models.setModels[k]->calculateRi(data->getDataCoordfromIndex(i), '-');
          }
-         */
       }  // plus Noise!
+      norm_forward += models.noise.calculateRi(data->getDataCoordfromIndex(i), '+');
+      norm_reverse += models.noise.calculateRi(data->getDataCoordfromIndex(i), '-');
+
       if (norm_forward > 0) {
          models.ll += tfit::LOG(norm_forward) * data->forward(i);
       }
@@ -211,7 +212,7 @@ void EMalg::Mstep(dInterval *data) {
 	for (int k = 0; k < models.K; k++){
       models.setModels[k]->updateParameters(N,models.K);
    } // plus noise!
-   models.noise.updateParameters(N,models.K);
+   models.noise.updateParameters(N,models.K);   // Joey's may ignore background?
 }
 
 /**

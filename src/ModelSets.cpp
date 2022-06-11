@@ -191,6 +191,12 @@ if ((r / N) < pow(10, -5))
 
 }
 
+double ModelWrapper::calculateRi(double z, char strand) {
+   // If Bidirectional
+   // If FullModel 
+   return 1.;
+}
+
 /***************** sets of models *************/
 
 ModelContainer::ModelContainer()

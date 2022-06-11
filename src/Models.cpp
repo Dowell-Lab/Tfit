@@ -20,6 +20,17 @@ BasicModel::BasicModel()
   : sufficiencyStats() {
   weight = 0.; 
   pi = 0.5;
+
+  alpha_pi = 1;
+  alpha_w = 1;
+}
+
+void BasicModel::setPriorPi(double v_alpha) {
+   alpha_pi = v_alpha;
+}
+
+void BasicModel::setPriorWeight(double v_alpha) {
+   alpha_w = v_alpha;
 }
 
 void BasicModel::resetSufficiency() {
@@ -32,6 +43,11 @@ void BasicModel::resetSufficiency() {
 Bidirectional::Bidirectional()
   : BasicModel(), loading(), initiation() {
    footprint = 40;	
+   // Priors:
+   alpha_sigma = 1;
+   beta_sigma = 1;
+   alpha_lambda = 1;
+   beta_lambda = 1;
 }
 
 Bidirectional::Bidirectional(double v_mu, double v_sigma, double v_lambda, 
@@ -99,6 +115,15 @@ void Bidirectional::setLambda(double newlambda) {
   initiation.lambda = newlambda;
 }
 
+void Bidirectional::setPriorSigma(double v_alpha, double v_beta) {
+   alpha_sigma = v_alpha;
+   beta_sigma = v_beta; 
+}
+
+void Bidirectional::setPriorLambda(double v_alpha, double v_beta) {
+   alpha_lambda = v_alpha;
+   beta_lambda = v_beta; 
+}
 
 
 /**
@@ -336,15 +361,14 @@ void Bidirectional::updateParameters(double N, double K) {
    double r = getResponsibility();
    double prevmu = getMu();
 
-/*
-   pi = (sufficiencyStats.r_forward + ALPHA_3) / (r + ALPHA_3 * 2);
-   weight = (r + ALPHA_2) / (N + ALPHA_2 * K * 3 + K * 3);
-   setMu(bidir.ex / (r + 0.001));
-   setSigma(pow(abs((1. / (r + 3 + ALPHA_0)) * (bidir.ex2 - 2 * bidir.mu * bidir.ex +
-                                                     r * pow(bidir.mu, 2) + 2 * BETA_0)),
-                     0.5);
-   setLambda(min((r + ALPHA_1) / (bidir.ey + BETA_1), 5.));
-   */
+   pi = (sufficiencyStats.r_forward + alpha_pi) / (r + alpha_pi * 2);
+   weight = (r + alpha_w) / (N + alpha_w * K * 3 + K * 3);
+/* setMu(bidir.ex / (r + 0.001)); 
+   double tempSigma = (pow(abs((1. / (r + 3 + alpha_sigma)) * (bidir.ex2 - 2 * bidir.mu * bidir.ex +
+                                                     r * pow(bidir.mu, 2) + 2 * beta_sigma)), 0.5);
+   setSigma(tempSigma);
+   setLambda(min((r + alpha_lambda) / (bidir.ey + beta_lambda), 5.));
+*/
 
    // We have an established minimum for lambda?!?!
    setLambda(std::max(getLambda(),0.05));
@@ -353,6 +377,13 @@ void Bidirectional::updateParameters(double N, double K) {
    if (abs(getMu() - prevmu) < 0.01) {
     // footprint = min(max(bidir.C / (r + 0.1), 0.0), 2.5);
    }
+}
+
+double Bidirectional::calculateRi(double z, char strand) {
+   sufficiencyStats.ri_forward = pdf(z,strand);
+   sufficiencyStats.ri_reverse = pdf(z,strand);
+
+   return (sufficiencyStats.ri_forward + sufficiencyStats.ri_reverse);
 }
 
 /*************** Uniform Model (Elongation and Noise) ************************/
@@ -409,9 +440,19 @@ double UniformModel::getResponsibility() {
    return (sufficiencyStats.r_forward + sufficiencyStats.r_reverse);
 }
 
-void UniformModel::updateParameters(double N,double K) {
-   //sufficiencyStats.w = (sufficiencyStats.r_forward + ALPHA_2) / (N + ALPHA_2 * K * 3 + K * 3);
+void UniformModel::updateParameters(double N, double K) {
+   weight = (sufficiencyStats.r_forward + alpha_w) / (N + alpha_w*K*3 + K*3);
+   pi = (sufficiencyStats.r_forward + 1) / 
+      (sufficiencyStats.r_forward + sufficiencyStats.r_reverse + 2);
 }
+
+double UniformModel::calculateRi(double z, char strand) {
+   sufficiencyStats.ri_forward = pdf(z,strand);
+   sufficiencyStats.ri_reverse = pdf(z,strand);
+
+   return (sufficiencyStats.ri_forward + sufficiencyStats.ri_reverse);
+}
+
 
 
 /**********************  Full model (with Elongationg) *************/
@@ -458,12 +499,23 @@ void FullModel::updateParameters(double N, double K) {
    reverseElongation.uni.upper = bidir.getMu();
 
    // Do these get set to zero and one?  If not why?
-   forwardElongation.pi = (forwardElongation.sufficiencyStats.r_forward + 1) /
-                           (forwardElongation.getResponsibility() + 2);
-   reverseElongation.pi = (reverseElongation.sufficiencyStats.r_forward + 1) /
-                           (reverseElongation.getResponsibility() + 2);
    if (bidir.weight == 0) {
       forwardElongation.weight = 0;
       reverseElongation.weight = 0;
    }
 }
+
+double FullModel::calculateRi(double z, char strand) {
+   bidir.calculateRi(z,strand);
+   forwardElongation.calculateRi(z,strand);
+   reverseElongation.calculateRi(z,strand);
+
+	return (bidir.sufficiencyStats.ri_forward 
+      + forwardElongation.sufficiencyStats.ri_forward
+      + reverseElongation.sufficiencyStats.ri_forward);
+   /*
+	return bidir.ri_reverse + reverse.ri_reverse + forward.ri_reverse;
+   */
+}
+
+

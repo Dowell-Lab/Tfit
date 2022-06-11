@@ -34,26 +34,4 @@ class Responsibilities {
   double getResponsibility();
 };
 
-class HyperParameters {
-  //FOR SIGMA ; variance in loading, gamma
-	double ALPHA_0, BETA_0;
-	//FOR LAMBA ; rate of initiation, gamma
-	double ALPHA_1, BETA_1;
-	//FOR W ; weight , Dirichlet
-	double ALPHA_2;
-	//FOR PI ; strand prob. , beta
-	double ALPHA_3;
-
-  // Other priors?
-	// double p;   // What is this?
-	// double foot_print;	//  ?? 
-
-  //Constructor
-  HyperParameters();
-
-  //Functions
-  std::string write_out();
-
-};
-
 #endif

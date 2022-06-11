@@ -22,11 +22,18 @@ class BasicModel {
   double pi;  //strand bias
   Responsibilities sufficiencyStats;   // The current read
 
+  // Priors
+  double alpha_pi;  // prior on pi, beta
+  double alpha_w;   // prior on weight, Dirichlet
+
   //Constructor
   BasicModel();
 
   std::string write_out();
   double pdf(double z, char s);   // pdf on strand s for position z
+
+  void setPriorPi(double);
+  void setPriorWeight(double);
 
   void resetSufficiency();
 };
@@ -36,6 +43,10 @@ class Bidirectional: public BasicModel {
   Normal loading;
   Exponential initiation;
   double footprint;		// the ad hoc footprint parameter 
+
+  // Priors
+  double alpha_sigma, beta_sigma;   // variance in loading, gamma
+  double alpha_lambda, beta_lambda;   // rate of initiation, gamma
 
   // Constructor
   Bidirectional();
@@ -51,6 +62,8 @@ class Bidirectional: public BasicModel {
   void setMu(double);
   void setSigma(double);
   void setLambda(double);
+  void setPriorSigma(double, double);
+  void setPriorLambda(double, double);
 
   // Calculate the pdf and expected values
   double pdf(double z, char s);   // standard (Grushka 1972) formula for pdf
@@ -64,6 +77,7 @@ class Bidirectional: public BasicModel {
   std::vector<double> generate_data(int n);
   double getResponsibility();   
   void updateParameters(double,double);
+  double calculateRi(double, char);
 
   // Supporting Functions (could be private?)
   double millsRatio(double);    
@@ -93,6 +107,7 @@ class UniformModel: public BasicModel {
   // Functions of all Models
   double getResponsibility();   
   void updateParameters(double,double);
+  double calculateRi(double, char);
 
   // These are functions specifically for when its NOISE?
   // Noise Expectation: pG(b-a)/S where S is length of genome, 
@@ -120,6 +135,7 @@ class FullModel {
   void resetSufficiencyStats();
   double getResponsibility();   
   void updateParameters(double,double);
+  double calculateRi(double z, char strand);
 };
 
 

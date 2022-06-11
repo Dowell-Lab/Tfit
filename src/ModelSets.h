@@ -51,6 +51,7 @@ class ModelWrapper {
   double getMu();
 
   void updateParameters(double N, int K);
+  double calculateRi(double z, char strand);
 };
 
 /**
