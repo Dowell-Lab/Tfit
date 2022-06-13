@@ -749,6 +749,8 @@ void component::update_parameters(double N, int K){
 		if ((r / N) < pow(10,-5) ){ EXIT 	= true; }
 		bidir.lambda 	= min((r+ALPHA_1) / (bidir.ey + BETA_1), 5.);
 		bidir.lambda 	= max(bidir.lambda, 0.05);
+		// The 0.05 sets initation length to max of ~20 bps and forces EMG
+		// to look more gaussian!   Perhaps this cutoff needs to be different?
 		if (abs(bidir.mu-bidir.prev_mu)< 0.01 ){
 			bidir.move_fp 	= true;
 		} else{

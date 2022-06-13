@@ -134,6 +134,7 @@ public:
 	//FOR W ; weight , Dirichlet
 	double ALPHA_2;
 	//FOR PI ; strand prob. , beta
+	// rdd: Note to self:  If alpha = beta for Beta distro, get parabolic.
 	double ALPHA_3;
 
 	double foot_print;		// set but never used?

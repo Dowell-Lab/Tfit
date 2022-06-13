@@ -362,15 +362,24 @@ void Bidirectional::updateParameters(double N, double K) {
    double prevmu = getMu();
 
    pi = (sufficiencyStats.r_forward + alpha_pi) / (r + alpha_pi * 2);
+   // Note that this assumes the noise component is equivalently weighted
+   // to each model.  Instead perhaps the noise should be Beta weighted 
+   // (i.e. restricted to something low) and this renormalized accordingly.
+   // Note that 3K is ~ the number of component weights.
    weight = (r + alpha_w) / (N + alpha_w * K * 3 + K * 3);
 /* setMu(bidir.ex / (r + 0.001)); 
+   // Note that Joey uses bidir.mu which was set above to be the t+1 instance.
+   // Yet the updates should be using the previous step (mu_t).  I believe
+   // this is a bug in the original Tfit code.
    double tempSigma = (pow(abs((1. / (r + 3 + alpha_sigma)) * (bidir.ex2 - 2 * bidir.mu * bidir.ex +
                                                      r * pow(bidir.mu, 2) + 2 * beta_sigma)), 0.5);
    setSigma(tempSigma);
    setLambda(min((r + alpha_lambda) / (bidir.ey + beta_lambda), 5.));
 */
 
-   // We have an established minimum for lambda?!?!
+   // Note that setting the max at 0.05 is equivalent to setting tau (in bps; 1/lambda)
+   // to a upper limit of ~20 bases.  This should be strongly biasing the EMG
+   // to look Gaussian!   Ugh.
    setLambda(std::max(getLambda(),0.05));
    /* This is not exactly Joey's logic.  See update_parameters() for the
    interplay of bidir.move_fp, bidir_prev_mu!!! */
