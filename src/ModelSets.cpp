@@ -181,14 +181,7 @@ if ((r / N) < pow(10, -5))
    {
       EXIT = true;
    }
-   if (abs(bidir.mu - bidir.prev_mu) < 0.01) {
-      bidir.move_fp = true;
-   } else {
-      bidir.prev_mu = bidir.mu;
-   } 
    */
-
-
 }
 
 double ModelWrapper::calculateRi(double z, char strand) {

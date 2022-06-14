@@ -12,6 +12,20 @@
 #include "helper.h"
 #include "Distro.h"
 
+/********* Generic Priors *****/
+Priors::Priors() {
+   alpha = 1;
+   beta = 1; 
+}
+
+std::string Priors::write_out() {
+   std::string output;
+   output = "Prior(" + tfit::prettyDecimal(alpha,2) 
+         + "," + tfit::prettyDecimal(beta,2) + ")";
+   return output;
+}
+
+
 /********* Sufficiency Statistics *****/
 
 Responsibilities::Responsibilities() {
@@ -76,3 +90,20 @@ std::string sumExpected::write_out () {
    return output;
 }
 
+/***********  Constraints on parameters ***************/
+
+bidirConstraints::bidirConstraints() {
+  lambdaMin = 0.05;
+  lambdaMax = 5; // Constrain lambda so it doesn't eat the elongation
+  fp_Min = 0;
+  fp_Max = 2.5;  // Constrain footprint so that we aren't looking at adjacent ones.
+}
+
+std::string bidirConstraints::write_out() {
+   std::string output;
+   output = "Lambda: Min: " + tfit::prettyDecimal(lambdaMin,4) 
+         + " Max: " + tfit::prettyDecimal(lambdaMax, 4);
+   output += " Footprint: Min: " + tfit::prettyDecimal(fp_Min, 3)
+      + " Max: " + tfit::prettyDecimal(fp_Max, 3);
+   return output;
+}

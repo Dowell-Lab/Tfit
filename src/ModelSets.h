@@ -19,10 +19,6 @@ extern double nINF;     // currently defined in template_matching?
 /**
  * @brief This class provides a unified front for the two different
  * models we can use within the EM (Bidirectional vs FullModel).
- * For the EM, we'll want to keep some intermediate information
- * during the M/E steps.  This class is designed to encompass those 
- * extra quantities.
- * 
  */
 class ModelWrapper {
   public:
@@ -68,6 +64,8 @@ class ModelContainer {
   int K;  //<! number of models in the set
   std::vector<ModelWrapper *> setModels;
   double ll; // log likelihood 
+
+  bidirConstraints limits;    // constraints on the bidir models
 
   // Constructor
   ModelContainer();

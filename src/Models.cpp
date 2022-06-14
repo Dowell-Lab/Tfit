@@ -37,6 +37,21 @@ void BasicModel::resetSufficiency() {
    sufficiencyStats.reset();
 }
 
+double BasicModel::getResponsibility() {  // formerly called get_all_repo
+   return (sufficiencyStats.r_forward + sufficiencyStats.r_reverse);
+}
+
+void BasicModel::updateParameters(double N, double K) {
+   double r = getResponsibility();
+   pi = (sufficiencyStats.r_forward + betaPi.getAlpha()) / (r + betaPi.getAlpha() * 2);
+   // Note that this assumes the noise component is equivalently weighted
+   // to each model.  Instead perhaps the noise should be Beta weighted 
+   // (i.e. restricted to something low) and this renormalized accordingly.
+   // Note that 3K is ~ the number of component weights.
+   weight = (r + DirichletW.getAlpha()) / (N + DirichletW.getAlpha() * K * 3 + K * 3);
+ 
+}
+
 /***** BIDIRECTIONAL MODEL *****/
 // Empty Constructor
 
@@ -44,10 +59,8 @@ Bidirectional::Bidirectional()
   : BasicModel(), loading(), initiation() {
    footprint = 40;	
    // Priors:
-   alpha_sigma = 1;
-   beta_sigma = 1;
-   alpha_lambda = 1;
-   beta_lambda = 1;
+   setPriorLambda(1,1);
+   setPriorSigma(1,1);
 }
 
 Bidirectional::Bidirectional(double v_mu, double v_sigma, double v_lambda, 
@@ -116,13 +129,13 @@ void Bidirectional::setLambda(double newlambda) {
 }
 
 void Bidirectional::setPriorSigma(double v_alpha, double v_beta) {
-   alpha_sigma = v_alpha;
-   beta_sigma = v_beta; 
+   GammaSigma.setAlpha(v_alpha);
+   GammaSigma.setBeta(v_beta);
 }
 
 void Bidirectional::setPriorLambda(double v_alpha, double v_beta) {
-   alpha_lambda = v_alpha;
-   beta_lambda = v_beta; 
+   GammaLambda.setAlpha(v_alpha);
+   GammaLambda.setBeta(v_beta);
 }
 
 
@@ -353,39 +366,38 @@ std::vector<double> Bidirectional::generate_data(int n) {
    return results;
 }
 
-double Bidirectional::getResponsibility() {  // formerly called get_all_repo
-   return (sufficiencyStats.r_forward + sufficiencyStats.r_reverse);
-}
-
 void Bidirectional::updateParameters(double N, double K) {
    double r = getResponsibility();
    double prevmu = getMu();
 
-   pi = (sufficiencyStats.r_forward + alpha_pi) / (r + alpha_pi * 2);
-   // Note that this assumes the noise component is equivalently weighted
-   // to each model.  Instead perhaps the noise should be Beta weighted 
-   // (i.e. restricted to something low) and this renormalized accordingly.
-   // Note that 3K is ~ the number of component weights.
-   weight = (r + alpha_w) / (N + alpha_w * K * 3 + K * 3);
-/* setMu(bidir.ex / (r + 0.001)); 
+   BasicModel::updateParameters(N,K);  // Updates pi and weight
+
+  setMu(sumOverN.sumRExpX/ (r + 0.001)); 
    // Note that Joey uses bidir.mu which was set above to be the t+1 instance.
    // Yet the updates should be using the previous step (mu_t).  I believe
    // this is a bug in the original Tfit code.
-   double tempSigma = (pow(abs((1. / (r + 3 + alpha_sigma)) * (bidir.ex2 - 2 * bidir.mu * bidir.ex +
-                                                     r * pow(bidir.mu, 2) + 2 * beta_sigma)), 0.5);
+   // Also notice here he is taking the 0.5 power on this, which is NOT in the 
+   // original paper.
+   double tempSigma = (pow(abs((1. / (r + 3 + GammaSigma.getAlpha())) 
+                  * (sumOverN.sumRExpX2 - 2 * prevmu * sumOverN.sumRExpX +
+                  r * prevmu * prevmu + 2 * GammaSigma.getBeta())), 0.5));
    setSigma(tempSigma);
-   setLambda(min((r + alpha_lambda) / (bidir.ey + beta_lambda), 5.));
-*/
 
    // Note that setting the max at 0.05 is equivalent to setting tau (in bps; 1/lambda)
    // to a upper limit of ~20 bases.  This should be strongly biasing the EMG
    // to look Gaussian!   Ugh.
+   setLambda(std::min((r + GammaLambda.getAlpha()) / 
+            (sumOverN.sumRExpY + GammaLambda.getBeta()), 5.));
    setLambda(std::max(getLambda(),0.05));
-   /* This is not exactly Joey's logic.  See update_parameters() for the
-   interplay of bidir.move_fp, bidir_prev_mu!!! */
-   if (abs(getMu() - prevmu) < 0.01) {
-    // footprint = min(max(bidir.C / (r + 0.1), 0.0), 2.5);
-   }
+
+	if (abs(getMu() - prevmu) < 0.01) {
+		//bidir.move_fp 	= true;
+	} else{
+		// bidir.prev_mu 	= bidir.mu;
+	}
+	if (bidir.move_fp){
+		footprint 	= std::min( std::max(sumOverN.sumRXExpY / (r+0.1),0.0) , 2.5);
+	}
 }
 
 double Bidirectional::calculateRi(double z, char strand) {
@@ -446,13 +458,11 @@ void UniformModel::setBounds(double v_lower, double v_upper) {
 }
 
 double UniformModel::getResponsibility() {
-   return (sufficiencyStats.r_forward + sufficiencyStats.r_reverse);
+   return BasicModel::getResponsibility();
 }
 
 void UniformModel::updateParameters(double N, double K) {
-   weight = (sufficiencyStats.r_forward + alpha_w) / (N + alpha_w*K*3 + K*3);
-   pi = (sufficiencyStats.r_forward + 1) / 
-      (sufficiencyStats.r_forward + sufficiencyStats.r_reverse + 2);
+   BasicModel::updateParameters(N,K);
 }
 
 double UniformModel::calculateRi(double z, char strand) {
@@ -493,8 +503,7 @@ void FullModel::resetSufficiencyStats() {
 }
 
 double FullModel::getResponsibility() {  // formerly called get_all_repo
-   return (bidir.sufficiencyStats.r_forward + bidir.sufficiencyStats.r_reverse
-         + forwardElongation.sufficiencyStats.r_forward 
+   return (bidir.getResponsibility() + forwardElongation.sufficiencyStats.r_forward 
          + reverseElongation.sufficiencyStats.r_reverse);
 }
 

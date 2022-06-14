@@ -23,8 +23,8 @@ class BasicModel {
   Responsibilities sufficiencyStats;   // The current read
 
   // Priors
-  double alpha_pi;  // prior on pi, beta
-  double alpha_w;   // prior on weight, Dirichlet
+  Priors betaPi; // prior on pi, beta
+  Priors DirichletW; // prior on weight, Dirichlet
 
   //Constructor
   BasicModel();
@@ -34,7 +34,9 @@ class BasicModel {
 
   void setPriorPi(double);
   void setPriorWeight(double);
+  void updateParameters(double,double);
 
+  double getResponsibility();   
   void resetSufficiency();
 };
 
@@ -45,8 +47,8 @@ class Bidirectional: public BasicModel {
   double footprint;		// the ad hoc footprint parameter 
 
   // Priors
-  double alpha_sigma, beta_sigma;   // prior: variance in loading, gamma
-  double alpha_lambda, beta_lambda;   // prior: rate of initiation, gamma
+  Priors GammaSigma; // prior: variance in loading, gamma
+  Priors GammaLambda; // prior: rate of initiation, gamma
 
   // Convenience Variables for calculating updates and responsibilities
   sumExpected sumOverN; // Sums of assorted variables from i = 1 to N
@@ -68,7 +70,7 @@ class Bidirectional: public BasicModel {
   void setPriorSigma(double, double);
   void setPriorLambda(double, double);
 
-  // Calculate the pdf and expected values
+  // Calculate the pdf and expected values for a single read z with strand s
   double pdf(double z, char s);   // standard (Grushka 1972) formula for pdf
   double pdf_alt(double z, char s);   // Kalambet 2011 pdf for numerical stability
   double ExpX(double z, char strand);
@@ -78,7 +80,6 @@ class Bidirectional: public BasicModel {
 
   // Functions of all Models
   std::vector<double> generate_data(int n);
-  double getResponsibility();   
   void updateParameters(double,double);
   double calculateRi(double, char);
 

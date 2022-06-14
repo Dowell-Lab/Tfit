@@ -13,6 +13,33 @@
 
 #include "Distro.h"
 
+
+/**
+ * @brief Hyperparameters to the model.  Currently:
+ * Prior for sigma is a Gamma distribution
+ * Prior for lambda is a Gamma distribution
+ * Prior for weights is a Beta distribution
+ * Prior for pi is a Dirichlet (only uses alpha)!
+ */
+class Priors {
+public:
+  double alpha;
+  double beta;
+
+  //Constructor
+  Priors();
+
+  //Functions
+  std::string write_out();
+
+  // Getters and Setters
+  double getAlpha() const { return alpha; }
+  void setAlpha(double v_alpha) { alpha = v_alpha; }
+  double getBeta() const { return beta; }
+  void setBeta(double v_beta) { beta = v_beta; }
+
+};
+
 /**
  * @brief Every model component must be able to report on its 
  * responsiblities, e.g. Prob(k|data point, params) in the EM 
@@ -63,6 +90,31 @@ class sumExpected {
  void addToSumRExpX (double);
  void addToSumRExpX2 (double);
  void addToSumRXExpY (double);
+
+};
+
+class bidirConstraints {
+  public:
+  double lambdaMin;
+  double lambdaMax;  // Constrain lambda so it doesn't eat the elongation
+  double fp_Min;
+  double fp_Max;  // Constrain footprint so that we aren't looking at adjacent ones.
+
+  //Constructor
+  bidirConstraints();
+
+  //Functions
+  std::string write_out();
+
+  // Setters and Getters
+  void setLambdaMin(double v_lambdaMin) { lambdaMin = v_lambdaMin; }
+  void setLambdaMax(double v_lambdaMax) { lambdaMax = v_lambdaMax; }
+  void setFpMin(double v_fpMin) { fp_Min = v_fpMin; }
+  void setFpMax(double v_fpMax) { fp_Max = v_fpMax; }
+  double getLambdaMin() const { return lambdaMin; }
+  double getLambdaMax() const { return lambdaMax; }
+  double fpMin() const { return fp_Min; }
+  double fpMax() const { return fp_Max; }
 
 };
 
