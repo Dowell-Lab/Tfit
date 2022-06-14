@@ -234,7 +234,7 @@ string EMG::write(){
 string EMG::write_sufficient_stats() {
 	string text = ("SS: " + to_string(ri_forward)+ "," + to_string(ri_reverse)
 		+ "," + to_string(ey) + "," + to_string(ex) + "," + to_string(ex2) 
-		+ "," + to_string(r_forward) + "," + to_string(r_reverse) + "," + to_string(ex_r) );
+		+ "," + to_string(r_forward) + "," + to_string(r_reverse));
 	return text;
 }
 

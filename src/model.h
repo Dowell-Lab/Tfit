@@ -65,7 +65,7 @@ public:
 	double ri_forward, ri_reverse; //current responsibility
 	double r_forward, r_reverse;//running total
 	double ey, ex, ex2; 
-	double ex_r;
+	// double ex_r;
 
 	// Internals?
 	double C;
