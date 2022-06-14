@@ -45,8 +45,11 @@ class Bidirectional: public BasicModel {
   double footprint;		// the ad hoc footprint parameter 
 
   // Priors
-  double alpha_sigma, beta_sigma;   // variance in loading, gamma
-  double alpha_lambda, beta_lambda;   // rate of initiation, gamma
+  double alpha_sigma, beta_sigma;   // prior: variance in loading, gamma
+  double alpha_lambda, beta_lambda;   // prior: rate of initiation, gamma
+
+  // Convenience Variables for calculating updates and responsibilities
+  sumExpected sumOverN; // Sums of assorted variables from i = 1 to N
 
   // Constructor
   Bidirectional();
@@ -116,7 +119,6 @@ class UniformModel: public BasicModel {
   double calculateLikelihood(dInterval *data);
   void setBounds(double v_lower, double v_upper);
 };
-
 
 class FullModel {
   public:

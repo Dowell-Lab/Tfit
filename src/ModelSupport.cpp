@@ -38,4 +38,41 @@ std::string Responsibilities::write_out() {
 double Responsibilities::getResponsibility() {
    return (r_forward + r_reverse);
 }
+/****************** sumExpected ********************/
+
+sumExpected::sumExpected() {
+   reset(); 
+}
+
+void sumExpected::reset() {
+   sumRExpX = 0;
+   sumRExpY = 0;
+   sumRExpX2 = 0;
+   sumRXExpY = 0;
+}
+
+void sumExpected::addToSumRExpY (double i_term) {
+   sumRExpY += i_term;
+}
+
+void sumExpected::addToSumRExpX (double i_term) {
+  sumRExpX += i_term; 
+}
+
+void sumExpected::addToSumRExpX2 (double i_term) {
+  sumRExpX2 += i_term; 
+}
+
+void sumExpected::addToSumRXExpY (double i_term) {
+  sumRXExpY += i_term; 
+}
+
+std::string sumExpected::write_out () {
+   std::string output;
+   output = "Sum Exp[X] * r_i^k: " + tfit::prettyDecimal(sumRExpX, 4);
+   output += "Sum Exp[Y] * r_i^k: " + tfit::prettyDecimal(sumRExpY, 4);
+   output += "Sum Exp[X2] * r_i^k: " + tfit::prettyDecimal(sumRExpX2, 4);
+   output += "Sum (s*(z-mu) - Exp[Y]) * r_i^k: " + tfit::prettyDecimal(sumRXExpY, 4);
+   return output;
+}
 
