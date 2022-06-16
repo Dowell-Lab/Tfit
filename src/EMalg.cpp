@@ -88,6 +88,7 @@ int EMalg::fit (dInterval *data) {
       Mstep(data);
 
       // Checks if algorithm completed
+      // if ((r / N) < pow(10, -5)) EXIT;
 		if (abs(models.ll-prevll)< control.convergence_threshold){
 			converged=true;
 		}
@@ -126,20 +127,10 @@ double EMalg::computeBackgroundModel(dInterval *data) {
 
 /**
  * @brief E-step, grab all the stats and responsibilities
- * Equation 9 from Azofeifa 2017:
- * 
- * \f$ E[Y|g_i,\theta^t] = s_i(z-\mu) - \lambda\sigma^2
- * + \frac{\sigma}{R(\lambda\sigma - s_i(z_i-\mu)/\sigma)} \f$
- * 
- * \f$ E[X|g_i,\theta^t = z_i - s_i E[Y|g_i,\theta^t] \f$
- * 
- * \f$ E[Y^2|g_i,\theta^t] = \lambda^2\sigma^4 +
- * \sigma^2(2\lambda(\mu-z)s_i+1) + (z_i - \mu)^2 
- * \frac{\sigma(\lambda\sigma^2 + s_i(\mu - z_i))}{R(\lambda\sigma - s_i(z_i-\mu)/\sigma}\f$
- * 
- * \f$ E[X^2|g_i,\theta^t] = E[X|g_i,\theta^t] +
- * E[Y^2|g_i,\theta^t] - E[Y|g_i,\theta^t] \f$
- * 
+ * 1. Calculate Sum_Ri over k (partition function/normalizinng factor) 
+ * 2. Use those sums to update log liklihoods
+ * 3. Then calculate Expectations (Eqn 9 in Azofeifa) and 
+ *    add these to the sum of expectations that is kept (i=1..N)
  */
 void EMalg::Estep(dInterval *data) {
    perStrandInfo normalizeRi;
@@ -161,25 +152,8 @@ void EMalg::Estep(dInterval *data) {
 }
 
 /**
- * @brief M-step, Equation 10 in Azofeifa 2017, Theta_k^(t+1)
- * 
- * Equation 7 from Azofeifa 2017:
- * 
- * \f$ r_i^k=p(k|g_i;\theta_k^g)=\frac{w_k p(g_i;\theta_k^g)}{\sum_{k\in K} 
- * w_k p(g_i;\theta_k^g)} \f$
- * 
- * Equation 10 from Azofeifa 2017:
- *
- * \f$ w^{t+1}_k =\frac{r_k}{r} \f$
- * 
- * \f$ \pi^{t+1}_k =\frac{\sum_{i=1} r_i^k  I(s_i=1) }{r_k} \f$
- * 
- * \f$ \mu^{t+1}_k =\frac{1}{r_k} \sum_{i=1} E[X|g_i;\theta^t ]  r_i^k \f$
- * 
- * \f$ \frac{1}{\lambda^{t+1}_k} =\frac{1}{r_k}  \sum_{i=1} E[Y|g_i; \theta^t] r_i^k \f$
- * 
- * \f$ \sigma^{t+1}_k =\frac{1}{r_k} [ (\sum_{i=1} E[X^2|g_i; \theta^t]r_i^k 
- * -2\mu_k\sum_{i=1} E[X|g_i; \theta^t] r_i^k] +  \mu_k^2   \f$ 
+ * @brief M-step,
+ * Update parameters given the expected values and responsibilities
  * 
  * @param data 
  */

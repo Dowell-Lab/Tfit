@@ -176,12 +176,6 @@ void ModelWrapper::updateParameters(double N, int K) {
    } else {
      // Should never be here!
    }
-/*
-if ((r / N) < pow(10, -5))
-   {
-      EXIT = true;
-   }
-   */
 }
 
 double ModelWrapper::calculateRi(double z, char strand) {
