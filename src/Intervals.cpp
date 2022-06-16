@@ -20,6 +20,7 @@
 
 #include "split.h"
 #include "Regions.h"
+#include "EMseeds.h"
 
 gInterval::gInterval() {
   chromosome = "NA";
@@ -155,7 +156,6 @@ bed6::bed6():gInterval() {
   strand = '.';
 }
 
-
 /**
  * @brief Construct a new bed6::bed6 object
  * 
@@ -214,6 +214,10 @@ std::string bed6::write_asBED() {
 void bed6::setfromBedLine(std::string line) {
   std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
   lineArray=string_split(line, '\t');
+  setBED6fromStrings(lineArray);
+}
+
+void bed6::setBED6fromStrings(std::vector<std::string> lineArray) {
   setBED4fromStrings(lineArray);  // setup basic BED3/4 contents.
 
   if (lineArray.size() >= 6) {  // At least a BED6, so score and strand are present.
@@ -231,5 +235,48 @@ void bed6::setfromBedLine(std::string line) {
     score = -1;   // using -1 to indicate unavailable (i.e. wrong file type?)
     strand = '.';
   }
+ 
 }
 
+
+/********************  BED12 ***********************/
+
+bed12::bed12(): bed6() {
+  seeds == NULL;
+}
+
+/**
+ * @brief This is a standard content dump function.  Primarily
+ * used in debugging.  Notice the string does NOT end in a newline.
+ * 
+ * @return std::string 
+ */
+std::string bed12::write_out() {
+  std::string text = bed6::write_out();
+  if (seeds != NULL) { text += "," + seeds->write_out(); }
+  return text;
+}
+
+/**
+ * @brief Writes out the interval as a line in a BED6 file.  
+ * Note does NOT include newline.
+ * 
+ * @return std::string 
+ */
+std::string bed12::write_asBED() {
+  std::string text = bed6::write_asBED();
+  if (seeds != NULL) seeds->writeHalfBed12(start, stop);
+  return text;
+}
+
+/**
+ * @brief Set this bed6 based on a single line from a BED file.
+ * 
+ * @param line expects a single line of a BED file 
+ */
+void bed12::setfromBedLine(std::string line) {
+  std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
+  lineArray=string_split(line, '\t');
+  setBED6fromStrings(lineArray);
+  if (seeds != NULL) seeds->grabSeedsfromBed12(lineArray);
+}

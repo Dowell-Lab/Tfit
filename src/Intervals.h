@@ -19,6 +19,7 @@
 #include <vector>
 
 class RawData;    // Forward declaration
+class Seeds;    // Forward delcaration
 
 /**
  * @brief gInterval
@@ -54,11 +55,8 @@ public:
 
   // add points to data (RawData):
   void addDataPoint(double start,double stop,double cov,bool expand);
-
-protected:
   void setBED4fromStrings(std::vector<std::string> lineArray); // helper function
 
-private:
 };
 
 /**
@@ -79,8 +77,22 @@ public:
   bed6();
   bed6(std::string, double, double, std::string, int, std::string);
 
-  /* FUCTIONS: */
   // Reporting out 
+  std::string write_out();
+  std::string write_asBED();
+
+  void setfromBedLine(std::string);  // converts from a single line from file 
+  void setBED6fromStrings(std::vector<std::string> lineArray); // helper function
+};
+
+class bed12: public bed6 {
+  public: 
+  Seeds *seeds;
+
+  // Constructors
+  bed12();
+
+  // Functions
   std::string write_out();
   std::string write_asBED();
 

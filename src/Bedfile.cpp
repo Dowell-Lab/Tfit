@@ -49,7 +49,7 @@ void Bedfile::load_file(std::string file) {
     while(getline(FH, line)){
       if (line.substr(0,1)!="#") { // ignore comment lines
 
-      bed6 *iregion = new bed6();
+      bed12 *iregion = new bed12();
       // Note that the bed6 object is doing sanity checking on the line.
       iregion->setfromBedLine(line);  // This interval's info.
 

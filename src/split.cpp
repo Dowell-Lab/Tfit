@@ -21,16 +21,14 @@ vector<string> string_split(string s, const char delimiter)
   
   vector<string> output;
   
-  while (end <= string::npos)
-    {
-      output.emplace_back(s.substr(start, end-start));
+  while (end <= string::npos) {
+    output.emplace_back(s.substr(start, end-start));
       
-      if (end == string::npos)
-	break;
+    if (end == string::npos) break;
       
-      start=end+1;
-      end = s.find_first_of(delimiter, start);
-    }
+    start=end+1;
+    end = s.find_first_of(delimiter, start);
+  }
   
   return output;
 }

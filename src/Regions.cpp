@@ -46,7 +46,7 @@ SetROI::~SetROI() {
 }
 
 /**
- * @brief Given a new region (bed6), add it to this set.
+ * @brief Given a new region (bed12), add it to this set.
  * 
  * @param nregion 
  */
