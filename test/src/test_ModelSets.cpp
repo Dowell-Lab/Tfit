@@ -8,6 +8,20 @@
 #include "gmock/gmock.h"
 #include "ModelSets.h"
 
+// ModelSets, ModelWrapper_setPriors
+// ModelSets, ModelWrapper_initializeBounds
+// ModelSets, ModelWrapper_getResponsibility
+// ModelSets, ModelWrapper_updateParameters
+// ModelSets, ModelWrapper_calculateRi
+// ModelSets, ModelWrapper_updateExpectations
+
+// ModelSets, ModelContainer_initalizeComponents
+// ModelSets, ModelContainer_SortByMu
+// ModelSets, ModelContainer_Seed_SetBounds
+// ModelSets, ModelContainer_getAllResponsibilities
+// ModelSets, ModelContainer_calculateAllRi
+// ModelSets, ModelContainer_updateExpectations
+
 TEST(ModelSets, firsttest)
 {
     // Arrange: bring SUT to desired state

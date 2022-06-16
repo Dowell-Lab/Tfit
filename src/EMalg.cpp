@@ -95,7 +95,7 @@ int EMalg::fit (dInterval *data) {
 
       // Checks if algorithm completed
       // if ((r / N) < pow(10, -5)) EXIT;
-		if (abs(models.ll-prevll)< control.convergence_threshold){
+		if (std::abs(models.ll-prevll)< control.convergence_threshold){
 			converged=true;
 		}
 		if (not std::isfinite(models.ll)){

@@ -9,6 +9,21 @@
 #include <fstream>
 #include "Models.h"
 
+// Models, basicModel_setPriors
+// Models, basicModel_updateExpectations
+// Models, basicModel_updateParameters
+// Models, basicModel_resetSufficiency
+// Models, basicModel_calculateRi
+
+// Models, bidir_applyFootprint & indicatorStrand
+// Models, bidir_setPriors
+// Models, bidir_calculate EXP
+// Models, bidir_calculate pdfs
+// Models, bidir_generate data
+// Models, bidir_updateExpectations
+// Models, bidir_calcExpectedVals
+// Models, bidir_updateParameters
+
 TEST(Models, bidir_MillsRatio)
 {
     // Arrange: bring SUT to desired state
@@ -42,3 +57,17 @@ TEST(Models, bidir_generateData)
     // Assert: Verify the outcome
     ASSERT_LE(mean - (sut.loading.mu + (1/sut.initiation.lambda)), 0.01);  
 }
+
+// Models, uniform_pdf
+// Models, uniform_updateParameters
+// Models, uniform_setPi
+// Models, uniform_calculateLiklihood
+// Models, uniform_setBounds
+
+
+// Models, fullModel_pdf
+// Models, fullModel_resetSufficiency
+// Models, fullModel_getResponsibility
+// Models, fullModel_updateParameters
+// Models, fullModel_calculateRi
+// Models, fullModel_updateExpectations

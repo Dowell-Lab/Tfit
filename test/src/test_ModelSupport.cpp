@@ -8,7 +8,14 @@
 #include "gmock/gmock.h"
 #include "ModelSupport.h"
 
-TEST(ModelSsupport, firsttest)
+// ModelSupport, priors
+// ModelSupport, perStrandInfo_sumBothStrands
+// ModelSupport, Responsibilities_reset
+// ModelSupport, Responsibilities_get
+// ModelSupport, sumExpected
+// ModelSupport, bidirConstraints
+
+TEST(ModelSupport, firsttest)
 {
     // Arrange: bring SUT to desired state
 
