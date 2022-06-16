@@ -11,6 +11,10 @@
 #include "ITree.h"
 #include "Bedfile.h"
 
+// Bedfile, bed_readbed4
+// Bedfile, bed_readbed6
+// Bedfile, bed_readbed12
+
 TEST(Bedfile, multiChromCheck) 
 {
     // Arrange: bring SUT to desired state

@@ -8,6 +8,13 @@
 #include "gmock/gmock.h"
 #include "EMseeds.h"
 
+// EMseeds, grabSeed
+// EMseeds, setupRandomSeeds
+// EMseeds, weightRandomly
+
+// EMseeds, setfromBedLine
+// EMseeds, I/O  (write to BED12 then read back) 
+
 TEST(EMseeds, firsttest)
 {
     // Arrange: bring SUT to desired state
