@@ -185,9 +185,24 @@ if ((r / N) < pow(10, -5))
 }
 
 double ModelWrapper::calculateRi(double z, char strand) {
-   // If Bidirectional
-   // If FullModel 
-   return 1.;
+   if (type == FMOD) {
+      return gene->calculateRi(z,strand);
+   } else if (type == BIDIR) {
+      return bidir->calculateRi(z,strand);
+   } else {
+     return 1.;
+   }
+}
+
+void ModelWrapper::updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi) {
+   if (type == FMOD) {
+      gene->updateExpectations(i,coverage, normalizeRi);
+   } else if (type == BIDIR) {
+      bidir->updateExpectations(i,coverage,normalizeRi);
+   } else {
+      // Not a valid model!
+   }
+
 }
 
 /***************** sets of models *************/
@@ -320,7 +335,7 @@ void ModelContainer::SortByMu() {
    */
 }
 
-void ModelContainer::resetSufficiencyStats() {
+void ModelContainer::resetAllSufficiencyStats() {
    for (int k = 0; k < K; k++) {
       setModels[k]->resetSufficiencyStats();
       /*    What triggers this exit case?
@@ -343,3 +358,35 @@ double ModelContainer::getAllResponsibilities() {
    N += noise.getResponsibility();
    return N;
 }
+
+perStrandInfo ModelContainer::calculateAllRi(double i, dInterval *data) {
+   perStrandInfo normalizeRi;
+   // Equation 7 in Azofeifa 2017: calculate r_i^k
+   for (int k = 0; k < K; k++) { // computing the responsibility terms per model
+      if (data->forward(i)) {
+           normalizeRi.forward += setModels[k]->calculateRi(data->position(i), '+');
+      }
+      if (data->reverse(i)) {
+           normalizeRi.reverse += setModels[k]->calculateRi(data->position(i), '-');
+      }  // plus Noise!
+   }
+   normalizeRi.forward += noise.calculateRi(data->position(i), '+');
+   normalizeRi.reverse += noise.calculateRi(data->position(i), '-');
+
+   return normalizeRi;
+}
+
+void ModelContainer::updateExpectations(double i, dInterval *data, 
+                                             perStrandInfo normalizeRi) {
+   perStrandInfo coverage;
+   coverage.forward = data->forward(i);
+   coverage.reverse = data->reverse(i);
+
+   // now we need to add the sufficient statistics 
+   for (int k = 0; k < K ; k++) {
+      setModels[k]->updateExpectations(i, coverage, normalizeRi);
+   } // plus noise!
+
+   noise.updateExpectations(coverage, normalizeRi);
+}
+

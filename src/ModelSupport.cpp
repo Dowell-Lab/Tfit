@@ -25,32 +25,45 @@ std::string Priors::write_out() {
    return output;
 }
 
+/********* Container for per Strand Info *****/
+
+perStrandInfo::perStrandInfo() {
+   forward = 0;
+   reverse = 0; 
+}
+
+std::string perStrandInfo::write_out() {
+   std::string output;
+   output = "Forward: " + tfit::prettyDecimal(forward,4) 
+         + " Reverse: " + tfit::prettyDecimal(reverse,4);
+   return output;
+}
+
+double perStrandInfo::sumBothStrands() {
+   return (forward + reverse);
+}
 
 /********* Sufficiency Statistics *****/
 
-Responsibilities::Responsibilities() {
-   r_forward = 0;
-	r_reverse = 0;
-   ri_forward = 0;
-	ri_reverse = 0;
+Responsibilities::Responsibilities(): Ri(), Rk() {
 }
 
 void Responsibilities::reset() {
-   ri_forward = 0;
-	ri_reverse = 0;
+   Ri.forward = 0.;
+   Ri.reverse = 0.;
 }
 
 std::string Responsibilities::write_out() {
    std::string output;
-   output = "Ri: f: " + tfit::prettyDecimal(ri_forward,3);
-   output += " r: " + tfit::prettyDecimal(ri_reverse,3);
-   output = "Rk: f: " + tfit::prettyDecimal(r_forward,3);
-   output += " r: " + tfit::prettyDecimal(r_reverse,3);
+   output = "Ri: f: " + tfit::prettyDecimal(Ri.forward,3);
+   output += " r: " + tfit::prettyDecimal(Ri.forward,3);
+   output = "Rk: f: " + tfit::prettyDecimal(Rk.forward,3);
+   output += " r: " + tfit::prettyDecimal(Rk.reverse,3);
    return output;
 }
 
 double Responsibilities::getResponsibility() {
-   return (r_forward + r_reverse);
+   return Rk.sumBothStrands();
 }
 /****************** sumExpected ********************/
 

@@ -94,9 +94,9 @@ public:
 	string write_bidirectional_bounds(); 	// Just the centers vector
 
     // Accessor functions for X:
-    double Coordinate(int);
-	double ForwardCoverage(int);
-	double ReverseCoverage(int);
+    double Coordinate(int);		// X[0][i]
+	double ForwardCoverage(int);	// X[1][i]
+	double ReverseCoverage(int);	// X[2][i]
 
 	// bin does the scaling and smoothing of input data (builds X)
 	void bin(double, double, bool); // delta, scale, erase

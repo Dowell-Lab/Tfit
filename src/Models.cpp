@@ -21,36 +21,59 @@ BasicModel::BasicModel()
   weight = 0.; 
   pi = 0.5;
 
-  alpha_pi = 1;
-  alpha_w = 1;
+  betaPi.alpha = 1;
+  DirichletW.alpha = 1;
 }
 
 void BasicModel::setPriorPi(double v_alpha) {
-   alpha_pi = v_alpha;
+   betaPi.alpha = v_alpha;
 }
 
 void BasicModel::setPriorWeight(double v_alpha) {
-   alpha_w = v_alpha;
+   DirichletW.alpha = v_alpha;
+}
+
+
+double BasicModel::pdf(double z, char st) {
+   return 1.;     // Note this function *must* be overwritten by models! 
+}
+
+double BasicModel::getResponsibility() {  // formerly called get_all_repo
+   return sufficiencyStats.Rk.sumBothStrands();
 }
 
 void BasicModel::resetSufficiency() {
    sufficiencyStats.reset();
 }
 
-double BasicModel::getResponsibility() {  // formerly called get_all_repo
-   return (sufficiencyStats.r_forward + sufficiencyStats.r_reverse);
-}
-
 void BasicModel::updateParameters(double N, double K) {
    double r = getResponsibility();
-   pi = (sufficiencyStats.r_forward + betaPi.getAlpha()) / (r + betaPi.getAlpha() * 2);
+   pi = (sufficiencyStats.Rk.forward + betaPi.getAlpha()) / (r + betaPi.getAlpha() * 2);
    // Note that this assumes the noise component is equivalently weighted
    // to each model.  Instead perhaps the noise should be Beta weighted 
    // (i.e. restricted to something low) and this renormalized accordingly.
    // Note that 3K is ~ the number of component weights.
    weight = (r + DirichletW.getAlpha()) / (N + DirichletW.getAlpha() * K * 3 + K * 3);
- 
 }
+
+double BasicModel::calculateRi(double z, char strand) {
+   sufficiencyStats.Ri.forward = pdf(z,strand);
+   sufficiencyStats.Ri.reverse = pdf(z,strand);
+
+   return sufficiencyStats.Ri.sumBothStrands();
+}
+
+void BasicModel::updateExpectations(perStrandInfo coverage, perStrandInfo normalizedRi) {
+   if (normalizedRi.forward) {
+     sufficiencyStats.Rk.forward += coverage.forward*sufficiencyStats.Ri.forward/normalizedRi.forward;
+   }
+   if (normalizedRi.reverse) {
+     sufficiencyStats.Rk.reverse += coverage.reverse*sufficiencyStats.Ri.reverse/normalizedRi.reverse;
+   }
+   sufficiencyStats.reset();
+}
+
+
 
 /***** BIDIRECTIONAL MODEL *****/
 // Empty Constructor
@@ -366,6 +389,32 @@ std::vector<double> Bidirectional::generate_data(int n) {
    return results;
 }
 
+void Bidirectional::updateExpectations(double z, perStrandInfo coverage, 
+                                          perStrandInfo normalizeRi) {
+   BasicModel::updateExpectations(coverage,normalizeRi);
+
+	//now adding all the conditional expectations for the convolution, per strand
+   double rterm = sufficiencyStats.Ri.forward / normalizeRi.forward;
+   if (rterm > 0 and coverage.forward > 0) {
+      calcExpectedVals(z, '+', rterm*coverage.forward);
+   }
+   rterm = sufficiencyStats.Ri.reverse / normalizeRi.reverse;
+   if (rterm > 0 and coverage.reverse > 0) {
+      calcExpectedVals(z, '-', rterm*coverage.reverse);
+   }
+}
+
+void Bidirectional::calcExpectedVals (double position, char strand, double rtimescov) {
+   double current_EY = ExpY(position, strand);
+   double current_EY2 = ExpY2(position, strand);
+   double current_EX = ExpX(position,strand);
+
+   sumOverN.addToSumRXExpY(std::max((strand * (position - getMu()) - current_EY) *rtimescov, 0.0)); 
+   sumOverN.addToSumRExpY(current_EY * rtimescov); 
+   sumOverN.addToSumRExpX(current_EX * rtimescov);
+   sumOverN.addToSumRExpX2((current_EX*current_EX + current_EY2 - current_EY*current_EY)*rtimescov);
+}
+
 void Bidirectional::updateParameters(double N, double K) {
    double r = getResponsibility();
    double prevmu = getMu();
@@ -395,16 +444,11 @@ void Bidirectional::updateParameters(double N, double K) {
 	} else{
 		// bidir.prev_mu 	= bidir.mu;
 	}
+   /*
 	if (bidir.move_fp){
 		footprint 	= std::min( std::max(sumOverN.sumRXExpY / (r+0.1),0.0) , 2.5);
 	}
-}
-
-double Bidirectional::calculateRi(double z, char strand) {
-   sufficiencyStats.ri_forward = pdf(z,strand);
-   sufficiencyStats.ri_reverse = pdf(z,strand);
-
-   return (sufficiencyStats.ri_forward + sufficiencyStats.ri_reverse);
+   */
 }
 
 /*************** Uniform Model (Elongation and Noise) ************************/
@@ -457,19 +501,8 @@ void UniformModel::setBounds(double v_lower, double v_upper) {
    uni.upper = v_upper;
 }
 
-double UniformModel::getResponsibility() {
-   return BasicModel::getResponsibility();
-}
-
 void UniformModel::updateParameters(double N, double K) {
    BasicModel::updateParameters(N,K);
-}
-
-double UniformModel::calculateRi(double z, char strand) {
-   sufficiencyStats.ri_forward = pdf(z,strand);
-   sufficiencyStats.ri_reverse = pdf(z,strand);
-
-   return (sufficiencyStats.ri_forward + sufficiencyStats.ri_reverse);
 }
 
 
@@ -503,8 +536,8 @@ void FullModel::resetSufficiencyStats() {
 }
 
 double FullModel::getResponsibility() {  // formerly called get_all_repo
-   return (bidir.getResponsibility() + forwardElongation.sufficiencyStats.r_forward 
-         + reverseElongation.sufficiencyStats.r_reverse);
+   return (bidir.getResponsibility() + forwardElongation.sufficiencyStats.Rk.forward 
+         + reverseElongation.sufficiencyStats.Rk.reverse);
 }
 
 void FullModel::updateParameters(double N, double K) {
@@ -528,12 +561,13 @@ double FullModel::calculateRi(double z, char strand) {
    forwardElongation.calculateRi(z,strand);
    reverseElongation.calculateRi(z,strand);
 
-	return (bidir.sufficiencyStats.ri_forward 
-      + forwardElongation.sufficiencyStats.ri_forward
-      + reverseElongation.sufficiencyStats.ri_forward);
-   /*
-	return bidir.ri_reverse + reverse.ri_reverse + forward.ri_reverse;
-   */
+	return (bidir.sufficiencyStats.Ri.forward 
+      + forwardElongation.sufficiencyStats.Ri.forward
+      + reverseElongation.sufficiencyStats.Ri.forward);
 }
 
-
+void FullModel::updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi) {
+  bidir.updateExpectations(i, coverage, normalizeRi);
+  forwardElongation.updateExpectations(coverage, normalizeRi);
+  reverseElongation.updateExpectations(coverage, normalizeRi);
+}

@@ -80,10 +80,10 @@ int EMalg::fit (dInterval *data) {
 	//======================================================
 	int t 			= 0; //EM loop ticker
 	double prevll 	= nINF; //previous iterations log likelihood
-	int u 			= 0; //elongation movement ticker
 	converged 		= false; //has the EM converged?
-	while (t < control.max_iterations && not converged){
-      models.resetSufficiencyStats();
+	int u 			= 0; //elongation movement ticker
+	while (t < control.max_iterations && not converged){  // Iterate on EM
+      models.resetAllSufficiencyStats();
       Estep(data);
       Mstep(data);
 
@@ -121,8 +121,7 @@ double EMalg::computeBackgroundModel(dInterval *data) {
    // setup NOISE component
    models.noise.setPi(pi);
 
-   ll += models.noise.calculateLikelihood(data);
-   return ll;
+   return models.noise.calculateLikelihood(data);
 }
 
 /**
@@ -143,44 +142,22 @@ double EMalg::computeBackgroundModel(dInterval *data) {
  * 
  */
 void EMalg::Estep(dInterval *data) {
-   double norm_forward, norm_reverse, N; // helper variables
+   perStrandInfo normalizeRi;
    models.ll = 0;
    // i -> |D| (Azofeifa 2017 pseudocode)
    for (int i = 0; i < data->num_elements(); i++) { // For every data point
-      norm_forward = 0;
-      norm_reverse = 0;
-
-      // Equation 7 in Azofeifa 2017: calculate r_i^k
-      for (int k = 0; k < models.K; k++) { // computing the responsibility terms per model
-         if (data->forward(i)) {
-           norm_forward += models.setModels[k]->calculateRi(data->getDataCoordfromIndex(i), '+');
-         }
-         if (data->reverse(i)) {
-           norm_reverse += models.setModels[k]->calculateRi(data->getDataCoordfromIndex(i), '-');
-         }
-      }  // plus Noise!
-      norm_forward += models.noise.calculateRi(data->getDataCoordfromIndex(i), '+');
-      norm_reverse += models.noise.calculateRi(data->getDataCoordfromIndex(i), '-');
-
-      if (norm_forward > 0) {
-         models.ll += tfit::LOG(norm_forward) * data->forward(i);
+      // Calculate Ri and normalize over k. 
+      normalizeRi = models.calculateAllRi(i, data);
+      // Update log likelihood based on normalizing constants and depth
+      if (normalizeRi.forward > 0) {
+        models.ll += tfit::LOG(normalizeRi.forward) * data->forward(i);
       }
-      if (norm_reverse > 0) {
-         models.ll += tfit::LOG(norm_reverse) * data->reverse(i);
+      if (normalizeRi.reverse > 0) {
+        models.ll += tfit::LOG(normalizeRi.reverse) * data->reverse(i);
       }
-
-      // now we need to add the sufficient statistics 
-      for (int k = 0; k < models.K ; k++) {
-         /*
-         if (norm_forward) {
-            components[k].add_stats(data->Coordinate(i), data->ForwardCoverage(i), 1, norm_forward);
-         }
-         if (norm_reverse) {
-            components[k].add_stats(data->Coordinate(i), data->ReverseCoverage(i), -1, norm_reverse);
-         }
-         */
-      } // plus noise!
-   }
+      // Calculate Expected Values
+      models.updateExpectations(i, data, normalizeRi);
+  }
 }
 
 /**

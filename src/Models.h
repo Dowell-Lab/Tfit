@@ -35,9 +35,12 @@ class BasicModel {
   void setPriorPi(double);
   void setPriorWeight(double);
   void updateParameters(double,double);
+  void updateExpectations(perStrandInfo coverage, perStrandInfo normalizedRi);
 
   double getResponsibility();   
   void resetSufficiency();
+  double calculateRi(double z, char strand);
+
 };
 
 class Bidirectional: public BasicModel {
@@ -80,13 +83,16 @@ class Bidirectional: public BasicModel {
 
   // Functions of all Models
   std::vector<double> generate_data(int n);
+  void updateExpectations(double z, perStrandInfo coverage, perStrandInfo normalizeRi);
+  void calcExpectedVals (double position, char strand, double rtimescov);
   void updateParameters(double,double);
-  double calculateRi(double, char);
 
   // Supporting Functions (could be private?)
   double millsRatio(double);    
   int indicatorStrand(char s);
   double applyFootprint (double z, char s);
+
+
 };
 
 /**
@@ -109,9 +115,7 @@ class UniformModel: public BasicModel {
   double pdf(double x, char s);
 
   // Functions of all Models
-  double getResponsibility();   
   void updateParameters(double,double);
-  double calculateRi(double, char);
 
   // These are functions specifically for when its NOISE?
   // Noise Expectation: pG(b-a)/S where S is length of genome, 
@@ -119,6 +123,7 @@ class UniformModel: public BasicModel {
   void setPi(double v_pi);
   double calculateLikelihood(dInterval *data);
   void setBounds(double v_lower, double v_upper);
+
 };
 
 class FullModel {
@@ -139,6 +144,9 @@ class FullModel {
   double getResponsibility();   
   void updateParameters(double,double);
   double calculateRi(double z, char strand);
+
+  void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
+
 };
 
 

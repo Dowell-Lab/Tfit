@@ -48,6 +48,7 @@ class ModelWrapper {
 
   void updateParameters(double N, int K);
   double calculateRi(double z, char strand);
+  void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
 };
 
 /**
@@ -81,8 +82,12 @@ class ModelContainer {
   std::vector<double> RandomSeeds();
   void SortByMu();
 
-  void resetSufficiencyStats();
+  void resetAllSufficiencyStats();
   double getAllResponsibilities();
+  perStrandInfo calculateAllRi(double i, dInterval *data);
+  void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
+
+  void updateExpectations(double i, dInterval *data, perStrandInfo normalizeRi);
 };
 
 #endif

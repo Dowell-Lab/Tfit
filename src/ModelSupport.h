@@ -37,7 +37,20 @@ public:
   void setAlpha(double v_alpha) { alpha = v_alpha; }
   double getBeta() const { return beta; }
   void setBeta(double v_beta) { beta = v_beta; }
+};
 
+class perStrandInfo {
+  public:
+  double forward;
+  double reverse;
+
+  //Constructor
+  perStrandInfo();
+
+  //Functions
+  std::string write_out();
+
+  double sumBothStrands();
 };
 
 /**
@@ -48,8 +61,8 @@ public:
  */
 class Responsibilities {
   public:
-  double ri_forward, ri_reverse; //responsibilities per strand
-  double r_forward, r_reverse;  // Sum r_i^k 
+  perStrandInfo Ri;   // Responsibilities per read per strand
+  perStrandInfo Rk; // Sum r_i^k
 
   //Constructor
   Responsibilities();
