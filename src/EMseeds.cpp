@@ -46,7 +46,9 @@ void Seeds::grabSeedsfromBed12 (std::vector<std::string> lineArray) {
     return;   // This is a Bed3, bed4 or bed6 file!
   }
   if (lineArray.size() >= 12) { // Or should this be 11?
-    /*
+    if (weights.size() > 0) weights.clear();
+    if (mu_seeds.size() > 0) mu_seeds.clear();
+/*
       // Check these are correct for this interval?
       double start = stod(lineArray[6]);
       double stop = stod(lineArray[7]);
@@ -60,11 +62,10 @@ void Seeds::grabSeedsfromBed12 (std::vector<std::string> lineArray) {
     if (seedsArray.size() != numseeds) {
       std::cout << "ERROR: Invalid BED12, field 11 should contain # elements as specified in field 10!\n" << std::endl;
     }
-    if (weights.size() > 0) weights.clear();
+    weights.reserve(numseeds);
     for (int i = 0; i < numseeds; i++) {
       weights[i] = stod(seedsArray[i]);
     }
-
     seedsArray.clear();
 
     // Read in seed positions from field 12:
@@ -72,7 +73,7 @@ void Seeds::grabSeedsfromBed12 (std::vector<std::string> lineArray) {
     if (seedsArray.size() != numseeds) {
       std::cout << "ERROR: Invalid BED12, field 12 should contain # elements as specified in field 10!\n" << std::endl;
     }
-    if (mu_seeds.size() > 0) mu_seeds.clear();
+    mu_seeds.reserve(numseeds);
     for (int i = 0; i < numseeds; i++) {
       mu_seeds[i] = stod(seedsArray[i]);
     }

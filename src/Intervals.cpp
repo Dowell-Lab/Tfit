@@ -279,4 +279,5 @@ void bed12::setfromBedLine(std::string line) {
   lineArray=string_split(line, '\t');
   setBED6fromStrings(lineArray);
   if (seeds != NULL) seeds->grabSeedsfromBed12(lineArray);
+  // Should we confirm the seeds are within the gInterval??
 }

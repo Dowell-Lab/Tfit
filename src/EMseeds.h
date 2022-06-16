@@ -20,7 +20,7 @@
  * Seeds are constrained to reside within the gInterval.
  * 
  * Can read/write to files in Bed12 format using the "exon starts" as
- * seed locations (size = 1)
+ * seed locations (size = 1) and "exon widths" as seed weights.
  * 
  */
 class Seeds { 
@@ -39,7 +39,7 @@ class Seeds {
   //Functions
   std::string write_out();
 
-  double grabSeed(); // Grab a seed (mark it as used?)
+  double grabSeed(); // Grab a seed (should we mark it as used?)
 
   // Build x random choosen seeds, equally weighted across region of interest
   void setupRandomSeeds(int numseeds, gInterval *region);  
