@@ -12,6 +12,7 @@
 #include <vector>
 
 #include "Models.h"
+#include "Data.h"   // gInterval
 
 enum ModTypes {EMPTY, FMOD, BIDIR};
 extern double nINF;     // currently defined in template_matching?

@@ -76,7 +76,6 @@ int EMalg::fit (dInterval *data) {
      return 1;
    } 
    models.initializeComponents(data);
-
 	//======================================================
 	int t 			= 0; //EM loop ticker
 	double prevll 	= nINF; //previous iterations log likelihood
@@ -84,6 +83,13 @@ int EMalg::fit (dInterval *data) {
 	int u 			= 0; //elongation movement ticker
 	while (t < control.max_iterations && not converged){  // Iterate on EM
       models.resetAllSufficiencyStats();
+      /*
+      if (components[k].EXIT)
+      {
+         converged = false, ll = nINF;
+         return 0;
+      }
+      */
       Estep(data);
       Mstep(data);
 

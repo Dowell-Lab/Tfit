@@ -313,33 +313,11 @@ std::vector<double> ModelContainer::RandomSeeds() {
 
 void ModelContainer::SortByMu() {
    std::sort(setModels.begin(), setModels.end(), tfit::compareMu); 
-/*
-   bool sorted=true;
-	while (sorted){
-		sorted=false;
-		for (int k = 0; k < K-1; k++){
-			if (components[k].bidir.mu > components[k+1].bidir.mu){
-				component cp 		= components[k];
-				components[k] 		= components[k+1];
-				components[k+1] 	= cp;
-				sorted 				= true;
-			}
-		}
-	} 
-   */
 }
 
 void ModelContainer::resetAllSufficiencyStats() {
    for (int k = 0; k < K; k++) {
       setModels[k]->resetSufficiencyStats();
-      /*    What triggers this exit case?
-      components[k].reset();
-      if (components[k].EXIT)
-      {
-         converged = false, ll = nINF;
-         return 0;
-      }
-      */
    }
    noise.resetSufficiency();
 }
