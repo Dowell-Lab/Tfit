@@ -16,6 +16,7 @@ algorithm:
 all:
 	mpost datahandling
 	mpost models
+	mpost EMalg 
 	pdflatex notes.tex
 
 latex:
