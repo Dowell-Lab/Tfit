@@ -10,6 +10,9 @@ Class_noVisibilityMarkers.A;
 Class.B("bedGraph")("hasROI:bool")();
 Class_noVisibilityMarkers.B;
 
+Class.C("bimap")("num_elements:int", "index2str:map", "str2index:map")();
+Class_noVisibilityMarkers.C;
+
 Class.S("SetROI")("bimap:object","gInterval:map{vector}")();
 Class_noVisibilityMarkers.S;
 
@@ -36,7 +39,7 @@ Class_noVisibilityMarkers.D;
 
 Note.E("X : [position, forward_cov, reverse_cov]*bins");
 
-topToBottom(20)(A,B);
+topToBottom(20)(A,B,C);
 S.w = A.e + (50,0);
 topToBottom(20)(S,I);
 G.w = S.se + (50,0);
@@ -46,10 +49,10 @@ topToBottom(20)(R,P);
 D.w = R.e + (50,0);
 E.s = D.nw + (10,10);
 
-drawObjects(A,B,S,I,G,J,K,R,P,D,E);
+drawObjects(A,B,S,I,G,J,K,R,P,D,E,C);
 link(inheritance)(B.n -- A.s);
 link(aggregation)(S.w -- A.e);
-link(aggregation)(G.w -- S.e);
+link(aggregation)(pathStepX(S.se, G.nw, 20));
 link(aggregation)(rpathManhattanX(I.e, G.w));
 link(aggregation)(I.n -- S.s);
 link(inheritance)(J.n -- G.s);
@@ -58,12 +61,12 @@ clink(association)(G, R);
 link(aggregation)(P.n -- R.s);
 clink(association)(R,D);
 clink(dashedLink)(D,E);
+link(aggregation)(pathStepX(C.e, S.sw, 10));
 
 item(iAssoc)("data")(obj.sw = G.e);
 item(iAssoc)("belongsTo")(obj.ne = R.w);
 item(iAssoc)("cdata")(obj.sw = R.e);
 item(iAssoc)("raw")(obj.ne = D.w);
-
 
 endfig;
 
