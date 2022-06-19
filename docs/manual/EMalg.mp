@@ -18,17 +18,22 @@ Class_noVisibilityMarkers.E;
 
 Note.D("dInterval");
 
+Class.S("EMseeds")("mu_seeds:vector{double}", "weights:vector{double}", "numgen:Random")();
+Class_noVisibilityMarkers.S;
+
 topToBottom(20)(W,X);
 A.w = W.e + (70,0);
 topToBottom(20)(A,E);
-D.w = E.e + (40,0);
+S.w = A.e + (30,0);
+topToBottom(20)(S,D);
 
-drawObjects(W,X,A,E,D);
+drawObjects(W,X,A,E,D,S);
 
 link(aggregation)(X.n -- W.s);
 link(aggregation)(E.n -- A.s);
 link(aggregation)(rpathStepX(X.e, E.w, 30));
 link(dependency)(D.w -- E.e);
+link(association)(S.s -- D.n);
 
 endfig;
 
