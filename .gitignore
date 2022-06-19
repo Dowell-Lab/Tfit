@@ -20,3 +20,4 @@ docs/manual/*.log
 docs/manual/*.out
 docs/manual/*.toc
 docs/manual/*.pdf
+docs/manual/*.mps
