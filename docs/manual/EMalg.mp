@@ -32,7 +32,7 @@ drawObjects(W,X,A,E,D,S);
 link(aggregation)(X.n -- W.s);
 link(aggregation)(E.n -- A.s);
 link(aggregation)(rpathStepX(X.e, E.w, 30));
-link(dependency)(D.w -- E.e);
+link(dependency)(pathStepX(D.w, E.e, -20));
 link(association)(S.s -- D.n);
 
 endfig;

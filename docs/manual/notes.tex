@@ -13,7 +13,7 @@
 \title{Tfit Notes}
 \author{Robin D. Dowell}
 \date{}
-\lhead{Tfit Notes}
+\lhead{Tfit Design Notes}
 \rhead{Dowell}
 \date{ }
 
@@ -22,16 +22,90 @@
 \noindent $*$ Corresponding author: robin.dowell@colorado.edu
 
 \section{Data Handling Design}
-%Supplemental text here. 
-\includegraphics[width=\textwidth]{datahandling1.mps}
-\clearpage
-\section{Models Design}
-\includegraphics{models1.mps}
-\clearpage
-\section{EM Algorithm}
-\includegraphics{EMalg1.mps}
+Tfit uses signed bedGraphs as data input.  A bedGraph has the basic format of 
+chromosome \t start \t stop \t coverage.  Tfit assumes all coordinates are
+reported as zero based half open coordinates.  In a slight modification of
+the basic bedGraph format, the coverage value is signed according to 
+strand (e.g. positive numbers refer to the positive strand whereas negative 
+numbers refer to the negative strand).  Thus each position in the genome 
+may be represented in a signed bedGraph twice, once per sign/strand.
+
+\includegraphics{datahandling1.mps}
+
+The computable unit is a segment of the genome, otherwise known as a region
+of interest (ROI).  ROI can be specified at input as bed files (bed3, bed4,
+bed6 or bed12), stored as a genomic interval (gInterval). With a 
+user specified ROI, Tfit will *only* consider data within these regions
+(e.g. gIntervals correspond to bed entries and data outside these regions 
+ is ignored).  Without a specified ROI file (i.e. bedGraph only input) 
+then the ROI are inferred directly from the bedGraph.   In either case,
+bedGraphs are read in as PointCov (position, coverage) in a strand specific
+fashion within the RawData object.   
+
+As most genomes contain multiple chromosomes of variable size, the contents
+of bedGraphs and bed files are stored as an indexed collection (setROI).
+Chromosome names can be converted into numerical indicies and vice versa.
+For rapid searching, a searchable centered index tree can also be constructed
+for each chromosome index.  The CITree can be destroyed to save memory. 
+
+Once the full bedGraph is read, each gInterval's RawData is converted into
+a data Interval (dInterval), in which data in coordinate transformed (all
+dIntervals begin at position zero), binned and scaled (for numerical
+stability).  The RawData can be retained (unadulterated input data) or removed 
+from memory (destroyed to reduce memory footprint).  The dInterval can 
+process coordinate transformations (between data coordinates, genomic 
+coordinates, and indexed values).  It is also the fundamental data unit 
+internally.
+
+It is worth noting that bed12 data is interpreted in a very specific way
+in the Tfit framework.   Exon lengths are weights and exon starts are 
+positions for possible seeds to the EM algorithm (see EM algorithm 
+section for more information).
 
 \clearpage
+\section{Models Design}
+The details of the model were originally published in Azofeifa 2017 and
+Azofeifa 2018.  We will repeat and augment the model description here for
+completeness.  
+
+\includegraphics{models1.mps}
+
+Currently there are multiple models available:
+
+\begin{itemize}
+\item The Full Model (as described in Azofeifa 2017)
+\item The Full Model (as described in Azofeifa 2018), e.g. includes
+the footprint parameter
+\item The Bidirectionals only model
+\item The LIET model (not yet available, planned)
+\end{itemize}
+
+\section{EM Algorithm}
+The details of model inference by the expectation maximization algorithm was
+originally described in Azofeifa 2017.  We will repeat and augment the 
+algorithm description here for completeness.
+
+\includegraphics{EMalg1.mps}
+
+\section{More on Seeding the EM algorithm}
+Performance of the EM algorithm is strongly dependent on either having 
+many iterations (to find an optimal parameter regime) or strong priors
+(i.e. high quality seeds).  There are multiple seeding options:
+
+\begin{itemize}
+\item Random seeds
+\item User defined seeds (provided by bed12)
+\item Template matching (originally described in Azofeifa 2018)
+\end{itemize}
+
+\section{Customizing the algorithm}
+This is about fine tuning algorithm control, model constraints, and 
+the wealth of options available.   This section should also describe 
+how Tfit does I/O of parameters (argparm interface, JSON) and how
+to maximize reproducibility. 
+
+\section{Leveraging Compute Resources}
+MPI and Threading -- playing nice with compute clusters.
 
 \small{
   \bibliographystyle{abbrv}
