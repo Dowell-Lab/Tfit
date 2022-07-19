@@ -6,6 +6,8 @@ make
 build$ ./TestTfit --gtest_filter=Test_Cases1*
 
 build$ make gcov
-
 in Visual Studio Code: CTRL-Shift-P 
+
+build$ make lcov
+see index.html in build/lcoverage/
 
