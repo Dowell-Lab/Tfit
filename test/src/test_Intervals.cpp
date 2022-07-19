@@ -8,19 +8,11 @@
 #include "gmock/gmock.h"
 #include "Intervals.h"
 
-TEST(Intervals, basicWrite)
-{
-    // Arrange: bring SUT to desired state
-    gInterval sut = gInterval("chrTest", 100, 1000, "TestName"); 
+/* Need to test I/O for bed3, bed4, bed6 and bed12.  
+ * Contains and overlap should be tested for gInterval.
+ */
 
-    // Act: call methods on SUT, capture output
-    std::string name = sut.write_out(); 
-
-    // Assert: Verify the outcome
-    EXPECT_THAT(name, "#chrTest:100-1000,TestName");
-}
-
-TEST(Intervals, basicIO)
+TEST(gInterval, writeBedEQreadBed)
 {
     // Arrange: bring SUT to desired state
     gInterval temp = gInterval("TestName", 100, 1000, "chrTest"); 
@@ -35,37 +27,34 @@ TEST(Intervals, basicIO)
     EXPECT_THAT(temp.write_out(), sut.write_out());
 }
 
-TEST(Intervals, bed6IO)
-{
-    // Arrange: bring SUT to desired state
-    bed6 temp = bed6("TestName", 100, 1000, "chrTest", 30, "."); 
-    std::string name = temp.write_asBED();      // Write as bed6
-    // std::cout << name << std::endl;
+class Bed6ContainsTest: public :: testing::Test {
+  protected:
+  void SetUp() override { }
+  // void TearDown() override 
+  bed6 sut = bed6("TestName", 100, 1000, "chrTest", 30, "."); 
+};
 
-    bed6 sut = bed6();
-
-    // Act: call methods on SUT, capture output
-    sut.setfromBedLine(name);   // Read as bed6
-
-    // Assert: Verify the outcome
-    EXPECT_THAT(temp.write_out(), sut.write_out());
+TEST_F(Bed6ContainsTest, containsEdgeCase) {
+  EXPECT_TRUE(sut.Contains((double)100)); // Edge case
 }
 
-TEST(Intervals, contains)
-{
-    // Arrange: bring SUT to desired state
-    bed6 sut = bed6("TestName", 100, 1000, "chrTest", 30, "."); 
-    // std::cout << name << std::endl;
-
-    // Assert: Verify the outcome
-    EXPECT_TRUE(sut.Contains((double)100)); // Edge case
-    EXPECT_TRUE(sut.Contains((double)300));   // Middle value
-    EXPECT_FALSE(sut.Contains((double)1000));   // Edge value, half open system!
-    EXPECT_FALSE(sut.Contains((double)50));   // Below range 
-    EXPECT_FALSE(sut.Contains((double)2000));   // Above range 
+TEST_F(Bed6ContainsTest, containsValue) {
+  EXPECT_TRUE(sut.Contains((double)300)); // Edge case
 }
 
-TEST(Intervals, overlaps)
+TEST_F(Bed6ContainsTest, containsEdgeCaseHalfOpen) {
+  EXPECT_FALSE(sut.Contains((double)1000)); // Edge case
+}
+
+TEST_F(Bed6ContainsTest, containsBelowRange) {
+  EXPECT_FALSE(sut.Contains((double)50));   // Below range 
+}
+
+TEST_F(Bed6ContainsTest, containsAboveRange) {
+  EXPECT_FALSE(sut.Contains((double)2000));   // Above range 
+}
+
+TEST(bed6, overlaps)
 {
     // Arrange: bring SUT to desired state
     bed6 OR1 = bed6("TestChr", 100, 1000, "OR1", 30, "."); 
@@ -80,6 +69,21 @@ TEST(Intervals, overlaps)
     EXPECT_FALSE(sut.Overlap((gInterval *)&NR1));
 }
 
+TEST(bed6, writeBedEQreadBed)
+{
+    // Arrange: bring SUT to desired state
+    bed6 temp = bed6("TestName", 100, 1000, "chrTest", 30, "."); 
+    std::string name = temp.write_asBED();      // Write as bed6
+    // std::cout << name << std::endl;
+
+    bed6 sut = bed6();
+
+    // Act: call methods on SUT, capture output
+    sut.setfromBedLine(name);   // Read as bed6
+
+    // Assert: Verify the outcome
+    EXPECT_THAT(temp.write_out(), sut.write_out());
+}
 /*
 TEST(Intervals, addData)
 {

@@ -11,9 +11,7 @@
 #include "ITree.h"
 #include "Bedfile.h"
 
-// Bedfile, bed_readbed4
-// Bedfile, bed_readbed6
-// Bedfile, bed_readbed12
+// Bedfile:  I/O for bed4, bed6, bed12
 
 TEST(Bedfile, multiChromCheck) 
 {
@@ -98,7 +96,7 @@ TEST(Bedfile, checkSearch_noOverlap)
    sut.setRegions.clearTrees();
 }
 
-TEST(Bedfile, load_Bedgraph) 
+TEST(Bedgraph, load_Bedgraph) 
 {
     // Arrange: bring SUT to desired state
    std::string file_name = "../examples/typical_region.bg"; 
