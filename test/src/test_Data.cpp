@@ -8,7 +8,10 @@
 #include "gmock/gmock.h"
 #include "Data.h"
 
-TEST(Data, rawData_addDataPoints)
+/* Test PointCov
+*/
+
+TEST(RawData, addDataPoints)
 {
     // Arrange: bring SUT to desired state
     RawData sut;
@@ -26,7 +29,7 @@ TEST(Data, rawData_addDataPoints)
     EXPECT_EQ(sut.Length(), 7);
 }
 
-TEST(Data, rawData_removeDup)
+TEST(RawData, removeDup)
 {
     // Arrange: bring SUT to desired state
     RawData sut;
@@ -46,7 +49,7 @@ TEST(Data, rawData_removeDup)
     EXPECT_EQ(sut.forward.size(), 5);
 }
 
-TEST(Data, dInt_bin_scale)
+TEST(dInterval, bin_scale)
 {
     // Arrange: bring SUT to desired state
     RawData data;
@@ -64,7 +67,7 @@ TEST(Data, dInt_bin_scale)
     EXPECT_EQ(sut.sumAlldata(), 21);
 }
 
-TEST(Data, coordIndex2Genomic)
+TEST(dInterval, coordIndex2Genomic)
 {
     // Arrange: bring SUT to desired state
     RawData data;
@@ -88,7 +91,7 @@ TEST(Data, coordIndex2Genomic)
     EXPECT_EQ(result3, 13);     // genomic -> index -> genomic
 }
 
-TEST(Data, coordData2Index)
+TEST(dInterval, coordData2Index)
 {
     // Arrange: bring SUT to desired state
     RawData data;

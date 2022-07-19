@@ -9,7 +9,7 @@
 #include <fstream>
 #include "Distro.h"
 
-TEST(Distros, standardNormal)
+TEST(Normal, genSamplesFollowZNorm) 
 {
     // Arrange: bring SUT to desired state
     Normal standard;
@@ -38,7 +38,7 @@ TEST(Distros, standardNormal)
     EXPECT_LE(abs(std - 1.0), 0.01);  
 }
 
-TEST(Distros, Normal)
+TEST(Normal, pdf)
 {
     // Arrange: bring SUT to desired state
     Normal norm(5,2);
@@ -69,7 +69,7 @@ TEST(Distros, Normal)
     EXPECT_LE(abs(norm.cdf(3) - 0.1586553), 0.0001);  // R: pnorm(3,mean=5,sd=3)
 }
 
-TEST(Distros, Exponential)
+TEST(Exponential, pdf)
 {
     // Arrange: bring SUT to desired state
     Exponential exp(5);
@@ -92,7 +92,7 @@ TEST(Distros, Exponential)
     EXPECT_LE(abs(exp.cdf(0.2) - 0.6321206), 0.0001);  // R: pexp(0.2,rate=5)
 }
 
-TEST(Distros, Uniform)
+TEST(Uniform, pdf)
 {
     // Arrange: bring SUT to desired state
     Uniform uni(5,10);
