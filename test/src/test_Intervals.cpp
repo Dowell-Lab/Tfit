@@ -52,7 +52,7 @@ TEST(gInterval, addDataPoint_edgeCaseNoExpand)
     EXPECT_EQ(sut.start, (double)100);
 }
 
-TEST(gInterval, addDataPoint_edgeCaseExpand)
+TEST(gInterval, addDataPoint_edgeCaseStartExpand)
 {
     // Arrange: bring SUT to desired state
     gInterval sut = gInterval("TestName", 100, 1000, "chrTest"); 
@@ -64,6 +64,20 @@ TEST(gInterval, addDataPoint_edgeCaseExpand)
     // Confirming that the coordinates were properly adjusted (when allowed)
     EXPECT_EQ(sut.start, (double)80);
 }
+
+TEST(gInterval, addDataPoint_edgeCaseStopExpand)
+{
+    // Arrange: bring SUT to desired state
+    gInterval sut = gInterval("TestName", 100, 1000, "chrTest"); 
+
+    // Act: call methods on SUT, capture output
+    sut.addDataPoint(900,1500,4,true);      // Note calls rawData::addDataPoints, test elsewhere
+
+    // Assert: Verify the outcome
+    // Confirming that the coordinates were properly adjusted (when allowed)
+    EXPECT_EQ(sut.stop, (double)1500);
+}
+
 
 class Bed6ContainsTest: public :: testing::Test {
   protected:
