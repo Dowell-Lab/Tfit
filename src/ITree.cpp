@@ -67,17 +67,7 @@ CITree::~CITree() {
 }
 
 CITree::CITree(std::vector<gInterval *> setIntervals) {
-   if (setIntervals.empty()) { root = NULL; return; }
-
-  // Shouldn't this be responsible for all intervals originating
-  // from the same chromosome??
-
-  // Sort setIntervals by end value of intervals
-  std::sort(setIntervals.begin(),setIntervals.end(), 
-      [](gInterval *const &l, gInterval *const &r) { return l->stop < r->stop;});
-
-   // Build the tree!
-   root = constructTree(setIntervals);
+  constructTree(setIntervals);
 }
 
 std::vector<gInterval *>CITree::searchPoint(double point) {
@@ -143,7 +133,6 @@ std::vector<gInterval *>CITree::overlapSearch(gInterval *query) {
 
   return hits;
 }
-
 /**
  * @brief writes out the entire subtree at root
  * 
@@ -190,7 +179,7 @@ std::string CITree::write_Root() {
  * Assumes:  gInterval is a sorted list of intervals (first has smallest stop; last largest stop)
  * @param segments
  */
-Inode *CITree::constructTree(std::vector<gInterval *>segments){
+Inode *CITree::constructTreeSortedSet(std::vector<gInterval *>segments){
   // center = median of interval endpoints
   int median = segments.size()/2;  // if even finds median; if odd takes upper bound on median
   double center = segments[median]->stop;
@@ -216,16 +205,31 @@ Inode *CITree::constructTree(std::vector<gInterval *>segments){
 
   // leftSubTree = constructTree(iLeft)
   if (!Left.empty()) {
-    root->left 	= constructTree(Left);
+    root->left 	= constructTreeSortedSet(Left);
   }
   // rightSubTree = constructTree(iRight)
   if (!Right.empty()) {
-    root->right 	= constructTree(Right);
+    root->right 	= constructTreeSortedSet(Right);
   }
  
   // return current node (tree)
   return root;
 }
+
+void CITree::constructTree(std::vector<gInterval *> setIntervals) {
+  if (setIntervals.empty()) { root = NULL; return; }
+
+  // Shouldn't this be responsible for all intervals originating
+  // from the same chromosome??
+
+  // Sort setIntervals by end value of intervals
+  std::sort(setIntervals.begin(),setIntervals.end(), 
+      [](gInterval *const &l, gInterval *const &r) { return l->stop < r->stop;});
+
+   // Build the tree!
+   root = constructTreeSortedSet(setIntervals);
+}
+
 
 void CITree::destroyTree() {
     delete(root);

@@ -64,7 +64,8 @@ public:
     std::vector<gInterval *>overlapSearch(gInterval *);
 
     // Recursively builds tree, assumes sorted vector of intervals
-    Inode *constructTree(std::vector<gInterval *>);
+    void constructTree(std::vector<gInterval *>);
+    Inode *constructTreeSortedSet(std::vector<gInterval *>);
     void destroyTree();
 };
 
