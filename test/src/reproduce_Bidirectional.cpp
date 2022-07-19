@@ -10,6 +10,7 @@
 #include "Models.h"
 #include "model.h"
 
+
 // Need to test edge cases and negative strand!
 TEST(BidirEQ, reproducePDF)
 {
@@ -30,4 +31,3 @@ TEST(BidirEQ, reproducePDF)
     // Assert: Verify the outcome
     ASSERT_LE(abs(oldresult - newresult), 0.0001);  
 }
-

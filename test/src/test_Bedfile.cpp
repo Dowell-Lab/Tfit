@@ -96,6 +96,7 @@ TEST(Bedfile, checkSearch_noOverlap)
    sut.setRegions.clearTrees();
 }
 
+/*
 TEST(Bedgraph, load_Bedgraph) 
 {
     // Arrange: bring SUT to desired state
@@ -115,5 +116,6 @@ TEST(Bedgraph, load_Bedgraph)
    ASSERT_NE(output->data->cdata, nullptr);
    EXPECT_EQ(output->data->cdata->delta, 10);
 }
+*/
 
 

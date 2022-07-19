@@ -1,3 +1,6 @@
 cd build
 cmake ..
 make
+
+
+./TestTfit --gtest_filter=Test_Cases1*

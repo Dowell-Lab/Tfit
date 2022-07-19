@@ -52,6 +52,7 @@ TEST(classifier, exerciseFit2)
   // EXPECT_EQ(sut.ll, -10);  Why is this -inf here?
 }
 
+/*
 TEST(classifier, rewritten)
 {
   // Lets load a typical small bedgraph file.
@@ -72,3 +73,4 @@ TEST(classifier, rewritten)
 }
 
 
+*/

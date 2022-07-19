@@ -52,6 +52,7 @@ TEST(SetROI, search)
     sut.clearTrees();
 }
 
+/*
 TEST(SetROI, addDataToExistingROI)
 {
     // Arrange: bring SUT to desired state
@@ -86,6 +87,7 @@ TEST(SetROI, addDataToExistingROI)
     }
     sut.clearTrees();
 }
+*/
 
 TEST(SetROI, addDataCreateROI)
 {
