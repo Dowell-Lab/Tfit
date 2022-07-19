@@ -82,3 +82,20 @@ TEST(bed6, writeBedEQreadBed)
     // Assert: Verify the outcome
     EXPECT_THAT(temp.write_out(), sut.write_out());
 }
+
+/*
+TEST(bed12, writeBedEQreadBed) {
+    // Arrange: bring SUT to desired state
+    bed12 temp = bed12("TestName", 100, 1000, "chrTest", 30, "."); 
+    std::string name = temp.write_asBED();      // Write as bed6
+    // std::cout << name << std::endl;
+
+    bed12 sut = bed12();
+
+    // Act: call methods on SUT, capture output
+    sut.setfromBedLine(name);   // Read as bed6
+
+    // Assert: Verify the outcome
+    EXPECT_THAT(temp.write_out(), sut.write_out());
+}
+*/
