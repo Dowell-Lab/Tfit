@@ -3,4 +3,4 @@ distinguish from the names of the components of the objects.
 
 Global variables are named g_paramname.
 
-
+Every method with logic should have Unit Tests in /test/src

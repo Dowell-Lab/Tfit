@@ -7,6 +7,17 @@
  */
 #include "gmock/gmock.h"
 
+/* Style Guides for Tfit tests:
+ *   -- The name of this file should be the *.h file being tested
+ *   -- TestSuiteName should be the Class being tested
+ *   -- TestName should be Method_functionToBeTested
+ *   -- Generally follow Arrange, Act, Assert pattern
+ *   -- One (or only a couple) Assert per test
+ *   -- No interdependence between tests
+ *   -- Do not test getters and setters, but test all methods with any logic/action
+ *      (Note a setter has logic if it tests/constrains the input!)
+ */
+
 // TEST() {}  is the Test Case macro
 // Avoid if statements
 TEST(TestSuiteName, TestName)

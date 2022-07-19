@@ -22,42 +22,48 @@
 \noindent $*$ Corresponding author: robin.dowell@colorado.edu
 
 \section{Data Handling Design}
-Tfit uses signed bedGraphs as data input.  A bedGraph has the basic format of 
-chromosome \t start \t stop \t coverage.  Tfit assumes all coordinates are
-reported as zero based half open coordinates.  In a slight modification of
-the basic bedGraph format, the coverage value is signed according to 
-strand (e.g. positive numbers refer to the positive strand whereas negative 
-numbers refer to the negative strand).  Thus each position in the genome 
-may be represented in a signed bedGraph twice, once per sign/strand.
+Tfit uses signed bedGraphs as data input.  A bedGraph has the basic format of: 
+chromosome /\t start /\t stop /\t coverage.  Tfit assumes all coordinates are
+reported as zero based half open coordinates, as described in the bedGraph standard.  
+The coverage value is expected to be signed according to strand (e.g. positive 
+numbers refer to the positive strand whereas negative numbers refer to the 
+negative strand).  Thus each position in the genome may be represented in a 
+signed bedGraph twice, once per sign/strand.
 
 \includegraphics{datahandling1.mps}
 
-The computable unit is a segment of the genome, otherwise known as a region
-of interest (ROI).  ROI can be specified at input as bed files (bed3, bed4,
-bed6 or bed12), stored as a genomic interval (gInterval). With a 
-user specified ROI, Tfit will *only* consider data within these regions
-(e.g. gIntervals correspond to bed entries and data outside these regions 
- is ignored).  Without a specified ROI file (i.e. bedGraph only input) 
-then the ROI are inferred directly from the bedGraph.   In either case,
-bedGraphs are read in as PointCov (position, coverage) in a strand specific
-fashion within the RawData object.   
+Tfit attempts to fit one or more instances of the RNA polymerase model to a 
+region of interest.  If the only input is the signed bedGraph, the regions of 
+interest are inferred directly from the bedGraph (chromosome identifiers 
+and coordinates).  Alternatively (and the preferred method), the user can 
+provide a bed file (bed3, bed4, bed6, or bed12) to specify the regions of 
+interest.  Each line of a bed file is stored as the corresponding gInterval.
+When a user provides a ROI bed file, Tfit will *only* consider data within 
+these regions (e.g. gIntervals correspond to bed entries and data outside these 
+regions is ignored).  Generally, bedGraphs are read in as PointCov (position, 
+coverage) in a strand specific fashion within the RawData object.  Notably,
+the bed12 format is adapted here to provide Tfit with seed information.  [See
+the Seeds object and information for more details.]
 
-As most genomes contain multiple chromosomes of variable size, the contents
-of bedGraphs and bed files are stored as an indexed collection (setROI).
-Chromosome names can be converted into numerical indicies and vice versa.
-For rapid searching, a searchable centered index tree can also be constructed
-for each chromosome index.  The CITree can be destroyed to save memory. 
+As most genomes contain multiple ROI (or multiple chromosomes), the contents
+are stored within an indexed collection called SetROI.  Each chromosome name 
+(column 1 of bedGraph and/or bed files) is converted into a numerical index.
+The bimap converts between the numerical index (int) and chromosome name (string).
+For each numerical index, a set of gIntervals is stored (is this ordered/sorted?). 
+For rapid searching, a searchable centered index tree (CITree) can also be 
+constructed for each numerical index.  The CITree can be destroyed to save 
+memory.  
 
-Once the full bedGraph is read, each gInterval's RawData is converted into
-a data Interval (dInterval), in which data in coordinate transformed (all
+Once the full bedGraph is read, each gInterval's RawData is the converted into
+a data Interval (dInterval), in which the data is coordinate transformed (all
 dIntervals begin at position zero), binned and scaled (for numerical
 stability).  The RawData can be retained (unadulterated input data) or removed 
 from memory (destroyed to reduce memory footprint).  The dInterval can 
 process coordinate transformations (between data coordinates, genomic 
 coordinates, and indexed values).  It is also the fundamental data unit 
-internally.
+used by the EM algorithm for each interval.
 
-It is worth noting that bed12 data is interpreted in a very specific way
+Seeds: It is worth noting that bed12 data is interpreted in a very specific way
 in the Tfit framework.   Exon lengths are weights and exon starts are 
 positions for possible seeds to the EM algorithm (see EM algorithm 
 section for more information).
