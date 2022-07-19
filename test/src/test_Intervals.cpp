@@ -8,8 +8,6 @@
 #include "gmock/gmock.h"
 #include "Intervals.h"
 
-/* Need to test I/O for bed3, bed4, bed6 and bed12.  */
-
 TEST(gInterval, writeBedEQreadBed)
 {
     // Arrange: bring SUT to desired state
@@ -23,6 +21,48 @@ TEST(gInterval, writeBedEQreadBed)
 
     // Assert: Verify the outcome
     EXPECT_THAT(temp.write_out(), sut.write_out());
+}
+
+TEST(gInterval, addDataPoint_contained)
+{
+    // Arrange: bring SUT to desired state
+    gInterval sut = gInterval("TestName", 100, 1000, "chrTest"); 
+
+    // Act: call methods on SUT, capture output
+    sut.addDataPoint(120,150,4,false);      // Note calls rawData::addDataPoints, test elsewhere
+
+    // Assert: Verify the outcome
+    // Confirming that the coordinates were properly adjusted (when allowed)
+    // Check that the RawData contains what its supposed to should be tested by RawData!
+    EXPECT_TRUE(sut.data != NULL);  // addDataPoint created a link
+    EXPECT_EQ(sut.start, (double)100);
+    EXPECT_EQ(sut.stop, (double)1000);
+}
+
+TEST(gInterval, addDataPoint_edgeCaseNoExpand)
+{
+    // Arrange: bring SUT to desired state
+    gInterval sut = gInterval("TestName", 100, 1000, "chrTest"); 
+
+    // Act: call methods on SUT, capture output
+    sut.addDataPoint(80,150,4,false);      // Note calls rawData::addDataPoints, test elsewhere
+
+    // Assert: Verify the outcome
+    // Confirming that the coordinates were properly adjusted (when allowed)
+    EXPECT_EQ(sut.start, (double)100);
+}
+
+TEST(gInterval, addDataPoint_edgeCaseExpand)
+{
+    // Arrange: bring SUT to desired state
+    gInterval sut = gInterval("TestName", 100, 1000, "chrTest"); 
+
+    // Act: call methods on SUT, capture output
+    sut.addDataPoint(80,150,4,true);      // Note calls rawData::addDataPoints, test elsewhere
+
+    // Assert: Verify the outcome
+    // Confirming that the coordinates were properly adjusted (when allowed)
+    EXPECT_EQ(sut.start, (double)80);
 }
 
 class Bed6ContainsTest: public :: testing::Test {
