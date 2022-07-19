@@ -31,7 +31,7 @@ gInterval::gInterval() {
 }
 
 /**
- * @brief Construct a new g Interval::g Interval object
+ * @brief Construct a new gInterval::gInterval object
  * 
  * Representation is as in BED files:
  *  thus expects 0-based half open coordinates
@@ -102,25 +102,25 @@ bool gInterval::Contains(double point) {
  * @brief Add a set of points (per bedGraph info) to this interval.
  * 
  */
-void gInterval::addDataPoint(double start, double stop, double cov, bool expand) {
-  // std::cout << "gInterval: " + to_string(st) + "," + to_string(sp) << std::endl;
+void gInterval::addDataPoint(double v_start, double v_stop, double cov, bool expand) {
+  // std::cout << "gInterval: " + to_string(start) + "," + to_string(stop) << std::endl;
   // If pointer to segment doesn't exist, create it.
   if (data == NULL) {
     data = new RawData(this);
   }   
   // Adjust for edge cases, expanding the region if permissible.
-  double pt_edge = start;
-  if (start < start) {
-    if (expand) start = start;   // Adjust the gInterval
-    pt_edge = start;    // Don't add non-overlapping points (edge case)
+  double pt_start = start;
+  if (v_start < start) {
+    if (expand) start = v_start;   // Adjust the gInterval
+    pt_start = start;    // Don't add non-overlapping points (edge case)
   }
-  double pt_edge2 = stop;
-  if (stop > stop) {
-    if (expand) stop = stop;  // Adjust the gInterval
-    pt_edge2 = start;    // Don't add non-overlapping points (edge case)
+  double pt_stop = stop;
+  if (v_stop > stop) {
+    if (expand) stop = v_stop;  // Adjust the gInterval
+    pt_stop = stop;    // Don't add non-overlapping points (edge case)
   }
-  // std::cout << "ADDing: " + to_string(pt_edge) + "," + to_string(pt_edge2) << std::endl;
-  data->addDataPoints(pt_edge, pt_edge2, cov);
+  // std::cout << "ADDing: " + to_string(pt_start) + "," + to_string(pt_stop) << std::endl;
+  data->addDataPoints(pt_start, pt_stop, cov);
 }
 
 /**

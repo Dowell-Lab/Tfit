@@ -46,17 +46,18 @@ public:
   /* FUCTIONS: */
   // Reporting out 
   std::string write_out();
+
+  // Read and write a bed* line
   std::string write_asBED();
-
   void setfromBedLine(std::string);  // converts from a single line from file 
+  void setBED4fromStrings(std::vector<std::string> lineArray); // helper for setfromBedLine
 
+  // Comparison of points/intervals
   bool Overlap(gInterval *);    // Does your interval of interest overlap this one?
   bool Contains(double point);  // Is a coordinate in this region?
 
   // add points to data (RawData):
   void addDataPoint(double start,double stop,double cov,bool expand);
-  void setBED4fromStrings(std::vector<std::string> lineArray); // helper function
-
 };
 
 /**
@@ -79,23 +80,25 @@ public:
 
   // Reporting out 
   std::string write_out();
-  std::string write_asBED();
 
+  // Read and write a bed* line
+  std::string write_asBED();
   void setfromBedLine(std::string);  // converts from a single line from file 
   void setBED6fromStrings(std::vector<std::string> lineArray); // helper function
 };
 
 class bed12: public bed6 {
   public: 
-  Seeds *seeds;
+  Seeds *seeds;   // How do seeds get set to anything but NULL?
 
   // Constructors
   bed12();
 
   // Functions
   std::string write_out();
-  std::string write_asBED();
 
+  // Read and write a bed* line
+  std::string write_asBED();
   void setfromBedLine(std::string);  // converts from a single line from file 
 };
 
