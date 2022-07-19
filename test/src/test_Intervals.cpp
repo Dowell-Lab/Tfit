@@ -78,7 +78,6 @@ TEST(gInterval, addDataPoint_edgeCaseStopExpand)
     EXPECT_EQ(sut.stop, (double)1500);
 }
 
-
 class Bed6ContainsTest: public :: testing::Test {
   protected:
   void SetUp() override { }

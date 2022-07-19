@@ -3,4 +3,9 @@ cmake ..
 make
 
 
-./TestTfit --gtest_filter=Test_Cases1*
+build$ ./TestTfit --gtest_filter=Test_Cases1*
+
+build$ make gcov
+
+in Visual Studio Code: CTRL-Shift-P 
+
