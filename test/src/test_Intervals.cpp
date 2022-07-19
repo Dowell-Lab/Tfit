@@ -8,9 +8,7 @@
 #include "gmock/gmock.h"
 #include "Intervals.h"
 
-/* Need to test I/O for bed3, bed4, bed6 and bed12.  
- * Contains and overlap should be tested for gInterval.
- */
+/* Need to test I/O for bed3, bed4, bed6 and bed12.  */
 
 TEST(gInterval, writeBedEQreadBed)
 {
@@ -54,7 +52,7 @@ TEST_F(Bed6ContainsTest, containsAboveRange) {
   EXPECT_FALSE(sut.Contains((double)2000));   // Above range 
 }
 
-TEST(bed6, overlaps)
+TEST(bed6, overlapTestingEdge)
 {
     // Arrange: bring SUT to desired state
     bed6 OR1 = bed6("TestChr", 100, 1000, "OR1", 30, "."); 
@@ -84,18 +82,3 @@ TEST(bed6, writeBedEQreadBed)
     // Assert: Verify the outcome
     EXPECT_THAT(temp.write_out(), sut.write_out());
 }
-/*
-TEST(Intervals, addData)
-{
-    // Arrange: bring SUT to desired state
-    bed6 temp = bed6("TestChr", 100, 1000, "ID", 30, "+"); 
-
-    bed6 sut = bed6();
-
-    // Act: call methods on SUT, capture output
-    sut.setfromBedLine(name);
-
-    // Assert: Verify the outcome
-    EXPECT_THAT(temp.write_out(), sut.write_out());
-}
-*/
