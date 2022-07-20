@@ -44,7 +44,6 @@ TEST_F(ITreeTest, treeConstruction)
     EXPECT_EQ(output, sut.write_Full_Tree());
 }
 
-// Need to test a known result, an edge case (edge of interval), and not in tree.
 TEST_F(ITreeTest, SearchPointContains)
 {
     // Arrange

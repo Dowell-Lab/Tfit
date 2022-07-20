@@ -47,6 +47,8 @@ double Random::fetchProbability() {
 	return Random::fetchUniform(0,1);
 }
 
+/*************  Bimap *****************/
+
 Bimap::Bimap() {
    num_elements = 0;
 }
@@ -81,6 +83,8 @@ std::string Bimap::print_index_names() {
   }
   return output;
 }
+
+/*************  Helper Functions  *****************/
 
 std::string tfit::prettyDecimal (double x, double sigfig) {
    int sfig = sigfig + 1;      // Necessary to get decimal + signfig!

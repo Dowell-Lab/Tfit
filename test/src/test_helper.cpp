@@ -9,7 +9,7 @@
 #include "gmock/gmock.h"
 #include "helper.h"
 
-TEST(helper, Random_fetchProbabilityRandom)
+TEST(Random, fetchProbabilityRandom)
 {
     // Arrange
     Random sut;
@@ -22,7 +22,7 @@ TEST(helper, Random_fetchProbabilityRandom)
     ASSERT_LE(abs(ran_num - 0.4610), 0.0001);  // Using a "tolerance" of 0.0001
 }
 
-TEST(helper, Random_fetchNormalRandom)
+TEST(Random, fetchNormalRandom)
 {
     // Arrange
     Random sut;
@@ -36,13 +36,84 @@ TEST(helper, Random_fetchNormalRandom)
     ASSERT_LE(abs(ran_num - 11.1246), 0.0001);  // Using a "tolerance" of 0.0001
 }
 
-TEST(helper, Bimap_createAndSearch)
+// Bimap: addIdentifier, lookupIndex, lookupName
+TEST(Bimap, addIdentifierNew)
 {
     // Arrange
     Bimap sut;
 
     // Act
+    sut.addIdentifier("chromosome1");
     
     // Assert
-   EXPECT_EQ(sut.num_elements, 0);
+   EXPECT_EQ(sut.num_elements, 1);
+}
+
+TEST(Bimap, addIdentifierExisting)
+{
+    // Arrange
+    Bimap sut;
+    sut.addIdentifier("chromosome1");
+
+    // Act
+    sut.addIdentifier("chromosome1");
+    
+    // Assert
+   EXPECT_EQ(sut.num_elements, 1);
+}
+
+TEST(Bimap, lookupIndex)
+{
+    // Arrange
+    Bimap sut;
+    sut.addIdentifier("chromosome1");
+    sut.addIdentifier("chr2");
+
+    // Act
+    int index = sut.lookupIndex("chr2");
+    
+    // Assert
+   EXPECT_EQ(index, 1);
+}
+
+TEST(Bimap, lookupIndexNoExist)
+{
+    // Arrange
+    Bimap sut;
+    sut.addIdentifier("chromosome1");
+    sut.addIdentifier("chr2");
+
+    // Act
+    int index = sut.lookupIndex("chrX");
+    
+    // Assert
+   EXPECT_EQ(index, -1);
+}
+
+TEST(Bimap, lookupName)
+{
+    // Arrange
+    Bimap sut;
+    sut.addIdentifier("chromosome1");
+    sut.addIdentifier("chr2");
+
+    // Act
+    std::string name = sut.lookupName(0);
+    
+    // Assert
+   EXPECT_EQ(name, "chromosome1");
+}
+
+TEST(Bimap, lookupNameNoExist)
+{
+    // Arrange
+    Bimap sut;
+    sut.addIdentifier("chromosome1");
+    sut.addIdentifier("chr2");
+
+    // Act
+    std::string name = sut.lookupName(3);
+    
+    // Assert
+   EXPECT_EQ(name, "");
 }
