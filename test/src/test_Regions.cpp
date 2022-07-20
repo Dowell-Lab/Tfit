@@ -10,7 +10,20 @@
 #include "Data.h"
 #include "Regions.h"
 
-TEST(SetROI, constructAdd)
+/* 
+  std::string print_tree_at_chromosome(std::string chromo);
+  std::string write_out();
+   
+  void createSearchIndex();   // Builds the interval trees given the regions 
+  std::vector<gInterval *>findOverlapIntervals(gInterval *);
+  void clearTrees();
+
+  void addDataCreateROI(std::string chr, double start, double stop, double coverage);
+  bool addDataToExistingROI(std::string chr, double start, double stop, double coverage);
+  void ConditionDataSet(int v_delta, int v_scale);
+  */
+
+TEST(SetROI, addRegionToSet_IncrementNumElements)
 {
     // Arrange: bring SUT to desired state
     SetROI sut;
@@ -22,20 +35,45 @@ TEST(SetROI, constructAdd)
 
     // Assert: Verify the outcome
     EXPECT_EQ(sut.chr_names.num_elements, 1);
-
 }
 
-TEST(SetROI, search)
+
+TEST(SetROI, findOverlapInterval_NoContents)
 {
     // Arrange: bring SUT to desired state
     SetROI sut;
-    bed6 *testregion;
-    testregion = new bed6("Example1", 2000, 4000, "ID1", 300, "+");
-    sut.addRegionToSet(testregion);
-
-    bed6 query("Example1", 3000, 3500, "test", 100, "+");
-
     std::vector<gInterval *> results;
+    bed6 query = bed6("NewChr", 3200, 3500, "test", 100, "+");
+
+    // Act: call methods on SUT, capture output
+    results = sut.findOverlapIntervals(&query);
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(results.size(), 0);
+}
+
+class findOverlapIntervalTests: public ::testing::Test {
+  protected:
+  void SetUp() override {
+    region1 = new bed6("Example1", 2000, 4000, "ID1", 300, "+");
+    region2 = new bed6("Example2", 1000, 5000, "ID2", 300, "-");
+    region3 = new bed6("Example1", 3000, 5000, "ID3", 300, "+");
+    sut.addRegionToSet(region1);
+    sut.addRegionToSet(region2);
+    sut.addRegionToSet(region3);
+  }
+  void TearDown() override {
+    sut.clearTrees();
+  }
+  SetROI sut;
+  bed6 *region1, *region2, *region3;
+  std::vector<gInterval *> results;
+};
+
+TEST_F(findOverlapIntervalTests, SingleOverlap)
+{
+    // Arrange: bring SUT to desired state
+    bed6 query = bed6("Example1", 1000, 2500, "test", 100, "+");
 
     // Act: call methods on SUT, capture output
     results = sut.findOverlapIntervals(&query);
@@ -48,9 +86,32 @@ TEST(SetROI, search)
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 1);
-
-    sut.clearTrees();
 }
+
+TEST_F(findOverlapIntervalTests, MultipleOverlap)
+{
+    // Arrange: bring SUT to desired state
+    bed6 query = bed6("Example1", 3200, 3500, "test", 100, "+");
+
+    // Act: call methods on SUT, capture output
+    results = sut.findOverlapIntervals(&query);
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(results.size(), 2);
+}
+
+TEST_F(findOverlapIntervalTests, ChromDoesNotExist)
+{
+    // Arrange: bring SUT to desired state
+    bed6 query = bed6("NewChr", 3200, 3500, "test", 100, "+");
+
+    // Act: call methods on SUT, capture output
+    results = sut.findOverlapIntervals(&query);
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(results.size(), 0);
+}
+
 
 /*
 TEST(SetROI, addDataToExistingROI)
