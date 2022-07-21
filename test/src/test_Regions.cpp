@@ -10,19 +10,6 @@
 #include "Data.h"
 #include "Regions.h"
 
-/* 
-  std::string print_tree_at_chromosome(std::string chromo);
-  std::string write_out();
-   
-  void createSearchIndex();   // Builds the interval trees given the regions 
-  std::vector<gInterval *>findOverlapIntervals(gInterval *);
-  void clearTrees();
-
-  void addDataCreateROI(std::string chr, double start, double stop, double coverage);
-  bool addDataToExistingROI(std::string chr, double start, double stop, double coverage);
-  void ConditionDataSet(int v_delta, int v_scale);
-  */
-
 TEST(SetROI, addRegionToSet_IncrementNumElements)
 {
     // Arrange: bring SUT to desired state
@@ -36,7 +23,6 @@ TEST(SetROI, addRegionToSet_IncrementNumElements)
     // Assert: Verify the outcome
     EXPECT_EQ(sut.chr_names.num_elements, 1);
 }
-
 
 TEST(SetROI, findOverlapInterval_NoContents)
 {
@@ -52,7 +38,7 @@ TEST(SetROI, findOverlapInterval_NoContents)
     EXPECT_EQ(results.size(), 0);
 }
 
-class findOverlapIntervalTests: public ::testing::Test {
+class SetROITest: public ::testing::Test {
   protected:
   void SetUp() override {
     region1 = new bed6("Example1", 2000, 4000, "ID1", 300, "+");
@@ -70,7 +56,7 @@ class findOverlapIntervalTests: public ::testing::Test {
   std::vector<gInterval *> results;
 };
 
-TEST_F(findOverlapIntervalTests, SingleOverlap)
+TEST_F(SetROITest, findOverlapIntervalTests_SingleOverlap)
 {
     // Arrange: bring SUT to desired state
     bed6 query = bed6("Example1", 1000, 2500, "test", 100, "+");
@@ -88,7 +74,7 @@ TEST_F(findOverlapIntervalTests, SingleOverlap)
     EXPECT_EQ(results.size(), 1);
 }
 
-TEST_F(findOverlapIntervalTests, MultipleOverlap)
+TEST_F(SetROITest, findOverlapIntervalTests_MultipleOverlap)
 {
     // Arrange: bring SUT to desired state
     bed6 query = bed6("Example1", 3200, 3500, "test", 100, "+");
@@ -100,7 +86,7 @@ TEST_F(findOverlapIntervalTests, MultipleOverlap)
     EXPECT_EQ(results.size(), 2);
 }
 
-TEST_F(findOverlapIntervalTests, ChromDoesNotExist)
+TEST_F(SetROITest, findOverlapIntervalTests_ChromDoesNotExist)
 {
     // Arrange: bring SUT to desired state
     bed6 query = bed6("NewChr", 3200, 3500, "test", 100, "+");
@@ -112,26 +98,81 @@ TEST_F(findOverlapIntervalTests, ChromDoesNotExist)
     EXPECT_EQ(results.size(), 0);
 }
 
-
-/*
-TEST(SetROI, addDataToExistingROI)
+TEST_F(SetROITest, addDataToExistingROI_contained)
 {
-    // Arrange: bring SUT to desired state
-    SetROI sut;
-    bed6 *testregion;
-    testregion = new bed6("Chr1", 10, 40, "ID1", 300, "+");
-    sut.addRegionToSet(testregion);        // The interval (bed)
+  // Act: call methods on SUT, capture output
+  bool foundexisting = sut.addDataToExistingROI("Example2", 1010, 1020, 3);  // The data (bedGraph)
 
-    sut.addDataToExistingROI("Chr1", 10, 20, 3);        // The data (bedGraph)
+  // Assert: Verify the outcome
+  EXPECT_TRUE(foundexisting);
+}
 
-    int idx = sut.chr_names.lookupIndex("Chr1");    // Index for Chr1 
-    std::vector<gInterval *> outRegions;
-    outRegions = sut.regions[idx];
+TEST_F(SetROITest, addDataToExistingROI_edgeCase)
+{
+  // Act: call methods on SUT, capture output
+  bool foundexisting = sut.addDataToExistingROI("Example2", 900, 1020, 3);  // The data (bedGraph)
 
-    //std::cout << outRegions[0]->data->data_dump() << std::endl;
+  // Assert: Verify the outcome
+  EXPECT_TRUE(foundexisting);
+}
 
-    // Act: call methods on SUT, capture output
-    sut.ConditionDataSet(2,1);      // Creates dIntervals for all regions.
+TEST_F(SetROITest, addDataToExistingROI_notFound)
+{
+  // Act: call methods on SUT, capture output
+  bool foundexisting = sut.addDataToExistingROI("Example2", 500, 550, 3);  // The data (bedGraph)
+
+  // Assert: Verify the outcome
+  EXPECT_FALSE(foundexisting);
+}
+
+TEST_F(SetROITest, addDataCreateROI_contained)
+{
+  // Arrange: bring SUT to desired state
+  bed6 query = bed6("Example2", 1000, 2500, "test", 100, "+");
+
+  // Act: call methods on SUT, capture output
+  // Example2 is 1000 to 5000
+  sut.addDataCreateROI("Example2", 1010, 1020, -3);        // The data (bedGraph)
+
+  results = sut.findOverlapIntervals(&query);
+
+  // Assert: Verify the outcome, assumes only one result!
+  // Contained won't change boundaries
+  EXPECT_EQ((double)1000, results[0]->start);
+}
+
+TEST_F(SetROITest, addDataCreateROI_newIdentifier)
+{
+  // Act: call methods on SUT, capture output
+  sut.addDataCreateROI("NewChr", 10, 20, -3);        // The data (bedGraph)
+
+  // Assert: Verify the outcome
+  // Fixture has 2 (Example1, Example2) this should add a third (Chr1)
+  EXPECT_EQ(sut.chr_names.num_elements,3);
+  // And identifier should exist in bimap
+  EXPECT_TRUE(sut.chr_names.lookupIndex("NewChr") >= 0);
+}
+
+TEST_F(SetROITest, addDataCreateROI_edgecase)
+{
+  // Arrange: bring SUT to desired state
+  bed6 query = bed6("Example2", 1000, 2500, "test", 100, "+");
+
+  // Act: call methods on SUT, capture output
+  // Example2 is 1000 to 5000
+  sut.addDataCreateROI("Example2", 950, 1020, -3);        // The data (bedGraph)
+
+  results = sut.findOverlapIntervals(&query);
+
+  // Assert: Verify the outcome, assumes only one result!
+  // Should expand boundary to include data added. 
+  EXPECT_EQ((double)950, results[0]->start);
+}
+
+
+/*  What needs to be tested in ConditionDataSet?
+//  void ConditionDataSet(int v_delta, int v_scale);
+sut.ConditionDataSet(2,1);      // Creates dIntervals for all regions.
     //std::cout << outRegions[0]->data->cdata->data_dump() << std::endl;
 
     // Assert: Verify the outcome
@@ -147,38 +188,6 @@ TEST(SetROI, addDataToExistingROI)
         FAIL() << "We should have data!";
     }
     sut.clearTrees();
-}
-*/
 
-TEST(SetROI, addDataCreateROI)
-{
-    // Arrange: bring SUT to desired state
-    SetROI sut;
-
-    sut.addDataCreateROI("Chr1", 10, 20, -3);        // The data (bedGraph)
-            // Note now using negative strand!
-
-    int idx = sut.chr_names.lookupIndex("Chr1");    // Index for Chr1 
-    std::vector<gInterval *> outRegions;
-    outRegions = sut.regions[idx];
-
-    //std::cout << outRegions[0]->data->data_dump() << std::endl;
-
-    // Act: call methods on SUT, capture output
-    sut.ConditionDataSet(2,1);      // Creates dIntervals for all regions.
-    //std::cout << outRegions[0]->data->cdata->data_dump() << std::endl;
-
-    // Assert: Verify the outcome
-    EXPECT_EQ(outRegions[0]->chromosome, "Chr1");
-    if (outRegions[0]->data != NULL) {
-      EXPECT_EQ(outRegions[0]->data->maxX, 20);     // This time check max!
-      if (outRegions[0]->data->cdata != NULL) {
-          EXPECT_EQ(outRegions[0]->data->cdata->sumAlldata(), 30);
-      } else {
-        FAIL() << "We should have conditioned data!";
-      }
-    } else {
-        FAIL() << "We should have data!";
-    }
-}
+  */
 

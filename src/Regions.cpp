@@ -169,23 +169,14 @@ bool SetROI::addDataToExistingROI(std::string chr, double start, double stop, do
    return 1;
 }
 
-void SetROI::ConditionDataSet(int v_delta, int v_scale) {
-  std::map<int, std::vector<gInterval *>>::iterator mit;    // Outer Map iterator
-  std::vector<gInterval *>::iterator  it;   //Inner vector iterator
-  for (mit = regions.begin(); mit != regions.end(); mit++) {
-    // For every index, lets go through the vector of gIntervals.
-    for (it = mit->second.begin(); it != mit->second.end(); it++) {
-      if ((*it)->data != NULL) {
-        (*it)->data->cdata = new dInterval((*it)->data, v_delta, v_scale);
-      }
-    }
-  }
-}
-
 /**
  * @brief Add data, building/expanding existing intervals/segments 
- * as necessary.   This is primarily used when adding data from a 
- * bedGraph without pre-existing ROI. 
+ * as necessary.   This is used when adding data from a 
+ * bedGraph without pre-existing ROI.  Currently this creates
+ * a single ROI for each identifier/chromosome. 
+ * 
+ * @note May want to consider whether it would be better to 
+ * chunk regions baed on some interval without data (future work?).   
  * 
  */
 void SetROI::addDataCreateROI(std::string chr, double start, double stop, double coverage) {
@@ -199,5 +190,20 @@ void SetROI::addDataCreateROI(std::string chr, double start, double stop, double
   }
   // Add this point to the gInterval, expand if needed.
   regions[idx].front()->addDataPoint(start,stop,coverage,1);
+}
+
+void SetROI::ConditionDataSet(int v_delta, int v_scale) {
+  std::map<int, std::vector<gInterval *>>::iterator mit;    // Outer Map iterator
+  std::vector<gInterval *>::iterator  it;   //Inner vector iterator
+  for (mit = regions.begin(); mit != regions.end(); mit++) {
+    // For every index, lets go through the vector of gIntervals.
+    for (it = mit->second.begin(); it != mit->second.end(); it++) {
+      if ((*it)->data != NULL) {
+        (*it)->data->cdata = new dInterval((*it)->data, v_delta, v_scale);
+      } else {
+        // Throw an error?!?
+      }
+    }
+  }
 }
 
