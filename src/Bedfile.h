@@ -15,7 +15,7 @@
 
 /**
  * @brief The complete contents of a bedfile.
- * Entries may be bed3, bed4, or bed6 (bed12 treated as bed6).
+ * Entries may be bed3, bed4, bed6 or bed12 
  */
 class Bedfile {
 public:
@@ -39,9 +39,6 @@ public:
  * @brief The complete contents of a bedGraph.
  * We think of a bedgraph as regions of interest (similar to a bed file),
  * but with data.
- * 
- * Thus a large part of the responsibility of this class is to ensure
- * that data exists for each gInterval. 
  */
 class Bedgraph: public Bedfile {
 public:

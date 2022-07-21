@@ -55,6 +55,7 @@ list(APPEND sources
                 src/test_ModelSupport.cpp
                 src/test_Regions.cpp
                 src/test_split.cpp
+                src/Itest_DataIO.cpp
                 )
 
 # Set Include directories

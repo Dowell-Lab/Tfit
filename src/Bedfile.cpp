@@ -84,7 +84,6 @@ std::string Bedfile::reportBedfileContents() {
 
 /*******************  BEDGRAPH ********************/
 
-
 Bedgraph::Bedgraph()
   : Bedfile() {
   useExistingIntervals = 0; 
