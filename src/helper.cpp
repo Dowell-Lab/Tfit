@@ -108,7 +108,7 @@ bool tfit::compareMu(ModelWrapper *mod1, ModelWrapper *mod2) {
    return (mod1->getMu() < mod2->getMu());
 }
 
-bool tfit::compareCoords(const PointCov pt1, const PointCov pt2) {
+bool tfit::sortOnCoordComparison(const PointCov pt1, const PointCov pt2) {
    return (pt1.coordinate < pt2.coordinate);
 }
 

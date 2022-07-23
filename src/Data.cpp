@@ -118,9 +118,9 @@ void RawData::addDataPoints(double start, double stop, double cov) {
  */
 void RawData::Sort() {
   // Sort vector<double> by first entity (e.g. coordinates)
-  std::sort(forward.begin(),forward.end(), tfit::compareCoords);
+  std::sort(forward.begin(),forward.end(), tfit::sortOnCoordComparison);
   // std::cout << "After sort: " + data_dump() << std::endl;
-  std::sort(reverse.begin(),reverse.end(), tfit::compareCoords);
+  std::sort(reverse.begin(),reverse.end(), tfit::sortOnCoordComparison);
 }
 
 /**

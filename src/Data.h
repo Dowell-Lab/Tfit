@@ -37,7 +37,6 @@ class PointCov {
   PointCov(double v_coord, double v_cov);
 
   std::string write_out();
-  bool compareCoords(PointCov *, PointCov *);
 };
 
 /**
@@ -67,7 +66,7 @@ class RawData {
 
   std::string write_out();  // Debugging
 
-  double Length();    
+  double Length();    // length of region with data (maxX-minX)   
   void freeDataMemory();    //!< Deallocates the forward and reverse vectors;
   void addDataPoints(double st, double sp, double cov);
 

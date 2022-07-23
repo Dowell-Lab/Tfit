@@ -69,7 +69,7 @@ namespace tfit {
   std::string prettyDecimal (double x, double sigfig);
   double LOG(double x);
   bool compareMu(ModelWrapper *mod1, ModelWrapper *mod2);
-  bool compareCoords(const PointCov pt1, const PointCov pt2);
+  bool sortOnCoordComparison(const PointCov pt1, const PointCov pt2);
   int StrandAsInt(char s);
 }
 
