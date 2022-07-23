@@ -86,38 +86,115 @@ TEST(RawData, CorrectlySorted)
 
 
 /********* Test dInterval: ********/
-/*
 // double getLength();
-TEST (dInterval, LengthCorrect)
+TEST (dInterval, LengthCorrectNoData)
 {
+    // Arrange: bring SUT to desired state
+    dInterval sut = dInterval();;
 
+    // Assert: Verify the outcome
+    EXPECT_EQ(sut.getLength(), 0);
 }
 
-// double sumForward();
-TEST (dInterval, sumForward)
+TEST (dInterval, LengthCorrectWithRaw)
 {
+    // Arrange: bring SUT to desired state
+    RawData data;
+    data.addDataPoints(10, 14, 4);   
+    data.addDataPoints(14, 15, 1);
+    data.addDataPoints(8, 10, -2);
 
+    // Act: call methods on SUT, capture output
+    dInterval sut(&data,2,1);
+    // std::cout << sut.data_dump() << std::endl;
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(sut.getLength(), 7);
+}
+
+TEST (dInterval, LengthCorrectNoRaw)
+{
+    // Arrange: bring SUT to desired state
+    RawData data;
+    data.addDataPoints(10, 14, 4);   
+    data.addDataPoints(14, 15, 1);
+    data.addDataPoints(8, 10, -2);
+    dInterval sut(&data,2,1);
+    sut.raw == NULL;        // Artificially set to Null for Test.
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(sut.getLength(), 7);
+}
+
+class dIntervalSumTests: public :: testing::Test {
+  protected:
+  void SetUp() override {
+    data.addDataPoints(4, 14, 4);   
+    data.addDataPoints(14, 23, 3);
+    data.addDataPoints(4, 14, -2);   
+    data.addDataPoints(14, 23, -6);
+  }
+  RawData data;
+};
+
+// double sumForward();
+TEST_F(dIntervalSumTests, sumForward)
+{   
+     // Arrange: bring SUT to desired state
+    dInterval sut(&data,2,1);
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(sut.sumForward(), 67);  // 10*4 + 9*3
 }
 
 // double sumReverse();
-TEST (dInterval, sumReverse)
+TEST_F(dIntervalSumTests, sumReverse)
 {
+  // Arrange: bring SUT to desired state
+    dInterval sut(&data,2,1);
 
+    // Assert: Verify the outcome
+    EXPECT_EQ(sut.sumReverse(), 74); 
 }
 
-// double sumInterval(int, int, char);  // on single strand
-TEST (dInterval, sumInterval)
-{
 
+// double sumInterval(int, int, char);  // on single strand
+TEST_F(dIntervalSumTests, sumIntervalPosStrand)
+{
+  // Arrange: bring SUT to desired state
+    dInterval sut(&data,2,1);
+
+    // Note these are indexes into dinterval, not genomic positions
+    double sum = sut.sumInterval(2, 4, '+');
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(sum, 16);  // 
+}
+
+TEST_F (dIntervalSumTests, sumIntervalNegStrand)
+{
+  // Arrange: bring SUT to desired state
+    dInterval sut(&data,2,1);
+
+    // Note these are indexes into dinterval, not genomic positions
+    double sum = sut.sumInterval(2, 4, '-');
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(sum, 8);  // 
 }
 
 //  double sumAlldata();  // both strands
-TEST (dInterval, sumAlldata)
+TEST_F (dIntervalSumTests, sumAlldata)
 {
+  // Arrange: bring SUT to desired state
+    dInterval sut(&data,2,1);
 
+    // Note these are indexes into dinterval, not genomic positions
+    double sum = sut.sumAlldata();
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(sum, 141);  // 
 }
-
-*/
 
 TEST(dInterval, CreateBinScaleWithDuplicates)
 {

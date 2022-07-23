@@ -339,7 +339,10 @@ double dInterval::position(int x) {
  */
 double dInterval::getLength() {
   if (raw == NULL) {
-    return position(bins-1);
+    if (X == NULL) {
+      return 0;     // No data
+    }
+    return position(bins-1);    // conditioned data, no raw
   }
   return (raw->Length());   //Genome coords length
 }
