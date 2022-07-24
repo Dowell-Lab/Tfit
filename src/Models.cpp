@@ -130,7 +130,7 @@ double Bidirectional::millsRatio(double x){
 	return exp(log(1. - N)-log(D));
 }
 
-double Bidirectional::applyFootprint (double z, char s) {
+double Bidirectional::applyFootprint(double z, char s) {
 	if (s == '+'){ 
       z-=footprint; 
 
@@ -152,16 +152,16 @@ double Bidirectional::getLambda() {
   return (initiation.lambda);
 }
 
-void Bidirectional::setMu(double newmu) {
-  loading.mu = newmu; 
+void Bidirectional::setMu(double v_mu) {
+  loading.mu = v_mu; 
 }
 
-void Bidirectional::setSigma(double newsigma) {
-   loading.sigma = newsigma;
+void Bidirectional::setSigma(double v_sigma) {
+   loading.sigma = v_sigma;
 }
 
-void Bidirectional::setLambda(double newlambda) {
-  initiation.lambda = newlambda;
+void Bidirectional::setLambda(double v_lambda) {
+  initiation.lambda = v_lambda;
 }
 
 void Bidirectional::setPriorSigma(double v_alpha, double v_beta) {
@@ -173,7 +173,6 @@ void Bidirectional::setPriorLambda(double v_alpha, double v_beta) {
    GammaLambda.setAlpha(v_alpha);
    GammaLambda.setBeta(v_beta);
 }
-
 
 /**
  * @brief EMG probability density function
@@ -314,7 +313,7 @@ double Bidirectional::ExpY(double z, char strand){
    z = applyFootprint(z,strand);
    double s = tfit::StrandAsInt(strand);
 	return std::max(0. , s*(z-loading.mu) 
-      - initiation.lambda*pow(loading.sigma, 2) 
+      - initiation.lambda* (loading.sigma * loading.sigma) 
       + (loading.sigma / millsRatio(initiation.lambda*loading.sigma 
             - s*((z-loading.mu)/loading.sigma))));
 }
@@ -348,10 +347,12 @@ double Bidirectional::ExpX(double z, char strand){
 double Bidirectional::ExpY2(double z, char strand){
    z = applyFootprint(z,strand);
    double s = tfit::StrandAsInt(strand);
-	return pow(initiation.lambda,2)*pow(loading.sigma,4) 
-     + pow(loading.sigma, 2)*(2*initiation.lambda*s*(loading.mu-z)+1 ) 
-     + pow(loading.mu-z,2) 
-     - ((loading.sigma*(initiation.lambda*pow(loading.sigma,2) 
+   double sigmaSQ = loading.sigma * loading.sigma;
+   double lambdaSQ = initiation.lambda * initiation.lambda;
+	return lambdaSQ * sigmaSQ * sigmaSQ 
+     + sigmaSQ * (2*initiation.lambda*s*(loading.mu-z)+1) 
+     + (loading.mu-z) * (loading.mu-z)
+     - ((loading.sigma*(initiation.lambda*sigmaSQ
         + s*(loading.mu-z)))/millsRatio(initiation.lambda*loading.sigma 
         - s*((z-loading.mu)/loading.sigma))); 
 }
@@ -368,7 +369,8 @@ double Bidirectional::ExpY2(double z, char strand){
  */
 double Bidirectional::ExpX2(double z, char strand){
    z = applyFootprint(z,strand);
-	return (pow(ExpX(z,strand),2)+ExpY2(z,strand)-ExpY(z,strand));
+   double ExpXSQ = ExpX(z,strand) * ExpX(z,strand);
+	return (ExpXSQ + ExpY2(z,strand)-ExpY(z,strand));
 }
 
 std::string Bidirectional::write_out() {
