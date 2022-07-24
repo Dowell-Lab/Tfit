@@ -32,6 +32,11 @@ perStrandInfo::perStrandInfo() {
    reverse = 0; 
 }
 
+perStrandInfo::perStrandInfo(double v_forward, double v_reverse) {
+   forward = v_forward; 
+   reverse = v_reverse;  
+}
+
 std::string perStrandInfo::write_out() {
    std::string output;
    output = "Forward: " + tfit::prettyDecimal(forward,4) 
@@ -48,7 +53,7 @@ double perStrandInfo::sumBothStrands() {
 Responsibilities::Responsibilities(): Ri(), Rk() {
 }
 
-void Responsibilities::reset() {
+void Responsibilities::resetRi() {
    Ri.forward = 0.;
    Ri.reverse = 0.;
 }

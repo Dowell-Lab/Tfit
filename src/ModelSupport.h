@@ -46,6 +46,7 @@ class perStrandInfo {
 
   //Constructor
   perStrandInfo();
+  perStrandInfo(double, double);
 
   //Functions
   std::string write_out();
@@ -69,7 +70,7 @@ class Responsibilities {
 
   //Functions
   std::string write_out();
-  void reset();
+  void resetRi();
 
   double getResponsibility();
 };

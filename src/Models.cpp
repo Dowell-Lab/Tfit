@@ -43,7 +43,7 @@ double BasicModel::getResponsibility() {  // formerly called get_all_repo
 }
 
 void BasicModel::resetSufficiency() {
-   sufficiencyStats.reset();
+   sufficiencyStats.resetRi();
 }
 
 void BasicModel::updateParameters(double N, double K) {
@@ -70,7 +70,7 @@ void BasicModel::updateExpectations(perStrandInfo coverage, perStrandInfo normal
    if (normalizedRi.reverse) {
      sufficiencyStats.Rk.reverse += coverage.reverse*sufficiencyStats.Ri.reverse/normalizedRi.reverse;
    }
-   sufficiencyStats.reset();
+   sufficiencyStats.resetRi();
 }
 
 
