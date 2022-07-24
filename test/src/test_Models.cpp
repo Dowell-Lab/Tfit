@@ -36,7 +36,7 @@ TEST (basicModel, updateExpectations)
 // Models, bidir_calcExpectedVals
 // Models, bidir_updateParameters
 
-TEST(Models, bidir_MillsRatio)
+TEST(Bidirectional, MillsRatioCorrect)
 {
     // Arrange: bring SUT to desired state
     Bidirectional sut(35., 0.5, 0.25, 0.5, 2.);
@@ -51,7 +51,7 @@ TEST(Models, bidir_MillsRatio)
     ASSERT_LE(abs(result2 - 0.421369), 0.0001);  // .421369 per R
 }
 
-TEST(Models, bidir_generateData)
+TEST(Bidirectional, generateDataHasCorrectMean)
 {
     // Arrange: bring SUT to desired state
     Bidirectional sut(35., 0.5, 0.25, 1.0, 2.);
@@ -68,6 +68,19 @@ TEST(Models, bidir_generateData)
 
     // Assert: Verify the outcome
     ASSERT_LE(mean - (sut.loading.mu + (1/sut.initiation.lambda)), 0.01);  
+}
+
+TEST(Bidirectional, GrushkaEQKalambet)
+{
+    // Arrange: bring SUT to desired state
+    Bidirectional sut(35., 1.5, 0.25, 0.5, 0.);
+
+    // Act: call methods on SUT, capture output
+    double grushka = sut.pdf(37.,'+');
+    double kalambet = sut.pdf_alt(37.,'+');
+
+    // Assert: Verify the outcome
+    ASSERT_LE(abs(grushka - kalambet), 0.0001);  
 }
 
 // Models, uniform_pdf
