@@ -270,14 +270,36 @@ TEST_F(CoordinateTransformTest, coordData2Index)
     EXPECT_EQ(result1, 2);      // index -> genomic -> index
 }
 
-/*
+/*  Recover when this function comes back.  
+class getWithinRangePosition: public :: testing::Test {
+   protected:
+   void SetUp() override {
+        // Pos strand
+    data.addDataPoints(1, 10, 4);   
+    data.addDataPoints(15, 18, 1);
+    data.addDataPoints(22, 24, 2);
+        // Neg strand
+    data.addDataPoints(1, 7, -1);   
+    data.addDataPoints(11, 13, -2);
+    data.addDataPoints(26, 28, -3);
+   }   
+   RawData data;
+};
 
 // int getWithinRangeofPosition(double position, double dist);
-TEST (dInterval, getWithinRangeofPosition)
+TEST_F (getWithinRangePosition, PosStrandInRange)
 {
+    // Arrange: bring SUT to desired state
+   dInterval sut(&data,2,1);
 
+    // Act: call methods on SUT, capture output
+    double position = sut.getWithinRangeofPosition(11, 2);
+
+    // Assert: Verify the outcome
+    EXPECT_EQ(sut.reverse.size(), 2);
 }
+*/
 
+/*
 // void DeallocateX();   // Deallocates X, leaves other variables intact.
-
 */

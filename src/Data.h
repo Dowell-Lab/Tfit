@@ -138,7 +138,7 @@ public:
   void CompressZeros();   // Remove positions that are zero on both strands
 
   // Other useful functions
-  int getWithinRangeofPosition(double position, double dist);
+  // int getWithinRangeofPosition(double position, double dist);
   void DeallocateX();   // Deallocates X, leaves other variables intact.
 
 	};

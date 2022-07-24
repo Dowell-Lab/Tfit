@@ -616,10 +616,11 @@ void dInterval::CompressZeros() {
  * @brief  This is currently a rewrite of Joey's get_nearest_position
  * into this data structure.
  * 
- * @param position  Typically a mu
+ * @param position  Typically a mu, in transformed coordinates
+ *  -- should this instead be in genomic coordinates?  Or is that an
+ *  alternative function?
  * @param dist    Typically s(1/lambda)
  * @return int    index of the position closest to position + dist (signed dist)
- */
 int dInterval::getWithinRangeofPosition(double qspot, double dist) {
 	int i;
 
@@ -636,6 +637,7 @@ int dInterval::getWithinRangeofPosition(double qspot, double dist) {
 	}
 	return i;
 }
+ */
 
 /**
  * @brief Cleans up existing X matrix (memory clearing)
