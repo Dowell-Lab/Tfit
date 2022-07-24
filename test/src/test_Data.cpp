@@ -65,25 +65,43 @@ TEST(RawData, LengthCorrect_NoRepeats)
     EXPECT_EQ(sut.Length(), 6);
 }
 
-/*
 //  void Sort();    //!< Sorts both forward and reverse by coordinate
 TEST(RawData, CorrectlySorted)
 {
     // Arrange: bring SUT to desired state
     RawData sut;
     sut.addDataPoints(14, 16, 1);
-    sut.addDataPoints(10, 14, 4);  
+    sut.addDataPoints(10, 14, -2);  
     sut.addDataPoints(2, 10, 3);
+    sut.addDataPoints(3, 6, -1);
 
-    // std::cout << sut.data_dump() << std::endl;
+    // Act: function we are testing 
     sut.Sort();
-    //std::cout << sut.data_dump() << std::endl;
 
     // Assert: Verify the outcome
-    // Coordinates on forward should be in numerical order.
-}
-*/
+    bool outoforder = false;
+    for (unsigned int i = 0; i < sut.forward.size(); i++) {
+      if (i > 0) { // Ingores the first one
+         if (sut.forward[i-1].coordinate > sut.forward[i].coordinate) {
+             outoforder = true;
+         }
+      }
+    }
+    EXPECT_FALSE(outoforder);
 
+    outoforder = false;     // Now for reverse strand
+    for (unsigned int i = 0; i < sut.reverse.size(); i++) {
+      if (i > 0) { // Ingores the first one
+         if (sut.reverse[i-1].coordinate > sut.reverse[i].coordinate) {
+             outoforder = true;
+         }
+      }
+    }
+    EXPECT_FALSE(outoforder);
+
+
+
+}
 
 /********* Test dInterval: ********/
 // double getLength();
