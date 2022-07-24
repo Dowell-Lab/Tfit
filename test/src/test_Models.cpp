@@ -9,11 +9,23 @@
 #include <fstream>
 #include "Models.h"
 
-// Models, basicModel_setPriors
-// Models, basicModel_updateExpectations
-// Models, basicModel_updateParameters
-// Models, basicModel_resetSufficiency
-// Models, basicModel_calculateRi
+/*
+TEST (basicModel, updateParameters) 
+{
+
+}
+
+TEST (basicModel, calculateRi) 
+{
+
+}
+
+TEST (basicModel, updateExpectations) 
+{
+
+}
+*/
+
 
 // Models, bidir_applyFootprint & indicatorStrand
 // Models, bidir_setPriors

@@ -15,7 +15,6 @@
 #include "Data.h"    // dInterval
 
 /************** Basic functionality required of all models ************/
-
 BasicModel::BasicModel()
   : sufficiencyStats() {
   weight = 0.; 
@@ -23,6 +22,10 @@ BasicModel::BasicModel()
 
   betaPi.alpha = 1;
   DirichletW.alpha = 1;
+
+  // These parameter *should* never be used!!!
+  betaPi.beta = -1;    // Not used!
+  DirichletW.beta = -1;    // Not used!
 }
 
 void BasicModel::setPriorPi(double v_alpha) {
@@ -32,7 +35,6 @@ void BasicModel::setPriorPi(double v_alpha) {
 void BasicModel::setPriorWeight(double v_alpha) {
    DirichletW.alpha = v_alpha;
 }
-
 
 double BasicModel::pdf(double z, char st) {
    return 1.;     // Note this function *must* be overwritten by models! 
@@ -46,8 +48,14 @@ void BasicModel::resetSufficiency() {
    sufficiencyStats.resetRi();
 }
 
+/**
+ * @brief  Use the responsibility stats to update the parameters (pi and weight)
+ * 
+ * @param N 
+ * @param K 
+ */
 void BasicModel::updateParameters(double N, double K) {
-   double r = getResponsibility();
+   double r = getResponsibility(); // sum Rk 
    pi = (sufficiencyStats.Rk.forward + betaPi.getAlpha()) / (r + betaPi.getAlpha() * 2);
    // Note that this assumes the noise component is equivalently weighted
    // to each model.  Instead perhaps the noise should be Beta weighted 
@@ -56,9 +64,16 @@ void BasicModel::updateParameters(double N, double K) {
    weight = (r + DirichletW.getAlpha()) / (N + DirichletW.getAlpha() * K * 3 + K * 3);
 }
 
+/**
+ * @brief  Given a position (z), update the position based sufficiency stats.
+ * 
+ * @param z          position in tranformed coords 
+ * @param strand        strand, as char (why do we need this?) 
+ * @return double 
+ */
 double BasicModel::calculateRi(double z, char strand) {
-   sufficiencyStats.Ri.forward = pdf(z,strand);
-   sufficiencyStats.Ri.reverse = pdf(z,strand);
+   sufficiencyStats.Ri.forward = pdf(z, strand);
+   sufficiencyStats.Ri.reverse = pdf(z, strand);
 
    return sufficiencyStats.Ri.sumBothStrands();
 }
@@ -72,8 +87,6 @@ void BasicModel::updateExpectations(perStrandInfo coverage, perStrandInfo normal
    }
    sufficiencyStats.resetRi();
 }
-
-
 
 /***** BIDIRECTIONAL MODEL *****/
 // Empty Constructor
@@ -186,11 +199,11 @@ void Bidirectional::setPriorLambda(double v_alpha, double v_beta) {
 double Bidirectional::pdf(double z, char s){
    // Offset the position by the footprint 
    z = applyFootprint(z,s);
-	double h;   // Called h(z,s;mu, sigma, lambda, pi) in the paper.
+	double h;   // Called h(z,s;mu, sigma, lambda, pi) in the Azofeifa 2018 paper.
 
    // Reused intermediates in calculation:
    double pointMeandiff = tfit::StrandAsInt(s) * (loading.mu - z);
-   double lambdaSigmaSQ = initiation.lambda * pow(loading.sigma,2);
+   double lambdaSigmaSQ = initiation.lambda * loading.sigma * loading.sigma;
    double halfLambda = initiation.lambda/2.0;
 	double exponentvalue = (halfLambda)* (2*(pointMeandiff) + lambdaSigmaSQ);
 
@@ -260,17 +273,19 @@ double Bidirectional::pdf_alt(double z, char s){
 
    double f = 0;     // As described in Kalambet et. al. 2011
    if (decision > 6.71e7) {     // Equation #3
-      f = h * exp(-0.5 * pow((pointMeandiff/loading.sigma),2));
-      f = f / (1.0 + (pointMeandiff*tau) / pow(loading.sigma,2));
+      f = h * exp(-0.5 * 
+         (pointMeandiff/loading.sigma) * (pointMeandiff/loading.sigma));
+      f = f / (1.0 + (pointMeandiff*tau) / (loading.sigma * loading.sigma));
    } else {
       double sigmaLambda = loading.sigma*initiation.lambda; // sigma/tau
       double CON = sqrt(M_PI/2); // constant
       double secondTerm = 1.0/sqrt(2) * (sigmaLambda - (pointMeandiff/loading.sigma));
       if (decision < 0) {  // Equation #1
-         double firstTerm = exp(0.5 * pow(sigmaLambda,2) - (pointMeandiff/tau));
+         double firstTerm = exp(0.5 * (sigmaLambda * sigmaLambda) - (pointMeandiff/tau));
          f = h * sigmaLambda * CON * firstTerm * erfc(secondTerm);
       } else {  // Equation #2
-         double fTerm = exp(-0.5 * pow((pointMeandiff/loading.sigma),2));
+         double meanDivsigma = pointMeandiff/loading.sigma;
+         double fTerm = exp(-0.5 * meanDivsigma * meanDivsigma);
          f = h * fTerm * sigmaLambda * CON * erfc(secondTerm) * exp(pow(secondTerm,2));
       }
    }

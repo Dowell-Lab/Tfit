@@ -30,17 +30,19 @@ class BasicModel {
   BasicModel();
 
   std::string write_out();
-  double pdf(double z, char s);   // pdf on strand s for position z
+  double pdf(double z, char s);   // pdf on strand s for position z must OVERRIDE!
 
+  // Getters and Setters
   void setPriorPi(double);
   void setPriorWeight(double);
+  double getResponsibility();   
+
+  // Functions
   void updateParameters(double,double);
   void updateExpectations(perStrandInfo coverage, perStrandInfo normalizedRi);
-
-  double getResponsibility();   
   void resetSufficiency();
-  double calculateRi(double z, char strand);
 
+  double calculateRi(double z, char strand);
 };
 
 class Bidirectional: public BasicModel {
@@ -91,7 +93,6 @@ class Bidirectional: public BasicModel {
   double millsRatio(double);    
   int indicatorStrand(char s);
   double applyFootprint (double z, char s);
-
 
 };
 
@@ -146,7 +147,6 @@ class FullModel {
   double calculateRi(double z, char strand);
 
   void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
-
 };
 
 
