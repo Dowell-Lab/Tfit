@@ -91,7 +91,7 @@ class Bidirectional: public BasicModel {
 
   // Supporting Functions (could be private?)
   double millsRatio(double);    
-  int indicatorStrand(char s);
+  // int indicatorStrand(char s);
   double applyFootprint (double z, char s);
 
 };

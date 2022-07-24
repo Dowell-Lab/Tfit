@@ -131,6 +131,7 @@ double Bidirectional::millsRatio(double x){
 }
 
 double Bidirectional::applyFootprint(double z, char s) {
+   // Is z allowed to exceed the bounds?
 	if (s == '+'){ 
       z-=footprint; 
 
