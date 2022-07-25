@@ -111,20 +111,20 @@ class UniformModel: public BasicModel {
   UniformModel();
   UniformModel(double v_a, double v_b);
 
-  // Functions
+  // Getter and Setters
+  void setPi(double v_pi);
+  void setBounds(double v_lower, double v_upper);
+
   std::string write_out();
-  double pdf(double x, char s);
 
   // Functions of all Models
+  double pdf(double x, char s);
   void updateParameters(double,double);
 
   // These are functions specifically for when its NOISE?
   // Noise Expectation: pG(b-a)/S where S is length of genome, 
   //  G is # reads mapped, p is prob noise
-  void setPi(double v_pi);
   double calculateLikelihood(dInterval *data);
-  void setBounds(double v_lower, double v_upper);
-
 };
 
 class FullModel {
@@ -138,15 +138,14 @@ class FullModel {
 
   // Functions
   std::string write_out();
-  double pdf(double z, char s);
 
-  // Functions of all Models
+  double pdf(double z, char s);
   void resetSufficiencyStats();
   double getResponsibility();   
   void updateParameters(double,double);
   double calculateRi(double z, char strand);
-
   void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
+
 };
 
 

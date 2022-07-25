@@ -480,6 +480,16 @@ UniformModel::UniformModel(double v_a, double v_b): BasicModel(), uni() {
    pi = 0.;
 }
 
+void UniformModel::setPi(double v_pi) {
+   pi = v_pi;
+}
+
+void UniformModel::setBounds(double v_lower, double v_upper) {
+   uni.lower = v_lower;
+   uni.upper = v_upper;
+}
+
+
 std::string UniformModel::write_out() {
    return ("Uni: " + uni.write_out() + " pi: " + tfit::prettyDecimal(pi,4));
 }
@@ -496,9 +506,6 @@ double UniformModel::pdf(double x, char s){
    return (weight * uni.pdf(x));
 }
 
-void UniformModel::setPi(double v_pi) {
-   pi = v_pi;
-}
 
 double UniformModel::calculateLikelihood(dInterval *data) {
    double ll = 0;
@@ -512,11 +519,6 @@ double UniformModel::calculateLikelihood(dInterval *data) {
       }
    }
    return ll;
-}
-
-void UniformModel::setBounds(double v_lower, double v_upper) {
-   uni.lower = v_lower;
-   uni.upper = v_upper;
 }
 
 void UniformModel::updateParameters(double N, double K) {

@@ -158,23 +158,57 @@ TEST(Bidirectional, ExpY2)
   ASSERT_LE(abs(Y2expected - 0.676969), 0.0001);  
 }
 
-// Models, bidir_setPriors
-// Models, bidir_calculate EXP
-// Models, bidir_updateExpectations
-// Models, bidir_calcExpectedVals
-// Models, bidir_updateParameters
+/*
+// updateExpectations(double z, perStrandInfo coverage, perStrandInfo normalizeRi) 
+TEST(Bidirectional, updateExpectations) 
+{}
 
+// calcExpectedVals (double position, char strand, double rtimescov) 
+TEST(Bidirectional, calcExpectedVals)
+{}
 
-// Models, uniform_pdf
-// Models, uniform_updateParameters
-// Models, uniform_setPi
-// Models, uniform_calculateLiklihood
-// Models, uniform_setBounds
+// updateParameters(double N, double K) 
+TEST(Bidirectional, updateParameters) 
+{}
+*/
 
+/*
+// double pdf(double x, char s);
+TEST(Uniform, pdf)
+{}
 
-// Models, fullModel_pdf
-// Models, fullModel_resetSufficiency
-// Models, fullModel_getResponsibility
-// Models, fullModel_updateParameters
-// Models, fullModel_calculateRi
-// Models, fullModel_updateExpectations
+// void updateParameters(double,double);
+TEST(Uniform, updateParameters)
+{}
+
+// double calculateLikelihood(dInterval *data);
+TEST(Uniform, calculateLikelihood)
+{}
+
+*/
+
+/*
+// double pdf(double z, char s);
+TEST(FullModel, pdf)
+{}
+
+//  void resetSufficiencyStats();
+TEST(FullModel, resetSufficiencyStats)
+{}
+
+//  double getResponsibility();   
+TEST(FullModel, getResponsibility)
+{}
+
+//   void updateParameters(double,double);
+TEST(FullModel, updateParameters)
+{}
+
+//   double calculateRi(double z, char strand);
+TEST(FullModel, calculateRi)
+{}
+
+// void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
+TEST(FullModel, updateExpecations)
+{}
+*/
