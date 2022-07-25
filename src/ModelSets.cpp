@@ -41,10 +41,10 @@ ModelWrapper::~ModelWrapper() {
 }
 
 double ModelWrapper::getMu() {
-  if (type == BIDIR) {
-     return bidir->getMu();
-  } else if (type == FMOD) {
+  if (type == FMOD) {
      return gene->bidir.getMu();
+  } else if (type == BIDIR) {
+     return bidir->getMu();
   } else {  // Undefined type
      return 0.;
   }
@@ -169,10 +169,10 @@ void ModelWrapper::initializeBounds(double mu_seed) {
  * @param K 
  */
 void ModelWrapper::updateParameters(double N, int K) {
-   if (type == BIDIR) {
-      bidir->updateParameters(N,K);
-   } else if (type == FMOD) {
+   if (type == FMOD) {
       gene->updateParameters(N,K);
+   } else if (type == BIDIR) {
+      bidir->updateParameters(N,K);
    } else {
      // Should never be here!
    }
