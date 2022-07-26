@@ -48,7 +48,7 @@ class ModelWrapper {
   double getMu();
 
   void updateParameters(double N, int K);
-  double calculateRi(double z, char strand);
+  perStrandInfo calculateRi(double z, perStrandInfo coverage);
   void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
 };
 
@@ -85,8 +85,8 @@ class ModelContainer {
 
   void resetAllSufficiencyStats();
   double getAllResponsibilities();
-  perStrandInfo calculateAllRi(double i, dInterval *data);
-  void updateExpectations(double i, dInterval *data, perStrandInfo normalizeRi);
+  perStrandInfo calculateAllRi(double i, perStrandInfo coverage);
+  void updateExpectations(double z, perStrandInfo coverage, perStrandInfo normalizeRi);
 
 };
 

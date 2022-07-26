@@ -144,20 +144,17 @@ double EMalg::computeBackgroundModel() {
  */
 void EMalg::Estep() {
    perStrandInfo normalizeRi;
+   perStrandInfo coverage;
    models.ll = 0;
    // i -> |D| (Azofeifa 2017 pseudocode)
    for (int i = 0; i < data->num_elements(); i++) { // For every data point
+      coverage.forward = data->forward(i);
+      coverage.reverse = data->reverse(i);
+      
       // Calculate Ri and normalize over k. 
-      normalizeRi = models.calculateAllRi(i, data);
-      // Update log likelihood based on normalizing constants and depth
-      if (normalizeRi.forward > 0) {
-        models.ll += tfit::LOG(normalizeRi.forward) * data->forward(i);
-      }
-      if (normalizeRi.reverse > 0) {
-        models.ll += tfit::LOG(normalizeRi.reverse) * data->reverse(i);
-      }
+      normalizeRi = models.calculateAllRi(data->position(i), coverage);
       // Calculate Expected Values
-      models.updateExpectations(i, data, normalizeRi);
+      models.updateExpectations(data->position(i), coverage, normalizeRi);
   }
 }
 

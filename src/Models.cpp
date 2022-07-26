@@ -7,7 +7,7 @@
  * 
  */
 #include "Models.h"
-
+#include <math.h>
 #include <iostream>
 #include <algorithm>  // min and max
 #include "helper.h"     // tfit::prettyDecimal tift::StrandAsInt
@@ -68,14 +68,14 @@ void BasicModel::updateParameters(double N, double K) {
  * @brief  Given a position (z), update the position based sufficiency stats.
  * 
  * @param z          position in tranformed coords 
- * @param strand        strand, as char (why do we need this?) 
+ * @param coverage   coverage per strand
  * @return double 
  */
-double BasicModel::calculateRi(double z, char strand) {
-   sufficiencyStats.Ri.forward = pdf(z, strand);
-   sufficiencyStats.Ri.reverse = pdf(z, strand);
+perStrandInfo BasicModel::calculateRi(double z, perStrandInfo coverage) {
+   if (coverage.forward) sufficiencyStats.Ri.forward = pdf(z, '+');
+   if (coverage.reverse) sufficiencyStats.Ri.reverse = pdf(z, '-');
 
-   return sufficiencyStats.Ri.sumBothStrands();
+   return sufficiencyStats.Ri;
 }
 
 void BasicModel::updateExpectations(perStrandInfo coverage, perStrandInfo normalizedRi) {
@@ -196,7 +196,7 @@ void Bidirectional::setPriorLambda(double v_alpha, double v_beta) {
  * @param s strand 
  * @return double 
  */
-double Bidirectional::pdf(double z, char s){
+double Bidirectional::pdf(double z, char s) {
    // Offset the position by the footprint 
    z = applyFootprint(z,s);
 	double h;   // Called h(z,s;mu, sigma, lambda, pi) in the Azofeifa 2018 paper.
@@ -424,30 +424,31 @@ void Bidirectional::updateExpectations(double z, perStrandInfo coverage,
 
 void Bidirectional::calcExpectedVals (double position, char strand, double rtimescov) {
    double current_EY = ExpY(position, strand);
-   double current_EY2 = ExpY2(position, strand);
+   sumOverN.addToSumRExpY(current_EY * rtimescov); 
+
    double current_EX = ExpX(position,strand);
+   sumOverN.addToSumRExpX(current_EX * rtimescov);
+
+   double current_EY2 = ExpY2(position, strand);
+   sumOverN.addToSumRExpX2((current_EX*current_EX + current_EY2 - current_EY*current_EY)*rtimescov);
 
    sumOverN.addToSumRXExpY(std::max((strand * (position - getMu()) - current_EY) *rtimescov, 0.0)); 
-   sumOverN.addToSumRExpY(current_EY * rtimescov); 
-   sumOverN.addToSumRExpX(current_EX * rtimescov);
-   sumOverN.addToSumRExpX2((current_EX*current_EX + current_EY2 - current_EY*current_EY)*rtimescov);
 }
 
 void Bidirectional::updateParameters(double N, double K) {
+   BasicModel::updateParameters(N,K);  // Updates pi and weight
    double r = getResponsibility();
    double prevmu = getMu();
-
-   BasicModel::updateParameters(N,K);  // Updates pi and weight
 
   setMu(sumOverN.sumRExpX/ (r + 0.001)); 
    // Note that Joey uses bidir.mu which was set above to be the t+1 instance.
    // Yet the updates should be using the previous step (mu_t).  I believe
    // this is a bug in the original Tfit code.
-   // Also notice here he is taking the 0.5 power on this, which is NOT in the 
+   // Also notice here he is taking the 0.5 power on this (sqrt), which is NOT in the 
    // original paper.
-   double tempSigma = (pow(abs((1. / (r + 3 + GammaSigma.getAlpha())) 
+   double tempSigma = sqrt(abs((1. / (r + 3 + GammaSigma.getAlpha())) 
                   * (sumOverN.sumRExpX2 - 2 * prevmu * sumOverN.sumRExpX +
-                  r * prevmu * prevmu + 2 * GammaSigma.getBeta())), 0.5));
+                  r * prevmu * prevmu + 2 * GammaSigma.getBeta())));
    setSigma(tempSigma);
 
    // Note that setting the max at 0.05 is equivalent to setting tau (in bps; 1/lambda)
@@ -501,7 +502,7 @@ std::string UniformModel::write_out() {
  * @param strand     currently NOT used!
  * @return double 
  */
-double UniformModel::pdf(double x, char s){
+double UniformModel::pdf(double x, char s) {
    // Should the strand use pi?
    return (weight * uni.pdf(x));
 }
@@ -576,18 +577,20 @@ void FullModel::updateParameters(double N, double K) {
    }
 }
 
-double FullModel::calculateRi(double z, char strand) {
-   bidir.calculateRi(z,strand);
-   forwardElongation.calculateRi(z,strand);
-   reverseElongation.calculateRi(z,strand);
+perStrandInfo FullModel::calculateRi(double z, perStrandInfo coverage) {
+   perStrandInfo fromBidir = bidir.calculateRi(z,coverage);
+   perStrandInfo fromForward = forwardElongation.calculateRi(z,coverage);
+   perStrandInfo fromReverse = reverseElongation.calculateRi(z,coverage);
 
-	return (bidir.sufficiencyStats.Ri.forward 
-      + forwardElongation.sufficiencyStats.Ri.forward
-      + reverseElongation.sufficiencyStats.Ri.forward);
+   perStrandInfo cummulativeRi;
+   cummulativeRi.forward = fromBidir.forward + fromForward.forward + fromReverse.forward;
+   cummulativeRi.reverse = fromBidir.reverse + fromForward.reverse + fromReverse.reverse;
+
+   return cummulativeRi;
 }
 
-void FullModel::updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi) {
-  bidir.updateExpectations(i, coverage, normalizeRi);
+void FullModel::updateExpectations(double z, perStrandInfo coverage, perStrandInfo normalizeRi) {
+  bidir.updateExpectations(z, coverage, normalizeRi);
   forwardElongation.updateExpectations(coverage, normalizeRi);
   reverseElongation.updateExpectations(coverage, normalizeRi);
 }

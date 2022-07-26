@@ -42,7 +42,7 @@ class BasicModel {
   void updateExpectations(perStrandInfo coverage, perStrandInfo normalizedRi);
   void resetSufficiency();
 
-  double calculateRi(double z, char strand);
+  perStrandInfo calculateRi(double z, perStrandInfo coverage);
 };
 
 class Bidirectional: public BasicModel {
@@ -143,7 +143,7 @@ class FullModel {
   void resetSufficiencyStats();
   double getResponsibility();   
   void updateParameters(double,double);
-  double calculateRi(double z, char strand);
+  perStrandInfo calculateRi(double z, perStrandInfo coverage);
   void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
 
 };

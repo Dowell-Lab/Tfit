@@ -178,21 +178,22 @@ void ModelWrapper::updateParameters(double N, int K) {
    }
 }
 
-double ModelWrapper::calculateRi(double z, char strand) {
+perStrandInfo ModelWrapper::calculateRi(double z, perStrandInfo coverage) {
    if (type == FMOD) {
-      return gene->calculateRi(z,strand);
+      return gene->calculateRi(z,coverage);
    } else if (type == BIDIR) {
-      return bidir->calculateRi(z,strand);
+      return bidir->calculateRi(z,coverage);
    } else {
-     return 1.;
+      perStrandInfo empty;
+      return empty;
    }
 }
 
-void ModelWrapper::updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi) {
+void ModelWrapper::updateExpectations(double z, perStrandInfo coverage, perStrandInfo normalizeRi) {
    if (type == FMOD) {
-      gene->updateExpectations(i,coverage, normalizeRi);
+      gene->updateExpectations(z,coverage, normalizeRi);
    } else if (type == BIDIR) {
-      bidir->updateExpectations(i,coverage,normalizeRi);
+      bidir->updateExpectations(z,coverage,normalizeRi);
    } else {
       // Not a valid model!
    }
@@ -327,38 +328,41 @@ double ModelContainer::getAllResponsibilities() {
 	for (int k = 0; k < K; k++){
 	   N += setModels[k]->getResponsibility();
 	}
-   N += noise.getResponsibility();
+   // N +=  noise.getResponsibility(); // Or should this just be zero?!?
    return N;
 }
 
-perStrandInfo ModelContainer::calculateAllRi(double i, dInterval *data) {
+/**
+ * @brief 
+ * 
+ * @param z       data position coordinates
+ * @param coverage   Coverage per strand at this position
+ * @return perStrandInfo 
+ */
+perStrandInfo ModelContainer::calculateAllRi(double z, perStrandInfo coverage) {
+   perStrandInfo perModelRi;
    perStrandInfo normalizeRi;
    // Equation 7 in Azofeifa 2017: calculate r_i^k
    for (int k = 0; k < K; k++) { // computing the responsibility terms per model
-      if (data->forward(i)) {
-           normalizeRi.forward += setModels[k]->calculateRi(data->position(i), '+');
-      }
-      if (data->reverse(i)) {
-           normalizeRi.reverse += setModels[k]->calculateRi(data->position(i), '-');
-      }  // plus Noise!
+      perModelRi = setModels[k]->calculateRi(z, coverage);
+      normalizeRi.forward += perModelRi.forward;
+      normalizeRi.reverse += perModelRi.reverse;
+
    }
-   normalizeRi.forward += noise.calculateRi(data->position(i), '+');
-   normalizeRi.reverse += noise.calculateRi(data->position(i), '-');
+   // plus Noise!
+   perStrandInfo noiseRi = noise.calculateRi(z, coverage); 
+   normalizeRi.forward += noiseRi.forward;
+   normalizeRi.reverse += noiseRi.reverse;
 
    return normalizeRi;
 }
 
-void ModelContainer::updateExpectations(double i, dInterval *data, 
-                                             perStrandInfo normalizeRi) {
-   perStrandInfo coverage;
-   coverage.forward = data->forward(i);
-   coverage.reverse = data->reverse(i);
-
+void ModelContainer::updateExpectations(double z, perStrandInfo coverage, perStrandInfo normalizeRi) {
    // now we need to add the sufficient statistics 
    for (int k = 0; k < K ; k++) {
-      setModels[k]->updateExpectations(i, coverage, normalizeRi);
-   } // plus noise!
-
+      setModels[k]->updateExpectations(z, coverage, normalizeRi);
+   }
+   // plus noise!
    noise.updateExpectations(coverage, normalizeRi);
 }
 
