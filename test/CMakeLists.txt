@@ -38,7 +38,7 @@ list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/mai
 list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/MainTesting.cpp")
 list(APPEND sources
                 src/explore_coreEM.cpp
-                src/reproduce_Bidirectional.cpp
+                src/reproduce_BidirPDFs.cpp
                 src/reproduce_templatematching.cpp
                 src/reproduce_assortment.cpp
                 src/test_main.cpp
