@@ -51,26 +51,3 @@ TEST(classifier, exerciseFit2)
   EXPECT_EQ(sut.K, 2);
   // EXPECT_EQ(sut.ll, -10);  Why is this -inf here?
 }
-
-/*
-TEST(classifier, rewritten)
-{
-  // Lets load a typical small bedgraph file.
-  // string joint_bedgraph = "../examples/reduced.bg";    //chr21 	
-  string joint_bedgraph = "../examples/typical_region.bg";    //chr21 33401693 33407411	
-
-  Bedgraph bg; 
-  bg.load_file(joint_bedgraph, 0);
-
-  // Grab first interval for testing
-  std::vector<gInterval*> roi = bg.setRegions.regions[0];
-  gInterval *testregion = roi[0];
-
-  // Now we need to run the model on this data!
-
-  // Assert: Verify the outcome
-  EXPECT_EQ(bg.setRegions.chr_names.num_elements, 1);
-}
-
-
-*/

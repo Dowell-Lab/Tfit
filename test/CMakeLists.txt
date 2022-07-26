@@ -39,10 +39,8 @@ list(REMOVE_ITEM sources "/home/robindowell/src/Tfit/Dowell/Tfit/test/../src/Mai
 list(APPEND sources
                 src/explore_coreEM.cpp
                 src/reproduce_Bidirectional.cpp
-                src/reproduce_loadBedGraph.cpp
-                src/reproduce_Nested.cpp
-                src/reproduce_segment.cpp
                 src/reproduce_templatematching.cpp
+                src/reproduce_assortment.cpp
                 src/test_main.cpp
                 src/test_Bedfile.cpp
                 src/test_Data.cpp
