@@ -61,6 +61,7 @@ class EMalg {
 	bool converged;	//!< indicator
 	AlgorithmControl control;  //!< parameters that can alter the way the EM works
 	ModelContainer models;		//!< This is the set of models we're trying to infer
+	dInterval *data;	// Data on which to fit this model
 
 	// Constructor
 	EMalg();
@@ -68,13 +69,17 @@ class EMalg {
 	//Functions
 	std::string write_out();	// debugging
 
-	int fit (dInterval *data); // How to priors factor in?
+	void setData(dInterval *v_data) { data = v_data; }
+
+    // The main algorithm: Fitting via EM
+	bool fit ();
 
 	// Breaking the EM algorithm into smaller manageable chunks
-	double computeBackgroundModel(dInterval *data);
-	void adjustBounds ();
-	void Mstep(dInterval *data);
-	void Estep(dInterval *data);
+	// Should these be private?
+	double computeBackgroundModel();
+	void adjustBounds();
+	void Mstep();
+	void Estep();
 };
 
  /* 	UNUSED/PORTED parts of Joey's original classifier: 

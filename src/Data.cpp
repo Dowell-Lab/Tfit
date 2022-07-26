@@ -354,7 +354,7 @@ double dInterval::getLength() {
  */
 double dInterval::sumForward() {
   double sum = 0;
-  for(int i = 0; i < bins; i++) {
+  for(int i = 0; i < num_elements(); i++) {
      sum += forward(i);
   }
   return sum;
@@ -367,7 +367,7 @@ double dInterval::sumForward() {
  */
 double dInterval::sumReverse() {
   double sum = 0;
-  for(int i = 0; i < bins; i++) {
+  for(int i = 0; i < num_elements(); i++) {
      sum += reverse(i);
   }
   return sum;

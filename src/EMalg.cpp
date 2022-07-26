@@ -51,6 +51,7 @@ std::string AlgorithmControl::write_out() {
 /**********************  The actual algorithm class *************/
 EMalg::EMalg(): control(), models() {
    converged = false;	
+   data = NULL;
 }
 
 /**
@@ -70,12 +71,15 @@ std::string EMalg::write_out() {
  * 
  * @return int an indicator of success
  */
-int EMalg::fit (dInterval *data) {
+bool EMalg::fit () {
+   if (data == NULL) return false;      // No data, no fitting
    if (models.K == 0) {    // We only have the noise model.
-     models.ll = computeBackgroundModel(data);
-     return 1;
-   } 
+     models.ll = computeBackgroundModel();
+     return true;
+   }
+
    models.initializeComponents(data);
+   
 	//======================================================
 	int t 			= 0; //EM loop ticker
 	double prevll 	= nINF; //previous iterations log likelihood
@@ -90,8 +94,8 @@ int EMalg::fit (dInterval *data) {
          return 0;
       }
       */
-      Estep(data);
-      Mstep(data);
+      Estep();
+      Mstep();
 
       // Checks if algorithm completed
       // if ((r / N) < pow(10, -5)) EXIT;
@@ -111,7 +115,7 @@ int EMalg::fit (dInterval *data) {
 		prevll=models.ll;
    }
    // Cleanup
-   return 1;
+   return true;
 }
 
 /**
@@ -119,7 +123,7 @@ int EMalg::fit (dInterval *data) {
  * 
  * @param data 
  */
-double EMalg::computeBackgroundModel(dInterval *data) {
+double EMalg::computeBackgroundModel() {
    double ll = 0;
    double pos = data->sumForward();
    double neg = data->sumReverse();
@@ -138,7 +142,7 @@ double EMalg::computeBackgroundModel(dInterval *data) {
  * 3. Then calculate Expectations (Eqn 9 in Azofeifa) and 
  *    add these to the sum of expectations that is kept (i=1..N)
  */
-void EMalg::Estep(dInterval *data) {
+void EMalg::Estep() {
    perStrandInfo normalizeRi;
    models.ll = 0;
    // i -> |D| (Azofeifa 2017 pseudocode)
@@ -163,7 +167,7 @@ void EMalg::Estep(dInterval *data) {
  * 
  * @param data 
  */
-void EMalg::Mstep(dInterval *data) {
+void EMalg::Mstep() {
 	double N=0; //get normalizing constant
    N = models.getAllResponsibilities();
 	for (int k = 0; k < models.K; k++){

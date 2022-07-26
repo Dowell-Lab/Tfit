@@ -47,11 +47,14 @@ list(APPEND sources
                 src/test_Bedfile.cpp
                 src/test_Data.cpp
                 src/test_Distros.cpp
+                src/test_EMalg.cpp
+                src/test_EMseeds.cpp
                 src/test_helper.cpp
                 src/test_Intervals.cpp
                 src/test_ITree.cpp
                 src/test_ModelParamSet.cpp
                 src/test_Models.cpp
+                src/test_ModelSets.cpp
                 src/test_ModelSupport.cpp
                 src/test_Regions.cpp
                 src/test_split.cpp
