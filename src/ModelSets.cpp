@@ -16,7 +16,7 @@
 /**********************  Model Wrapper (for EM) *************/
 
 ModelWrapper::ModelWrapper() {
-   type = EMPTY;         
+   type = FMOD;         
    gene = NULL;
    bidir = NULL;
 }
