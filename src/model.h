@@ -203,6 +203,10 @@ public:
     string write_params();
 
     void computeUniform (segment * data);	// Used when K = 0
+
+	// This is a stub for testing parts of fit2 behavior
+    int fit3(segment * data, vector<double> mu_seeds, int topology,
+    	 int elon_move );
 };
 
 
