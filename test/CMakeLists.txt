@@ -41,6 +41,7 @@ list(APPEND sources
                 src/reproduce_BidirPDFs.cpp
                 src/reproduce_templatematching.cpp
                 src/reproduce_assortment.cpp
+                src/reproduce_EMcomponents.cpp
                 src/test_main.cpp
                 src/test_Bedfile.cpp
                 src/test_Data.cpp

@@ -11,3 +11,5 @@ in Visual Studio Code: CTRL-Shift-P
 build$ make lcov
 see index.html in build/lcoverage/
 
+Remember to change the "Run and Debug" configuration choice to debug Unit tests in Visual Studio Code.
+
