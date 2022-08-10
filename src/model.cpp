@@ -1192,3 +1192,176 @@ string classifier::write_components() {
 	}
 	return text;
 }
+
+
+/**
+ * @brief This is the core EM algorithm.
+ * 
+ * @param data 
+ * @param mu_seeds  only used in initialization of algorithm
+ * @param topology passed through to initialize_bounds as termination 
+ * @param elon_move should try to move elongation component (e.g. L)?
+ * @return int 
+ */
+int classifier::fit3(segment * data, vector<double> mu_seeds, int topology,
+	 int elon_move ){
+
+	//=================================================
+	//compute just a uniform model...no need for the EM
+	if (K == 0){
+		this->computeUniform(data);
+		return 1;
+	}
+
+	
+	int add 	= noise_max>0;
+	components 	= new component[K+add];
+	//===========================================================================
+	//initialize(1) components with user defined hyperparameters
+	for (int k = 0; k < K; k++){
+		components[k].set_priors(ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3,data->N, K);
+	}
+
+	//===========================================================================
+	//random seeding, initialize(2), center of pausing components
+	int i 	= 0;
+	double mu;
+	double mus[K];
+	// These are the seeds for the initial location.
+	Random ran_num_generator;
+	for (int k = 0; k < K; k++){ // Each model
+		if (mu_seeds.size()>0  ){
+			i 	= sample_centers(mu_seeds ,  p);
+			mu 	= mu_seeds[i];
+			if (r_mu > 0){
+				mu = ran_num_generator.fetchNormal(mu,r_mu);
+			}
+		}else{
+			mu = ran_num_generator.fetchNormal((data->minX+data->maxX)/2., r_mu);
+		}
+		
+		mus[k] 	= mu;
+		if (mu_seeds.size() > 0  ){
+			mu_seeds.erase (mu_seeds.begin()+i);	
+		}
+	}
+	sort_vector(mus, K);
+	for (int k = 0; k < K;k++){ //random seeding, initialize(3) other parameters
+	    // This is the only place topology is used, passed as termination.
+		components[k].initialize_bounds(mus[k], 
+			data, K, data->SCALE , 0., topology,foot_print, data->maxX, data->maxX);
+		
+	}
+	sort_components(components, K);
+	// Is this just resetting the linked list based on the sort?
+	for (int k = 0; k < K; k++){	// each model
+		if (k > 0){
+			components[k].reverse_neighbor 	= &components[k-1];
+		}else{
+			components[k].reverse_neighbor 	= NULL;
+		}
+		if (k+1 < K){
+			components[k].forward_neighbor 	= &components[k+1];
+		}else{
+			components[k].forward_neighbor 	= NULL;
+		}
+	}
+	// I think this is the noise component ...
+	if (add){
+		components[K].initialize_bounds(0., data, 0., 0. , noise_max, pi, foot_print, data->minX, data->maxX);
+	}
+
+	//===========================================================================
+	int t 			= 0; //EM loop ticker
+	double prevll 	= nINF; //previous iterations log likelihood
+	converged 		= false; //has the EM converged?
+	int u 			= 0; //elongation movement ticker
+	double norm_forward, norm_reverse,N; //helper variables
+	//printf("------------------------------------------\n");
+	while (t < max_iterations && not converged){
+		//======================================================
+		//reset old sufficient statistics
+		for (int k=0; k < K+add; k++){
+			// components[k].print();
+			components[k].reset();
+			if (components[k].EXIT){
+				converged=false, ll=nINF;
+				return 0;
+			}
+		       
+		}
+		
+		//======================================================
+		//E-step, grab all the stats and responsibilities
+		ll 	= 0;
+		// i -> |D| (Azofeifa 2017 pseudocode) 
+		for (int i =0; i < data->XN;i++){	// For every data point
+			norm_forward=0;
+			norm_reverse=0;
+			
+			// Equation 7 in Azofeifa 2017: calculate r_i^k
+			for (int k=0; k < K+add; k++){ //computing the responsibility terms per model
+				if (data->ForwardCoverage(i)) { //if there is actually data point here...
+					norm_forward+=components[k].calculateRi(data->Coordinate(i),1);
+				}
+				if (data->ReverseCoverage(i)){//if there is actually data point here...
+					norm_reverse+=components[k].calculateRi(data->Coordinate(i),-1);
+				}
+			}
+			if (norm_forward > 0){
+				ll+=LOG(norm_forward)*data->ForwardCoverage(i);
+			}
+			if (norm_reverse > 0){
+				ll+=LOG(norm_reverse)*data->ReverseCoverage(i);
+			}
+			
+			//now we need to add the sufficient statistics, need to compute expectations
+			// Equation 9 in Azofeifa 2017
+			for (int k=0; k < K+add; k++){
+				if (norm_forward){
+					components[k].add_stats(data->Coordinate(i), data->ForwardCoverage(i), 1, norm_forward);
+				}
+				if (norm_reverse){
+					components[k].add_stats(data->Coordinate(i), data->ReverseCoverage(i), -1, norm_reverse);
+				}
+			}
+		}
+
+		//======================================================
+		//M-step, Equation 10 in Azofeifa 2017, Theta_k^(t+1)
+		N=0; //get normalizing constant
+		for (int k = 0; k < K+add; k++){
+			N+=(components[k].get_all_repo());
+		}
+		
+		for (int k = 0; k < K+add; k++){
+			components[k].update_parameters(N, K);
+		}
+		
+		if (abs(ll-prevll)<convergence_threshold){
+			converged=true;
+		}
+		if (not isfinite(ll)){
+			ll 	= nINF;
+			return 0;	
+		}
+		//======================================================
+		//should we try to move the uniform component? e.g. change L
+		if (u > 200 ){
+			sort_components(components, K);
+			//check_mu_positions(components, K);
+			if (elon_move){		// Only place this is used.
+				update_j_k(components,data, K, N);
+				update_l(components,  data, K);
+			}
+			u 	= 0;
+		}
+
+		u++;
+		t++;
+		prevll=ll;
+	}
+
+	return 1;
+}
+
