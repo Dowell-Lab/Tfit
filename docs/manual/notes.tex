@@ -31,10 +31,23 @@ All methods/classes with logic (i.e. getters and setters generally do not
 have logic, unless they test the inputs) should have a Unit test in 
 Tfit/test/src.  Unit tests use the gmock/gtest framework from Google.   
 Testing uses cMake to build the appropriate tests (cd Tfit/test/build; 
-    cmake .. ; make; ./TestTfit).  
+cmake .. ; make; ./TestTfit).  General naming convention for tests is that
+within Tfit/test/src exists a test\_filename.cpp where "filename" is an
+existing file in Tfit/src.   Within this test file, individual objects
+are the test set name and test names follow the method\_behavior naming 
+convention.  Note that for gtest: Test(test set name, test name).  Fixture
+classes (TEST\_F) are used when the setup of a test needs to be 
+repeated frequently.  In these cases the class name is infoNameTest where
+infoName is some informative name that includes the Class name.
 
-The code (both main code base Tfit/src and Unit testing Tfit/test/src) have
-documentation following Doyxgen standards.   The Doxygen configuration file
+Test coverage statistics and reports can be obtained through gcov
+and lcov using the same Makefile (cd Tfit/test/build; cmake ..; make;
+./TestTfit; make gcov; make lcov).  Note that lcov produces web parsable
+coverage reports (file:///.../Tfit/test/build/lcoverage/index.html).
+
+Furthermore, the code (both main code base Tfit/src and Unit testing 
+    Tfit/test/src) have documentation following Doyxgen standards.   
+The Doxygen configuration file
 lives at Tfit/docs/doxyfile.in and documentation can be build (cd Tfit/docs; 
     doxygen doxyfile.in).   This manual resides within Tfit/docs/manual and 
 is built using a Makefile (cd Tfit/docs/manual; make all ).  UML diagrams are
