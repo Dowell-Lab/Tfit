@@ -21,6 +21,26 @@
 \maketitle
 \noindent $*$ Corresponding author: robin.dowell@colorado.edu
 
+\section{Coding conventions}
+This document assumes that the github Tfit tree has been checked out into a 
+directory called "Tfit".   Within the Tfit code base the primary code for the 
+algorithm lives in Tfit/src and is written in C++.   Compiling the code is 
+done via the Makefile system (cd Tfit/src/; make). 
+
+All methods/classes with logic (i.e. getters and setters generally do not 
+have logic, unless they test the inputs) should have a Unit test in 
+Tfit/test/src.  Unit tests use the gmock/gtest framework from Google.   
+Testing uses cMake to build the appropriate tests (cd Tfit/test/build; 
+    cmake .. ; make; ./TestTfit).  
+
+The code (both main code base Tfit/src and Unit testing Tfit/test/src) have
+documentation following Doyxgen standards.   The Doxygen configuration file
+lives at Tfit/docs/doxyfile.in and documentation can be build (cd Tfit/docs; 
+    doxygen doxyfile.in).   This manual resides within Tfit/docs/manual and 
+is built using a Makefile (cd Tfit/docs/manual; make all ).  UML diagrams are
+constructed using metapost (*.mp).  A User's guide has been stubbed and should
+eventually be makeable via make userguide.
+
 \section{Data Handling Design}
 Tfit uses signed bedGraphs as data input.  A bedGraph has the basic format of: 
 chromosome /\t start /\t stop /\t coverage.  Tfit assumes all coordinates are
