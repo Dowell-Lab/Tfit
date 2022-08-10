@@ -71,7 +71,27 @@ void Bedfile::load_file(std::string file) {
 }
 
 /**
- * @brief Provide a basic report on a bed file.
+ * @brief Write out a bedfile contents.
+ * 
+ * Q: Do we test if the filename exists first?
+ * Q: Should we *sort* the intervals by start so that we get a consistent
+ *   output ordering?
+ * 
+ * @param filename 
+ */
+void Bedfile::write_file (std::string filename) {
+  ofstream FH(filename);    // Test for existence before using?
+  
+  // For every chromosome in setRegions
+    // For every region with a given chromosome
+      // Output the region in appropriate bed format (3, 4, 6, or 12)
+
+}
+
+
+
+/**
+ * @brief Provide a basic report on a bed file (debugging).
  * 
  * @return std::string  printable string of object contents 
  */

@@ -32,7 +32,7 @@ public:
   // Read the file
   void load_file (std::string); //!< Nuts and Bolts of this class, reads bed file.
 
-  // void write_file (std::string filename);  // inverse of load
+  void write_file (std::string filename);  // inverse of load
 };
 
 /**
