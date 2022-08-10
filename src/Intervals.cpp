@@ -103,24 +103,19 @@ bool gInterval::Contains(double point) {
  * 
  */
 void gInterval::addDataPoint(double v_start, double v_stop, double cov, bool expand) {
-  // std::cout << "gInterval: " + to_string(start) + "," + to_string(stop) << std::endl;
   // If pointer to segment doesn't exist, create it.
   if (data == NULL) {
     data = new RawData(this);
   }   
   // Adjust for edge cases, expanding the region if permissible.
-  double pt_start = start;
-  if (v_start < start) {
-    if (expand) start = v_start;   // Adjust the gInterval
-    pt_start = start;    // Don't add non-overlapping points (edge case)
+  if (expand && (v_start < start)) {
+    start = v_start;   // Adjust the gInterval
   }
-  double pt_stop = stop;
-  if (v_stop > stop) {
-    if (expand) stop = v_stop;  // Adjust the gInterval
-    pt_stop = stop;    // Don't add non-overlapping points (edge case)
+  if (expand && (v_stop > stop)) {
+    stop = v_stop;  // Adjust the gInterval
   }
-  // std::cout << "ADDing: " + to_string(pt_start) + "," + to_string(pt_stop) << std::endl;
-  data->addDataPoints(pt_start, pt_stop, cov);
+  // Adding these data points to the set
+  data->addDataPoints(v_start, v_stop, cov);
 }
 
 /**
