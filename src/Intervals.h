@@ -48,9 +48,9 @@ public:
   std::string write_out();
 
   // Read and write a bed* line
-  std::string write_asBED();
+  std::string write_asBEDline();
   void setfromBedLine(std::string);  // converts from a single line from file 
-  void setBED4fromStrings(std::vector<std::string> lineArray); // helper for setfromBedLine
+  void setBEDfromStrings(std::vector<std::string> lineArray); // helper for setfromBedLine
 
   // Comparison of points/intervals
   bool Overlap(gInterval *);    // Does your interval of interest overlap this one?
@@ -82,9 +82,9 @@ public:
   std::string write_out();
 
   // Read and write a bed* line
-  std::string write_asBED();
+  std::string write_asBEDline();
   void setfromBedLine(std::string);  // converts from a single line from file 
-  void setBED6fromStrings(std::vector<std::string> lineArray); // helper function
+  void setBEDfromStrings(std::vector<std::string> lineArray); // helper function
 };
 
 class bed12: public bed6 {
@@ -98,7 +98,7 @@ class bed12: public bed6 {
   std::string write_out();
 
   // Read and write a bed* line
-  std::string write_asBED();
+  std::string write_asBEDline();
   void setfromBedLine(std::string);  // converts from a single line from file 
 };
 

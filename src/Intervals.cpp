@@ -71,7 +71,7 @@ std::string gInterval::write_out() {
  * 
  * @return std::string 
  */
-std::string gInterval::write_asBED() {
+std::string gInterval::write_asBEDline() {
   std::string text = (chromosome + "\t" + tfit::prettyDecimal(start,-1) + "\t" 
 		+ tfit::prettyDecimal(stop,-1) + "\t" + identifier);
   return text;
@@ -85,7 +85,7 @@ std::string gInterval::write_asBED() {
 void gInterval::setfromBedLine(std::string line) {
   std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
   lineArray=string_split(line, '\t');
-  setBED4fromStrings(lineArray);
+  setBEDfromStrings(lineArray);
 }
 
 bool gInterval::Overlap(gInterval *i2) {
@@ -123,7 +123,7 @@ void gInterval::addDataPoint(double v_start, double v_stop, double cov, bool exp
  * 
  * @param lineArray expects: chromosome start stop ID in lineArray and ignores rest.
  */
-void gInterval::setBED4fromStrings(std::vector<std::string> lineArray) {
+void gInterval::setBEDfromStrings(std::vector<std::string> lineArray) {
   if (lineArray.size() < 3) {  // accept BED3 or BED4
     // Should this throw an exception?
     cout << "ERROR: Invalid BED file\n" << std::endl;
@@ -195,8 +195,8 @@ std::string bed6::write_out() {
  * 
  * @return std::string 
  */
-std::string bed6::write_asBED() {
-  std::string text = gInterval::write_asBED();
+std::string bed6::write_asBEDline() {
+  std::string text = gInterval::write_asBEDline();
   text += "\t" + tfit::prettyDecimal(score, 4) + "\t" + strand;
   return text;
 }
@@ -209,11 +209,11 @@ std::string bed6::write_asBED() {
 void bed6::setfromBedLine(std::string line) {
   std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
   lineArray=string_split(line, '\t');
-  setBED6fromStrings(lineArray);
+  setBEDfromStrings(lineArray);
 }
 
-void bed6::setBED6fromStrings(std::vector<std::string> lineArray) {
-  setBED4fromStrings(lineArray);  // setup basic BED3/4 contents.
+void bed6::setBEDfromStrings(std::vector<std::string> lineArray) {
+  gInterval::setBEDfromStrings(lineArray);  // setup basic BED3/4 contents.
 
   if (lineArray.size() >= 6) {  // At least a BED6, so score and strand are present.
     score = stod(lineArray[4]);
@@ -258,8 +258,8 @@ std::string bed12::write_out() {
  * 
  * @return std::string 
  */
-std::string bed12::write_asBED() {
-  std::string text = bed6::write_asBED();
+std::string bed12::write_asBEDline() {
+  std::string text = bed6::write_asBEDline();
   if (seeds != NULL) seeds->writeHalfBed12(start, stop);
   return text;
 }
@@ -272,7 +272,7 @@ std::string bed12::write_asBED() {
 void bed12::setfromBedLine(std::string line) {
   std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
   lineArray=string_split(line, '\t');
-  setBED6fromStrings(lineArray);
+  bed6::setBEDfromStrings(lineArray);
   if (seeds != NULL) seeds->grabSeedsfromBed12(lineArray);
   // Should we confirm the seeds are within the gInterval??
 }

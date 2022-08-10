@@ -94,7 +94,7 @@ void Seeds::grabSeedsfromBed12 (std::vector<std::string> lineArray) {
  * Using blockStarts as seed locations and blockSizes as relative weighting.
 */
 std::string Seeds::writeToBed12 (bed12 *region) {
-  std::string output = region->write_asBED();   // Need to force bed6!
+  std::string output = region->write_asBEDline();   // Need to force bed6!
   output += writeHalfBed12(region->start, region->stop);
   return output;
 }  

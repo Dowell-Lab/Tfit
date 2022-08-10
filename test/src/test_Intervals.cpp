@@ -12,7 +12,7 @@ TEST(gInterval, writeBedEQreadBed)
 {
     // Arrange: bring SUT to desired state
     gInterval temp = gInterval("TestName", 100, 1000, "chrTest"); 
-    std::string name = temp.write_asBED();  // Writes as bed4
+    std::string name = temp.write_asBEDline();  // Writes as bed4
 
     gInterval sut = gInterval();
 
@@ -124,7 +124,7 @@ TEST(bed6, writeBedEQreadBed)
 {
     // Arrange: bring SUT to desired state
     bed6 temp = bed6("TestName", 100, 1000, "chrTest", 30, "."); 
-    std::string name = temp.write_asBED();      // Write as bed6
+    std::string name = temp.write_asBEDline();      // Write as bed6
     // std::cout << name << std::endl;
 
     bed6 sut = bed6();
