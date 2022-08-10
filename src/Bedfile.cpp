@@ -122,12 +122,15 @@ void Bedgraph::load_file(std::string v_filename, bool useExisting) {
   vector<string> lineArray; // Contents of file, split on tab (\t) 
 	string prevChrom="";	// What chrom was on the previous line?
 
+  // cout << "In Load File" << std::endl;
+
   if (FH){
     std::string line;   // We are going to read this file in one line at a time.
     int 	linenum = 0;    // line counter
 
     // Reading input file line by line
     while(getline(FH, line)){
+      cout << "reading line " + std::to_string(linenum) << std::endl;
       if (line.substr(0,1)!="#") { // ignore comment lines
         // bedgraphs are always 4 column: chr start stop coverage 
         lineArray = string_split(line, '\t');
@@ -147,6 +150,7 @@ void Bedgraph::load_file(std::string v_filename, bool useExisting) {
         }
       }
       linenum++;    // line counter
+           cout << "lets start " + std::to_string(linenum) << std::endl;
     } // for each line in bedfile
   } else {  // filehandle error
     printf("couldn't open %s for reading\n", filename.c_str() );
