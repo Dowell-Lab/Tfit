@@ -253,11 +253,19 @@ std::string bed12::write_out() {
 }
 
 /**
- * @brief Writes out the interval as a line in a BED6 file.  
+ * @brief Writes out the interval as a line in a BED12 file.  
  * Note does NOT include newline.
  * 
- * @return std::string 
- */
+ * As bed12:  bed6 is the interval: chr start stop identifier score strand
+ * field 7  thick_start   typically start of CDS or repeats start
+ * field 8  thick_end     typically end of CDS or repeats stop
+ * field 9  RGB value     0,0,0 formatted
+ * field 10 blockCount (#exons)
+ * field 11 blockSizes
+ * field 12 blockStarts   positions relative to start, e.g. first is zero
+ * 
+ * Using blockStarts as seed locations and blockSizes as relative weighting.
+*/
 std::string bed12::write_asBEDline() {
   std::string text = bed6::write_asBEDline();
   if (seeds != NULL) seeds->writeHalfBed12(start, stop);
@@ -276,3 +284,4 @@ void bed12::setfromBedLine(std::string line) {
   if (seeds != NULL) seeds->grabSeedsfromBed12(lineArray);
   // Should we confirm the seeds are within the gInterval??
 }
+

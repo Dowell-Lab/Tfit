@@ -11,6 +11,7 @@
 #include <string>
 #include "ModelSets.h" // ModelContainer
 #include "Data.h"		// dInterval
+#include "EMseeds.h"
 
 /**
  * @brief Parameters for altering the EM algorithm.
@@ -62,6 +63,7 @@ class EMalg {
 	AlgorithmControl control;  //!< parameters that can alter the way the EM works
 	ModelContainer models;		//!< This is the set of models we're trying to infer
 	dInterval *data;	// Data on which to fit this model
+	SeedManager seeds;	// Handling seeding the algorithm
 
 	// Constructor
 	EMalg();

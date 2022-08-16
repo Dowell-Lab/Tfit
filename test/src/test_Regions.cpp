@@ -6,7 +6,6 @@
  * 
  */
 #include "gmock/gmock.h"
-#include "Intervals.h"
 #include "Data.h"
 #include "Regions.h"
 
@@ -29,7 +28,7 @@ TEST(SetROI, findOverlapInterval_NoContents)
     // Arrange: bring SUT to desired state
     SetROI sut;
     std::vector<gInterval *> results;
-    bed6 query = bed6("NewChr", 3200, 3500, "test", 100, "+");
+    bed6 query("NewChr", 3200, 3500, "test", 100, "+");
 
     // Act: call methods on SUT, capture output
     results = sut.findOverlapIntervals(&query);
@@ -59,7 +58,7 @@ class SetROITest: public ::testing::Test {
 TEST_F(SetROITest, findOverlapIntervalTests_SingleOverlap)
 {
     // Arrange: bring SUT to desired state
-    bed6 query = bed6("Example1", 1000, 2500, "test", 100, "+");
+    bed6 query("Example1", 1000, 2500, "test", 100, "+");
 
     // Act: call methods on SUT, capture output
     results = sut.findOverlapIntervals(&query);
@@ -77,7 +76,7 @@ TEST_F(SetROITest, findOverlapIntervalTests_SingleOverlap)
 TEST_F(SetROITest, findOverlapIntervalTests_MultipleOverlap)
 {
     // Arrange: bring SUT to desired state
-    bed6 query = bed6("Example1", 3200, 3500, "test", 100, "+");
+    bed6 query("Example1", 3200, 3500, "test", 100, "+");
 
     // Act: call methods on SUT, capture output
     results = sut.findOverlapIntervals(&query);
@@ -89,7 +88,7 @@ TEST_F(SetROITest, findOverlapIntervalTests_MultipleOverlap)
 TEST_F(SetROITest, findOverlapIntervalTests_ChromDoesNotExist)
 {
     // Arrange: bring SUT to desired state
-    bed6 query = bed6("NewChr", 3200, 3500, "test", 100, "+");
+    bed6 query("NewChr", 3200, 3500, "test", 100, "+");
 
     // Act: call methods on SUT, capture output
     results = sut.findOverlapIntervals(&query);
@@ -128,7 +127,7 @@ TEST_F(SetROITest, addDataToExistingROI_notFound)
 TEST_F(SetROITest, addDataCreateROI_contained)
 {
   // Arrange: bring SUT to desired state
-  bed6 query = bed6("Example2", 1000, 2500, "test", 100, "+");
+  bed6 query("Example2", 1000, 2500, "test", 100, "+");
 
   // Act: call methods on SUT, capture output
   // Example2 is 1000 to 5000
@@ -156,7 +155,7 @@ TEST_F(SetROITest, addDataCreateROI_newIdentifier)
 TEST_F(SetROITest, addDataCreateROI_edgecase)
 {
   // Arrange: bring SUT to desired state
-  bed6 query = bed6("Example2", 1000, 2500, "test", 100, "+");
+  bed6 query("Example2", 1000, 2500, "test", 100, "+");
 
   // Act: call methods on SUT, capture output
   // Example2 is 1000 to 5000
@@ -168,26 +167,3 @@ TEST_F(SetROITest, addDataCreateROI_edgecase)
   // Should expand boundary to include data added. 
   EXPECT_EQ((double)950, results[0]->start);
 }
-
-
-/*  What needs to be tested in ConditionDataSet?
-//  void ConditionDataSet(int v_delta, int v_scale);
-sut.ConditionDataSet(2,1);      // Creates dIntervals for all regions.
-    //std::cout << outRegions[0]->data->cdata->data_dump() << std::endl;
-
-    // Assert: Verify the outcome
-    EXPECT_EQ(outRegions[0]->chromosome, "Chr1");
-    if (outRegions[0]->data != NULL) {
-      EXPECT_EQ(outRegions[0]->data->minX, 10);
-      if (outRegions[0]->data->cdata != NULL) {
-          EXPECT_EQ(outRegions[0]->data->cdata->sumAlldata(), 30);
-      } else {
-        FAIL() << "We should have conditioned data!";
-      }
-    } else {
-        FAIL() << "We should have data!";
-    }
-    sut.clearTrees();
-
-  */
-

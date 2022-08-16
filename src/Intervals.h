@@ -98,8 +98,11 @@ class bed12: public bed6 {
   std::string write_out();
 
   // Read and write a bed* line
-  std::string write_asBEDline();
+  std::string write_asBEDline(); // std::string writeToBed12 ();
   void setfromBedLine(std::string);  // converts from a single line from file 
+
+  void SetSeeds(Seeds *v_seeds);  // Set the seeds for this interval, check constraints!
+
 };
 
 #endif

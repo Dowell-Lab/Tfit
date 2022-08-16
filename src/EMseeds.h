@@ -11,9 +11,10 @@
 #include <string>
 #include "helper.h"   //Random
 #include "Intervals.h"  // gInterval
+#include "Data.h"  // gInterval
 
 /**
- * @brief How do we want to generate and manage seeds?
+ * @brief Collection of seeds (may have arisen by several possibilities)
  * 
  * Seeds are associated with a gInterval, use coordinates relative
  * to the gInterval (e.g. gInterval->start is position zero).
@@ -21,17 +22,11 @@
  * 
  * Can read/write to files in Bed12 format using the "exon starts" as
  * seed locations (size = 1) and "exon widths" as seed weights.
- * 
  */
 class Seeds { 
   public:
-  // set of seeds (read from file or from alg)
-  std::vector<double> mu_seeds;    // Set of preferred seed points for mu
-  std::vector<double> weights;    // Weights on the seeds, order all three by weights!
-
-  // These could be private:
-  Random numgen;    // Random number generator
-  // std::vector<bool> used;    // Indicator, have we used this seed?
+  // Set of preferred seed points for mu with weights (in coverage position)
+  std::vector<PointCov> mu_seeds;    
 
   // Constructor
   Seeds();
@@ -39,19 +34,47 @@ class Seeds {
   //Functions
   std::string write_out();
 
+  double getMaxWeight();
+  double getMinWeight();
+  int getNumSeeds();
+
+  // Sort seeds by position or weight
+  void SortByWeights();
+  void SortByPositions();
+
+  // User Input (i.e. I/O of seeds, perhaps bed12?)
+  void grabSeedsfromBed12 (std::vector<std::string> lineArray);
+  std::string writeHalfBed12(double start, double stop);
+
+};
+
+/**
+ * @brief How do we want to generate and manage seeds?
+ * 
+ */
+class SeedManager { 
+  public:
+  Seeds *setSeeds;
+
+  // These could be private:
+  Random numgen;    // Random number generator
+  // std::vector<bool> used;    // Indicator, have we used this seed?
+
+  // Constructor
+  SeedManager();
+
+  //Functions
+  std::string write_out();
+
   double grabSeed(); // Grab a seed (should we mark it as used?)
+
+  // Just use seeds from an interval (user provided in bed12)
 
   // Build x random choosen seeds, equally weighted across region of interest
   void setupRandomSeeds(int numseeds, gInterval *region);  
   void weightRandomly();    // randomly generate weights for seeds
 
   // Run a seeding algorithm (template matching or other)
-
-  // User Input (i.e. I/O of seeds, perhaps bed12?)
-  void grabSeedsfromBed12 (std::vector<std::string> lineArray);
-  bed6 setfromBedLine(std::string line);
-  std::string writeToBed12 (bed12 *region);
-  std::string writeHalfBed12(double start, double stop);
 
 };
 
