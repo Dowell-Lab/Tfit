@@ -77,7 +77,7 @@ void Seeds::grabSeedsfromBed12 (std::vector<std::string> lineArray) {
 
     mu_seeds.reserve(numseeds);
     for (int i = 0; i < numseeds; i++) {
-      PointCov singleSeed(stod(seedsArray[i]), stod(weightsArray[i]));
+      PointCov singleSeed(stod(seedsArray[i]), stod(weightsArray[i])/100);
       mu_seeds.push_back(singleSeed);
     }
   }
