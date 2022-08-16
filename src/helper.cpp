@@ -108,10 +108,6 @@ bool tfit::compareMu(ModelWrapper *mod1, ModelWrapper *mod2) {
    return (mod1->getMu() < mod2->getMu());
 }
 
-bool tfit::sortOnCoordComparison(const PointCov pt1, const PointCov pt2) {
-   return (pt1.coordinate < pt2.coordinate);
-}
-
 /**
  * @brief Convert strand character to integer
  * '+' becomes 1

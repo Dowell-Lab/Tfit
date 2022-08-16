@@ -48,6 +48,14 @@ std::string PointCov::write_out() {
   return output;
 }
 
+bool PointCov::sortOnCoordComp(const PointCov pt1, const PointCov pt2) {
+   return (pt1.coordinate < pt2.coordinate);
+}
+
+bool PointCov::sortOnCovComp(const PointCov pt1, const PointCov pt2) {
+   return (pt1.coverage < pt2.coverage);
+}
+
 /**********************  RawData ********************/
 RawData::RawData() {
   minX = maxX = 0;
@@ -118,9 +126,9 @@ void RawData::addDataPoints(double start, double stop, double cov) {
  */
 void RawData::Sort() {
   // Sort vector<double> by first entity (e.g. coordinates)
-  std::sort(forward.begin(),forward.end(), tfit::sortOnCoordComparison);
+  std::sort(forward.begin(),forward.end(), PointCov::sortOnCoordComp);
   // std::cout << "After sort: " + data_dump() << std::endl;
-  std::sort(reverse.begin(),reverse.end(), tfit::sortOnCoordComparison);
+  std::sort(reverse.begin(),reverse.end(), PointCov::sortOnCoordComp);
 }
 
 /**

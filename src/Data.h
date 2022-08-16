@@ -37,6 +37,10 @@ class PointCov {
   PointCov(double v_coord, double v_cov);
 
   std::string write_out();
+
+  static bool sortOnCoordComp(const PointCov pt1, const PointCov pt2);
+  static bool sortOnCovComp(const PointCov pt1, const PointCov pt2);
+
 };
 
 /**
