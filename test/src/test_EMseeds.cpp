@@ -9,7 +9,6 @@
 #include "split.h"
 #include "EMseeds.h"
 
-
 class SeedsTest: public :: testing::Test {
     protected:
         void SetUp() override {
@@ -94,7 +93,6 @@ TEST_F(SeedsTest, IOonHalfBed12)
     // Assert: Verify the outcome
     EXPECT_EQ(newSUT.getNumSeeds(), 3);
     EXPECT_EQ(newSUT.getMaxWeight(), 0.23);
-
 }
 
 

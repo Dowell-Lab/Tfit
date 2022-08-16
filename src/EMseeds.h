@@ -45,7 +45,6 @@ class Seeds {
   // User Input (i.e. I/O of seeds, perhaps bed12?)
   void grabSeedsfromBed12 (std::vector<std::string> lineArray);
   std::string writeHalfBed12(double start, double stop);
-
 };
 
 /**

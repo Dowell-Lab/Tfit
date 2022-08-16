@@ -11,7 +11,7 @@
 TEST(gInterval, writeBedEQreadBed)
 {
     // Arrange: bring SUT to desired state
-    gInterval temp = gInterval("TestName", 100, 1000, "chrTest"); 
+    gInterval temp("TestName", 100, 1000, "chrTest"); 
     std::string name = temp.write_asBEDline();  // Writes as bed4
 
     gInterval sut = gInterval();
@@ -26,7 +26,7 @@ TEST(gInterval, writeBedEQreadBed)
 TEST(gInterval, addDataPoint_contained)
 {
     // Arrange: bring SUT to desired state
-    gInterval sut = gInterval("TestName", 100, 1000, "chrTest"); 
+    gInterval sut("TestName", 100, 1000, "chrTest"); 
 
     // Act: call methods on SUT, capture output
     sut.addDataPoint(120,150,4,false);      // Note calls rawData::addDataPoints, test elsewhere
@@ -42,7 +42,7 @@ TEST(gInterval, addDataPoint_contained)
 TEST(gInterval, addDataPoint_edgeCaseNoExpand)
 {
     // Arrange: bring SUT to desired state
-    gInterval sut = gInterval("TestName", 100, 1000, "chrTest"); 
+    gInterval sut("TestName", 100, 1000, "chrTest"); 
 
     // Act: call methods on SUT, capture output
     sut.addDataPoint(80,150,4,false);      // Note calls rawData::addDataPoints, test elsewhere
@@ -55,7 +55,7 @@ TEST(gInterval, addDataPoint_edgeCaseNoExpand)
 TEST(gInterval, addDataPoint_edgeCaseStartExpand)
 {
     // Arrange: bring SUT to desired state
-    gInterval sut = gInterval("TestName", 100, 1000, "chrTest"); 
+    gInterval sut("TestName", 100, 1000, "chrTest"); 
 
     // Act: call methods on SUT, capture output
     sut.addDataPoint(80,150,4,true);      // Note calls rawData::addDataPoints, test elsewhere
@@ -68,7 +68,7 @@ TEST(gInterval, addDataPoint_edgeCaseStartExpand)
 TEST(gInterval, addDataPoint_edgeCaseStopExpand)
 {
     // Arrange: bring SUT to desired state
-    gInterval sut = gInterval("TestName", 100, 1000, "chrTest"); 
+    gInterval sut("TestName", 100, 1000, "chrTest"); 
 
     // Act: call methods on SUT, capture output
     sut.addDataPoint(900,1500,4,true);      // Note calls rawData::addDataPoints, test elsewhere
@@ -108,11 +108,11 @@ TEST_F(Bed6ContainsTest, containsAboveRange) {
 TEST(bed6, overlapTestingEdge)
 {
     // Arrange: bring SUT to desired state
-    bed6 OR1 = bed6("TestChr", 100, 1000, "OR1", 30, "."); 
-    bed6 NR1 = bed6("TestChr", 300, 1000, "NR1", 30, ".");  // half open, so no overlap!
-    bed6 ER1 = bed6("TestChr", 299, 500, "ER1", 30, "."); 
+    bed6 OR1("TestChr", 100, 1000, "OR1", 30, "."); 
+    bed6 NR1("TestChr", 300, 1000, "NR1", 30, ".");  // half open, so no overlap!
+    bed6 ER1("TestChr", 299, 500, "ER1", 30, "."); 
 
-    bed6 sut = bed6("TestChr", 50, 300, "R2", 30, "."); 
+    bed6 sut("TestChr", 50, 300, "R2", 30, "."); 
 
     // Assert: Verify the outcome
     EXPECT_TRUE(sut.Overlap((gInterval *)&OR1));
@@ -123,7 +123,7 @@ TEST(bed6, overlapTestingEdge)
 TEST(bed6, writeBedEQreadBed)
 {
     // Arrange: bring SUT to desired state
-    bed6 temp = bed6("TestName", 100, 1000, "chrTest", 30, "."); 
+    bed6 temp("TestName", 100, 1000, "chrTest", 30, "."); 
     std::string name = temp.write_asBEDline();      // Write as bed6
     // std::cout << name << std::endl;
 
@@ -151,4 +151,5 @@ TEST(bed12, writeBedEQreadBed) {
     // Assert: Verify the outcome
     EXPECT_THAT(temp.write_out(), sut.write_out());
 }
+
 */
