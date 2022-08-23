@@ -7,6 +7,7 @@
  */
 #include "gmock/gmock.h"
 #include "Intervals.h"
+#include "EMseeds.h"
 
 TEST(gInterval, writeBedEQreadBed)
 {
@@ -136,22 +137,17 @@ TEST(bed6, writeBedEQreadBed)
     EXPECT_THAT(temp.write_out(), sut.write_out());
 }
 
-/**
-
-TEST(bed12, writeBedEQreadBed) {
+TEST(bed12, readBed12) {
     // Arrange: bring SUT to desired state
     bed12 temp = bed12("TestName", 100, 1000, "chrTest", 30, ".", 
                 "100\t1000\t0,0,0\t2\t22,30\t50,500"); 
     std::string name = temp.write_asBEDline();    
-    // std::cout << name << std::endl;
+    std::cout << name << std::endl;
 
-    bed12 sut = bed12();
-
+    // bed12 sut = bed12();
     // Act: call methods on SUT, capture output
     // sut.setfromBedLine(name);   
 
     // Assert: Verify the outcome
-    EXPECT_THAT(temp.write_out(), sut.write_out());
+    EXPECT_THAT(temp.seeds->mu_seeds.size(), 2);
 }
-
-*/

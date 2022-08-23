@@ -244,7 +244,7 @@ bed12::bed12(std::string v_chromosome, double v_start, double v_stop,
     std::string v_identifier, int v_score, std::string v_strand, 
     std::string v_nextsix) : 
     bed6(v_chromosome, v_start, v_stop, v_identifier,v_score, v_strand) {
-      // Allocate a Seeds object to fill here.
+
     Seeds seedinfo;
     seeds = &seedinfo;
     setfromLastSix(v_nextsix);
@@ -278,7 +278,9 @@ std::string bed12::write_out() {
 */
 std::string bed12::write_asBEDline() {
   std::string text = bed6::write_asBEDline();
+  std::cout << std::to_string(seeds->mu_seeds.size()) << std::endl;
   // Need fields 7-9!!
+
   if (seeds != NULL) text += "\t" + seeds->writeSeedsAsBedFields(); // last 3 fields
   return text;
 }
@@ -314,6 +316,8 @@ void bed12::setfromLastSix(std::string v_lastsix) {
   std::string numSeeds = lineArray[3];
   std::string seedWeights = lineArray[4];
   std::string seedStarts = lineArray[5];
+
+  std::cout << numSeeds + " :: " + seedWeights + " :: " + seedStarts << std::endl;
   seeds->getSeedsfromBedFields(numSeeds, seedWeights, seedStarts);
 }
 

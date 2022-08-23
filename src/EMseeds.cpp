@@ -60,12 +60,13 @@ int Seeds::getNumSeeds() {
  */
 void Seeds::getSeedsfromBedFields (std::string v_numSeeds, 
         std::string v_weightsSeeds, std::string v_relativeSeedStarts) {
-  
-  int numseeds = stod(v_numSeeds);
-  std::vector<std::string> weightsArray; // Contents of field[11], split on comma (,)
-  std::vector<std::string> seedsArray;   // Contents of field[11], split on comma (,)
 
+  int numseeds = stod(v_numSeeds);
+
+  std::vector<std::string> weightsArray; // Contents of field[11], split on comma (,)
   weightsArray = string_split(v_weightsSeeds, ',');
+
+  std::vector<std::string> seedsArray;   // Contents of field[11], split on comma (,)
   seedsArray = string_split(v_relativeSeedStarts, ',');
 
   // Note numseeds = size() + 1
@@ -79,11 +80,12 @@ void Seeds::getSeedsfromBedFields (std::string v_numSeeds,
                 << std::endl;
   }
 
-  mu_seeds.reserve(numseeds);
+  mu_seeds.reserve(numseeds+1);
   for (int i = 0; i < numseeds; i++) {
     PointCov singleSeed(stod(seedsArray[i]), stod(weightsArray[i]) / 100);
     mu_seeds.push_back(singleSeed);
   }
+
 }
 
 /**
