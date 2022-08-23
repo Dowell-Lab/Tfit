@@ -292,12 +292,13 @@ void bed12::setfromBedLine(std::string v_line) {
   std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
   lineArray=string_split(v_line, '\t');
   bed6::setBEDfromStrings(lineArray);
-  // Confirm BED12?!?
 
-  std::string numSeeds = lineArray[9];
-  std::string seedWeights = lineArray[10];
-  std::string seedStarts = lineArray[11];
-  seeds->getSeedsfromBedFields(numSeeds, seedWeights, seedStarts);
+  if (lineArray.size() > 6) {   // Only do if got bed12!
+    std::string numSeeds = lineArray[9];
+    std::string seedWeights = lineArray[10];
+    std::string seedStarts = lineArray[11];
+    seeds->getSeedsfromBedFields(numSeeds, seedWeights, seedStarts);
+  } 
 }
 
 /**
@@ -314,5 +315,12 @@ void bed12::setfromLastSix(std::string v_lastsix) {
   std::string seedWeights = lineArray[4];
   std::string seedStarts = lineArray[5];
   seeds->getSeedsfromBedFields(numSeeds, seedWeights, seedStarts);
+}
+
+void bed12::SetSeeds(Seeds *v_seeds) {
+  if (seeds == NULL) { seeds = v_seeds; }
+  else {
+    // There already exists seeds, need to get rid of them?
+  }
 }
 
