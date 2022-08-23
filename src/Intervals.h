@@ -93,6 +93,7 @@ class bed12: public bed6 {
 
   // Constructors
   bed12();
+  bed12(std::string, double, double, std::string, int, std::string, std::string);
 
   // Functions
   std::string write_out();
@@ -100,6 +101,7 @@ class bed12: public bed6 {
   // Read and write a bed* line
   std::string write_asBEDline(); // std::string writeToBed12 ();
   void setfromBedLine(std::string);  // converts from a single line from file 
+  void setfromLastSix(std::string); // converts ONLY the last 6 fields of bedfile
 
   void SetSeeds(Seeds *v_seeds);  // Set the seeds for this interval, check constraints!
 

@@ -43,8 +43,9 @@ class Seeds {
   void SortByPositions();
 
   // User Input (i.e. I/O of seeds, perhaps bed12?)
-  void grabSeedsfromBed12 (std::vector<std::string> lineArray);
-  std::string writeHalfBed12(double start, double stop);
+  void getSeedsfromBedFields (std::string v_numSeeds, std::string v_weightsSeeds, 
+                            std::string v_relativeSeedStarts);
+  std::string writeSeedsAsBedFields();
 };
 
 /**

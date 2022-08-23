@@ -9,6 +9,24 @@
 #include "split.h"
 #include "EMseeds.h"
 
+TEST(Seeds, writeEmpty) {
+  // Arrange
+  Seeds sut;
+  // Act
+  std::string output = sut.writeSeedsAsBedFields();
+  //Assert
+  EXPECT_EQ(output, "0.\t\t");
+
+}
+
+TEST(Seeds, EmptySize) {
+  // Arrange
+  Seeds sut;
+  // Act
+  //Assert
+  EXPECT_EQ(sut.getNumSeeds(), 0);
+}
+
 class SeedsTest: public :: testing::Test {
     protected:
         void SetUp() override {
@@ -68,27 +86,30 @@ TEST_F(SeedsTest, sortByCoordinate)
     EXPECT_EQ(sut.mu_seeds[0].coordinate, 3.);;
 }
 
-TEST_F(SeedsTest, writeAsHalfBed12)
+TEST_F(SeedsTest, writeAsBedFields)
 {
     // Act: call methods on SUT, capture output
-    std::string output = sut.writeHalfBed12(1, 100);
+    std::string output = sut.writeSeedsAsBedFields();
 
     // Assert: Verify the outcome
-    EXPECT_EQ(output, "\t1.\t100.\t00,00,00\t3.\t13.,23.,3.\t3.,18.,25.");
+    EXPECT_EQ(output, "3.\t13.,23.,3.\t3.,18.,25.");
 
 }
 
-TEST_F(SeedsTest, IOonHalfBed12)
+TEST_F(SeedsTest, IOonSeeds)
 {
-    std::string output = sut.writeHalfBed12(1, 100);
-    std::string firstSix = "chr1\t1\t100\ttest\t+\t300";
-    std::string line = firstSix + output;
+    std::string output = sut.writeSeedsAsBedFields();
+
     std::vector<std::string> lineArray; // Contents of line, split on tab (\t)
-    lineArray = string_split(line, '\t');
+    lineArray = string_split(output, '\t');
+    std::string seedNum = lineArray[0];
+    std::string seedWeights = lineArray[1];
+    std::string seedPos = lineArray[2];
 
     Seeds newSUT;
+
     // Act: call methods on SUT, capture output
-    newSUT.grabSeedsfromBed12(lineArray);
+    newSUT.getSeedsfromBedFields(seedNum, seedWeights, seedPos);
 
     // Assert: Verify the outcome
     EXPECT_EQ(newSUT.getNumSeeds(), 3);

@@ -18,12 +18,12 @@
 #include "Intervals.h"   // gInterval
 
 
-Seeds::Seeds() {
+Seeds::Seeds(): mu_seeds() {
   // initialize seeds 
 }
 
 std::string Seeds::write_out() {
-  return "No seeding yet!";
+  return writeSeedsAsBedFields();
 }
 
 double Seeds::getMaxWeight() {
@@ -50,57 +50,60 @@ int Seeds::getNumSeeds() {
   return (int)mu_seeds.size();
 }
 
-void Seeds::grabSeedsfromBed12 (std::vector<std::string> lineArray) {
-  if (lineArray.size() < 12) {  // accept BED3 or BED4
-    return;   // This is a Bed3, bed4 or bed6 file!
+/**
+ * @brief Given the last three fields of a bed12 file (as strings), 
+ *   populate the seed data structure.
+ * 
+ * @param v_numSeeds      field 9 (num exons)
+ * @param v_weightsSeeds  field 10 (exon lengths)
+ * @param v_relativeSeedStarts  field 11 (exon starts, relative to start)
+ */
+void Seeds::getSeedsfromBedFields (std::string v_numSeeds, 
+        std::string v_weightsSeeds, std::string v_relativeSeedStarts) {
+  
+  int numseeds = stod(v_numSeeds);
+  std::vector<std::string> weightsArray; // Contents of field[11], split on comma (,)
+  std::vector<std::string> seedsArray;   // Contents of field[11], split on comma (,)
+
+  weightsArray = string_split(v_weightsSeeds, ',');
+  seedsArray = string_split(v_relativeSeedStarts, ',');
+
+  // Note numseeds = size() + 1
+  if (weightsArray.size() != numseeds) {
+    std::cout << "ERROR: Invalid BED12!" << std::endl;
+    std::cout << "Field 11 should contain # elements as specified in field 10!\n"
+                << std::endl;
   }
-  if (lineArray.size() >= 12) { // Or should this be 11?
-    if (mu_seeds.size() > 0) mu_seeds.clear();  // Removes old seeds if exist.
-/*
-      // Check these are correct for this interval?
-      double start = stod(lineArray[6]);
-      double stop = stod(lineArray[7]);
-    */
+  if (seedsArray.size() != numseeds) {
+    std::cout << "ERROR: Invalid BED12, field 12 should contain # elements as specified in field 10!\n"
+                << std::endl;
+  }
 
-    int numseeds = stod(lineArray[9]);
-    std::vector<std::string> weightsArray; // Contents of field[11], split on comma (,)
-    std::vector<std::string> seedsArray; // Contents of field[11], split on comma (,)
-
-    weightsArray = string_split(lineArray[10], ',');
-    seedsArray = string_split(lineArray[11], ',');
-    if (weightsArray.size() != numseeds) {
-      std::cout << "ERROR: Invalid BED12, field 11 should contain # elements as specified in field 10!\n" << std::endl;
-    }
-    if (seedsArray.size() != numseeds) {
-      std::cout << "ERROR: Invalid BED12, field 12 should contain # elements as specified in field 10!\n" << std::endl;
-    }
-
-    mu_seeds.reserve(numseeds);
-    for (int i = 0; i < numseeds; i++) {
-      PointCov singleSeed(stod(seedsArray[i]), stod(weightsArray[i])/100);
-      mu_seeds.push_back(singleSeed);
-    }
+  mu_seeds.reserve(numseeds);
+  for (int i = 0; i < numseeds; i++) {
+    PointCov singleSeed(stod(seedsArray[i]), stod(weightsArray[i]) / 100);
+    mu_seeds.push_back(singleSeed);
   }
 }
 
-std::string Seeds::writeHalfBed12(double start, double stop) {
+/**
+ * @brief Write out the seeds as the last three fields of a typical bed12.
+ * Does NOT lead with a tab.
+ * 
+ * @return std::string 
+ */
+std::string Seeds::writeSeedsAsBedFields() {
   std::string output = "";
-  // No seeds, no second half, i.e. stick with Bed6!
-  if (mu_seeds.size() == 0) {   return output; }
-  // Otherwise we're going to output this as 2nd half of a bed12:
-  output += "\t" + tfit::prettyDecimal(start, 0);              // field 7
-  output += "\t" + tfit::prettyDecimal(stop, 0);            // field 8
-  output += "\t00,00,00";                                   // field 9, color = black #000000
-  output += "\t" + tfit::prettyDecimal(mu_seeds.size(),0);  // field 10: # seeds
+  output += tfit::prettyDecimal(getNumSeeds(),0);  // field 10: # exons (seeds)
   output += "\t";
-  if (getNumSeeds() > 0) {  // field 11: weights
+  if (getNumSeeds() > 0) {  // field 11: exon lengths (used here for weights) 
     output += tfit::prettyDecimal(mu_seeds[0].coverage*100, 0);
     for (int i = 1; i < mu_seeds.size(); i++) { 
       output += "," + tfit::prettyDecimal(mu_seeds[i].coverage*100, 0); 
     }
   }
   output += "\t";
-  if (getNumSeeds() > 0) {  // field 12: all positions relative to start
+  if (getNumSeeds() > 0) {  // field 12: seed/exon positions relative to start
     output += tfit::prettyDecimal(mu_seeds[0].coordinate, 0);
     for (int i = 1; i < mu_seeds.size(); i++) { 
       output += "," + tfit::prettyDecimal(mu_seeds[i].coordinate,0); 

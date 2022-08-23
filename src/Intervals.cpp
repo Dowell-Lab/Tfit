@@ -237,7 +237,17 @@ void bed6::setBEDfromStrings(std::vector<std::string> lineArray) {
 /********************  BED12 ***********************/
 
 bed12::bed12(): bed6() {
-  seeds == NULL;
+  seeds = NULL;
+}
+
+bed12::bed12(std::string v_chromosome, double v_start, double v_stop, 
+    std::string v_identifier, int v_score, std::string v_strand, 
+    std::string v_nextsix) : 
+    bed6(v_chromosome, v_start, v_stop, v_identifier,v_score, v_strand) {
+      // Allocate a Seeds object to fill here.
+    Seeds seedinfo;
+    seeds = &seedinfo;
+    setfromLastSix(v_nextsix);
 }
 
 /**
@@ -268,7 +278,8 @@ std::string bed12::write_out() {
 */
 std::string bed12::write_asBEDline() {
   std::string text = bed6::write_asBEDline();
-  if (seeds != NULL) seeds->writeHalfBed12(start, stop);
+  // Need fields 7-9!!
+  if (seeds != NULL) text += "\t" + seeds->writeSeedsAsBedFields(); // last 3 fields
   return text;
 }
 
@@ -277,11 +288,31 @@ std::string bed12::write_asBEDline() {
  * 
  * @param line expects a single line of a BED file 
  */
-void bed12::setfromBedLine(std::string line) {
+void bed12::setfromBedLine(std::string v_line) {
   std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
-  lineArray=string_split(line, '\t');
+  lineArray=string_split(v_line, '\t');
   bed6::setBEDfromStrings(lineArray);
-  if (seeds != NULL) seeds->grabSeedsfromBed12(lineArray);
-  // Should we confirm the seeds are within the gInterval??
+  // Confirm BED12?!?
+
+  std::string numSeeds = lineArray[9];
+  std::string seedWeights = lineArray[10];
+  std::string seedStarts = lineArray[11];
+  seeds->getSeedsfromBedFields(numSeeds, seedWeights, seedStarts);
+}
+
+/**
+ * @brief  Used for creating seeds from a string (half bed12 line)
+ * 
+ * @param v_lastsix Assumes does NOT start with \t
+ */
+void bed12::setfromLastSix(std::string v_lastsix) {
+  std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
+  lineArray=string_split(v_lastsix, '\t');
+
+  // Note here we expect half the string so indexs shift.
+  std::string numSeeds = lineArray[3];
+  std::string seedWeights = lineArray[4];
+  std::string seedStarts = lineArray[5];
+  seeds->getSeedsfromBedFields(numSeeds, seedWeights, seedStarts);
 }
 
