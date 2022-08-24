@@ -141,13 +141,22 @@ TEST(bed12, readBed12) {
     // Arrange: bring SUT to desired state
     bed12 temp = bed12("TestName", 100, 1000, "chrTest", 30, ".", 
                 "100\t1000\t0,0,0\t2\t22,30\t50,500"); 
-    std::string name = temp.write_asBEDline();    
-    std::cout << name << std::endl;
-
-    // bed12 sut = bed12();
-    // Act: call methods on SUT, capture output
-    // sut.setfromBedLine(name);   
 
     // Assert: Verify the outcome
     EXPECT_THAT(temp.seeds->mu_seeds.size(), 2);
+}
+
+TEST(bed12, IOBed12) {
+    // Arrange: bring SUT to desired state
+    bed12 temp = bed12("TestName", 100, 1000, "chrTest", 30, ".", 
+                "100\t1000\t0,0,0\t2\t22,30\t50,500"); 
+    std::string name = temp.write_asBEDline();    
+    // std::cout << name << std::endl;
+
+    bed12 sut;
+    // Act: call methods on SUT, capture output
+    sut.setfromBedLine(name);   
+
+    // Assert: Verify the outcome
+    EXPECT_THAT(temp.write_out(), sut.write_out());
 }

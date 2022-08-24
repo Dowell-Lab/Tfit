@@ -94,6 +94,7 @@ class bed12: public bed6 {
   // Constructors
   bed12();
   bed12(std::string, double, double, std::string, int, std::string, std::string);
+  ~bed12();
 
   // Functions
   std::string write_out();

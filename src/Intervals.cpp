@@ -245,9 +245,14 @@ bed12::bed12(std::string v_chromosome, double v_start, double v_stop,
     std::string v_nextsix) : 
     bed6(v_chromosome, v_start, v_stop, v_identifier,v_score, v_strand) {
 
-    Seeds seedinfo;
-    seeds = &seedinfo;
+    // std::cout << v_nextsix << std::endl;
+    seeds = new Seeds;
     setfromLastSix(v_nextsix);
+    // std::cout << "End Construct: " + seeds->mu_seeds.size() << std::endl;
+}
+
+bed12::~bed12() {
+  delete(seeds);
 }
 
 /**
@@ -278,10 +283,12 @@ std::string bed12::write_out() {
 */
 std::string bed12::write_asBEDline() {
   std::string text = bed6::write_asBEDline();
-  std::cout << std::to_string(seeds->mu_seeds.size()) << std::endl;
-  // Need fields 7-9!!
-
-  if (seeds != NULL) text += "\t" + seeds->writeSeedsAsBedFields(); // last 3 fields
+  // std::cout << std::to_string(seeds->mu_seeds.size()) << std::endl;
+  if (seeds != NULL) {
+    text += "\t" + tfit::prettyDecimal(start,0);
+    text += "\t" + tfit::prettyDecimal(stop,0) + "\t0,0,0";
+    text += "\t" + seeds->writeSeedsAsBedFields(); // last 3 fields
+  }
   return text;
 }
 
@@ -295,10 +302,13 @@ void bed12::setfromBedLine(std::string v_line) {
   lineArray=string_split(v_line, '\t');
   bed6::setBEDfromStrings(lineArray);
 
+
   if (lineArray.size() > 6) {   // Only do if got bed12!
+    if (seeds == NULL) { seeds = new Seeds; }
     std::string numSeeds = lineArray[9];
     std::string seedWeights = lineArray[10];
     std::string seedStarts = lineArray[11];
+    // cout << numSeeds + " :: " + seedWeights + " :: " + seedStarts << std::endl;;
     seeds->getSeedsfromBedFields(numSeeds, seedWeights, seedStarts);
   } 
 }
@@ -317,8 +327,9 @@ void bed12::setfromLastSix(std::string v_lastsix) {
   std::string seedWeights = lineArray[4];
   std::string seedStarts = lineArray[5];
 
-  std::cout << numSeeds + " :: " + seedWeights + " :: " + seedStarts << std::endl;
+  // std::cout << numSeeds + " :: " + seedWeights + " :: " + seedStarts << std::endl;
   seeds->getSeedsfromBedFields(numSeeds, seedWeights, seedStarts);
+  // cout << "End setfromLastSix: " + seeds->mu_seeds.size() << std::endl;
 }
 
 void bed12::SetSeeds(Seeds *v_seeds) {

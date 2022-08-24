@@ -74,18 +74,23 @@ void Seeds::getSeedsfromBedFields (std::string v_numSeeds,
     std::cout << "ERROR: Invalid BED12!" << std::endl;
     std::cout << "Field 11 should contain # elements as specified in field 10!\n"
                 << std::endl;
+    std::cout << to_string(weightsArray.size()) + " : " + to_string(numseeds) << std::endl;
   }
   if (seedsArray.size() != numseeds) {
     std::cout << "ERROR: Invalid BED12, field 12 should contain # elements as specified in field 10!\n"
                 << std::endl;
   }
 
-  mu_seeds.reserve(numseeds+1);
+  //mu_seeds.reserve(numseeds+1);
+  // mu_seeds.empty();   // Remove anything there already?
+  double position, weight;
   for (int i = 0; i < numseeds; i++) {
-    PointCov singleSeed(stod(seedsArray[i]), stod(weightsArray[i]) / 100);
-    mu_seeds.push_back(singleSeed);
+    position = stod(seedsArray[i]);
+    weight = stod(weightsArray[i]) / 100;
+    PointCov singleseed(position, weight);
+    mu_seeds.push_back(singleseed);
   }
-
+  // cout << "After: " + to_string(mu_seeds.size()) << std::endl;
 }
 
 /**
