@@ -83,9 +83,16 @@ void Bedfile::write_file (std::string filename) {
   ofstream FH(filename);    // Test for existence before using?
   
   // For every chromosome in setRegions
+  std::map<int, std::vector<gInterval *>>::iterator it;
+  std::vector<gInterval *>::iterator interval;
+  for (it = setRegions.regions.begin(); it != setRegions.regions.end(); it++)  {
     // For every region with a given chromosome
+    for (interval = it->second.begin(); interval != it->second.end(); interval++)  {
       // Output the region in appropriate bed format (3, 4, 6, or 12)
-
+       FH << (*interval)->write_asBEDline() << std::endl;
+    }
+  }
+  FH.close();
 }
 
 

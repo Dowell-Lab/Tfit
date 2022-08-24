@@ -147,7 +147,7 @@ void gInterval::setBEDfromStrings(std::vector<std::string> lineArray) {
 /********************  BED6 ***********************/
 
 bed6::bed6():gInterval() {
-  score = 0;
+  score = -1;
   strand = '.';
 }
 
@@ -197,7 +197,9 @@ std::string bed6::write_out() {
  */
 std::string bed6::write_asBEDline() {
   std::string text = gInterval::write_asBEDline();
-  text += "\t" + tfit::prettyDecimal(score, 4) + "\t" + strand;
+  if (score >= 0) {
+    text += "\t" + tfit::prettyDecimal(score, 4) + "\t" + strand;
+  }
   return text;
 }
 
@@ -230,9 +232,7 @@ void bed6::setBEDfromStrings(std::vector<std::string> lineArray) {
     score = -1;   // using -1 to indicate unavailable (i.e. wrong file type?)
     strand = '.';
   }
- 
 }
-
 
 /********************  BED12 ***********************/
 
