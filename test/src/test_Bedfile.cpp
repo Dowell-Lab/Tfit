@@ -24,9 +24,14 @@ TEST(Bedfile, ReadWriteEquivalent)
 }
 */
 
+/**
+ * @brief Do I write back out the same file I read in.
+ * Caveats: doesn't keep comments and writes in chromosome sorted order,
+ * so the input file MUST behave under these conditions!
+ */
 TEST(Bedfile, ReadWriteCheck) 
 {
-    std::string filename = "../examples/multiple.bed";    //chr21 33401693 33407411	
+    std::string filename = "../examples/multiple.nocomments.bed";    //chr21 33401693 33407411	
     Bedfile sut;
     sut.load_file(filename);
 
