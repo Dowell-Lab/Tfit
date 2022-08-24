@@ -104,7 +104,7 @@ class bed12: public bed6 {
   void setfromBedLine(std::string);  // converts from a single line from file 
   void setfromLastSix(std::string); // converts ONLY the last 6 fields of bedfile
 
-  void SetSeeds(Seeds *v_seeds);  // Set the seeds for this interval, check constraints!
+  // void SetSeeds(Seeds *v_seeds);  // Set the seeds for this interval, check constraints!
 
 };
 
