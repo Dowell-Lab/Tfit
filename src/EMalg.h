@@ -71,7 +71,8 @@ class EMalg {
 	//Functions
 	std::string write_out();	// debugging
 
-	void setData(dInterval *v_data) { data = v_data; }
+	// Setup Functions
+	void setDataAndSeeds(dInterval *v_data);	// Links in data and init seeds
 
     // The main algorithm: Fitting via EM
 	bool fit ();
@@ -79,9 +80,9 @@ class EMalg {
 	// Breaking the EM algorithm into smaller manageable chunks
 	// Should these be private?
 	double computeBackgroundModel();
-	void adjustBounds();
-	void Mstep();
 	void Estep();
+	void Mstep();
+	void adjustBounds();
 };
 
  /* 	UNUSED/PORTED parts of Joey's original classifier: 

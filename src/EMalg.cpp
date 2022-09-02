@@ -49,7 +49,7 @@ std::string AlgorithmControl::write_out() {
 
 
 /**********************  The actual algorithm class *************/
-EMalg::EMalg(): control(), models() {
+EMalg::EMalg(): control(), models(), seeds() {
    converged = false;	
    data = NULL;
 }
@@ -61,9 +61,18 @@ std::string EMalg::write_out() {
    std::string output;
    if (converged) { output = "Converged!\n"; }
    else { output = "Not Converged!\n";}
-   output += control.write_out();
-   output += models.write_out();
+   output += "Control Params:\n" + control.write_out();
+   output += "Model Specification:\n" + models.write_out();
+   output += "Data Given:\n" + data->write_out();
+   output += "Seeds Specified:\n" + seeds.write_out();
    return output;
+}
+
+void EMalg::setDataAndSeeds(dInterval *v_data) {
+	data = v_data;    // Set pointer to current data set
+
+   // Now we need to push to SeedManager this region's seeds, if they exist
+   seeds.setSeeds =  data->raw->belongsTo->seeds;
 }
 
 /**
@@ -78,8 +87,25 @@ bool EMalg::fit () {
      return true;
    }
 
-   models.initializeComponents(data);
-   
+   // user defined hyperparameters
+   models.initializeWithPriors(data);
+
+   /*
+	//random seeding, set bounds 
+   Seed_SetBounds(); 
+   */
+   // sort by mu
+   models.SortByMu(); // Joey's: sort_components(components, K);
+
+   /*
+   //  *** Joey's code resets the links for forward_neightbor and 
+      // reverse_neighbor here.
+
+   // Initialize the Noise model
+   // Needs a pi (from classifier in Joey) and weight, noise_w in Joey
+   // noise.setBounds(data->minX, data->maxX); 
+   */
+
 	//======================================================
 	int t 			= 0; //EM loop ticker
 	double prevll 	= nINF; //previous iterations log likelihood

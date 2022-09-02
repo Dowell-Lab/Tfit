@@ -59,12 +59,12 @@ class RawData {
   double minX; //!< This is the minimum value of the interval
   double maxX;   //!< This is the maximum value of the interval 
 
-  gInterval *belongsTo;  // The coordinates associated with this data
+  bed12 *belongsTo;  // The coordinates associated with this data
   dInterval *cdata;   // The conditioned data.
 
   //Constructors
   RawData();
-  RawData(gInterval *);
+  RawData(bed12 *);
   //Destructor
   ~RawData();
 
