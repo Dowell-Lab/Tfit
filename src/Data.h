@@ -20,6 +20,7 @@
 #include <vector>
 
 class gInterval;   // Forward declaration
+class bed12;   // Forward declaration
 class dInterval;
 
 /**

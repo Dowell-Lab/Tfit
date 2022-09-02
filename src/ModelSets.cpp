@@ -259,7 +259,7 @@ void ModelContainer::useSeeds2SetBounds(std::vector<double> v_museeds) {
    std::sort(v_museeds.begin(), v_museeds.end()); // sort seeds; replaces Joey's sort_vector
    for (int k = 0; k < K; k++) { 
       // Joey: initialize_bounds();
-      setModels[k]->initializeBounds(mus[k]);   // use random seeds to initialize
+      setModels[k]->initializeBounds(v_museeds[k]);   // use random seeds to initialize
       /** (mus[k], data, K, data->SCALE, 0., topology, foot_print, 
        * data->maxX, data->maxX); */
    }
@@ -272,13 +272,12 @@ void ModelContainer::useSeeds2SetBounds(std::vector<double> v_museeds) {
  * There is also r_mu which is set at 0.05 by parameters.   It uses this
  * as the variance to a normal centered at the midpoint of the region.  It
  * then samples from THIS Normal for a random mu.
- */
 std::vector<double> ModelContainer::RandomSeeds() {
   std::vector<double> mus; mus.reserve(K);
   double mu = 0;  int tempIndex = 0;
   Random ran_num_generator;
   for (int k = 0; k < K; k++){ // Each model
-  /*
+//////
      if (mu_seeds.size() > 0) {  // mu_seeds are a set of guesses at mu
         tempIndex = sample_centers(mu_seeds, p);
         mu = mu_seeds[i];
@@ -293,10 +292,11 @@ std::vector<double> ModelContainer::RandomSeeds() {
      if (mu_seeds.size() > 0) {
         mu_seeds.erase(mu_seeds.begin() + tempIndex);
      }
-     */
-  }
+     ////////////////
+
   return mus;
 }
+ */
 
 void ModelContainer::SortByMu() {
    std::sort(setModels.begin(), setModels.end(), tfit::compareMu); 

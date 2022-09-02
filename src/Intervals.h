@@ -56,8 +56,6 @@ public:
   bool Overlap(gInterval *);    // Does your interval of interest overlap this one?
   bool Contains(double point);  // Is a coordinate in this region?
 
-  // add points to data (RawData):
-  void addDataPoint(double start,double stop,double cov,bool expand);
 };
 
 /**
@@ -94,6 +92,7 @@ class bed12: public bed6 {
   // Constructors
   bed12();
   bed12(std::string, double, double, std::string, int, std::string, std::string);
+  bed12(std::string, double, double, std::string);
   ~bed12();
 
   // Functions
@@ -104,7 +103,8 @@ class bed12: public bed6 {
   void setfromBedLine(std::string);  // converts from a single line from file 
   void setfromLastSix(std::string); // converts ONLY the last 6 fields of bedfile
 
-  // void SetSeeds(Seeds *v_seeds);  // Set the seeds for this interval, check constraints!
+  // add points to data (RawData):
+  void addDataPoint(double start,double stop,double cov,bool expand);
 
 };
 

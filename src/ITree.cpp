@@ -23,7 +23,7 @@ Inode::Inode() {
   right = NULL;
 }
 
-Inode::Inode(double v_center, std::vector<gInterval *> current) {
+Inode::Inode(double v_center, std::vector<bed12 *> current) {
    center = v_center;
    OverlapCenter = current;
 
@@ -45,7 +45,7 @@ std::string Inode::write_currentIntervals() {
    intervals = "\nIntervals overlapping " + std::to_string(center);
 
    // iterate over contents of current node's intervals
-   std::vector<gInterval *>::iterator it;
+   std::vector<bed12 *>::iterator it;
    for (it = OverlapCenter.begin(); it != OverlapCenter.end(); it++) {
       intervals += "\n" + (*it)->write_out();
     }
@@ -66,22 +66,22 @@ CITree::~CITree() {
   // delete(root);
 }
 
-CITree::CITree(std::vector<gInterval *> setIntervals) {
+CITree::CITree(std::vector<bed12 *> setIntervals) {
   constructTree(setIntervals);
 }
 
-std::vector<gInterval *>CITree::searchPoint(double point) {
-  std::vector<gInterval *> hits;  // all overlapping intervals
+std::vector<bed12 *>CITree::searchPoint(double point) {
+  std::vector<bed12 *> hits;  // all overlapping intervals
 
   if (root == NULL) { return hits; } // should return empty vector?
 
   // Search those that overlap this center 
-  std::vector<gInterval *>::iterator it;
+  std::vector<bed12 *>::iterator it;
   for (it = root->OverlapCenter.begin(); it != root->OverlapCenter.end(); it++) {
     if ((*it)->Contains(point)) { hits.push_back(*it);}
   }
 
-  std::vector<gInterval *> rset;
+  std::vector<bed12 *> rset;
   // We must also search half the children
   if (point < root->center) {
     CITree Lftleaf(root->left);
@@ -95,8 +95,8 @@ std::vector<gInterval *>CITree::searchPoint(double point) {
   return hits;
 }
 
-std::vector<gInterval *>CITree::overlapSearch(gInterval *query) {
-  std::vector<gInterval *> hits;  // all overlapping intervals
+std::vector<bed12 *>CITree::overlapSearch(bed12 *query) {
+  std::vector<bed12 *> hits;  // all overlapping intervals
 
   bool debug = 0;   // this is manual programming switch for convenience
 
@@ -108,7 +108,7 @@ std::vector<gInterval *>CITree::overlapSearch(gInterval *query) {
   if (root == NULL) { return hits; } // should return empty vector?
   
   // Must consider all intervals at the current root.
-  std::vector<gInterval *>::iterator it;
+  std::vector<bed12 *>::iterator it;
   for (it = root->OverlapCenter.begin(); it != root->OverlapCenter.end(); it++) {
     if ((*it)->Overlap(query)) { 
       if (debug) { std::cout << "Hit: " << (*it)->write_out() << std::endl; }
@@ -117,7 +117,7 @@ std::vector<gInterval *>CITree::overlapSearch(gInterval *query) {
   }
 
   // if l < c then we have to check left
-  std::vector<gInterval *> rset;
+  std::vector<bed12 *> rset;
   if (query->start < root->center) {
     CITree Lftleaf(root->left);
     rset = Lftleaf.overlapSearch(query);
@@ -179,14 +179,14 @@ std::string CITree::write_Root() {
  * Assumes:  gInterval is a sorted list of intervals (first has smallest stop; last largest stop)
  * @param segments
  */
-Inode *CITree::constructTreeSortedSet(std::vector<gInterval *>segments){
+Inode *CITree::constructTreeSortedSet(std::vector<bed12 *>segments){
   // center = median of interval endpoints
   int median = segments.size()/2;  // if even finds median; if odd takes upper bound on median
   double center = segments[median]->stop;
 
-  std::vector<gInterval *> Left;
-  std::vector<gInterval *> Right;
-  std::vector<gInterval *> Current; 
+  std::vector<bed12 *> Left;
+  std::vector<bed12 *> Right;
+  std::vector<bed12 *> Current; 
   for (int i = 0; i < segments.size(); i++) {
       // compute iLeft: set of all intervals where right endpoint < center
       if (segments[i]->stop < center) {
@@ -216,7 +216,7 @@ Inode *CITree::constructTreeSortedSet(std::vector<gInterval *>segments){
   return root;
 }
 
-void CITree::constructTree(std::vector<gInterval *> setIntervals) {
+void CITree::constructTree(std::vector<bed12 *> setIntervals) {
   if (setIntervals.empty()) { root = NULL; return; }
 
   // Shouldn't this be responsible for all intervals originating
@@ -224,7 +224,7 @@ void CITree::constructTree(std::vector<gInterval *> setIntervals) {
 
   // Sort setIntervals by end value of intervals
   std::sort(setIntervals.begin(),setIntervals.end(), 
-      [](gInterval *const &l, gInterval *const &r) { return l->stop < r->stop;});
+      [](bed12 *const &l, bed12 *const &r) { return l->stop < r->stop;});
 
    // Build the tree!
    root = constructTreeSortedSet(setIntervals);

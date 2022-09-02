@@ -138,6 +138,7 @@ std::string SeedManager::write_out() {
 }
 
 std::vector<double> SeedManager::grabSeedSet(int K) {
+  std::vector<double> pickedseeds;
   if (setSeeds == NULL) { // No seeds allocated
      // Should allocate seeds, fill them (but this will need coords!)
      // Or throw an error?  
@@ -165,6 +166,7 @@ std::vector<double> SeedManager::grabSeedSet(int K) {
 
    */
   }
+  return pickedseeds;
 }
 
 /*

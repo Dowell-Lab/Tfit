@@ -99,26 +99,6 @@ bool gInterval::Contains(double point) {
 }
 
 /**
- * @brief Add a set of points (per bedGraph info) to this interval.
- * 
- */
-void gInterval::addDataPoint(double v_start, double v_stop, double cov, bool expand) {
-  // If pointer to segment doesn't exist, create it.
-  if (data == NULL) {
-    data = new RawData(this);
-  }   
-  // Adjust for edge cases, expanding the region if permissible.
-  if (expand && (v_start < start)) {
-    start = v_start;   // Adjust the gInterval
-  }
-  if (expand && (v_stop > stop)) {
-    stop = v_stop;  // Adjust the gInterval
-  }
-  // Adding these data points to the set
-  data->addDataPoints(v_start, v_stop, cov);
-}
-
-/**
  * @brief Helper function that sets the basic BED4 contents from a vector of strings.
  * 
  * @param lineArray expects: chromosome start stop ID in lineArray and ignores rest.
@@ -251,6 +231,16 @@ bed12::bed12(std::string v_chromosome, double v_start, double v_stop,
     // std::cout << "End Construct: " + seeds->mu_seeds.size() << std::endl;
 }
 
+bed12::bed12(std::string v_chromosome, double v_start, double v_stop, 
+    std::string v_identifier) :
+    bed6(v_chromosome, v_start, v_stop, v_identifier,0, ".") {
+
+    seeds = new Seeds;
+    // std::cout << "End Construct: " + seeds->mu_seeds.size() << std::endl;
+}
+
+
+
 bed12::~bed12() {
   delete(seeds);
 }
@@ -330,3 +320,25 @@ void bed12::setfromLastSix(std::string v_lastsix) {
   seeds->getSeedsfromBedFields(numSeeds, seedWeights, seedStarts);
   // cout << "End setfromLastSix: " + seeds->mu_seeds.size() << std::endl;
 }
+
+/**
+ * @brief Add a set of points (per bedGraph info) to this interval.
+ * 
+ */
+void bed12::addDataPoint(double v_start, double v_stop, double cov, bool expand) {
+  // If pointer to segment doesn't exist, create it.
+  if (data == NULL) {
+    data = new RawData(this);
+  }   
+  // Adjust for edge cases, expanding the region if permissible.
+  if (expand && (v_start < start)) {
+    start = v_start;   // Adjust the gInterval
+  }
+  if (expand && (v_stop > stop)) {
+    stop = v_stop;  // Adjust the gInterval
+  }
+  // Adding these data points to the set
+  data->addDataPoints(v_start, v_stop, cov);
+}
+
+

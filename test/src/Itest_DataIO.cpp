@@ -45,8 +45,8 @@ TEST(ITest_DataIO, checkSearch_noChr)
    Bedfile sut;
    sut.load_file(file_name);
 
-   std::vector<gInterval *> results;
-   gInterval query("chr51", 19731000, 19768000, "example");
+   std::vector<bed12 *> results;
+   bed12 query("chr51", 19731000, 19768000, "example");
 
    // Act: call methods on SUT, capture output
    results = sut.setRegions.findOverlapIntervals(&query);
@@ -65,8 +65,8 @@ TEST(ITest_DataIO, checkSearch_hasoverlap)
    Bedfile sut;
    sut.load_file(file_name);
 
-   std::vector<gInterval *> results;
-   gInterval query("chr22", 19731000, 19768000, "example");
+   std::vector<bed12 *> results;
+   bed12 query("chr22", 19731000, 19768000, "example");
 
    // std::cout << sut.reportBedfileContents() << std::endl;
    // Act: call methods on SUT, capture output
@@ -84,8 +84,8 @@ TEST(ITest_DataIO, checkSearch_noOverlap)
    Bedfile sut;
    sut.load_file(file_name);
 
-   std::vector<gInterval *> results;
-   gInterval query("chr21", 19731000, 19768000, "example");
+   std::vector<bed12 *> results;
+   bed12 query("chr21", 19731000, 19768000, "example");
 
    // Act: call methods on SUT, capture output
    results = sut.setRegions.findOverlapIntervals(&query);

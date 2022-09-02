@@ -25,11 +25,11 @@ public:
 	Inode * left;  //!< All intervals fully to left of center
 	Inode * right; //!< All intervals fully to the right of center
 
-	std::vector<gInterval *> OverlapCenter;	//<! All intervals overlapping center, sorted by end 
+	std::vector<bed12 *> OverlapCenter;	//<! All intervals overlapping center, sorted by end 
 
 	// Constructors
 	Inode();	// empty constructor
-    Inode(double, std::vector<gInterval *>);
+    Inode(double, std::vector<bed12 *>);
     // Destructor
     ~Inode();
 
@@ -49,7 +49,7 @@ public:
 	// Constructors
     CITree();
     CITree(Inode *);
-    CITree(std::vector<gInterval *>);  // sorts intervals then builds tree.
+    CITree(std::vector<bed12 *>);  // sorts intervals then builds tree.
     //Destructor
     ~CITree();
 
@@ -59,13 +59,13 @@ public:
     std::string write_Root();
 
     // Search tree for all intervals that overlap a given point 
-    std::vector<gInterval *>searchPoint(double);
+    std::vector<bed12 *>searchPoint(double);
     // Search tree for all intervals that overlap a given interval 
-    std::vector<gInterval *>overlapSearch(gInterval *);
+    std::vector<bed12 *>overlapSearch(bed12 *);
 
     // Recursively builds tree, assumes sorted vector of intervals
-    void constructTree(std::vector<gInterval *>);
-    Inode *constructTreeSortedSet(std::vector<gInterval *>);
+    void constructTree(std::vector<bed12 *>);
+    Inode *constructTreeSortedSet(std::vector<bed12 *>);
     void destroyTree();
 };
 

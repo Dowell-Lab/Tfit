@@ -13,8 +13,8 @@ TEST(SetROI, addRegionToSet_IncrementNumElements)
 {
     // Arrange: bring SUT to desired state
     SetROI sut;
-    bed6 *testregion;
-    testregion = new bed6("Example1", 2000, 4000, "ID1", 300, "+");
+    bed12 *testregion;
+    testregion = new bed12("Example1", 2000, 4000, "ID1");
 
     // Act: call methods on SUT, capture output
     sut.addRegionToSet(testregion);
@@ -27,8 +27,8 @@ TEST(SetROI, findOverlapInterval_NoContents)
 {
     // Arrange: bring SUT to desired state
     SetROI sut;
-    std::vector<gInterval *> results;
-    bed6 query("NewChr", 3200, 3500, "test", 100, "+");
+    std::vector<bed12 *> results;
+    bed12 query("NewChr", 3200, 3500, "test");
 
     // Act: call methods on SUT, capture output
     results = sut.findOverlapIntervals(&query);
@@ -40,9 +40,9 @@ TEST(SetROI, findOverlapInterval_NoContents)
 class SetROITest: public ::testing::Test {
   protected:
   void SetUp() override {
-    region1 = new bed6("Example1", 2000, 4000, "ID1", 300, "+");
-    region2 = new bed6("Example2", 1000, 5000, "ID2", 300, "-");
-    region3 = new bed6("Example1", 3000, 5000, "ID3", 300, "+");
+    region1 = new bed12("Example1", 2000, 4000, "ID1");
+    region2 = new bed12("Example2", 1000, 5000, "ID2");
+    region3 = new bed12("Example1", 3000, 5000, "ID3");
     sut.addRegionToSet(region1);
     sut.addRegionToSet(region2);
     sut.addRegionToSet(region3);
@@ -51,23 +51,17 @@ class SetROITest: public ::testing::Test {
     sut.clearTrees();
   }
   SetROI sut;
-  bed6 *region1, *region2, *region3;
-  std::vector<gInterval *> results;
+  bed12 *region1, *region2, *region3;
+  std::vector<bed12 *> results;
 };
 
 TEST_F(SetROITest, findOverlapIntervalTests_SingleOverlap)
 {
     // Arrange: bring SUT to desired state
-    bed6 query("Example1", 1000, 2500, "test", 100, "+");
+    bed12 query("Example1", 1000, 2500, "test");
 
     // Act: call methods on SUT, capture output
     results = sut.findOverlapIntervals(&query);
-
-    // std::cout << results.size() << std::endl;
-    // std::vector<gInterval *>::iterator it;
-    // for (it = results.begin(); it != results.end(); it++) {
-     //  std::cout << (*it)->write_out() << std::endl;
-    // }
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 1);
@@ -76,7 +70,7 @@ TEST_F(SetROITest, findOverlapIntervalTests_SingleOverlap)
 TEST_F(SetROITest, findOverlapIntervalTests_MultipleOverlap)
 {
     // Arrange: bring SUT to desired state
-    bed6 query("Example1", 3200, 3500, "test", 100, "+");
+    bed12 query("Example1", 3200, 3500, "test");
 
     // Act: call methods on SUT, capture output
     results = sut.findOverlapIntervals(&query);
@@ -88,7 +82,7 @@ TEST_F(SetROITest, findOverlapIntervalTests_MultipleOverlap)
 TEST_F(SetROITest, findOverlapIntervalTests_ChromDoesNotExist)
 {
     // Arrange: bring SUT to desired state
-    bed6 query("NewChr", 3200, 3500, "test", 100, "+");
+    bed12 query("NewChr", 3200, 3500, "test");
 
     // Act: call methods on SUT, capture output
     results = sut.findOverlapIntervals(&query);
@@ -127,7 +121,7 @@ TEST_F(SetROITest, addDataToExistingROI_notFound)
 TEST_F(SetROITest, addDataCreateROI_contained)
 {
   // Arrange: bring SUT to desired state
-  bed6 query("Example2", 1000, 2500, "test", 100, "+");
+  bed12 query("Example2", 1000, 2500, "test");
 
   // Act: call methods on SUT, capture output
   // Example2 is 1000 to 5000
@@ -155,7 +149,7 @@ TEST_F(SetROITest, addDataCreateROI_newIdentifier)
 TEST_F(SetROITest, addDataCreateROI_edgecase)
 {
   // Arrange: bring SUT to desired state
-  bed6 query("Example2", 1000, 2500, "test", 100, "+");
+  bed12 query("Example2", 1000, 2500, "test");
 
   // Act: call methods on SUT, capture output
   // Example2 is 1000 to 5000

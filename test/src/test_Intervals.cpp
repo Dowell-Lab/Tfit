@@ -24,10 +24,10 @@ TEST(gInterval, writeBedEQreadBed)
     EXPECT_THAT(temp.write_out(), sut.write_out());
 }
 
-TEST(gInterval, addDataPoint_contained)
+TEST(bed12, addDataPoint_contained)
 {
     // Arrange: bring SUT to desired state
-    gInterval sut("TestName", 100, 1000, "chrTest"); 
+    bed12 sut("TestName", 100, 1000, "chrTest"); 
 
     // Act: call methods on SUT, capture output
     sut.addDataPoint(120,150,4,false);      // Note calls rawData::addDataPoints, test elsewhere
@@ -40,10 +40,10 @@ TEST(gInterval, addDataPoint_contained)
     EXPECT_EQ(sut.stop, (double)1000);
 }
 
-TEST(gInterval, addDataPoint_edgeCaseNoExpand)
+TEST(bed12, addDataPoint_edgeCaseNoExpand)
 {
     // Arrange: bring SUT to desired state
-    gInterval sut("TestName", 100, 1000, "chrTest"); 
+    bed12 sut("TestName", 100, 1000, "chrTest"); 
 
     // Act: call methods on SUT, capture output
     sut.addDataPoint(80,150,4,false);      // Note calls rawData::addDataPoints, test elsewhere
@@ -53,10 +53,10 @@ TEST(gInterval, addDataPoint_edgeCaseNoExpand)
     EXPECT_EQ(sut.start, (double)100);
 }
 
-TEST(gInterval, addDataPoint_edgeCaseStartExpand)
+TEST(bed12, addDataPoint_edgeCaseStartExpand)
 {
     // Arrange: bring SUT to desired state
-    gInterval sut("TestName", 100, 1000, "chrTest"); 
+    bed12 sut("TestName", 100, 1000, "chrTest"); 
 
     // Act: call methods on SUT, capture output
     sut.addDataPoint(80,150,4,true);      // Note calls rawData::addDataPoints, test elsewhere
@@ -66,10 +66,10 @@ TEST(gInterval, addDataPoint_edgeCaseStartExpand)
     EXPECT_EQ(sut.start, (double)80);
 }
 
-TEST(gInterval, addDataPoint_edgeCaseStopExpand)
+TEST(bed12, addDataPoint_edgeCaseStopExpand)
 {
     // Arrange: bring SUT to desired state
-    gInterval sut("TestName", 100, 1000, "chrTest"); 
+    bed12 sut("TestName", 100, 1000, "chrTest"); 
 
     // Act: call methods on SUT, capture output
     sut.addDataPoint(900,1500,4,true);      // Note calls rawData::addDataPoints, test elsewhere

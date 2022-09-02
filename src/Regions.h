@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "helper.h"   // Bimap
-#include "Intervals.h"   // gInterval, bed6
+#include "Intervals.h"   // bed12
 #include "Data.h"   // RawData, Segment 
 #include "ITree.h"    // CITree
 
@@ -29,7 +29,7 @@
 class SetROI {
 public:
   Bimap chr_names;     // system for converting names to indexes (& vice versa)
-  std::map<int, std::vector<gInterval *>> regions;  // collection, one per "chr"
+  std::map<int, std::vector<bed12 *>> regions;  // collection, one per "chr"
 
   // The Interval tree is really only needed when searching.  
   std::map<int, CITree *> searchable;   // index to interval tree 
@@ -41,13 +41,13 @@ public:
   ~SetROI();
 
   // Functions
-  void addRegionToSet(gInterval *);
+  void addRegionToSet(bed12 *);
   std::string print_tree_at_chromosome(std::string chromo);
   std::string write_out();
    
   // Find overlapping intervals (search)
   void createSearchIndex();   // Builds the interval trees given the regions 
-  std::vector<gInterval *>findOverlapIntervals(gInterval *);
+  std::vector<bed12 *>findOverlapIntervals(bed12 *);
   void clearTrees();
 
   // Adding data to the set of regions (with vs without roi)

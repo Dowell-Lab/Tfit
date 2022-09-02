@@ -24,12 +24,12 @@ class ITreeTest: public :: testing::Test {
       sut.destroyTree();
     }
     // Arrange: bring SUT to desired state
-    std::vector<gInterval *>setofIntervals;
-    gInterval i1 = gInterval("chr1", 1, 10, "temp1");
-    gInterval i2 = gInterval("chr1", 15, 24, "temp2");
-    gInterval i3 = gInterval("chr1", 17, 29, "temp3");
-    gInterval i4 = gInterval("chr1", 31, 38, "temp4");
-    gInterval i5 = gInterval("chr1", 30, 40, "temp5");
+    std::vector<bed12 *>setofIntervals;
+    bed12 i1 = bed12("chr1", 1, 10, "temp1");
+    bed12 i2 = bed12("chr1", 15, 24, "temp2");
+    bed12 i3 = bed12("chr1", 17, 29, "temp3");
+    bed12 i4 = bed12("chr1", 31, 38, "temp4");
+    bed12 i5 = bed12("chr1", 30, 40, "temp5");
     CITree sut;
 };
 
@@ -47,14 +47,9 @@ TEST_F(ITreeTest, treeConstruction)
 TEST_F(ITreeTest, SearchPointContains)
 {
     // Arrange
-    std::vector<gInterval *> results;
+    std::vector<bed12 *> results;
     // Act: call methods on SUT, capture output
     results = sut.searchPoint((double)33);
-
-    //std::vector<gInterval *>::iterator it;
-    // for (it = results.begin(); it != results.end(); it++) {
-     //   std::cout << (*it)->write_out() << std::endl;
-    //}
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 2);
@@ -63,15 +58,10 @@ TEST_F(ITreeTest, SearchPointContains)
 TEST_F(ITreeTest, SearchPointEdge)
 {
     // Arrange: bring SUT to desired state
-    std::vector<gInterval *> results;
+    std::vector<bed12 *> results;
   
     // Act: call methods on SUT, capture output
     results = sut.searchPoint((double)17);
-
-    //  std::vector<gInterval *>::iterator it;
-    // for (it = results.begin(); it != results.end(); it++) {
-    //     std::cout << (*it)->write_out() << std::endl;
-    // }
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 2);
@@ -80,15 +70,10 @@ TEST_F(ITreeTest, SearchPointEdge)
 TEST_F(ITreeTest, SearchPointMissing)
 {
     // Arrange: bring SUT to desired state
-    std::vector<gInterval *> results;
+    std::vector<bed12 *> results;
 
     // Act: call methods on SUT, capture output
     results = sut.searchPoint((double)12);
-
-    // std::vector<gInterval *>::iterator it;
-    // for (it = results.begin(); it != results.end(); it++) {
-      //  std::cout << (*it)->write_out() << std::endl;
-    //}
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 0);
@@ -97,15 +82,10 @@ TEST_F(ITreeTest, SearchPointMissing)
 TEST_F(ITreeTest, SearchIntervalExact) 
 {
     // Arrange: bring SUT to desired state
-    std::vector<gInterval *> results;
+    std::vector<bed12 *> results;
 
     // Act: call methods on SUT, capture output
     results = sut.overlapSearch(&i4);
-
-    // std::vector<gInterval *>::iterator it;
-    // for (it = results.begin(); it != results.end(); it++) {
-    //   std::cout << (*it)->write_out() << std::endl;
-    // }
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 2);
@@ -114,16 +94,11 @@ TEST_F(ITreeTest, SearchIntervalExact)
 TEST_F(ITreeTest, SearchIntervalMissing) 
 {
     // Arrange: bring SUT to desired state
-    gInterval queryI("chr1", 11, 14, "missing");
-    std::vector<gInterval *> results;
+    bed12 queryI("chr1", 11, 14, "missing");
+    std::vector<bed12 *> results;
 
     // Act: call methods on SUT, capture output
     results = sut.overlapSearch(&queryI);
-
-    // std::vector<gInterval *>::iterator it;
-    // for (it = results.begin(); it != results.end(); it++) {
-    //   std::cout << (*it)->write_out() << std::endl;
-    // }
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 0);
@@ -132,16 +107,11 @@ TEST_F(ITreeTest, SearchIntervalMissing)
 TEST_F(ITreeTest, SearchIntervalContained) 
 {
     // Arrange: bring SUT to desired state
-    gInterval queryI("chr1", 33, 35, "contained");
-    std::vector<gInterval *> results;
+    bed12 queryI("chr1", 33, 35, "contained");
+    std::vector<bed12 *> results;
 
     // Act: call methods on SUT, capture output
     results = sut.overlapSearch(&queryI);
-
-    // std::vector<gInterval *>::iterator it;
-    // for (it = results.begin(); it != results.end(); it++) {
-    //   std::cout << (*it)->write_out() << std::endl;
-    // }
 
     // Assert: Verify the outcome
     EXPECT_EQ(results.size(), 2);

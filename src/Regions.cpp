@@ -50,7 +50,7 @@ SetROI::~SetROI() {
  * 
  * @param nregion 
  */
-void SetROI::addRegionToSet(gInterval * nregion) {
+void SetROI::addRegionToSet(bed12 * nregion) {
   // be sure we have an identifier for this chromosome
   chr_names.addIdentifier(nregion->chromosome);
 
@@ -65,7 +65,7 @@ void SetROI::addRegionToSet(gInterval * nregion) {
  */
 void SetROI::createSearchIndex() {
     // setup interval trees, one per chromosome
-    std::map<int, std::vector<gInterval *>>::iterator it;
+    std::map<int, std::vector<bed12 *>>::iterator it;
     for (it = regions.begin(); it != regions.end(); it++) {
       searchable[it->first] = new CITree(it->second);
     }
@@ -79,7 +79,7 @@ void SetROI::createSearchIndex() {
  * the chromosome identifier).
  * 
  */
-std::vector<gInterval *> SetROI::findOverlapIntervals(gInterval *input) {
+std::vector<bed12 *> SetROI::findOverlapIntervals(bed12 *input) {
   // std::cout << input->write_out() << std::endl;
 
   int index = chr_names.lookupIndex(input->chromosome);
@@ -90,7 +90,7 @@ std::vector<gInterval *> SetROI::findOverlapIntervals(gInterval *input) {
     }
     return searchable[index]->overlapSearch(input);
   } else {  // this index isn't found, return empty vector;
-    std::vector<gInterval *> empty_vector;
+    std::vector<bed12 *> empty_vector;
     return empty_vector;
   }
 }
@@ -134,8 +134,8 @@ std::string SetROI::write_out() {
    std::string report;
    // Currently only chromosome names reported.
    report = "\n" + chr_names.print_index_names();
-   std::map<int, std::vector<gInterval *>>::iterator it;
-   std::vector<gInterval *>::iterator intervals;
+   std::map<int, std::vector<bed12 *>>::iterator it;
+   std::vector<bed12*>::iterator intervals;
    for (it = regions.begin(); it != regions.end(); it++)  {
      for (intervals = it->second.begin(); intervals != it->second.end(); intervals++)  {
        report += "\n\t" + (*intervals)->write_out();
@@ -150,8 +150,8 @@ std::string SetROI::write_out() {
  * 
  */
 bool SetROI::addDataToExistingROI(std::string chr, double start, double stop, double coverage) {
-   std::vector<gInterval *> setToAdd;
-   gInterval dataInterval(chr, start, stop, "temp");
+   std::vector<bed12 *> setToAdd;
+   bed12 dataInterval(chr, start, stop, "temp");
    // Search existing CITree for overlapping intervals
    setToAdd = findOverlapIntervals(&dataInterval);
 
@@ -162,7 +162,7 @@ bool SetROI::addDataToExistingROI(std::string chr, double start, double stop, do
    // std::cout << "FOUND!" + dataInterval.write_out() << std::endl;
 
    // Add this point to the overlapping gIntervals
-   std::vector<gInterval *>::iterator it;
+   std::vector<bed12 *>::iterator it;
    for (it=setToAdd.begin(); it != setToAdd.end(); it++) {
      (*it)->addDataPoint(start,stop,coverage,0);
    }
@@ -186,15 +186,15 @@ void SetROI::addDataCreateROI(std::string chr, double start, double stop, double
 
   // If no gInterval exists, add to the regions list
   if (regions[idx].size() <= 0 ) { 
-    regions[idx].push_back(new gInterval(chr, start, stop, "temp"));
+    regions[idx].push_back(new bed12(chr, start, stop, "temp"));
   }
   // Add this point to the gInterval, expand if needed.
   regions[idx].front()->addDataPoint(start,stop,coverage,1);
 }
 
 void SetROI::ConditionDataSet(int v_delta, int v_scale) {
-  std::map<int, std::vector<gInterval *>>::iterator mit;    // Outer Map iterator
-  std::vector<gInterval *>::iterator  it;   //Inner vector iterator
+  std::map<int, std::vector<bed12*>>::iterator mit;    // Outer Map iterator
+  std::vector<bed12 *>::iterator  it;   //Inner vector iterator
   for (mit = regions.begin(); mit != regions.end(); mit++) {
     // For every index, lets go through the vector of gIntervals.
     for (it = mit->second.begin(); it != mit->second.end(); it++) {

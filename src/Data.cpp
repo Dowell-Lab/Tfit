@@ -63,11 +63,12 @@ RawData::RawData() {
   cdata = NULL;
 }
 
-RawData::RawData(gInterval *v_ginterval) {
+RawData::RawData(bed12 *v_ginterval) {
   minX = maxX = 0;
   belongsTo = v_ginterval; 
   cdata = NULL;
 }
+
 
 /**
  * @brief Length of the RawData (max-min)
