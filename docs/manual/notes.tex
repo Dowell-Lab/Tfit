@@ -21,24 +21,26 @@
 \maketitle
 \noindent $*$ Corresponding author: robin.dowell@colorado.edu
 
-\section{Coding conventions}
 This document assumes that the github Tfit tree has been checked out into a 
 directory called "Tfit".   Within the Tfit code base the primary code for the 
 algorithm lives in Tfit/src and is written in C++.   Compiling the code is 
 done via the Makefile system (cd Tfit/src/; make). 
 
-All methods/classes with logic (i.e. getters and setters generally do not 
-have logic, unless they test the inputs) should have a Unit test in 
-Tfit/test/src.  Unit tests use the gmock/gtest framework from Google.   
-Testing uses cMake to build the appropriate tests (cd Tfit/test/build; 
-cmake .. ; make; ./TestTfit).  General naming convention for tests is that
-within Tfit/test/src exists a test\_filename.cpp where "filename" is an
-existing file in Tfit/src.   Within this test file, individual objects
-are the test set name and test names follow the method\_behavior naming 
+\section{Coding conventions}
+Unit tests use the gmock/gtest framework from Google.
+Testing uses cMake to build the appropriate tests (cd Tfit/test/build; cmake .. ; make; ./TestTfit).  
+General naming convention for tests is for every .cpp file within 
+Tfit/test/src we have a test file of the same name prefaced by test\_.  For
+example, Tfit/src/filename.cpp has a corresponding Tfit/test/src/test\_filename.cpp
+
+Within this test file, individual objects are the test set name and test 
+names follow the method\_behavior naming 
 convention.  Note that for gtest: Test(test set name, test name).  Fixture
 classes (TEST\_F) are used when the setup of a test needs to be 
 repeated frequently.  In these cases the class name is infoNameTest where
 infoName is some informative name that includes the Class name.
+All methods/classes with logic (i.e. getters and setters generally do not 
+have logic, unless they test the inputs) should have a Unit test.
 
 Test coverage statistics and reports can be obtained through gcov
 and lcov using the same Makefile (cd Tfit/test/build; cmake ..; make;
@@ -48,7 +50,7 @@ coverage reports (file:///.../Tfit/test/build/lcoverage/index.html).
 Furthermore, the code (both main code base Tfit/src and Unit testing 
     Tfit/test/src) have documentation following Doyxgen standards.   
 The Doxygen configuration file
-lives at Tfit/docs/doxyfile.in and documentation can be build (cd Tfit/docs; 
+lives at Tfit/docs/doxyfile.in and documentation can be built (cd Tfit/docs; 
     doxygen doxyfile.in).   This manual resides within Tfit/docs/manual and 
 is built using a Makefile (cd Tfit/docs/manual; make all ).  UML diagrams are
 constructed using metapost (*.mp).  A User's guide has been stubbed and should
@@ -57,7 +59,8 @@ eventually be makeable via make userguide.
 \section{Data Handling Design}
 Tfit uses signed bedGraphs as data input.  A bedGraph has the basic format of: 
 chromosome /\t start /\t stop /\t coverage.  Tfit assumes all coordinates are
-reported as zero based half open coordinates, as described in the bedGraph standard.  
+reported as zero based half open coordinates, as described in the bedGraph 
+standard.  
 The coverage value is expected to be signed according to strand (e.g. positive 
 numbers refer to the positive strand whereas negative numbers refer to the 
 negative strand).  Thus each position in the genome may be represented in a 
@@ -71,12 +74,18 @@ interest are inferred directly from the bedGraph (chromosome identifiers
 and coordinates).  Alternatively (and the preferred method), the user can 
 provide a bed file (bed3, bed4, bed6, or bed12) to specify the regions of 
 interest.  Each line of a bed file is stored as the corresponding gInterval.
+
 When a user provides a ROI bed file, Tfit will *only* consider data within 
 these regions (e.g. gIntervals correspond to bed entries and data outside these 
 regions is ignored).  Generally, bedGraphs are read in as PointCov (position, 
 coverage) in a strand specific fashion within the RawData object.  Notably,
 the bed12 format is adapted here to provide Tfit with seed information.  [See
-the Seeds object and information for more details.]
+the Seeds object and information (Section \ref{seeds}) for more details.]
+
+Seeds: It is worth noting that bed12 data is interpreted in a very specific way
+in the Tfit framework.   Exon lengths are weights and exon starts are 
+positions for possible seeds to the EM algorithm (see EM algorithm 
+section for more information).
 
 As most genomes contain multiple ROI (or multiple chromosomes), the contents
 are stored within an indexed collection called SetROI.  Each chromosome name 
@@ -96,16 +105,12 @@ process coordinate transformations (between data coordinates, genomic
 coordinates, and indexed values).  It is also the fundamental data unit 
 used by the EM algorithm for each interval.
 
-Seeds: It is worth noting that bed12 data is interpreted in a very specific way
-in the Tfit framework.   Exon lengths are weights and exon starts are 
-positions for possible seeds to the EM algorithm (see EM algorithm 
-section for more information).
-
 \clearpage
 \section{Models Design}
-The details of the model were originally published in Azofeifa 2017 and
-Azofeifa 2018.  We will repeat and augment the model description here for
-completeness.  
+The details of the model were originally published in Azofeifa 2017 (core EM
+    algoritm) and Azofeifa 2018 (adds footprint parameter and template matching).  
+We will repeat and augment the model description here for
+completeness. 
 
 \includegraphics{models1.mps}
 
@@ -115,18 +120,26 @@ Currently there are multiple models available:
 \item The Full Model (as described in Azofeifa 2017)
 \item The Full Model (as described in Azofeifa 2018), e.g. includes
 the footprint parameter
-\item The Bidirectionals only model
-\item The LIET model (not yet available, planned)
+\item The Bidirectionals only model (note that Azofeifa 2018 was largely
+    optimzed for this behavior)
+\item The LIET model (not yet available, planned, Stanley 2023?)
 \end{itemize}
 
-\section{EM Algorithm}
-The details of model inference by the expectation maximization algorithm was
-originally described in Azofeifa 2017.  We will repeat and augment the 
-algorithm description here for completeness.
+In all cases, models describe nascent transcription data by 
+the behavior of RNA polymerase II.   Every model has model specific control
+and priors, uses reasonable defaults, has instructive failure, and can 
+be fit to data (either via EM or MCMC).
 
-\includegraphics{EMalg1.mps}
+Given a set of parameters and data, score a region.
+Given data, fit best parameters to data.  May be constrained, may have 
+priors on parameters or distinct initial seeds.
+Given a large region, identify seed locations and chunkable units on which to
+run the full model.   This includes specification of [K] (e.g. model selection).
 
-\section{More on Seeding the EM algorithm}
+\section{Model Inference}
+
+\subsection{Seeding the EM algorithm}
+\label{seeds}
 Performance of the EM algorithm is strongly dependent on either having 
 many iterations (to find an optimal parameter regime) or strong priors
 (i.e. high quality seeds).  There are multiple seeding options:
@@ -137,13 +150,20 @@ many iterations (to find an optimal parameter regime) or strong priors
 \item Template matching (originally described in Azofeifa 2018)
 \end{itemize}
 
-\section{Customizing the algorithm}
+\subsection{EM Algorithm}
+The details of model inference by the expectation maximization algorithm was
+originally described in Azofeifa 2017.  We will repeat and augment the 
+algorithm description here for completeness.
+
+\includegraphics{EMalg1.mps}
+
+\subsection{Customizing the algorithm}
 This is about fine tuning algorithm control, model constraints, and 
 the wealth of options available.   This section should also describe 
 how Tfit does I/O of parameters (argparm interface, JSON) and how
 to maximize reproducibility. 
 
-\section{Leveraging Compute Resources}
+\subsection{Leveraging Compute Resources}
 MPI and Threading -- playing nice with compute clusters.
 
 \small{

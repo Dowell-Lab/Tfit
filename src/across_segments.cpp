@@ -209,13 +209,13 @@ vector<map<int, vector<simple_c_free_mode> >> run_model_across_free_mode(vector<
 	double percent 	= 0;
 	int elon_move 	= stoi(P->p["-elon"]);
 	//printf("FSI.size: %d\n", FSI.size());
-	for (int i = 0 ; i < FSI.size(); i++){
+	for (int i = 0 ; i < FSI.size(); i++){		// for each interval
 		if ((i / N) > (percent+0.05)){
 			LG->write(to_string(int((i / N)*100))+"%,", verbose);
 			percent 	= (i / N);
 		}
 
-		//first need to populate data->centers
+		//first need to populate data->centers (the mu seeds!)
 		for (int b = 0 ; b < FSI[i]->bidirectional_bounds.size(); b++){
 			double center = FSI[i]->bidirectional_bounds[b][0] +  FSI[i]->bidirectional_bounds[b][1] ;
 			center/=2.;

@@ -89,7 +89,7 @@ public:
 
 class bed12: public bed6 {
   public: 
-  Seeds *seeds;   // How do seeds get set to anything but NULL?
+  Seeds *seeds;  
 
   // Constructors
   bed12();

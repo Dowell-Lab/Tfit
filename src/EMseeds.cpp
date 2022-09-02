@@ -137,6 +137,18 @@ std::string SeedManager::write_out() {
   return "nothing yet";
 }
 
+/* Joey's code logic:
+ 
+ For each model k:
+   if seeds_still_exist, grab seed (delete it) randomly
+     if randomize (add_noise) sample with Normal at seed, r_mu (stddev)
+   else grab seed from Normal at midpoint, r_mu (stddev, defaults = 0)
+
+ sort seeds
+ use sorted seeds to initilize K model bounds
+
+/*
+
 double SeedManager::grabSeed() {
   std::discrete_distribution<int> ddistro{setSeeds->getMinWeight(), setSeeds->getMaxWeight()};
   return setSeeds->mu_seeds[ddistro(numgen.mt)].coordinate;
@@ -163,3 +175,5 @@ void SeedManager::weightRandomly() {
     setSeeds->mu_seeds[i].coverage = numgen.fetchProbability();  
   }
 }
+
+*/

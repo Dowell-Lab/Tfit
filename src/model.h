@@ -177,7 +177,7 @@ public:
 	double ll,pi; // log likelihood, 
 	double last_diff;
 	bool converged;	// indicator
-	double r_mu;
+	double r_mu;	// default = 0; if > 0 then is std_dev on Normal for random round mu
 	bool move_l;	// indicator
 	// These are priors again.
 	double ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3;

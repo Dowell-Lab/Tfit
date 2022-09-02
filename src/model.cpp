@@ -993,10 +993,11 @@ int classifier::fit2(segment * data, vector<double> mu_seeds, int topology,
 		if (mu_seeds.size()>0  ){
 			i 	= sample_centers(mu_seeds ,  p);
 			mu 	= mu_seeds[i];
-			if (r_mu > 0){
+			if (r_mu > 0){   // if randomize (default is FALSE)
 				mu = ran_num_generator.fetchNormal(mu,r_mu);
 			}
 		}else{
+			// This appears to seed all to the midpoint
 			mu = ran_num_generator.fetchNormal((data->minX+data->maxX)/2., r_mu);
 		}
 		

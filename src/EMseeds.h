@@ -66,10 +66,6 @@ class SeedManager {
   //Functions
   std::string write_out();
 
-  double grabSeed(); // Grab a seed (should we mark it as used?)
-
-  // Just use seeds from an interval (user provided in bed12)
-
   // Build x random choosen seeds, equally weighted across region of interest
   void setupRandomSeeds(int numseeds, gInterval *region);  
   void weightRandomly();    // randomly generate weights for seeds
