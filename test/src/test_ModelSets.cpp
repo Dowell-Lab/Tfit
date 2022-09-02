@@ -32,7 +32,7 @@ TEST(ModelWrapper, updateExpectations)
 */
 
 /*
-TEST(ModelContainer, initializeComponents)
+TEST(ModelContainer, initializeWithPriors)
 {}
 TEST(ModelContainer, Seed_SetBounds)
 {}

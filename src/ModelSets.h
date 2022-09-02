@@ -77,10 +77,8 @@ class ModelContainer {
 
   // Functions;
   std::string write_out();
-  void initializeComponents(dInterval *data);
-  void Seed_SetBounds();
-
-  std::vector<double> RandomSeeds();
+  void initializeWithPriors(dInterval *data);
+  // void Seed_SetBounds();
   void SortByMu();
 
   void resetAllSufficiencyStats();

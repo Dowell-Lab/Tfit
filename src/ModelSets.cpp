@@ -247,24 +247,16 @@ std::string ModelContainer::write_out() {
 /**
  * @brief Pre-EM algorithm setup.  Includes:
  * (1) initialize models with hyperparameters
- * (2) Seed the positions of mu
- * (3) Based on seeds, set the bounds of each model, including Noise
  */
-void ModelContainer::initializeComponents(dInterval *data) {
+void ModelContainer::initializeWithPriors(dInterval *data) {
 	//initialize(1) components with user defined hyperparameters
 	for (int k = 0; k < K; k++){
       setModels[k]->setPriors();
 		//components[k].set_priors(ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3,data->N, K);
 	}
-	//random seeding, set bounds 
-   Seed_SetBounds();    
-   SortByMu(); // Joey's: sort_components(components, K);
-   //  *** Joey's code resets the links for forward_neightbor and reverse_neighbor here.
-
-   // Initialize the Noise model
-   // Needs a pi (from classifier in Joey) and weight, noise_w in Joey
-   // noise.setBounds(data->minX, data->maxX); 
 }
+
+/*
 
 void ModelContainer::Seed_SetBounds() {
 	std::vector<double> mus;
@@ -278,6 +270,7 @@ void ModelContainer::Seed_SetBounds() {
                                       */
    }
 }
+*/
 
 /**
  * @brief Fetch a random seed.
