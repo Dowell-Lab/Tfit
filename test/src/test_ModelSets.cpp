@@ -34,7 +34,7 @@ TEST(ModelWrapper, updateExpectations)
 /*
 TEST(ModelContainer, initializeWithPriors)
 {}
-TEST(ModelContainer, Seed_SetBounds)
+TEST(ModelContainer, useSeeds2SetBounds)
 {}
 TEST(ModelContainer, RandomSeeds)
 {}

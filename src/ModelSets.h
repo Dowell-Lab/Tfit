@@ -78,13 +78,15 @@ class ModelContainer {
   // Functions;
   std::string write_out();
   void initializeWithPriors(dInterval *data);
-  // void Seed_SetBounds();
+  // void useSeeds2SetBounds();
   void SortByMu();
 
   void resetAllSufficiencyStats();
   double getAllResponsibilities();
   perStrandInfo calculateAllRi(double i, perStrandInfo coverage);
   void updateExpectations(double z, perStrandInfo coverage, perStrandInfo normalizeRi);
+
+  void useSeeds2SetBounds(std::vector<double> v_museeds);
 
 };
 

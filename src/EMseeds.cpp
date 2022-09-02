@@ -137,18 +137,37 @@ std::string SeedManager::write_out() {
   return "nothing yet";
 }
 
-/* Joey's code logic:
- 
- For each model k:
+std::vector<double> SeedManager::grabSeedSet(int K) {
+  if (setSeeds == NULL) { // No seeds allocated
+     // Should allocate seeds, fill them (but this will need coords!)
+     // Or throw an error?  
+  }
+  for (int k = 0; k < K; k++) {
+    /*
    if seeds_still_exist, grab seed (delete it) randomly
      if randomize (add_noise) sample with Normal at seed, r_mu (stddev)
    else grab seed from Normal at midpoint, r_mu (stddev, defaults = 0)
 
- sort seeds
- use sorted seeds to initilize K model bounds
+    if (mu_seeds.size()>0  ){
+      i 	= sample_centers(mu_seeds ,  p);
+      mu 	= mu_seeds[i];
+      if (r_mu > 0){   // if randomize (default is FALSE)
+        mu = ran_num_generator.fetchNormal(mu,r_mu);
+      }
+    }else{
+      // This appears to seed all to the midpoint
+      mu = ran_num_generator.fetchNormal((data->minX+data->maxX)/2., r_mu);
+    }
+    mus[k] 	= mu;
+    if (mu_seeds.size() > 0  ){
+      mu_seeds.erase (mu_seeds.begin()+i);
+    }
+
+   */
+  }
+}
 
 /*
-
 double SeedManager::grabSeed() {
   std::discrete_distribution<int> ddistro{setSeeds->getMinWeight(), setSeeds->getMaxWeight()};
   return setSeeds->mu_seeds[ddistro(numgen.mt)].coordinate;

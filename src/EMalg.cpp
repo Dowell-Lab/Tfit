@@ -89,11 +89,10 @@ bool EMalg::fit () {
 
    // user defined hyperparameters
    models.initializeWithPriors(data);
-
-   /*
-	//random seeding, set bounds 
-   Seed_SetBounds(); 
-   */
+   // use seeds to initilize and set bounds
+	std::vector<double> museeds;
+   museeds = seeds.grabSeedSet(models.K);
+   models.useSeeds2SetBounds(museeds);
    // sort by mu
    models.SortByMu(); // Joey's: sort_components(components, K);
 

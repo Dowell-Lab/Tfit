@@ -66,11 +66,7 @@ class SeedManager {
   //Functions
   std::string write_out();
 
-  // Build x random choosen seeds, equally weighted across region of interest
-  void setupRandomSeeds(int numseeds, gInterval *region);  
-  void weightRandomly();    // randomly generate weights for seeds
-
-  // Run a seeding algorithm (template matching or other)
+  std::vector<double> grabSeedSet(int K);
 
 };
 

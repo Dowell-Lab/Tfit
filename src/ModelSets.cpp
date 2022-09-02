@@ -252,25 +252,18 @@ void ModelContainer::initializeWithPriors(dInterval *data) {
 	//initialize(1) components with user defined hyperparameters
 	for (int k = 0; k < K; k++){
       setModels[k]->setPriors();
-		//components[k].set_priors(ALPHA_0, BETA_0, ALPHA_1, BETA_1, ALPHA_2, ALPHA_3,data->N, K);
 	}
 }
 
-/*
-
-void ModelContainer::Seed_SetBounds() {
-	std::vector<double> mus;
-   mus = RandomSeeds();	// randomly seed
-   std::sort(mus.begin(), mus.end()); // sort random seed; replaces Joey's sort_vector
+void ModelContainer::useSeeds2SetBounds(std::vector<double> v_museeds) {
+   std::sort(v_museeds.begin(), v_museeds.end()); // sort seeds; replaces Joey's sort_vector
    for (int k = 0; k < K; k++) { 
       // Joey: initialize_bounds();
       setModels[k]->initializeBounds(mus[k]);   // use random seeds to initialize
-      /** (mus[k],
-                                      data, K, data->SCALE, 0., topology, foot_print, data->maxX, data->maxX);
-                                      */
+      /** (mus[k], data, K, data->SCALE, 0., topology, foot_print, 
+       * data->maxX, data->maxX); */
    }
 }
-*/
 
 /**
  * @brief Fetch a random seed.
