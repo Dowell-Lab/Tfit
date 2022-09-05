@@ -35,11 +35,14 @@ class ITreeTest: public :: testing::Test {
 
 TEST_F(ITreeTest, treeConstruction)
 {
-    std::string output = "\nL:\nL:\nIntervals overlapping 10.000000\n#chr1:1-10,temp1";
-    output += "\nIntervals overlapping 24.000000\n#chr1:15-24,temp2\nIntervals overlapping ";
-    output += "29.000000\n#chr1:17-29,temp3\nR:\nL:\nIntervals overlapping 38.000000\n";
-    output += "#chr1:31-38,temp4\nIntervals overlapping 40.000000\n#chr1:30-40,temp5";
-
+    std::string output = "\nL:\nL:\nIntervals overlapping 10.000000\n";
+    output += "#chr1:1-10,temp1,0.0000,.,0.\t\t\nIntervals overlapping ";
+    output += "24.000000\n#chr1:15-24,temp2,0.0000,.,0.\t\t\nIntervals ";
+    output += "overlapping 29.000000\n#chr1:17-29,temp3,0.0000,.,0.\t\t\n";
+    output += "R:\nL:\nIntervals overlapping 38.000000\n#chr1:31-38,temp4";
+    output += ",0.0000,.,0.\t\t\nIntervals overlapping 40.000000\n#chr1:30-";
+    output += "40,temp5,0.0000,.,0.\t\t";
+    
     // Assert: Verify the outcome
     EXPECT_EQ(output, sut.write_Full_Tree());
 }
