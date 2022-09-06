@@ -145,7 +145,7 @@ void EMalg::Initialize() {
       double init_sigma = seeds.numgen.fetchUniform(0,250) / data->scale;
       double init_lambda = data->scale / seeds.numgen.fetchUniform(0,250);
       double init_mu = seeds.setSeeds->mu_seeds[k].coordinate;
-      models.setModels[k]->initializeBounds(init_mu, init_sigma, init_lambda, 
+      models.setModels[k]->initalizeBounds(init_mu, init_sigma, init_lambda, 
                      weight, region_minX, region_maxX);   // use random seeds to initialize
    }
 

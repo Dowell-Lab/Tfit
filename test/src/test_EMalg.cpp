@@ -21,3 +21,15 @@ TEST(EMalg, fitFailswithNoData)
 }
 
 // TEST(EMalg, NoiseOnlyTest)
+
+// TEST(EMalg, fit)
+
+// Test(EMalg, computeBackgroundModel)
+
+// Test(EMalg, Initialize)
+
+// TEST(EMalg, Estep)
+
+// TEST(EMalg, Mstep)
+
+// TEST(EMalg, adjustBounds)

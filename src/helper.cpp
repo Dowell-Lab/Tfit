@@ -128,3 +128,11 @@ int tfit::StrandAsInt(char s) {
 }
 
 
+std::string tfit::write_VectorPointCov(std::vector<PointCov> setOfpoints) {
+  std::string output;
+  for (auto & element : setOfpoints) {
+    output += "[" + tfit::prettyDecimal(element.coordinate,1) +
+        ","  + tfit::prettyDecimal(element.coverage,1) + "] ";
+  }
+  return output;
+}

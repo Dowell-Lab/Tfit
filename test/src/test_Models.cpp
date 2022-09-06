@@ -35,6 +35,7 @@ TEST(Bidirectional, applyFootprintSubPosStrand)
   // Assess
   EXPECT_EQ(newZ, 3);
 }
+
 TEST(Bidirectional, applyFootprintAddNegStrand) 
 {
   // Arrange: bring SUT to desired state
@@ -44,7 +45,6 @@ TEST(Bidirectional, applyFootprintAddNegStrand)
   // Assess
   EXPECT_EQ(newZ, 63);
 }
-
 
 TEST(Bidirectional, MillsRatioCorrect)
 {
@@ -170,6 +170,10 @@ TEST(Bidirectional, calcExpectedVals)
 // updateParameters(double N, double K) 
 TEST(Bidirectional, updateParameters) 
 {}
+
+// initalizeBounds(...)
+TEST(Bidirectional, initalizeBounds)
+{}
 */
 
 /*
@@ -185,6 +189,9 @@ TEST(Uniform, updateParameters)
 TEST(Uniform, calculateLikelihood)
 {}
 
+// initalizeBounds(...)
+TEST(Uniform, initalizeBounds)
+{}
 */
 
 /*
@@ -210,5 +217,9 @@ TEST(FullModel, calculateRi)
 
 // void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
 TEST(FullModel, updateExpecations)
+{}
+
+// initBounds(...)
+TEST(Uniform, initBounds)
 {}
 */

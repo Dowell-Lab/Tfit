@@ -52,7 +52,7 @@ class ModelWrapper {
   perStrandInfo calculateRi(double z, perStrandInfo coverage);
   void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
 
-  void initializeBounds(double v_mu, double v_sigma, 
+  void initalizeBounds(double v_mu, double v_sigma, 
             double v_lambda, double v_weight, double minX, double maxX);
 };
 
@@ -82,7 +82,6 @@ class ModelContainer {
   // Functions;
   std::string write_out();
   void initializeWithPriors(dInterval *data);
-  // void useSeeds2SetBounds();
   void SortByMu();
 
   void resetAllSufficiencyStats();

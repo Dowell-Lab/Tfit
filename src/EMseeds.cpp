@@ -23,7 +23,11 @@ Seeds::Seeds(): mu_seeds() {
 }
 
 std::string Seeds::write_out() {
-  return writeSeedsAsBedFields();
+  if (mu_seeds.size() > 0) {
+    return writeSeedsAsBedFields();
+  } else {
+    return "None";
+  }
 }
 
 double Seeds::getMaxWeight() {
@@ -136,35 +140,42 @@ SeedManager::SeedManager(): numgen() {
 }
 
 std::string SeedManager::write_out() {
-  return "nothing yet";
+  std::string output = "";
+
+  if (belongsTo != NULL) {
+    output += "\nData: " + belongsTo->write_out();
+  } 
+  if (setSeeds != NULL) {
+    output += "\nSeeds: " + setSeeds->write_out(); 
+  }
+
+  return output;
 }
 
 void SeedManager::setupDataLink(dInterval *v_data) {
    belongsTo = v_data;
-   setSeeds =  belongsTo->raw->belongsTo->seeds;
-}
-
-std::vector<PointCov> SeedManager::grabSeedSet(int K) {
-  if (setSeeds == NULL) { // No seeds allocated
-    setSeeds = new Seeds;
-  }
-  if (setSeeds->mu_seeds.size() < K) {
-    // We need to add seeds randomly up to K.
-    int needNseeds = K - setSeeds->mu_seeds.size();
-    setupRandomSeeds(needNseeds, belongsTo->bins);
-  }
-
-  // At this point, we should have at least K seeds
-  shuffleSeeds(); // Should we randomize them?
-
-  // return K seeds
-  std::vector<PointCov> pickedseeds(setSeeds->mu_seeds.begin(), setSeeds->mu_seeds.end() + K);
-
-  // If we are injecting noise, we should then use these seeds to wiggle
-  // using a Normal distribution or something. 
-
-  // Should we sort these before returning?
-  return pickedseeds;
+   if (belongsTo->raw != NULL) {
+     if (belongsTo->raw->belongsTo != NULL) {
+       if (belongsTo->raw->belongsTo->seeds != NULL) {
+          setSeeds =  belongsTo->raw->belongsTo->seeds;
+       } else {
+          // Bed12 has no seeds, allocate here and cross link
+          std::cerr << "No Seeds in this Bed12!\n" << std::endl;
+          setSeeds = new Seeds;
+          belongsTo->raw->belongsTo->seeds = setSeeds;
+       }
+     } else {
+      // RawData does not link to a genomic interval
+      // Allocate seeds here, but do NOT link back
+      std::cerr << "No gInterval associated with this RawData!\n" << std::endl;
+      setSeeds = new Seeds;
+     }
+   } else {
+     // There is no raw data associated with this data (or gInterval)
+      // Allocate seeds here, but do NOT link back
+      std::cerr << "No RawData associated with this dInterval!\n" << std::endl;
+      setSeeds = new Seeds;
+   }
 }
 
 void SeedManager::shuffleSeeds() {
@@ -194,3 +205,31 @@ void SeedManager::weightRandomly(std::vector<PointCov> *seeds) {
     seeds->at(i).coverage = numgen.fetchProbability();  
   }
 }
+
+std::vector<PointCov> SeedManager::grabSeedSet(int K) {
+  if (setSeeds == NULL) { // No seeds allocated
+    std::cerr << "grabSeedSet empty!" << std::endl;
+    setSeeds = new Seeds;
+  }
+  if (setSeeds->mu_seeds.size() < K) {
+    // We need to add seeds randomly up to K.
+    int needNseeds = K - setSeeds->mu_seeds.size();
+    std::cerr << "Insufficient Seeds, generating " + 
+            tfit::prettyDecimal(needNseeds, -1) + "!" << std::endl;
+    std::vector<PointCov> newSeeds = setupRandomSeeds(needNseeds, belongsTo->bins);
+    setSeeds->mu_seeds.insert(setSeeds->mu_seeds.end(), newSeeds.begin(), newSeeds.end());
+  }
+
+  // At this point, we should have at least K seeds
+  shuffleSeeds(); // Should we randomize them?
+
+  // return K seeds
+  std::vector<PointCov> pickedseeds(setSeeds->mu_seeds.begin(), setSeeds->mu_seeds.begin() + K);
+
+  // If we are injecting noise, we should then use these seeds to wiggle
+  // using a Normal distribution or something. 
+
+  // Should we sort these before returning?
+  return pickedseeds;
+}
+

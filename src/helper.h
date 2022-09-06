@@ -70,6 +70,9 @@ namespace tfit {
   double LOG(double x);
   bool compareMu(ModelWrapper *mod1, ModelWrapper *mod2);
   int StrandAsInt(char s);
+
+  std::string write_VectorPointCov(std::vector<PointCov> setOfpoints);
+
 }
 
 #endif

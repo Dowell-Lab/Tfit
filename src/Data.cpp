@@ -48,6 +48,7 @@ std::string PointCov::write_out() {
   return output;
 }
 
+
 bool PointCov::sortOnCoordComp(const PointCov pt1, const PointCov pt2) {
    return (pt1.coordinate < pt2.coordinate);
 }
@@ -165,13 +166,13 @@ void RawData::RemoveDuplicates() {
 std::string RawData::write_out() {
   std::string ID;
   if (belongsTo != NULL ) { ID = belongsTo->identifier; }
-  else { ID = "noID"; }
+  else { ID = "NO gInterval!"; }
 
-  std::string output = ID + ":";
-  output += tfit::prettyDecimal(minX,2) + ":" + tfit::prettyDecimal(maxX,2);
+  std::string output = ID + ":min:";
+  output += tfit::prettyDecimal(minX,2) + ":max:" + tfit::prettyDecimal(maxX,2);
 
-  output += "  " + tfit::prettyDecimal(forward.size(), 2);
-  output += "  " + tfit::prettyDecimal(reverse.size(), 2);
+  output += "\tFS: " + tfit::prettyDecimal(forward.size(), 2);
+  output += "\tRS: " + tfit::prettyDecimal(reverse.size(), 2);
   return output;
 }
 
@@ -268,8 +269,8 @@ std::string dInterval::write_out() {
   if (raw != NULL) {
     output = raw->write_out();
   }
-  output += "\tbins: " + tfit::prettyDecimal(bins,0) + "," 
-      + tfit::prettyDecimal(delta,4) + "," + tfit::prettyDecimal(scale,3);
+  output += "\tParams bins:" + tfit::prettyDecimal(bins,0) + ", delta:" 
+      + tfit::prettyDecimal(delta,4) + ", scale:" + tfit::prettyDecimal(scale,3);
   return output;
 }
 

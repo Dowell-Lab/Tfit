@@ -109,7 +109,7 @@ void ModelWrapper::setPriors() {
 }
  
 // component::initialize_bounds
-void ModelWrapper::initializeBounds(double v_mu, double v_sigma, double v_lambda, 
+void ModelWrapper::initalizeBounds(double v_mu, double v_sigma, double v_lambda, 
                                  double v_weight, double v_minX, double v_maxX) {
    if (type == FMOD) {
       gene->initBounds(v_mu, v_sigma, v_lambda, v_weight, v_minX, v_maxX);

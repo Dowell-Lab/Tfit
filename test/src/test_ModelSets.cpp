@@ -29,14 +29,12 @@ TEST(ModelWrapper, calculateRi)
 {}
 TEST(ModelWrapper, updateExpectations)
 {}
+TEST(ModelWrapper, initalizeBounds)
+{}
 */
 
 /*
 TEST(ModelContainer, initializeWithPriors)
-{}
-TEST(ModelContainer, useSeeds2SetBounds)
-{}
-TEST(ModelContainer, RandomSeeds)
 {}
 TEST(ModelContainer, SortByMu)
 {}

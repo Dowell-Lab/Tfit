@@ -69,13 +69,11 @@ class SeedManager {
 
   void setupDataLink(dInterval *v_data);
 
-  std::vector<PointCov> grabSeedSet(int K);
   std::vector<PointCov> setupRandomSeeds(int numseeds, double v_lastposition);
   void weightRandomly(std::vector<PointCov> *seeds);
-
   void shuffleSeeds();
-
   double addUncertainty(PointCov *seed, double variance);
+  std::vector<PointCov> grabSeedSet(int K);
 };
 
 #endif
