@@ -85,6 +85,10 @@ public:
   void setBEDfromStrings(std::vector<std::string> lineArray); // helper function
 };
 
+/**
+ * @brief By default, everything is a bed12 because this allows
+ * for seeds to the EM.   Therefore, this is where data can be added.
+ */
 class bed12: public bed6 {
   public: 
   Seeds *seeds;  

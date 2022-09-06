@@ -551,7 +551,6 @@ void component::initialize_bounds(double mu, segment * data , int K, double scal
 			noise_w, 0.5);
 		type 	= 0; 
 	}else{
-
 		int complexity=1;
 		if (data->strand == "."){
 			complexity=3;

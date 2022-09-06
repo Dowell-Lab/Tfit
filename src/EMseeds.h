@@ -54,7 +54,8 @@ class Seeds {
  */
 class SeedManager { 
   public:
-  Seeds *setSeeds;
+  dInterval *belongsTo;
+  Seeds *setSeeds;  // convenience pointer
 
   // These could be private:
   Random numgen;    // Random number generator
@@ -66,8 +67,15 @@ class SeedManager {
   //Functions
   std::string write_out();
 
-  std::vector<double> grabSeedSet(int K);
+  void setupDataLink(dInterval *v_data);
 
+  std::vector<PointCov> grabSeedSet(int K);
+  std::vector<PointCov> setupRandomSeeds(int numseeds, double v_lastposition);
+  void weightRandomly(std::vector<PointCov> *seeds);
+
+  void shuffleSeeds();
+
+  double addUncertainty(PointCov *seed, double variance);
 };
 
 #endif

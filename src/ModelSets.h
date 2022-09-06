@@ -12,7 +12,7 @@
 #include <vector>
 
 #include "Models.h"
-#include "Data.h"   // gInterval
+#include "Data.h"   // bed12 
 
 enum ModTypes {EMPTY, FMOD, BIDIR};
 extern double nINF;     // currently defined in template_matching?
@@ -41,7 +41,8 @@ class ModelWrapper {
   std::string write_out();
 
   void setPriors();
-  void initializeBounds(double mu_seed);
+  void initializeBounds(double v_mu, double v_sigma, 
+     double v_lambda, double v_minX, double v_maxX);
   void resetSufficiencyStats();
   double getResponsibility();
 
@@ -50,6 +51,9 @@ class ModelWrapper {
   void updateParameters(double N, int K);
   perStrandInfo calculateRi(double z, perStrandInfo coverage);
   void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
+
+  void initializeBounds(double v_mu, double v_sigma, 
+            double v_lambda, double v_weight, double minX, double maxX);
 };
 
 /**
@@ -85,9 +89,6 @@ class ModelContainer {
   double getAllResponsibilities();
   perStrandInfo calculateAllRi(double i, perStrandInfo coverage);
   void updateExpectations(double z, perStrandInfo coverage, perStrandInfo normalizeRi);
-
-  void useSeeds2SetBounds(std::vector<double> v_museeds);
-
 };
 
 #endif

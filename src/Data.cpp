@@ -518,6 +518,14 @@ double dInterval::getDataCoordfromGenomeCoord(double Gcoord) {
   return getDataCoordfromIndex(index);
 }
 
+double dInterval::getMinGenomeCoord() {
+ return getGenomeCoordfromIndex(0);
+}
+
+double dInterval::getMaxGenomeCoord() {
+ return getGenomeCoordfromIndex(bins-1);
+}
+
 /***** Conditioning / Scaling / Binning Data *****/
 /**
  * @brief Allocate and setup the X matrix given the size of the RawData

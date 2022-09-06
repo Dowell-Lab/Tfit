@@ -120,7 +120,7 @@ public:
   double forward(int);    // equivalent to X[0][i]
   double reverse(int);    // equivalent to X[1][i]
   double position(int);   // equivalent to X[2][i]
-  double getLength();
+  double getLength();   // Note data matrix is 0 ... getLength
 
   // Summary information on this data
   double sumForward();
@@ -132,9 +132,12 @@ public:
   int getIndexfromGenomic(double);   // given genomic coordinate, give index 
   int getIndexfromData(double);  // given data coordinate, get closest index
   double getGenomeCoordfromIndex(int);  // given an index to the dInterval, what is the genomic Coord
-  double getGenomefromData(double);
-  double getDataCoordfromIndex(int);
-  double getDataCoordfromGenomeCoord(double);
+  double getGenomefromData(double); // given data coordinate, get genomic Coord
+  double getDataCoordfromIndex(int);  // given index, what is data coordinate
+  double getDataCoordfromGenomeCoord(double); /// given genomic coords, what is data coords?
+
+  double getMinGenomeCoord();
+  double getMaxGenomeCoord();
 
   // Functions for doing the conditioning
   void initializeData(int length);  // Sets up the internal matrix

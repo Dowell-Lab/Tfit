@@ -107,59 +107,17 @@ void ModelWrapper::setPriors() {
 		
 	//w_thresh= ( ALPHA_2 ) / (N + ALPHA_2*K*3 + K*3 );
 }
-
+ 
 // component::initialize_bounds
-void ModelWrapper::initializeBounds(double mu_seed) {
-   /*
-   footprint = fp;
-   EXIT = false;
-
-   int complexity = 1;
-   if (data->strand == ".") {
-      complexity = 3;
-   } else { 
-      complexity = 2;
+void ModelWrapper::initializeBounds(double v_mu, double v_sigma, double v_lambda, 
+                                 double v_weight, double v_minX, double v_maxX) {
+   if (type == FMOD) {
+      gene->initBounds(v_mu, v_sigma, v_lambda, v_weight, v_minX, v_maxX);
+   } else if (type == BIDIR) {
+      bidir->initalizeBounds(v_mu, v_sigma, v_lambda, v_weight);
+   } else {
+      // Not a valid model
    }
-
-   //====================================
-   double sigma, lambda, pi_EMG, w_EMG;
-   double b_forward, w_forward;
-   double a_reverse, w_reverse;
-
-   //====================================
-   // start sampling
-   // for the bidirectional/EMG component
-   Random ran_num_gen;
-
-   sigma = ran_num_gen.fetchUniform(1, 250) / scale;
-   lambda = scale / ran_num_gen.fetchUniform(1, 250);
-   double dist = (1.0 / lambda);
-   int j = get_nearest_position(data, mu, dist);
-   int k = get_nearest_position(data, mu, forward_bound - mu);
-   double pi = 0.5;
-   if (data->strand == "+")
-   {
-      pi = 1.0;
-   }
-   else if (data->strand == "-")
-   {
-      pi = 0.;
-   }
-   forward = UNI(mu + (1.0 / lambda), data->maxX, 1.0 / (complexity * K), 1, j, pi);
-   forward.j = j, forward.k = k;
-
-   bidir = EMG(mu, sigma, lambda, 1.0 / (complexity * K), 0.5);
-   bidir.foot_print = fp;
-
-   dist = -(1.0 / lambda);
-   j = get_nearest_position(data, mu, dist);
-   k = get_nearest_position(data, mu, reverse_bound - mu);
-   reverse = UNI(data->minX, mu - (1.0 / lambda), 1.0 / (complexity * K), -1, j, 1 - pi);
-   reverse.j = k, reverse.k = j;
-   termination = (termination > 1);
-
-   type = 1;
-   */
 }
 
 /**
@@ -254,49 +212,6 @@ void ModelContainer::initializeWithPriors(dInterval *data) {
       setModels[k]->setPriors();
 	}
 }
-
-void ModelContainer::useSeeds2SetBounds(std::vector<double> v_museeds) {
-   std::sort(v_museeds.begin(), v_museeds.end()); // sort seeds; replaces Joey's sort_vector
-   for (int k = 0; k < K; k++) { 
-      // Joey: initialize_bounds();
-      setModels[k]->initializeBounds(v_museeds[k]);   // use random seeds to initialize
-      /** (mus[k], data, K, data->SCALE, 0., topology, foot_print, 
-       * data->maxX, data->maxX); */
-   }
-}
-
-/**
- * @brief Fetch a random seed.
- * Joey's code passes around a set of random seeds (mu_seeds) obtained by
- * template matching.  It then samples from this set (removing as used). 
- * There is also r_mu which is set at 0.05 by parameters.   It uses this
- * as the variance to a normal centered at the midpoint of the region.  It
- * then samples from THIS Normal for a random mu.
-std::vector<double> ModelContainer::RandomSeeds() {
-  std::vector<double> mus; mus.reserve(K);
-  double mu = 0;  int tempIndex = 0;
-  Random ran_num_generator;
-  for (int k = 0; k < K; k++){ // Each model
-//////
-     if (mu_seeds.size() > 0) {  // mu_seeds are a set of guesses at mu
-        tempIndex = sample_centers(mu_seeds, p);
-        mu = mu_seeds[i];
-        if (r_mu > 0) {
-           mu = ran_num_generator.fetchNormal(mu, r_mu);
-        }
-     } else {
-        mu = ran_num_generator.fetchNormal((data->minX + data->maxX) / 2., r_mu);
-     }
-
-     mus[k] = mu;
-     if (mu_seeds.size() > 0) {
-        mu_seeds.erase(mu_seeds.begin() + tempIndex);
-     }
-     ////////////////
-
-  return mus;
-}
- */
 
 void ModelContainer::SortByMu() {
    std::sort(setModels.begin(), setModels.end(), tfit::compareMu); 

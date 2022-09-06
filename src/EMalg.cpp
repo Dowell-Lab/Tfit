@@ -68,11 +68,9 @@ std::string EMalg::write_out() {
    return output;
 }
 
-void EMalg::setDataAndSeeds(dInterval *v_data) {
+void EMalg::setupDataLink(dInterval *v_data) {
 	data = v_data;    // Set pointer to current data set
-
-   // Now we need to push to SeedManager this region's seeds, if they exist
-   seeds.setSeeds =  data->raw->belongsTo->seeds;
+   seeds.setupDataLink(v_data);
 }
 
 /**
@@ -87,23 +85,7 @@ bool EMalg::fit () {
      return true;
    }
 
-   // user defined hyperparameters
-   models.initializeWithPriors(data);
-   // use seeds to initilize and set bounds
-	std::vector<double> museeds;
-   museeds = seeds.grabSeedSet(models.K);
-   models.useSeeds2SetBounds(museeds);
-   // sort by mu
-   models.SortByMu(); // Joey's: sort_components(components, K);
-
-   /*
-   //  *** Joey's code resets the links for forward_neightbor and 
-      // reverse_neighbor here.
-
-   // Initialize the Noise model
-   // Needs a pi (from classifier in Joey) and weight, noise_w in Joey
-   // noise.setBounds(data->minX, data->maxX); 
-   */
+   Initialize();
 
 	//======================================================
 	int t 			= 0; //EM loop ticker
@@ -141,6 +123,34 @@ bool EMalg::fit () {
    }
    // Cleanup
    return true;
+}
+
+void EMalg::Initialize() {
+   // user defined hyperparameters
+   models.initializeWithPriors(data);
+
+   // use seeds to initilize and set bounds
+	std::vector<PointCov> museeds;
+   museeds = seeds.grabSeedSet(models.K);
+
+   // initialize and set bounds on noise model
+   double region_minX = data->getMinGenomeCoord();
+   double region_maxX = data->getMaxGenomeCoord();
+   // noise_max = 0.05 by default in Joey's code (is option); pi = 0.5
+   models.noise.initalizeBounds(region_minX, region_maxX, 0.05, 0.5); 
+
+   // initialize each model
+   double weight = 1/(3*models.K);   // 3 = complexity when "." but should be 2 if + or -?
+   for (int k = 0; k < models.K; k++) { 
+      double init_sigma = seeds.numgen.fetchUniform(0,250) / data->scale;
+      double init_lambda = data->scale / seeds.numgen.fetchUniform(0,250);
+      double init_mu = seeds.setSeeds->mu_seeds[k].coordinate;
+      models.setModels[k]->initializeBounds(init_mu, init_sigma, init_lambda, 
+                     weight, region_minX, region_maxX);   // use random seeds to initialize
+   }
+
+   // sort by mu
+   models.SortByMu(); // Joey's: sort_components(components, K);
 }
 
 /**

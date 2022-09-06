@@ -131,70 +131,66 @@ void Seeds::SortByPositions() {
 
 SeedManager::SeedManager(): numgen() {
   // initialize SeedManager
+  setSeeds = NULL;
+  belongsTo = NULL;
 }
 
 std::string SeedManager::write_out() {
   return "nothing yet";
 }
 
-std::vector<double> SeedManager::grabSeedSet(int K) {
-  std::vector<double> pickedseeds;
+void SeedManager::setupDataLink(dInterval *v_data) {
+   belongsTo = v_data;
+   setSeeds =  belongsTo->raw->belongsTo->seeds;
+}
+
+std::vector<PointCov> SeedManager::grabSeedSet(int K) {
   if (setSeeds == NULL) { // No seeds allocated
-     // Should allocate seeds, fill them (but this will need coords!)
-     // Or throw an error?  
+    setSeeds = new Seeds;
   }
-  for (int k = 0; k < K; k++) {
-    /*
-   if seeds_still_exist, grab seed (delete it) randomly
-     if randomize (add_noise) sample with Normal at seed, r_mu (stddev)
-   else grab seed from Normal at midpoint, r_mu (stddev, defaults = 0)
-
-    if (mu_seeds.size()>0  ){
-      i 	= sample_centers(mu_seeds ,  p);
-      mu 	= mu_seeds[i];
-      if (r_mu > 0){   // if randomize (default is FALSE)
-        mu = ran_num_generator.fetchNormal(mu,r_mu);
-      }
-    }else{
-      // This appears to seed all to the midpoint
-      mu = ran_num_generator.fetchNormal((data->minX+data->maxX)/2., r_mu);
-    }
-    mus[k] 	= mu;
-    if (mu_seeds.size() > 0  ){
-      mu_seeds.erase (mu_seeds.begin()+i);
-    }
-
-   */
+  if (setSeeds->mu_seeds.size() < K) {
+    // We need to add seeds randomly up to K.
+    int needNseeds = K - setSeeds->mu_seeds.size();
+    setupRandomSeeds(needNseeds, belongsTo->bins);
   }
+
+  // At this point, we should have at least K seeds
+  shuffleSeeds(); // Should we randomize them?
+
+  // return K seeds
+  std::vector<PointCov> pickedseeds(setSeeds->mu_seeds.begin(), setSeeds->mu_seeds.end() + K);
+
+  // If we are injecting noise, we should then use these seeds to wiggle
+  // using a Normal distribution or something. 
+
+  // Should we sort these before returning?
   return pickedseeds;
 }
 
-/*
-double SeedManager::grabSeed() {
-  std::discrete_distribution<int> ddistro{setSeeds->getMinWeight(), setSeeds->getMaxWeight()};
-  return setSeeds->mu_seeds[ddistro(numgen.mt)].coordinate;
+void SeedManager::shuffleSeeds() {
+  auto rng = numgen.fetchProbability();
+  std::random_shuffle(setSeeds->mu_seeds.begin(), setSeeds->mu_seeds.end());
 }
 
-void SeedManager::setupRandomSeeds(int numseeds, gInterval *region) {
-  double relativeStop = (region->stop - region->start)-1; // Is this correct?
-	std::uniform_real_distribution<double> udist(0, relativeStop);
-  
-  if (setSeeds != NULL) {   // Seeds already exist, what do I do?  ** current refuse!
-     return;
-  } else {
-    Seeds newseeds;
-    setSeeds = &newseeds;    // Create Seeds object;
-    for (int i = 0; i < numseeds; i++) {
-      setSeeds->mu_seeds.push_back(PointCov(udist(numgen.mt), 1.));
-    }
+double SeedManager::addUncertainty(PointCov *seed, double variance) {
+   double noisymu = numgen.fetchNormal(seed->coordinate, variance);
+   return noisymu;
+}
+
+std::vector<PointCov> SeedManager::setupRandomSeeds(int numseeds, double v_lastindex) {
+  std::vector<PointCov> randomSeeds;
+  // Notice we assume v_lastindex is end of region
+	std::uniform_real_distribution<double> udist(0, v_lastindex);
+
+  for (int i = 0; i < numseeds; i++) {
+    randomSeeds.push_back(PointCov(udist(numgen.mt), 1.));
   }
+  return randomSeeds;
 }
 
-void SeedManager::weightRandomly() {
-  for (int i = 0; i < setSeeds->getNumSeeds(); i++) {
+void SeedManager::weightRandomly(std::vector<PointCov> *seeds) {
+  for (int i = 0; i < seeds->size(); i++) {
     // Weighted by random probability, note doesn't check if already weighted!!
-    setSeeds->mu_seeds[i].coverage = numgen.fetchProbability();  
+    seeds->at(i).coverage = numgen.fetchProbability();  
   }
 }
-
-*/

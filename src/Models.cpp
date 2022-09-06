@@ -36,6 +36,25 @@ void BasicModel::setPriorWeight(double v_alpha) {
    DirichletW.alpha = v_alpha;
 }
 
+void BasicModel::setWeight(double v_weight) {
+  weight = v_weight; 
+}
+
+void BasicModel::setPi(double v_pi) {
+  pi = v_pi; 
+}
+
+double BasicModel::getWeight() {
+  return weight;
+}
+
+double BasicModel::getPi() {
+  return pi;
+}
+
+
+
+
 double BasicModel::pdf(double z, char st) {
    return 1.;     // Note this function *must* be overwritten by models! 
 }
@@ -470,6 +489,16 @@ void Bidirectional::updateParameters(double N, double K) {
    */
 }
 
+void Bidirectional::initalizeBounds(double v_mu, double v_sigma,
+                        double v_lambda, double v_weight) {
+  
+   setMu(v_mu);  
+   setSigma(v_sigma);
+   setLambda(v_lambda);
+   setWeight(v_weight);
+   setPi(0.5);
+}
+
 /*************** Uniform Model (Elongation and Noise) ************************/
 UniformModel::UniformModel(): BasicModel(), uni() {
   pi = 0.;
@@ -479,10 +508,6 @@ UniformModel::UniformModel(double v_a, double v_b): BasicModel(), uni() {
    uni.lower = v_a;
    uni.upper = v_b;
    pi = 0.;
-}
-
-void UniformModel::setPi(double v_pi) {
-   pi = v_pi;
 }
 
 void UniformModel::setBounds(double v_lower, double v_upper) {
@@ -524,6 +549,12 @@ double UniformModel::calculateLikelihood(dInterval *data) {
 
 void UniformModel::updateParameters(double N, double K) {
    BasicModel::updateParameters(N,K);
+}
+
+void UniformModel::initalizeBounds(double v_minX, double v_maxX, double v_weight, double v_pi) {
+    setBounds(v_minX,v_maxX);
+    setPi(v_pi);
+    setWeight(v_weight);
 }
 
 
@@ -593,4 +624,12 @@ void FullModel::updateExpectations(double z, perStrandInfo coverage, perStrandIn
   bidir.updateExpectations(z, coverage, normalizeRi);
   forwardElongation.updateExpectations(coverage, normalizeRi);
   reverseElongation.updateExpectations(coverage, normalizeRi);
+}
+
+void FullModel::initBounds(double v_mu, double v_sigma, double v_lambda, 
+               double v_weight, double v_minX, double v_maxX) {
+   double tau = 1/ v_lambda;
+   forwardElongation.initalizeBounds(v_mu + tau, v_maxX, v_weight, 1.0);
+   bidir.initalizeBounds(v_mu, v_sigma, v_lambda, v_weight);
+   reverseElongation.initalizeBounds(v_minX, v_mu - tau, v_weight, -1.0);
 }

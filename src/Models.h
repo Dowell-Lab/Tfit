@@ -37,6 +37,11 @@ class BasicModel {
   void setPriorWeight(double);
   double getResponsibility();   
 
+  void setWeight(double);
+  void setPi(double);
+  double getWeight();
+  double getPi();
+
   // Functions
   void updateParameters(double,double);
   void updateExpectations(perStrandInfo coverage, perStrandInfo normalizedRi);
@@ -94,6 +99,10 @@ class Bidirectional: public BasicModel {
   // int indicatorStrand(char s);
   double applyFootprint (double z, char s);
 
+
+  void initalizeBounds(double v_mu, double v_sigma,
+           double v_lambda, double v_weight);
+
 };
 
 /**
@@ -112,7 +121,6 @@ class UniformModel: public BasicModel {
   UniformModel(double v_a, double v_b);
 
   // Getter and Setters
-  void setPi(double v_pi);
   void setBounds(double v_lower, double v_upper);
 
   std::string write_out();
@@ -120,6 +128,7 @@ class UniformModel: public BasicModel {
   // Functions of all Models
   double pdf(double x, char s);
   void updateParameters(double,double);
+  void initalizeBounds(double v_minX, double v_maxX, double v_weight, double v_pi);
 
   // These are functions specifically for when its NOISE?
   // Noise Expectation: pG(b-a)/S where S is length of genome, 
@@ -145,6 +154,9 @@ class FullModel {
   void updateParameters(double,double);
   perStrandInfo calculateRi(double z, perStrandInfo coverage);
   void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
+
+  void initBounds(double v_mu, double v_sigma, double v_lambda, 
+                 double v_weight, double v_minX, double v_maxX);
 
 };
 
