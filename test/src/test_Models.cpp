@@ -9,22 +9,53 @@
 #include <fstream>
 #include "Models.h"
 
-/*
 TEST (basicModel, updateParameters) 
 {
-
+  //Arrange
+  BasicModel sut;
+  //Act
+  sut.updateParameters(10.,3.);
+  //Assert
+  EXPECT_EQ(sut.getPi(), 0.5);
+  double expect = 1./28.;
+  EXPECT_EQ(sut.getWeight(), expect);
 }
 
+/**
+ * @brief Need to double check -- this is a dumb test.
+ */
 TEST (basicModel, calculateRi) 
 {
+  //Arrange
+  perStrandInfo point(3.,5.);
+  perStrandInfo newRi;
+  BasicModel sut;
 
+  //Act
+  newRi = sut.calculateRi(10, point);
+  
+  // Assert
+  EXPECT_EQ(newRi.forward, 1.);
+  EXPECT_EQ(newRi.reverse, 1.);
 }
 
+/**
+ * @brief Need to double check -- this is a dumb test.
+ */
 TEST (basicModel, updateExpectations) 
 {
+  //Arrange
+  perStrandInfo point(3.,5.);
+  perStrandInfo normalizedRi(15.,20.);
+  BasicModel sut;
 
+  //Act
+  sut.updateExpectations(point, normalizedRi);
+  
+  // Assert
+  EXPECT_EQ(sut.sufficiencyStats.Rk.forward, 0.);
+  EXPECT_EQ(sut.sufficiencyStats.Rk.reverse, 0.);
 }
-*/
 
 TEST(Bidirectional, applyFootprintSubPosStrand) 
 {
@@ -158,23 +189,57 @@ TEST(Bidirectional, ExpY2)
   ASSERT_LE(abs(Y2expected - 0.676969), 0.0001);  
 }
 
-/*
-// updateExpectations(double z, perStrandInfo coverage, perStrandInfo normalizeRi) 
-TEST(Bidirectional, updateExpectations) 
-{}
-
-// calcExpectedVals (double position, char strand, double rtimescov) 
+/**
+ * @brief Need to double check -- this is a dumb test.
+ */
 TEST(Bidirectional, calcExpectedVals)
-{}
+{
+  //Arrange
+  Bidirectional sut;
+  //Act
+  sut.calcExpectedVals(6., '+', 36.);
+  //Assert
+  EXPECT_EQ(sut.sumOverN.sumRExpX, 216.);
+  EXPECT_EQ(sut.sumOverN.sumRExpY, 0.);
+  EXPECT_EQ(sut.sumOverN.sumRExpX2, 1332.);
+  EXPECT_EQ(sut.sumOverN.sumRXExpY, 9288.);
+}
 
-// updateParameters(double N, double K) 
+/**
+ * @brief Need to double check -- this is a dumb test.
+ */
+TEST(Bidirectional, updateExpectations) 
+{
+  //Arrange
+  perStrandInfo point(3.,5.);
+  perStrandInfo normalizedRi(15.,20.);
+  Bidirectional sut;
+
+  //Act
+  sut.updateExpectations(6., point, normalizedRi);
+  
+  // Assert
+  EXPECT_EQ(sut.sufficiencyStats.Rk.forward, 0.);
+  EXPECT_EQ(sut.sufficiencyStats.Rk.reverse, 0.);
+}
+
 TEST(Bidirectional, updateParameters) 
-{}
+{
+  //Arrange
+  Bidirectional sut;
+  //Act
+  sut.updateParameters(10.,3.);
+  //Assert
+  EXPECT_EQ(sut.getPi(), 0.5);
+  double expect = 1./28.;
+  EXPECT_EQ(sut.getWeight(), expect);
+  EXPECT_EQ(sut.getMu(), 0.);
+  EXPECT_LE(abs(sut.getSigma() - 0.707107), 0.01);
+  EXPECT_EQ(sut.getLambda(), 1.);
 
-// initalizeBounds(...)
-TEST(Bidirectional, initalizeBounds)
-{}
-*/
+  // Should footprint be tested?
+}
+
 
 /*
 // double pdf(double x, char s);

@@ -19,6 +19,7 @@ TEST (PerStrandInfo, sumBothStrands)
     perStrandInfo sut = perStrandInfo(5,9);
     // Act: call methods on SUT, capture output
     double answer = sut.sumBothStrands();
+
     // Assert: Verify the outcome
     EXPECT_EQ(answer, 14);
 }

@@ -52,9 +52,6 @@ double BasicModel::getPi() {
   return pi;
 }
 
-
-
-
 double BasicModel::pdf(double z, char st) {
    return 1.;     // Note this function *must* be overwritten by models! 
 }
@@ -69,18 +66,21 @@ void BasicModel::resetSufficiency() {
 
 /**
  * @brief  Use the responsibility stats to update the parameters (pi and weight)
- * 
- * @param N 
- * @param K 
+ *
+ * Both parameters are needed for the weight update which has a Dirichlet prior. 
+ * @param N    total number of *something*
+ * @param K    Number of "components"
  */
 void BasicModel::updateParameters(double N, double K) {
    double r = getResponsibility(); // sum Rk 
    pi = (sufficiencyStats.Rk.forward + betaPi.getAlpha()) / (r + betaPi.getAlpha() * 2);
+
    // Note that this assumes the noise component is equivalently weighted
    // to each model.  Instead perhaps the noise should be Beta weighted 
    // (i.e. restricted to something low) and this renormalized accordingly.
    // Note that 3K is ~ the number of component weights.
    weight = (r + DirichletW.getAlpha()) / (N + DirichletW.getAlpha() * K * 3 + K * 3);
+   // std::cout << tfit::prettyDecimal(N+DirichletW.getAlpha()*K*3+K*3,0) << std::endl;
 }
 
 /**
@@ -88,32 +88,52 @@ void BasicModel::updateParameters(double N, double K) {
  * 
  * @param z          position in tranformed coords 
  * @param coverage   coverage per strand
- * @return double 
+ * @return  updated Ri values (a perStrandInfo)
  */
 perStrandInfo BasicModel::calculateRi(double z, perStrandInfo coverage) {
-   if (coverage.forward) sufficiencyStats.Ri.forward = pdf(z, '+');
-   if (coverage.reverse) sufficiencyStats.Ri.reverse = pdf(z, '-');
+   if (coverage.forward) {
+      // std::cout << "Have forward coverage" << std::endl;
+      // std::cout << tfit::prettyDecimal(pdf(z,'+'), 2) << std::endl;
+      sufficiencyStats.Ri.forward = pdf(z, '+');
+   } else {
+      // Should this be reset?
+   }
+   if (coverage.reverse) {
+      // std::cout << "Have reverse coverage" << std::endl;
+      // std::cout << tfit::prettyDecimal(pdf(z,'-'), 2) << std::endl;
+      sufficiencyStats.Ri.reverse = pdf(z, '-');
+   } else {
+      // Should this be reset?
+   }
 
    return sufficiencyStats.Ri;
 }
 
+
 void BasicModel::updateExpectations(perStrandInfo coverage, perStrandInfo normalizedRi) {
    if (normalizedRi.forward) {
+      // std::cout << "Have forward coverage" << std::endl;
+
+      // DO we need to worry about division by ZERO?
      sufficiencyStats.Rk.forward += coverage.forward*sufficiencyStats.Ri.forward/normalizedRi.forward;
+      // std::cout << tfit::prettyDecimal(sufficiencyStats.Rk.forward, 2) << std::endl;
+   } else {
+      // Should Rk be reset?
    }
    if (normalizedRi.reverse) {
+      // std::cout << "Have reverse coverage" << std::endl;
      sufficiencyStats.Rk.reverse += coverage.reverse*sufficiencyStats.Ri.reverse/normalizedRi.reverse;
+   } else {
+      // Should Rk be reset?
    }
    sufficiencyStats.resetRi();
 }
 
 /***** BIDIRECTIONAL MODEL *****/
-// Empty Constructor
-
 Bidirectional::Bidirectional()
   : BasicModel(), loading(), initiation() {
+   // Priors: these are defaults
    footprint = 40;	
-   // Priors:
    setPriorLambda(1,1);
    setPriorSigma(1,1);
 }
@@ -489,7 +509,7 @@ void Bidirectional::updateParameters(double N, double K) {
    */
 }
 
-void Bidirectional::initalizeBounds(double v_mu, double v_sigma,
+void Bidirectional::setParametersModel(double v_mu, double v_sigma,
                         double v_lambda, double v_weight) {
   
    setMu(v_mu);  
@@ -630,6 +650,6 @@ void FullModel::initBounds(double v_mu, double v_sigma, double v_lambda,
                double v_weight, double v_minX, double v_maxX) {
    double tau = 1/ v_lambda;
    forwardElongation.initalizeBounds(v_mu + tau, v_maxX, v_weight, 1.0);
-   bidir.initalizeBounds(v_mu, v_sigma, v_lambda, v_weight);
+   bidir.setParametersModel(v_mu, v_sigma, v_lambda, v_weight);
    reverseElongation.initalizeBounds(v_minX, v_mu - tau, v_weight, -1.0);
 }

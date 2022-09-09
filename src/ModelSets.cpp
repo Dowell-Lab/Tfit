@@ -114,7 +114,7 @@ void ModelWrapper::initalizeBounds(double v_mu, double v_sigma, double v_lambda,
    if (type == FMOD) {
       gene->initBounds(v_mu, v_sigma, v_lambda, v_weight, v_minX, v_maxX);
    } else if (type == BIDIR) {
-      bidir->initalizeBounds(v_mu, v_sigma, v_lambda, v_weight);
+      bidir->setParametersModel(v_mu, v_sigma, v_lambda, v_weight);
    } else {
       // Not a valid model
    }

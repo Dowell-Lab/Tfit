@@ -79,6 +79,8 @@ class Bidirectional: public BasicModel {
   void setLambda(double);
   void setPriorSigma(double, double);
   void setPriorLambda(double, double);
+  void setParametersModel(double v_mu, double v_sigma,
+           double v_lambda, double v_weight);
 
   // Calculate the pdf and expected values for a single read z with strand s
   double pdf(double z, char s);   // standard (Grushka 1972) formula for pdf
@@ -98,11 +100,6 @@ class Bidirectional: public BasicModel {
   double millsRatio(double);    
   // int indicatorStrand(char s);
   double applyFootprint (double z, char s);
-
-
-  void initalizeBounds(double v_mu, double v_sigma,
-           double v_lambda, double v_weight);
-
 };
 
 /**
