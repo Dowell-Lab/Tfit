@@ -20,16 +20,29 @@ TEST(EMalg, fitFailswithNoData)
     EXPECT_FALSE(success);
 }
 
-// TEST(EMalg, NoiseOnlyTest)
+TEST(EMalg, computeBackground_NoiseOnly) 
+{
+  // Arrange: bring SUT to desired state
+  RawData data;
+  data.addDataPoints(10, 14, 4);   
+  data.addDataPoints(14, 15, 1);
+  data.addDataPoints(8, 10, -2);
+  dInterval interval(&data,2,1);
+ 
+  EMalg sut;
+  sut.data = &interval;
 
-// TEST(EMalg, fit)
+  // Act: call methods on SUT, capture output
+  bool success = sut.fit();
 
-// Test(EMalg, computeBackgroundModel)
+  // Assert: Verify the outcome
+  EXPECT_TRUE(success);
+  EXPECT_DOUBLE_EQ(sut.models.ll, -51.089280028918225);
+}
 
-// Test(EMalg, Initialize)
-
-// TEST(EMalg, Estep)
-
-// TEST(EMalg, Mstep)
-
-// TEST(EMalg, adjustBounds)
+TEST(EMalg, Itest_fit_oneModel) 
+{
+  // Arrange: bring SUT to desired state
+  //Act
+  //Assert
+}
