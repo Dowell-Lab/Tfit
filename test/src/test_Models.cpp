@@ -332,7 +332,7 @@ TEST(FullModel, updateParameters)
 
   //Act
   sut.updateParameters(2.,2.);
-  std::cout << sut.write_out() << std::endl;
+  // std::cout << sut.write_out() << std::endl;
 
   //Assert
   EXPECT_EQ(sut.bidir.getMu(), 0.);
