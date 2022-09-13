@@ -13,5 +13,6 @@
 #include "read_in_parameters.h"
 
 int model_run(params *, int, int, double, int, Log_File * );
+int model_rdd(params *, int, int, double, int, Log_File * );
 
 #endif 

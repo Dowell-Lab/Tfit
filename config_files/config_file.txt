@@ -1,6 +1,6 @@
 #This is a config file for running the BIDIR module
 #please contact joseph[dot]azofeifa[at]colorado[dot]edu
--N     	       	      	= foot_print_testing #job name
+-N     	       	      	= default_name #job name
 -v     	       	      	= 1 #verbose output
 #===========================================================================
 #input file parameters and output directories

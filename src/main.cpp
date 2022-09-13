@@ -87,8 +87,9 @@ int main(int argc, char* argv[]) {
   }
   if (P->testing) {
     // For testing behavior of subparts of Tfit.
-    std::cout << "Hijacked!" << std::endl;
+    // std::cout << "Hijacked!" << std::endl;
     // bidir_rdd(P, rank, nprocs, job_ID, LG);
+    model_rdd(P, rank, nprocs, 0, job_ID, LG);
   } else if (P->bidir) {
     bidir_run(P, rank, nprocs, job_ID, LG);
   } else if (P->model) {

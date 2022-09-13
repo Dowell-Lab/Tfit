@@ -22,6 +22,8 @@
 #include "select_main.h"
 #include "template_matching.h"
 
+#include "helper.h"	//rdd
+
 using namespace std;
 int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 
@@ -175,40 +177,52 @@ int bidir_run(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
  * @brief This is a hijacked form of the bidir_run for picking apart how 
  * certain aspects work (reverse engineering).
  * 
- * @param P 
- * @param rank 
- * @param nprocs 
- * @param job_ID 
- * @param LG 
  * @return int 
  */
 int bidir_rdd(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 
-	int verbose 	= stoi(P->p["-v"]);
-	P->p["-merge"] 	= "1";
+	std::cout << "rank: " + tfit::prettyDecimal(rank,-1) + 
+				" nprocs: " + tfit::prettyDecimal(nprocs,-1) +
+				" job_ID: " + tfit::prettyDecimal(job_ID,-1) << std::endl;
+
+	int verbose 	= 1;	// stoi(P->p["-v"]);
+	P->p["-merge"] 	= "1";		// Note docs say default is 0!
 	
 	LG->write("\ninitializing bidir module...............................done\n", verbose);
 
 	// Threads limited by parameters.
 	int threads 	= P->threads;
+	std::cout << "threads: " + tfit::prettyDecimal(threads,-1) << std::endl;
 	
 	//===========================================================================
 	//get job_ID and open file handle for log files
 	string job_name = P->p["-N"];
+	std::cout << "job_name: " + job_name << std::endl;
 	
 	//===========================================================================
 	//input files and output directories
 	string forward_bedgraph 	= P->p["-i"]; //forward strand bedgraph file
-	string reverse_bedgraph 	= P->p["-j"]; //reverse strand bedgraph file
+	std::cout << "forward: " + forward_bedgraph << std::endl;
 	string joint_bedgraph 		= P->p["-ij"]; //joint forward and reverse strand bedgraph file
+	std::cout << "joint: " + joint_bedgraph << std::endl;
+	string reverse_bedgraph 	= P->p["-j"]; //reverse strand bedgraph file
+	std::cout << "reverse: " + reverse_bedgraph << std::endl;
 	string tss_file 		= P->p["-tss"];
+	std::cout << "tss: " + tss_file << std::endl;
 	string out_file_dir 		= P->p["-o"] ;//out file directory
+	std::cout << "out_file_dir: " + out_file_dir << std::endl;
 	//===========================================================================
 	//template searching parameters
 	double sigma, lambda, foot_print, pi, w;
 	double ns 	= stod(P->p["-ns"]);
+	std::cout << "ns: " + tfit::prettyDecimal(ns, 0) << std::endl;
 	sigma 		= stod(P->p["-sigma"]), lambda= stod(P->p["-lambda"]);
 	foot_print 	= stod(P->p["-foot_print"]), pi= stod(P->p["-pi"]), w= stod(P->p["-w"]);
+	std::cout << "sigma: " + tfit::prettyDecimal(sigma, 2) +
+				" lambda: " + tfit::prettyDecimal(lambda,2) +
+				" foot_print: " + tfit::prettyDecimal(foot_print,2) +
+				" pi: " + tfit::prettyDecimal(pi,2) +
+				" w: " + tfit::prettyDecimal(w,2) << std::endl;
 
 	//(2a) read in bedgraph files 
 	map<string, int> chrom_to_ID;
@@ -216,6 +230,7 @@ int bidir_rdd(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
        
 	vector<double> parameters 	= {sigma, lambda, foot_print,pi, w};
 	if (not tss_file.empty() and rank == 0){
+	    std::cout << "tss_file not empty and rank = 0"  << std::endl;
 		vector<segment *> FSI;
 		LG->write("loading TSS intervals...................................",verbose);
 		map<int, string> IDS;
@@ -244,11 +259,15 @@ int bidir_rdd(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 		LG->write("-w          : " + to_string(parameters[4])+ "\n\n", verbose);
 	}
 	parameters 				= MPI_comm::send_out_parameters( parameters, rank, nprocs);
+	std::cout << tfit::write_VectorDoubles(parameters)  << std::endl;
+
 	P->p["-sigma"] 	       = to_string(parameters[0]);
 	P->p["-lambda"]        = to_string(parameters[1]);
 	P->p["-foot_print"]    = to_string(parameters[2]);
 	P->p["-pi"] 	       = to_string(parameters[3]);
 	P->p["-w"] 	       = to_string(parameters[4]);
+
+	std::cout << "Note I just rewrote the parameter inputs/param values!" << std::endl;
 
 	LG->write("loading bedgraph files..................................", verbose);
 	vector<segment *> 	segments 	= load::load_bedgraphs_total(forward_bedgraph, 
@@ -257,12 +276,17 @@ int bidir_rdd(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 
 	if (segments.empty()){
 		printf("exiting...\n");
-		return 1;
+		return  1;
+	} else {
+		for (auto &element : segments) {
+			std::cout << "\n" + element->write_interval() << std::endl;
+		}
 	}
 	LG->write("done\n", verbose);
 
 	slice_ratio SC;
 	if (stoi(P->p["-FDR"] ) ){
+	  std::cout << "Have and FDR in slice ratio prep" << std::endl;
 	  LG->write("getting likelihood score distribution...................", verbose);
 	  SC                      = get_slice(segments, pow(10,6) , pow(10,4) ,P  );
 	  LG->write("done\n\n", verbose);
@@ -277,6 +301,7 @@ int bidir_rdd(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	  LG->write("threshold            : "+to_string(SC.threshold) + "\n\n" ,verbose );
 	}
 	else{
+	  std::cout << "Taking defaults for slice ratio" << std::endl;
 	  SC.mean = 0.78, SC.std = 0.08; //this dependent on -w 0.9 !!!
 	  SC.set_2(stod(P->p["-bct"]));
 	}
@@ -291,7 +316,10 @@ int bidir_rdd(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	//to sub-processes and have each MPI call run on a subset of segments
 	vector<segment*> all_segments  	= segments;
 	LG->write("slicing segments........................................", verbose);
-	segments = MPI_comm::slice_segments(segments, rank, nprocs);	
+	segments = MPI_comm::slice_segments(segments, rank, nprocs);
+	for (auto &element : segments) {
+		std::cout << "\n" + element->write_interval() << std::endl;
+	}
 	LG->write("done\n", verbose);
 
 	//===========================================================================
@@ -300,6 +328,7 @@ int bidir_rdd(params * P, int rank, int nprocs, int job_ID, Log_File * LG){
 	LG->write("running template matching algorithm.....................", verbose);
 	double threshold 	= run_global_template_matching(segments, P, SC);	
 	//(3b) now need to send out, gather and write bidirectional intervals 
+	std::cout << "threshold: " + tfit::prettyDecimal(threshold, 2) << std::endl;
 	LG->write("done\n", verbose);
 	
 	LG->write("scattering predictions to other MPI processes...........", verbose);
