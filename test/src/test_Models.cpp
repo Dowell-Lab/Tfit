@@ -9,7 +9,7 @@
 #include <fstream>
 #include "Models.h"
 
-TEST (basicModel, updateParameters) 
+TEST (BasicModel, updateParameters) 
 {
   //Arrange
   BasicModel sut;
@@ -24,7 +24,7 @@ TEST (basicModel, updateParameters)
 /**
  * @brief Need to double check -- this is a dumb test.
  */
-TEST (basicModel, calculateRi) 
+TEST (BasicModel, calculateRi) 
 {
   //Arrange
   perStrandInfo point(3.,5.);
@@ -42,7 +42,7 @@ TEST (basicModel, calculateRi)
 /**
  * @brief Need to double check -- this is a dumb test.
  */
-TEST (basicModel, updateExpectations) 
+TEST (BasicModel, updateExpectations) 
 {
   //Arrange
   perStrandInfo point(3.,5.);
@@ -240,51 +240,124 @@ TEST(Bidirectional, updateParameters)
   // Should footprint be tested?
 }
 
+TEST(UniformModel, pdfUnweighted)
+{
+  // Arrange
+  UniformModel sut(5,10);
+  sut.setWeight(1.0);
+  //Act
+  double ans = sut.pdf(6,'+');
+  //Assert
+  EXPECT_LE(abs(ans - 0.2), 0.0001);  // R: dunif(6,min=5,max=10);
+}
 
-/*
-// double pdf(double x, char s);
-TEST(Uniform, pdf)
-{}
+TEST(UniformModel, pdfWeighted)
+{
+  // Arrange
+  UniformModel sut(5,10);
+  sut.setWeight(3.0);
+  //Act
+  double ans = sut.pdf(6,'+');
+  //Assert
+  EXPECT_LE(abs(ans - (3*0.2)), 0.0001);  // R: 3*dunif(6,min=5,max=10);
+}
 
-// void updateParameters(double,double);
-TEST(Uniform, updateParameters)
-{}
+/**
+ * @brief Need to double check -- this is a dumb test.
+ */
+TEST(UniformModel, calculateLikelihood)
+{
+  // Arrange: bring SUT to desired state
+  RawData data;
+  data.addDataPoints(10, 14, 4);   
+  data.addDataPoints(14, 15, 1);
+  data.addDataPoints(8, 10, -2);
 
-// double calculateLikelihood(dInterval *data);
-TEST(Uniform, calculateLikelihood)
-{}
+  dInterval roi(&data,2,1);
+  UniformModel sut;
+  sut.initalizeBounds(5,20,1.0,1.0);
 
-// initalizeBounds(...)
-TEST(Uniform, initalizeBounds)
-{}
-*/
+  // Act
+  double ans = sut.calculateLikelihood(&roi);
 
-/*
-// double pdf(double z, char s);
+  //Assert
+  EXPECT_DOUBLE_EQ(ans, -33.08047253394033);
+}
+
+/**
+ * @brief Need to double check -- this is a dumb test.
+ */
 TEST(FullModel, pdf)
-{}
+{
+  //Arrange
+  FullModel sut;
+  sut.initBounds(7., 2., 1., 0.33, 5., 30.);
+  sut.bidir.setFootprint(2.);
+  // std::cout << sut.write_out() << std::endl;
 
-//  void resetSufficiencyStats();
-TEST(FullModel, resetSufficiencyStats)
-{}
+  //Act
+  double ans = sut.pdf(3.,'+');
+  //Assert
+  EXPECT_DOUBLE_EQ(ans,0.00014099188829407296); 
+}
 
-//  double getResponsibility();   
+/**
+ * @brief Need to double check -- this is a dumb test.
+ * Need to setup Responsibilities for this to be a real test.
+ */
 TEST(FullModel, getResponsibility)
-{}
+{  //Arrange
+  FullModel sut;
+  sut.initBounds(7., 2., 1., 0.33, 5., 30.);
+  sut.bidir.setFootprint(2.);
+  // std::cout << sut.write_out() << std::endl;
 
-//   void updateParameters(double,double);
+  //Act
+  double ans = sut.getResponsibility();
+
+  //Assert
+  EXPECT_EQ(ans, 0.);
+}
+
+/**
+ * @brief Need to double check -- this is a dumb test.
+ * Need to setup Responsibilities for this to be a real test.
+ */
 TEST(FullModel, updateParameters)
-{}
+{  
+  //Arrange
+  FullModel sut;
+  sut.initBounds(7., 2., 1., 0.33, 5., 30.);
+  sut.bidir.setFootprint(2.);
 
-//   double calculateRi(double z, char strand);
+  //Act
+  sut.updateParameters(2.,2.);
+  std::cout << sut.write_out() << std::endl;
+
+  //Assert
+  EXPECT_EQ(sut.bidir.getMu(), 0.);
+}
+
+
+/**
+ * @brief Need to double check -- this is a dumb test.
+ */
 TEST(FullModel, calculateRi)
-{}
+{ 
+  //Arrange
+  FullModel sut;
+  sut.initBounds(7., 2., 1., 0.33, 5., 30.);
+  sut.bidir.setFootprint(2.);
 
-// void updateExpectations(double i, perStrandInfo coverage, perStrandInfo normalizeRi);
-TEST(FullModel, updateExpecations)
-{}
+  perStrandInfo coverage(15,25);
+  perStrandInfo output;
+  
+  // Act
+  // std::cout << output.write_out() << std::endl;
+  output = sut.calculateRi(10., coverage);
+  // std::cout << output.write_out() << std::endl;
 
-// initBounds(...)
-TEST(Uniform, initBounds)
-{}
-*/
+  // Assert
+  EXPECT_EQ(output.forward, 3.0);
+  EXPECT_EQ(output.reverse, 3.0);
+}

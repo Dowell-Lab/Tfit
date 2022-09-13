@@ -192,6 +192,10 @@ double Bidirectional::getLambda() {
   return (initiation.lambda);
 }
 
+double Bidirectional::getFootprint() {
+  return (footprint);
+}
+
 void Bidirectional::setMu(double v_mu) {
   loading.mu = v_mu; 
 }
@@ -202,6 +206,10 @@ void Bidirectional::setSigma(double v_sigma) {
 
 void Bidirectional::setLambda(double v_lambda) {
   initiation.lambda = v_lambda;
+}
+
+void Bidirectional::setFootprint(double v_fp) {
+  footprint = v_fp; 
 }
 
 void Bidirectional::setPriorSigma(double v_alpha, double v_beta) {

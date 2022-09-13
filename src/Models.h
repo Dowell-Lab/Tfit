@@ -74,9 +74,11 @@ class Bidirectional: public BasicModel {
   double getMu();
   double getSigma();
   double getLambda();
+  double getFootprint();
   void setMu(double);
   void setSigma(double);
   void setLambda(double);
+  void setFootprint(double);
   void setPriorSigma(double, double);
   void setPriorLambda(double, double);
   void setParametersModel(double v_mu, double v_sigma,
