@@ -49,6 +49,10 @@ testmain: MainTesting.o ${OBJ}
 	echo "Temporary Testing"
 	@${CXX} -o Testmain ${CXXFLAGS} MainTesting.o ${OBJ} -lmpi
 
+jsontest:
+	g++ -c ${CFLAGS} ${PWD}/rddjson.cpp
+	g++ -o jsonTest ${CFLAGS} rddjson.o 
+
 %: 
 	@${CXX} -c ${CXXFLAGS} ${PWD}/$*.cpp
 
