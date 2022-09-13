@@ -68,21 +68,11 @@ int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_
 	vector<segment*> integrated_segments= load::insert_bedgraph_to_segment_joint(GG, 
 		forward_bed_graph_file, reverse_bed_graph_file, joint_bed_graph_file, rank);
 
-    std::cout << "Loaded: " << std::endl;
-    vector<segment*>::iterator it;
-	for(it=integrated_segments.begin(); it!=integrated_segments.end(); it++) {
-       std::cout << (*it)->write_withData() << std::endl;
-	}
-
 	//(2b) for each segment we are going to bin and scale and center, numerical stability
 	LG->write("done\n",verbose);
 	LG->write("binning, centering, scaling.............................",verbose);
 	load::BIN(integrated_segments, stod(P->p["-br"]), stod(P->p["-ns"]),true);	
 	LG->write("done\n",verbose);
-
-	for(it=integrated_segments.begin(); it!=integrated_segments.end(); it++) {
-       std::cout << (*it)->write_withData() << std::endl;
-	}
 
 	//=======================================================================================
 	//(3a) now run template matching for seeding the EM  
@@ -93,10 +83,6 @@ int model_run(params * P, int rank, int nprocs, double density, int job_ID, Log_
 	SC.set_2(stod(P->p["-bct"]));
 	
 	run_global_template_matching(integrated_segments, P, SC);	
-    std::cout << SC.write_contents() << std::endl;
-	for(it=integrated_segments.begin(); it!=integrated_segments.end(); it++) {
-       std::cout << (*it)->write_bidirectional_bounds() << std::endl;
-	}
 	LG->write("done\n",verbose);
 
 	//=======================================================================================
@@ -148,19 +134,27 @@ int model_rdd(params * P, int rank, int nprocs, double density, int job_ID, Log_
 				" density: " + tfit::prettyDecimal(density,2) +
 				" job_ID: " + tfit::prettyDecimal(job_ID,-1) << std::endl;
 
-	int verbose 	= stoi(P->p["-v"]);
+	int verbose 	= 1; // stoi(P->p["-v"]);
 	LG->write("\ninitializing model module...............................done\n\n",verbose);
 	int threads 	= P->threads; // omp_get_max_threads();//number of OpenMP threads that are available for use	
+	std::cout << "threads: " + tfit::prettyDecimal(threads,-1) << std::endl;
 	string job_name = P->p["-N"];
+	std::cout << "job_name: " + job_name << std::endl;
 
 	//=======================================================================================
 	//input file paths
 	string forward_bed_graph_file 	= P->p["-i"];
+	std::cout << "forward: " + forward_bed_graph_file << std::endl;
 	string reverse_bed_graph_file 	= P->p["-j"];
+	std::cout << "reverse: " + reverse_bed_graph_file << std::endl;
 	string joint_bed_graph_file 	= P->p["-ij"];
+	std::cout << "joint: " + joint_bed_graph_file << std::endl;
 	string interval_file 			= P->p["-k"];
+	std::cout << "intervals: " + interval_file << std::endl;
 	string out_file_dir 			= P->p["-o"];
+	std::cout << "out_file: " + out_file_dir << std::endl;
 	string spec_chrom 				= P->p["-chr"];
+	std::cout << "specified chr: " + spec_chrom << std::endl;
 
 	//=======================================================================================
 	//(1a) load intervals and keep track of their associated IDS
@@ -173,6 +167,10 @@ int model_rdd(params * P, int rank, int nprocs, double density, int job_ID, Log_
 			printf("exiting...\n");
 		}
 		return 1;
+	} else {
+		for (auto &element : FSI) {
+			std::cout << "\n" + element->write_interval() << std::endl;
+		}
 	}
 	LG->write("done\n",verbose);
 	//(1b) now broadcast the intervals of interest to individual MPI processes
@@ -185,7 +183,6 @@ int model_rdd(params * P, int rank, int nprocs, double density, int job_ID, Log_
 	LG->write("inserting bedgraph data.................................",verbose);
 	vector<segment*> integrated_segments= load::insert_bedgraph_to_segment_joint(GG, 
 		forward_bed_graph_file, reverse_bed_graph_file, joint_bed_graph_file, rank);
-
     std::cout << "Loaded: " << std::endl;
     vector<segment*>::iterator it;
 	for(it=integrated_segments.begin(); it!=integrated_segments.end(); it++) {
