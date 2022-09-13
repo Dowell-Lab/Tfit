@@ -38,7 +38,7 @@ using namespace std;
 params::params(){
   p["-N"] 		= "EMG";
   p["-v"] 		= "1";
-  p["-threads"] = "32";
+  p["-threads"] = "8";
   
   p["-h"] 		= "";
   p["--help"] 	= "";
@@ -89,6 +89,7 @@ params::params(){
   module 			= "";
   EXIT 			= 0;
   bidir 			= 0;
+  testing			= 0;
   model 			= 0;
   select 			= 0;
   CONFIG 			= 0;
@@ -188,25 +189,35 @@ vector<string> params::validate_parameters(){
 		
 	}
 
-	//want to briefly check paths
-	//out put directory
-	if (p["-o"].empty()){
-		errors.push_back("User did not specify an output path, (-o)");
-
-	}else if(not is_path(p["-o"])){
-		errors.push_back("User specified output path, " +  p["-o"] +", but does not exist (-o)" );
+	// want to briefly check paths
+	// out put directory
+	if (p["-o"].empty()) {
+		if (!testing) {
+			errors.push_back("User did not specify an output path, (-o)");
+		} else {
+			std::cerr << "User did not specify an output path, (-o)" << std::endl;
+		}
+	} else if (not is_path(p["-o"])) {
+		errors.push_back("User specified output path, " + p["-o"] + ", but does not exist (-o)");
 	}
 	if (!p["-ij"].empty() and (!p["-i"].empty() or !p["-j"].empty() )  ){
 		errors.push_back("User specified both -ij and (-i or -j)");
-	}
-	else if (p["-ij"].empty()){
+	} else if (p["-ij"].empty()){
 		if (p["-j"].empty()){
-			errors.push_back("User did not specify a reverse strand file path or combinded file path, (-j, -ij)");
+			if (!testing) {
+			  errors.push_back("User did not specify a reverse strand file path or combinded file path, (-j, -ij)");
+			} else {
+			  std::cerr << "User did not specify a reverse strand file path or combined file path, (-j, -ij)" << std::endl;
+			}
 		}else if(not is_path(p["-j"])){
 			errors.push_back("User specified reverse strand file path, " +  p["-j"] +", but does not exist (-j)" );
 		}
 		if (p["-i"].empty()){
-			errors.push_back("User did not specify a forward strand file or combinded file, (-i, -ij)");	
+			if (!testing) {
+			  errors.push_back("User did not specify a forward strand file or combinded file, (-i, -ij)");	
+			} else {
+			  std::cerr << "User did not specify a forward strand file or combined file , (-i, -ij)" << std::endl;
+			}
 		}else if(not is_path(p["-i"])){
 			errors.push_back("User specified forward strand file path, " +  p["-i"] +", but does not exist (-i)" );
 		}
@@ -619,16 +630,15 @@ int read_in_parameters( char* argv[], params * P, int rank){
 			P->help();
 			return 1;
 		}
-		if (F.size()==5 and F.substr(0,5) == "bidir") {
+		if (F.size()==5 and F.substr(0,5) == "tests") {
+			P->testing = 1;
+		} else if (F.size()==5 and F.substr(0,5) == "bidir") {
 			P->bidir 	= 1;
-	 	}
-		else if (F.size()==5 and  F.substr(0,5) == "model") {
+	 	} else if (F.size()==5 and  F.substr(0,5) == "model") {
 			P->model 	= 1;
-		}
-		else if(F.size() == 6 and F.substr(0,6)=="select"){
+		} else if(F.size() == 6 and F.substr(0,6)=="select"){
 			P->select 	= 1;
-		}
-		else{
+		} else{
 			if (rank == 0){
 				printf("couldn't understand user provided module option: %s\n",F.c_str() );
 			}

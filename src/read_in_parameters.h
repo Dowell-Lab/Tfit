@@ -27,6 +27,7 @@ public:
 	map<string, string> p;
 	int N;
 	string module;
+	bool testing;
 	bool bidir;
 	bool model;
 	bool CONFIG;

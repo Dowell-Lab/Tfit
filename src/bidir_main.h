@@ -12,6 +12,7 @@
 #include "read_in_parameters.h"
 
 int bidir_run(params *, int, int,int, Log_File *);
+int bidir_rdd(params *, int, int,int, Log_File *);
 
 
 #endif

@@ -85,7 +85,11 @@ int main(int argc, char* argv[]) {
     P->display(nprocs, threads);
     LG->write(P->get_header(1), 0);
   }
-  if (P->bidir) {
+  if (P->testing) {
+    // For testing behavior of subparts of Tfit.
+    std::cout << "Hijacked!" << std::endl;
+    // bidir_rdd(P, rank, nprocs, job_ID, LG);
+  } else if (P->bidir) {
     bidir_run(P, rank, nprocs, job_ID, LG);
   } else if (P->model) {
     model_run(P, rank, nprocs, 0, job_ID, LG);
