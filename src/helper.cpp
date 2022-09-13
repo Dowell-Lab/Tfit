@@ -136,3 +136,11 @@ std::string tfit::write_VectorPointCov(std::vector<PointCov> setOfpoints) {
   }
   return output;
 }
+
+std::string tfit::write_VectorDoubles(std::vector<double> setOfdoubles) {
+   std::string output;
+  for (auto & element : setOfdoubles) {
+    output += "[" + tfit::prettyDecimal(element,2) + "] ";
+  }
+  return output;
+} 

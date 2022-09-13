@@ -72,6 +72,7 @@ namespace tfit {
   int StrandAsInt(char s);
 
   std::string write_VectorPointCov(std::vector<PointCov> setOfpoints);
+  std::string write_VectorDoubles(std::vector<double> setOfdoubles);
 
 }
 
