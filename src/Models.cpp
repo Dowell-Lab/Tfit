@@ -406,6 +406,39 @@ double Bidirectional::ExpY2(double z, char strand){
 }
 
 /**
+ * @brief Generate data from the model
+ *   h(z,s; mu, sigma, lambda, pi)
+ * 
+ * Does this even make sense?  If we knew the bounds on X 
+ * would the counts per position be (pdf(x) * n)?
+ * 
+ * @param n  Number of total reads to generate
+ * @return std::vector<PointCov> 
+ */
+std::vector<PointCov> Bidirectional::generateData(int n) {
+  Random num_generator;
+  std::vector<PointCov> output;
+
+  int strandAsInt;
+  double strandProb = 0;
+  double position = loading.mu;
+  for(int i = 0; i < n; i++) {
+   strandProb = num_generator.fetchProbability();
+   if (strandProb <= pi) {
+      strandAsInt = 1;     // This will be a positive strand read
+   } else {
+      strandAsInt = -1;  // This will be a negative strand read
+   }
+   double position = num_generator.fetchNormal(loading.mu,loading.sigma) + 
+     strandAsInt * num_generator.fetchExponential(initiation.lambda);
+
+    // output.push_back(new PointCov());
+  }
+  return output;
+  
+}
+
+/**
  * @brief conditional expectation of Y^2 given z_i
  * Eq 9 E[X^2|params] in Azofeifa 2018:
  * \f$ E[X^2|g_i,\theta^t] = E[X|g_i,\theta^t] +

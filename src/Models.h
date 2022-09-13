@@ -92,6 +92,8 @@ class Bidirectional: public BasicModel {
   double ExpX2(double z, char strand);
   double ExpY2(double z, char s);
 
+  std::vector<PointCov> generateData(int n);
+
   // Functions of all Models
   std::vector<double> generate_data(int n);
   void updateExpectations(double z, perStrandInfo coverage, perStrandInfo normalizeRi);
