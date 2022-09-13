@@ -63,7 +63,7 @@ class EMalg {
 	AlgorithmControl control;  //!< parameters that can alter the way the EM works
 	ModelContainer models;		//!< This is the set of models we're trying to infer
 	dInterval *data;	// Data on which to fit this model
-	SeedManager seeds;	// Handling seeding the algorithm
+	SeedManager seeds;	// Handling seeding the algorithm (should be in alg control?)
 
 	// Constructor
 	EMalg();
