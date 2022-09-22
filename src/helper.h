@@ -74,6 +74,8 @@ namespace tfit {
   std::string write_VectorPointCov(std::vector<PointCov> setOfpoints);
   std::string write_VectorDoubles(std::vector<double> setOfdoubles);
 
+  void write_VectorDouble2File(std::string filename, std::vector<double> setOfdoubles);
+
 }
 
 #endif

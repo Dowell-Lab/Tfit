@@ -8,6 +8,7 @@
  */
 #include "helper.h"
 
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <random>	// random numbers within distributions
@@ -144,3 +145,17 @@ std::string tfit::write_VectorDoubles(std::vector<double> setOfdoubles) {
   }
   return output;
 } 
+
+/**
+ * @brief  Prints one double per line
+ * 
+ * @param filename 
+ * @param setOfdoubles 
+ */
+void tfit::write_VectorDouble2File(std::string filename, std::vector<double> setOfdoubles) {
+  std::ofstream FH(filename);    // Test for existence before using?
+  for (auto & element : setOfdoubles) {
+    FH << tfit::prettyDecimal(element,-1) << std::endl;
+  }
+  FH.close();
+}
