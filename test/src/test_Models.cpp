@@ -8,6 +8,7 @@
 #include "gmock/gmock.h"
 #include <fstream>
 #include "Models.h"
+#include "helper.h"
 
 TEST (BasicModel, updateParameters) 
 {
@@ -77,6 +78,20 @@ TEST(Bidirectional, applyFootprintAddNegStrand)
   EXPECT_EQ(newZ, 63);
 }
 
+TEST(Bidirectional, generateData) 
+{
+  // Arrange: bring SUT to desired state
+  // mu, sigma, lambda, pi , footprint 
+  Bidirectional sut(1000, 61, 64, 0.75, 192);
+  std::vector<double> setReads;
+
+  // Act: call methods on SUT, capture output
+  setReads = sut.generateReads(3000);
+
+  // tfit::write_VectorDouble2File("BidirectionalModel.tmp", setReads);
+  // Assert: Verify the outcome
+}
+
 TEST(Bidirectional, MillsRatioCorrect)
 {
     // Arrange: bring SUT to desired state
@@ -90,25 +105,6 @@ TEST(Bidirectional, MillsRatioCorrect)
     ASSERT_LE(abs(result - (1.0/11)), 0.0001);  // Asymptotic behavior
     // in R: exp(pnorm(x, lower.tail=FALSE, log.p=TRUE) - dnorm(x, log=TRUE))
     ASSERT_LE(abs(result2 - 0.421369), 0.0001);  // .421369 per R
-}
-
-TEST(Bidirectional, generateDataHasCorrectMean)
-{
-    // Arrange: bring SUT to desired state
-    Bidirectional sut(35., 0.5, 0.25, 1.0, 2.);
-
-    // Act: call methods on SUT, capture output
-    std::vector<double> gdata = sut.generate_data(100000);
-
-    double total = 0;
-    std::vector<double>::iterator it;
-    for (it = gdata.begin(); it != gdata.end(); it++) {
-      total += (*it);
-    }
-    double mean = total / gdata.size();
-
-    // Assert: Verify the outcome
-    ASSERT_LE(mean - (sut.loading.mu + (1/sut.initiation.lambda)), 0.01);  
 }
 
 TEST(Bidirectional, GrushkaEQKalambetPositive)
@@ -251,6 +247,22 @@ TEST(UniformModel, pdfUnweighted)
   EXPECT_LE(abs(ans - 0.2), 0.0001);  // R: dunif(6,min=5,max=10);
 }
 
+TEST(UniformModel, generateData) 
+{
+  // Arrange: bring SUT to desired state
+  // mu, sigma, lambda, pi , footprint 
+  UniformModel sut(5,10);
+  sut.setWeight(1.0);
+  std::vector<double> setReads;
+
+  // Act: call methods on SUT, capture output
+  setReads = sut.generateReads(3000);
+
+  tfit::write_VectorDouble2File("UniformModel.tmp", setReads);
+  // Assert: Verify the outcome
+}
+
+
 TEST(UniformModel, pdfWeighted)
 {
   // Arrange
@@ -300,6 +312,23 @@ TEST(FullModel, pdf)
   //Assert
   EXPECT_DOUBLE_EQ(ans,0.00014099188829407296); 
 }
+
+TEST(FullModel, generateData) 
+{
+  // Arrange: bring SUT to desired state
+  FullModel sut;
+  sut.initBounds(7., 2., 1., 0.33, 5., 30.);
+  sut.bidir.setFootprint(2.);
+  std::vector<double> setReads;
+
+  // Act: call methods on SUT, capture output
+  setReads = sut.generateReads(3000);
+
+  tfit::write_VectorDouble2File("FullModel.tmp", setReads);
+
+  // Assert: Verify the outcome
+}
+
 
 /**
  * @brief Need to double check -- this is a dumb test.

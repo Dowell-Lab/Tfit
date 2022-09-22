@@ -3,6 +3,9 @@
 EMGU
 Tfit
 src/jsonTest
+test/.RData
+test/temp
+test/.Rhistory
 thirdparty
 argTest
 *.*~

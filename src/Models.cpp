@@ -406,36 +406,36 @@ double Bidirectional::ExpY2(double z, char strand){
 }
 
 /**
- * @brief Generate data from the model
+ * @brief Generate reads from the model
  *   h(z,s; mu, sigma, lambda, pi)
  * 
- * Does this even make sense?  If we knew the bounds on X 
- * would the counts per position be (pdf(x) * n)?
- * 
  * @param n  Number of total reads to generate
- * @return std::vector<PointCov> 
+ * @return std::vector<double>  (reads)
  */
-std::vector<PointCov> Bidirectional::generateData(int n) {
+std::vector<double> Bidirectional::generateReads(int n) {
   Random num_generator;
-  std::vector<PointCov> output;
+  std::vector<double> readSet;
 
   int strandAsInt;
   double strandProb = 0;
   double position = loading.mu;
-  for(int i = 0; i < n; i++) {
-   strandProb = num_generator.fetchProbability();
-   if (strandProb <= pi) {
-      strandAsInt = 1;     // This will be a positive strand read
-   } else {
-      strandAsInt = -1;  // This will be a negative strand read
-   }
-   double position = num_generator.fetchNormal(loading.mu,loading.sigma) + 
-     strandAsInt * num_generator.fetchExponential(initiation.lambda);
 
-    // output.push_back(new PointCov());
+  for (int i = 0; i < n; i++) {
+     strandProb = num_generator.fetchProbability();
+     if (strandProb <= pi) {
+        strandAsInt = 1; // This will be a positive strand read
+     } else {
+        strandAsInt = -1; // This will be a negative strand read
+     }
+     double position = num_generator.fetchNormal(loading.mu, loading.sigma) +
+                       strandAsInt * num_generator.fetchExponential(initiation.lambda);
+
+     // Rounding to nucleotide
+     position = strandAsInt * position;
+     readSet.push_back(round(position));
   }
-  return output;
-  
+
+  return readSet;
 }
 
 /**
@@ -458,33 +458,6 @@ std::string Bidirectional::write_out() {
    std::string output = "Bidir(" + loading.write_out() + ";" + initiation.write_out()
             + ";" + tfit::prettyDecimal(pi,3) + "," + tfit::prettyDecimal(footprint,2) + ")";
    return output;
-}
-
-/**
- * @brief Generate n samples from this bidirectional model
- * 
- * @param n          Number of samples to create
- * @return std::vector<double> 
- */
-std::vector<double> Bidirectional::generate_data(int n) {
-   Random num_gen;
-
-   std::vector<double> results;
-   double rnum;  int signStrand = 1;
-   for (int i = 0; i < n; i++) {
-    // Flip the coin on strand, based on pi (strand bias)
-    rnum = num_gen.fetchProbability();
-    if (rnum <= pi) {
-      signStrand = 1;
-    } else {
-      signStrand = -1;
-    }
-    // Given that strand, generate a read from EMG
-    double norm = num_gen.fetchNormal(loading.mu,loading.sigma);
-    double expon = num_gen.fetchExponential(initiation.lambda);
-    results.push_back(signStrand *(norm + signStrand * expon));
-   }
-   return results;
 }
 
 void Bidirectional::updateExpectations(double z, perStrandInfo coverage, 
@@ -593,6 +566,39 @@ double UniformModel::pdf(double x, char s) {
    return (weight * uni.pdf(x));
 }
 
+/**
+ * @brief Generate reads from the model
+ *   h(z,s; mu, sigma, lambda, pi)
+ * 
+ * @param n  Number of total reads to generate
+ * @return std::vector<double>  (reads)
+ */
+std::vector<double> UniformModel::generateReads(int n) {
+  Random num_generator;
+  std::vector<double> readSet;
+
+  int strandAsInt = 0;
+  double strandProb = 0;
+  double position = (uni.lower + uni.upper)/2; // midpoint
+
+  for (int i = 0; i < n; i++) {
+     strandProb = num_generator.fetchProbability();
+     if (strandProb <= pi) {
+        strandAsInt = 1; // This will be a positive strand read
+     } else {
+        strandAsInt = -1; // This will be a negative strand read
+     }
+     double position = num_generator.fetchUniform(uni.lower, uni.upper);
+
+     // Rounding to nucleotide
+     position = strandAsInt * position;
+     readSet.push_back(round(position));
+  }
+
+  return readSet;
+}
+
+
 
 double UniformModel::calculateLikelihood(dInterval *data) {
    double ll = 0;
@@ -694,3 +700,48 @@ void FullModel::initBounds(double v_mu, double v_sigma, double v_lambda,
    bidir.setParametersModel(v_mu, v_sigma, v_lambda, v_weight);
    reverseElongation.initalizeBounds(v_minX, v_mu - tau, v_weight, -1.0);
 }
+
+/**
+ * @brief Generate reads from the model
+ *   h(z,s; mu, sigma, lambda, pi)
+ * 
+ * @param n  Number of total reads to generate
+ * @return std::vector<double>  (reads)
+ */
+std::vector<double> FullModel::generateReads(int n) {
+  Random num_generator;
+  std::vector<double> readSet;
+
+  int strandAsInt = 0;
+  double strandProb = 0;
+  double weightProb = 0;
+  double position = bidir.getMu();
+
+  for (int i = 0; i < n; i++) {
+     strandProb = num_generator.fetchProbability();
+     if (strandProb <= bidir.getPi()) {
+        strandAsInt = 1; // This will be a positive strand read
+     } else {
+        strandAsInt = -1; // This will be a negative strand read
+     }
+     weightProb = num_generator.fetchProbability();
+     if (weightProb <= bidir.getWeight()) {
+      position = num_generator.fetchNormal(bidir.loading.mu, bidir.loading.sigma) +
+                       strandAsInt * num_generator.fetchExponential(bidir.initiation.lambda);
+     } else {
+      // generate from Elongation (need to handle strand!)
+      if (strandAsInt) {
+        position = num_generator.fetchUniform(forwardElongation.uni.lower, forwardElongation.uni.upper);
+      } else {
+        position = num_generator.fetchUniform(reverseElongation.uni.lower, reverseElongation.uni.upper);
+      }
+     }
+
+     // Rounding to nucleotide
+     position = strandAsInt * position;
+     readSet.push_back(round(position));
+  }
+
+  return readSet;
+}
+

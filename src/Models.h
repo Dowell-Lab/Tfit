@@ -92,10 +92,9 @@ class Bidirectional: public BasicModel {
   double ExpX2(double z, char strand);
   double ExpY2(double z, char s);
 
-  std::vector<PointCov> generateData(int n);
 
   // Functions of all Models
-  std::vector<double> generate_data(int n);
+  std::vector<double> generateReads(int n); // Untested
   void updateExpectations(double z, perStrandInfo coverage, perStrandInfo normalizeRi);
   void calcExpectedVals (double position, char strand, double rtimescov);
   void updateParameters(double,double);
@@ -127,6 +126,7 @@ class UniformModel: public BasicModel {
   std::string write_out();
 
   // Functions of all Models
+  std::vector<double> generateReads(int n);   // Untested
   double pdf(double x, char s);
   void updateParameters(double,double);
   void initalizeBounds(double v_minX, double v_maxX, double v_weight, double v_pi);
@@ -158,6 +158,7 @@ class FullModel {
 
   void initBounds(double v_mu, double v_sigma, double v_lambda, 
                  double v_weight, double v_minX, double v_maxX);
+  std::vector<double> generateReads(int n);   // Untested
 
 };
 
