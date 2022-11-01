@@ -92,7 +92,6 @@ class Bidirectional: public BasicModel {
   double ExpX2(double z, char strand);
   double ExpY2(double z, char s);
 
-
   // Functions of all Models
   std::vector<double> generateReads(int n); // Untested
   void updateExpectations(double z, perStrandInfo coverage, perStrandInfo normalizeRi);

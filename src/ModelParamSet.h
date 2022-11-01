@@ -35,11 +35,11 @@ public:
   double mu;    // Technically an int
   double sigma;
   double lambda;
-  double pi;  // This one is a probability
   double footprint;
+  double pi;  // This one is a probability
   double omega;
 
-  // weight?
+  // weight? 
 
   // Constructors & Destructors
   ModelParams();
@@ -47,10 +47,12 @@ public:
 
   // Functions
   std::string write();        
+
   void read(std::string);
   double getStart();
   double getEnd();
   std::vector<std::string> fetch_as_strings();
+
   // What about a function that outputs this as BED?  We don't keep
   // currently its chromosome.  We also aren't sure if these will be relative
   // or genomic coordinates yet. 

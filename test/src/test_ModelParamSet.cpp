@@ -10,7 +10,8 @@
 #include "gmock/gmock.h"
 #include "ModelParamSet.h"
 
-TEST(ModelParamSet, ReadWrite)
+
+TEST(ModelParams, ReadWrite)
 {
     // Arrange
     ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
@@ -30,7 +31,7 @@ TEST(ModelParamSet, ReadWrite)
     EXPECT_EQ(sut.omega,input.omega);  
 }
 
-TEST(ModelParamSet, Start_Stop)
+TEST(ModelParams, Start_Stop)
 {
     // Arrange
     ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
@@ -40,7 +41,7 @@ TEST(ModelParamSet, Start_Stop)
     EXPECT_EQ(sut.getEnd(), (double)35395);  
 }
 
-TEST(ModelParamSet, fetch_asStrings)
+TEST(ModelParams, fetch_asStrings)
 {
     // Arrange
     ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
