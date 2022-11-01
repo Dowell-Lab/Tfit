@@ -180,7 +180,7 @@ int MPI_comm::gather_all_bidir_predicitions(vector<segment *> all,
 struct simple_seg_struct{
 	char chrom[6];
 	char strand[2];
-	int st_sp[4]; //first->start, second->stop
+	int st_sp[4]; //first->start, second->stop, ID, counts
 };
 
 

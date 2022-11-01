@@ -49,7 +49,7 @@ struct simple_c{
  */
 struct simple_c_free_mode{
 	double SS[3];	//log-likelihood, N_forward, N_reverse
-	int ID[5] ;  //index of the segment that this belongs,start, stop, converged?
+	int ID[5] ;  //ID, start, stop, K, converged?
 	char chrom[6];
 
 /* 	ps[0]=C.bidir.mu,ps[1]=C.bidir.sigma,ps[2]=C.bidir.lambda, ps[3]=C.bidir.w, ps[4]=C.bidir.pi;
@@ -59,6 +59,8 @@ struct simple_c_free_mode{
 		*/
 
 	double ps[12]; //parameters for the component
+
+	
 	simple_c_free_mode(bool , double, component ,
 		int, segment *, int, double, double);
 	simple_c_free_mode();
