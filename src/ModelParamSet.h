@@ -19,10 +19,6 @@
  * Current output is: 
  * mus+"\t"+sigmas+"\t"+lambdas+"\t" + pis+"\t" + fps+ "\t" + ws + "\t" + fbs+"\t" +ras;
  * 
- * Unclear what fbs and ras are .. so leaving those out for now.  ** I think these
- * are the elongationg bounds.  Forward strand "b" parameters is most 3' and Reverse
- * strand "a" is most 3' on that strand (5' on region).
- * 
  * @remark Currently keeping all parameters as doubles, as Joey did.  Reality is that
  * they are not really all doubles.  Should be checking those that are probabilities for 
  * proper bounds.
