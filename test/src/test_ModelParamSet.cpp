@@ -28,7 +28,7 @@ TEST(ModelParams, ReadWrite)
     EXPECT_EQ(sut.lambda,input.lambda);  
     EXPECT_EQ(sut.pi,input.pi);  
     EXPECT_EQ(sut.footprint,input.footprint);  
-    EXPECT_EQ(sut.omega,input.omega);  
+    EXPECT_EQ(sut.omega[0],input.omega[0]);  
 }
 
 TEST(ModelParams, Start_Stop)
@@ -37,8 +37,8 @@ TEST(ModelParams, Start_Stop)
     ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
 
     // Assert
-    EXPECT_EQ(sut.getStart(), (double)34605);  
-    EXPECT_EQ(sut.getEnd(), (double)35395);  
+    EXPECT_EQ(sut.getBedStart(), (double)34605);  
+    EXPECT_EQ(sut.getBedEnd(), (double)35395);  
 }
 
 TEST(ModelParams, fetch_asStrings)
@@ -82,8 +82,8 @@ TEST(ModelParamSet, Set_read_from_K_models)
     // Assert
     EXPECT_EQ(sut.collection[0]->mu, (double)57970016);
     EXPECT_EQ(sut.collection[1]->mu, (double)57974849);
-    EXPECT_EQ(sut.collection[0]->omega, (double)0.617766);
-    EXPECT_EQ(sut.collection[1]->omega, (double)0.310201);
+    EXPECT_EQ(sut.collection[0]->omega[0], (double)0.617766);
+    EXPECT_EQ(sut.collection[1]->omega[0], (double)0.310201);
 
     // Teardown
 }

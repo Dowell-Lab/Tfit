@@ -10,11 +10,11 @@
 
 #include <iostream>
 
-ReadGenerator::ReadGenerator() {
-  
-}
+ReadGenerator::ReadGenerator() { }
 
 std::string ReadGenerator::write_out() {
-  
+  std::string output;
+  output = " Not Yet Written! "; 
+  return output;
 }
 

@@ -17,10 +17,13 @@
 #include <iostream>  // for cout?
 
 #include "split.h"
+#include "helper.h"
+#include "Models.h"
 
 ModelParams::ModelParams() {
   // Empty constructor.
-  mu = sigma = lambda = pi = footprint = omega = 0.0;
+  mu = sigma = lambda = pi = footprint = omega[0] = 0.0;
+  omega[1] = -1; omega[2] = -1;
 }
 
 /**
@@ -39,7 +42,29 @@ ModelParams::ModelParams(double v_mu, double v_sigma, double v_lambda,
     lambda = v_lambda;
     pi = v_pi;
     footprint = v_footprint;
-    omega = v_omega;
+    omega[0] = v_omega;
+}
+
+/**
+ * @brief Given a bidirectional model, transfer parameters
+ * 
+ * @param model 
+ */
+void ModelParams::SetfromBidirectional(Bidirectional model) {
+  mu = model.getMu();
+  sigma = model.getSigma();
+  lambda = model.getLambda();
+  footprint = model.getFootprint();
+  pi = model.getPi();
+  omega[0] = model.getWeight();
+}
+
+void ModelParams::SetfromFullModel(FullModel model) {
+   SetfromBidirectional(model.bidir);
+   omega[1] = model.forwardElongation.getWeight();
+   omega[2] = model.reverseElongation.getWeight();
+   posL = model.forwardElongation.uni.upper;
+   negL = model.reverseElongation.uni.lower;
 }
 
 /**
@@ -50,7 +75,7 @@ ModelParams::ModelParams(double v_mu, double v_sigma, double v_lambda,
 std::string ModelParams::write() {
   std::string output =    std::to_string(mu) +"\t" + std::to_string(sigma) +"\t" + 
     std::to_string(lambda) + "\t" + std::to_string(pi) +"\t" + std::to_string(footprint) 
-    +"\t" + std::to_string(omega) + "\n";
+    +"\t" + std::to_string(omega[0]) + "\n";
    return output;
 }
 
@@ -69,7 +94,7 @@ void ModelParams::read(std::string single) {
    lambda = std::stod(split_tab[2]);
    pi = std::stod(split_tab[3]);
    footprint = std::stod(split_tab[4]);
-   omega = std::stod(split_tab[5]);
+   omega[0] = std::stod(split_tab[5]);
 
    // Should we check that we don't have more parameters?
 }
@@ -79,7 +104,7 @@ void ModelParams::read(std::string single) {
  * 
  * @return std::string 
  */
-double ModelParams::getStart() {
+double ModelParams::getBedStart() {
     return max(mu-(sigma+lambda), 0.0);
 }
 
@@ -88,7 +113,7 @@ double ModelParams::getStart() {
  * 
  * @return std::string 
  */
-double ModelParams::getEnd() {
+double ModelParams::getBedEnd() {
    return (mu + (sigma+lambda));
 }
 
@@ -107,10 +132,32 @@ std::vector<std::string> ModelParams::fetch_as_strings() {
    asStrings[2] = std::to_string(lambda);
    asStrings[3] = std::to_string(pi);
    asStrings[4] = std::to_string(footprint);
-   asStrings[5] = std::to_string(omega);
+   asStrings[5] = std::to_string(omega[0]);
 
    return asStrings;
 }
+
+std::string ModelParams::writeAsJSON() {
+  std::string output;
+  output += "{\"mu\":" + tfit::prettyDecimal(mu,0) + ",";
+  output += "\"sigma\":" + tfit::prettyDecimal(sigma,2) + ",";
+  output += "\"lambda\":" + tfit::prettyDecimal(lambda,2) + ",";
+  output += "\"pi\":" + tfit::prettyDecimal(pi,2) + ",";
+  output += "\"fp\":" + tfit::prettyDecimal(footprint,2) + ",";
+  output += "\"weights\":{";
+  output +=  "\"bidir\":" + tfit::prettyDecimal(omega[0], 0) + 
+         ",\"forward\":" + tfit::prettyDecimal(omega[1], 0) +
+         ",\"reverse\":" + tfit::prettyDecimal(omega[2], 0) + "}";
+  output += "\"length_forward\":" + tfit::prettyDecimal(posL,0);
+  output += "\"length_reverse\":" + tfit::prettyDecimal(negL,0) + "}";
+  return output;
+}
+
+void ModelParams::readFromJSON(std::string entry) {
+  // Need to convert from JSON string (user parser?)
+}
+
+
 /******************************************************/
 /* Class: ModelParamsSet */
 /*************************/
@@ -222,4 +269,24 @@ void ModelParamSet::read_from_K_models(std::string line) {
                par_as_double[3][i], par_as_double[4][i], par_as_double[5][i],
                par_as_double[6][i]));
    }
+}
+
+std::string ModelParamSet::writeAsKmodels() {
+   std::string output;
+   // replaces write but now has the other weights
+   return output;
+}
+
+void ModelParamSet::readFromKmodels() {
+   // replaces read_from_K_models(std::string line)
+}
+
+std::string ModelParamSet::writeJSON() {
+   std::string output;
+   //  Write the JSON for the whole set.
+   return output;
+}
+
+void ModelParamSet::readJSON() {
+   // Read from the JSON
 }

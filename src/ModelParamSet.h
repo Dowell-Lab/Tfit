@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 
+#include "Models.h"
+
 /**
  * @brief This replaces the parameters string in segment_fits.
  * 
@@ -39,7 +41,7 @@ public:
   double lambda;
   double footprint;
   double pi;  // This one is a probability
-  double omega; // weight?
+  double omega[3]; // weights (this mimics Joey's but is ugly)
 
   double negL;  // reverse strand extent of elongation
   double posL;  // forward strand extent of elongation
@@ -48,17 +50,20 @@ public:
   ModelParams();
   ModelParams(double,double,double,double,double,double);
 
+    // Getters and Setters
+  void SetfromBidirectional(Bidirectional model);
+  void SetfromFullModel(FullModel model);
+  double getBedStart();
+  double getBedEnd();
+
   // Functions
   std::string write();        
-
   void read(std::string);
-  double getStart();
-  double getEnd();
-  std::vector<std::string> fetch_as_strings();
+  std::vector<std::string> fetch_as_strings();  // Needed for writeAsKModels?
+  std::string writeAsJSON();  // Output in JSON format
+  void readFromJSON(std::string);
 
-  // What about a function that outputs this as BED?  We don't keep
-  // currently its chromosome.  We also aren't sure if these will be relative
-  // or genomic coordinates yet. 
+
 };
 
 /**
@@ -78,6 +83,10 @@ class ModelParamSet {
   // Functions
   std::string write();
   void read_from_K_models(std::string);  // This will parse/read in a K_models string
+  std::string writeAsKmodels();
+  void readFromKmodels();
+  std::string writeJSON();
+  void readJSON();
   
   private:
   int K;    // Number of models
