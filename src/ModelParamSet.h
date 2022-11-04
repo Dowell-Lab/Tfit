@@ -55,11 +55,10 @@ public:
   // Functions
   std::string write();        
   void read(std::string);
+
   std::vector<std::string> fetch_as_strings();  // Needed for writeAsKModels?
   std::string writeAsJSON();  // Output in JSON format
   void readFromJSON(std::string);
-
-
 };
 
 /**

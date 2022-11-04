@@ -16,6 +16,7 @@
 #include <vector>
 #include <iostream>  // for cout?
 
+#include "../thirdparty/nlohmann/json.hpp"
 #include "split.h"
 #include "helper.h"
 #include "Models.h"
@@ -43,6 +44,7 @@ ModelParams::ModelParams(double v_mu, double v_sigma, double v_lambda,
     pi = v_pi;
     footprint = v_footprint;
     omega[0] = v_omega;
+    omega[1] = -1; omega[2] = -1;
 }
 
 /**
@@ -139,22 +141,33 @@ std::vector<std::string> ModelParams::fetch_as_strings() {
 
 std::string ModelParams::writeAsJSON() {
   std::string output;
-  output += "{\"mu\":" + tfit::prettyDecimal(mu,0) + ",";
+  output += "{\"mu\":" + tfit::prettyDecimal(mu,-1) + ",";
   output += "\"sigma\":" + tfit::prettyDecimal(sigma,2) + ",";
   output += "\"lambda\":" + tfit::prettyDecimal(lambda,2) + ",";
   output += "\"pi\":" + tfit::prettyDecimal(pi,2) + ",";
   output += "\"fp\":" + tfit::prettyDecimal(footprint,2) + ",";
   output += "\"weights\":{";
-  output +=  "\"bidir\":" + tfit::prettyDecimal(omega[0], 0) + 
-         ",\"forward\":" + tfit::prettyDecimal(omega[1], 0) +
-         ",\"reverse\":" + tfit::prettyDecimal(omega[2], 0) + "}";
-  output += "\"length_forward\":" + tfit::prettyDecimal(posL,0);
-  output += "\"length_reverse\":" + tfit::prettyDecimal(negL,0) + "}";
+  output +=  "\"bidir\":" + tfit::prettyDecimal(omega[0], 2) + 
+         ",\"forward\":" + tfit::prettyDecimal(omega[1], 2) +
+         ",\"reverse\":" + tfit::prettyDecimal(omega[2], 2) + "},";
+  output += "\"length_forward\":" + tfit::prettyDecimal(posL,-1) + ",";
+  output += "\"length_reverse\":" + tfit::prettyDecimal(negL,-1) + "}";
   return output;
 }
 
 void ModelParams::readFromJSON(std::string entry) {
-  // Need to convert from JSON string (user parser?)
+   nlohmann::json input;
+   input = nlohmann::json::parse(entry);
+   mu = input.value("mu", 0.);
+   sigma = input.value("sigma", 0.);
+   lambda = input.value("lambda", 0.);
+   pi = input.value("pi", 0.);
+   footprint = input.value("fp", 0.);
+   posL = input.value("length_forward", 0.);
+   negL = input.value("length_reverse", 0.);
+   omega[0] = input["weights"]["bidir"];
+   omega[1] = input["weights"]["forward"];
+   omega[2] = input["weights"]["reverse"];
 }
 
 

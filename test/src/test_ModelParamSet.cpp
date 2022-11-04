@@ -10,7 +10,6 @@
 #include "gmock/gmock.h"
 #include "ModelParamSet.h"
 
-
 TEST(ModelParams, ReadWrite)
 {
     // Arrange
@@ -20,6 +19,27 @@ TEST(ModelParams, ReadWrite)
     // Act
     std::string outString = sut.write();
     input.read(outString);
+
+    // Assert
+    EXPECT_EQ(sut.mu, (double)35000.0); // Checks basic I/O
+    EXPECT_EQ(sut.mu,input.mu);  
+    EXPECT_EQ(sut.sigma,input.sigma);  
+    EXPECT_EQ(sut.lambda,input.lambda);  
+    EXPECT_EQ(sut.pi,input.pi);  
+    EXPECT_EQ(sut.footprint,input.footprint);  
+    EXPECT_EQ(sut.omega[0],input.omega[0]);  
+}
+
+TEST(ModelParams, ReadWriteJSON)
+{
+    // Arrange
+    ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
+    ModelParams input;
+
+    // Act
+    std::string outString = sut.writeAsJSON();
+    std::cout << outString + "\n" << std::endl;
+    input.readFromJSON(outString);
 
     // Assert
     EXPECT_EQ(sut.mu, (double)35000.0); // Checks basic I/O
