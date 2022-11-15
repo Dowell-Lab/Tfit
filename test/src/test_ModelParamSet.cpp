@@ -28,6 +28,8 @@ TEST(ModelParams, ReadWrite)
     EXPECT_EQ(sut.pi,input.pi);  
     EXPECT_EQ(sut.footprint,input.footprint);  
     EXPECT_EQ(sut.omega[0],input.omega[0]);  
+    EXPECT_EQ(sut.omega[1],input.omega[1]);  
+    EXPECT_EQ(sut.omega[2],input.omega[2]);  
 }
 
 TEST(ModelParams, ReadWriteJSON)
@@ -49,6 +51,8 @@ TEST(ModelParams, ReadWriteJSON)
     EXPECT_EQ(sut.pi,input.pi);  
     EXPECT_EQ(sut.footprint,input.footprint);  
     EXPECT_EQ(sut.omega[0],input.omega[0]);  
+    EXPECT_EQ(sut.omega[1],input.omega[1]);  
+    EXPECT_EQ(sut.omega[2],input.omega[2]);  
 }
 
 TEST(ModelParams, Start_Stop)
@@ -70,7 +74,7 @@ TEST(ModelParams, fetch_asStrings)
     std::vector<std::string> params = sut.fetch_as_strings();
 
     // Assert
-    EXPECT_EQ(params.size(), 6);
+    EXPECT_EQ(params.size(), 8);
 
     /* Note: to_string with doubles can be a problem in 
     terms of things matching afterwards.  I side step that here
@@ -81,6 +85,8 @@ TEST(ModelParams, fetch_asStrings)
     EXPECT_EQ(params[3],std::to_string(0.8));  
     EXPECT_EQ(params[4],std::to_string(30.0));  
     EXPECT_EQ(params[5],std::to_string(0.3));  
+    EXPECT_EQ(params[6],std::to_string(0.2));  
+    EXPECT_EQ(params[7],std::to_string(0.1));  
 
     // Teardown
     params.clear();
@@ -119,6 +125,7 @@ TEST(ModelParamSet, Set_write)
 
     // Act
     std::string Toutput = sut.write();
+    std::cout << Toutput << std::endl;
     std::string output;
     output  = (std::string) "~2,0.000000\t" + "45333.000000,11111.000000\t" 
         + "65.000000,35.000000\t" + "44.000000,22.000000\t" "0.345000,0.081000\t"

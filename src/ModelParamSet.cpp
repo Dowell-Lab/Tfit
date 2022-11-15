@@ -79,7 +79,8 @@ void ModelParams::SetfromFullModel(FullModel model) {
 std::string ModelParams::write() {
   std::string output =    std::to_string(mu) +"\t" + std::to_string(sigma) +"\t" + 
     std::to_string(lambda) + "\t" + std::to_string(pi) +"\t" + std::to_string(footprint) 
-    +"\t" + std::to_string(omega[0]) + "\n";
+    +"\t" + std::to_string(omega[0]) + "\t" + std::to_string(omega[1])
+    + "\t" + std::to_string(omega[2]) + "\n";
    return output;
 }
 
@@ -88,7 +89,7 @@ std::string ModelParams::write() {
  * the write() function's output as its input.
  * 
  * @param single  Tab delimited list of parameters, 
- * in order: mu, sigma, lambda, pi, footprint, and omega.
+ * in order: mu, sigma, lambda, pi, footprint, and omegas.
  */
 void ModelParams::read(std::string single) {
    vector<std::string> split_tab = split_by_tab(single);
@@ -99,6 +100,8 @@ void ModelParams::read(std::string single) {
    pi = std::stod(split_tab[3]);
    footprint = std::stod(split_tab[4]);
    omega[0] = std::stod(split_tab[5]);
+   omega[1] = std::stod(split_tab[6]);
+   omega[2] = std::stod(split_tab[7]);
 
    // Should we check that we don't have more parameters?
 }
@@ -129,7 +132,7 @@ double ModelParams::getBedEnd() {
  * @return std::vector<std::string> 
  */
 std::vector<std::string> ModelParams::fetch_as_strings() {
-   std::vector<std::string> asStrings(6);
+   std::vector<std::string> asStrings(8);
    // cout << std::to_string(mu) << std::endl;
    asStrings[0] = std::to_string(mu);
    asStrings[1] = std::to_string(sigma);
@@ -137,6 +140,8 @@ std::vector<std::string> ModelParams::fetch_as_strings() {
    asStrings[3] = std::to_string(pi);
    asStrings[4] = std::to_string(footprint);
    asStrings[5] = std::to_string(omega[0]);
+   asStrings[6] = std::to_string(omega[1]);
+   asStrings[7] = std::to_string(omega[2]);
 
    return asStrings;
 }
@@ -232,7 +237,7 @@ std::string ModelParamSet::write() {
     }
   }
 
-  for (int j = 0; j < 6; j++) { // each of the parameters
+  for (int j = 0; j < 8; j++) { // each of the parameters
      std::string temp = params[0][j];
      // cout << temp << std::endl;
      for (int i = 1; i < K; i++) {
