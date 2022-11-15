@@ -35,16 +35,18 @@ ModelParams::ModelParams() {
  * @param lambda    The length of the exponential.  EMG = N(mu,sigma) + Exp(lambda)
  * @param pi        The strand bias
  * @param footprint     The offset parameter (aka Beta)
+ * @param omega     The weights 
  */
 ModelParams::ModelParams(double v_mu, double v_sigma, double v_lambda, 
-            double v_pi, double v_footprint, double v_omega) {
+            double v_pi, double v_footprint, double v_omega0, double v_omega1, double v_omega2) {
     mu = v_mu;
     sigma = v_sigma;
     lambda = v_lambda;
     pi = v_pi;
     footprint = v_footprint;
-    omega[0] = v_omega;
-    omega[1] = -1; omega[2] = -1;
+    omega[0] = v_omega0;
+    omega[1] = v_omega1;
+    omega[2] = v_omega2;
 }
 
 /**
@@ -244,8 +246,6 @@ std::string ModelParamSet::write() {
 /**
  * @brief Convert a string of K model output into a Set_EMGparameters 
  * 
- * UNTESTED 
- * 
  */
 void ModelParamSet::read_from_K_models(std::string line) {
    std::string data = line.substr(1, line.size() - 1); // removes the ~ first character
@@ -258,8 +258,8 @@ void ModelParamSet::read_from_K_models(std::string line) {
 
    // Now we need to build all the EMGparameter sets, of which there are K.
    // Recall the string is formatted:
-   // mus+"\t"+sigmas+"\t"+lambdas+"\t" + pis+"\t" + fps+ "\t" + ws
-   std::vector<std::vector<double>> par_as_double(7, std::vector<double>(K)); // [params][model]
+   // mus+"\t"+sigmas+"\t"+lambdas+"\t" + pis+"\t" + fps + "\t" + ws
+   std::vector<std::vector<double>> par_as_double(9, std::vector<double>(K)); // [params][model]
    for (int i = 1; i < 6; i++) { // mu to footprint
       std::vector<std::string> temp = split_by_comma(tab_split[i], "");
       for (int j = 0; j < K; j++) { // each of the K models
@@ -274,13 +274,15 @@ void ModelParamSet::read_from_K_models(std::string line) {
    // Note that temp.size should eq K.
    for (int i = 0; i < K; i++) {
       std::vector<std::string> wset = split_by_comma(temp[i], "");
-      par_as_double[6][i] = stod(wset[0]);
+      par_as_double[6][i] = stod(wset[0]);   // omega[0]
+      par_as_double[7][i] = stod(wset[1]);   // omega[1]
+      par_as_double[8][i] = stod(wset[2]);   // omega[2]
    }
 
    for (int i = 0; i < K; i++) {
       collection.push_back(new ModelParams(par_as_double[1][i], par_as_double[2][i],
                par_as_double[3][i], par_as_double[4][i], par_as_double[5][i],
-               par_as_double[6][i]));
+               par_as_double[6][i], par_as_double[7][i], par_as_double[8][i]));
    }
 }
 

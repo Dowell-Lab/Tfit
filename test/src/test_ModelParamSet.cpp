@@ -13,7 +13,7 @@
 TEST(ModelParams, ReadWrite)
 {
     // Arrange
-    ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
+    ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3, 0.2, 0.1);
     ModelParams input;
 
     // Act
@@ -33,12 +33,12 @@ TEST(ModelParams, ReadWrite)
 TEST(ModelParams, ReadWriteJSON)
 {
     // Arrange
-    ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
+    ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3, 0.2, 0.1);
     ModelParams input;
 
     // Act
     std::string outString = sut.writeAsJSON();
-    std::cout << outString + "\n" << std::endl;
+    // std::cout << outString + "\n" << std::endl;
     input.readFromJSON(outString);
 
     // Assert
@@ -54,7 +54,7 @@ TEST(ModelParams, ReadWriteJSON)
 TEST(ModelParams, Start_Stop)
 {
     // Arrange
-    ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
+    ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3, 0.2, 0.1);
 
     // Assert
     EXPECT_EQ(sut.getBedStart(), (double)34605);  
@@ -64,7 +64,7 @@ TEST(ModelParams, Start_Stop)
 TEST(ModelParams, fetch_asStrings)
 {
     // Arrange
-    ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3);
+    ModelParams sut(35000.0, 350.0, 45.0, 0.8, 30.0, 0.3, 0.2, 0.1);
 
     // Act
     std::vector<std::string> params = sut.fetch_as_strings();
@@ -103,7 +103,9 @@ TEST(ModelParamSet, Set_read_from_K_models)
     EXPECT_EQ(sut.collection[0]->mu, (double)57970016);
     EXPECT_EQ(sut.collection[1]->mu, (double)57974849);
     EXPECT_EQ(sut.collection[0]->omega[0], (double)0.617766);
+    EXPECT_EQ(sut.collection[0]->omega[1], (double)0.069621);
     EXPECT_EQ(sut.collection[1]->omega[0], (double)0.310201);
+    EXPECT_EQ(sut.collection[1]->omega[1], (double)0.000341);
 
     // Teardown
 }
@@ -112,8 +114,8 @@ TEST(ModelParamSet, Set_write)
 {
     // Arrange
     ModelParamSet sut(2);
-    sut.collection[0] = new ModelParams(45333,65,44,0.345,32,0.5);
-    sut.collection[1] = new ModelParams(11111,35,22,0.081,11,0.3);
+    sut.collection[0] = new ModelParams(45333,65,44,0.345,32,0.5, 0.2, 0.1);
+    sut.collection[1] = new ModelParams(11111,35,22,0.081,11,0.3, 0.2, 0.1);
 
     // Act
     std::string Toutput = sut.write();

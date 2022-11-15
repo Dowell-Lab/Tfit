@@ -44,7 +44,7 @@ public:
 
   // Constructors & Destructors
   ModelParams();
-  ModelParams(double,double,double,double,double,double);
+  ModelParams(double,double,double,double,double,double,double,double);
 
     // Getters and Setters
   void SetfromBidirectional(Bidirectional model);
