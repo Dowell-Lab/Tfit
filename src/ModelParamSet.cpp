@@ -35,10 +35,13 @@ ModelParams::ModelParams() {
  * @param lambda    The length of the exponential.  EMG = N(mu,sigma) + Exp(lambda)
  * @param pi        The strand bias
  * @param footprint     The offset parameter (aka Beta)
- * @param omega     The weights 
+ * @param omega     The weights (array as individual params)
+ * @param v_b     negL
+ * @param v_a     posL
  */
 ModelParams::ModelParams(double v_mu, double v_sigma, double v_lambda, 
-            double v_pi, double v_footprint, double v_omega0, double v_omega1, double v_omega2) {
+            double v_pi, double v_footprint, double v_omega0, double v_omega1, 
+            double v_omega2, double v_b, double v_a) {
     mu = v_mu;
     sigma = v_sigma;
     lambda = v_lambda;
@@ -47,6 +50,8 @@ ModelParams::ModelParams(double v_mu, double v_sigma, double v_lambda,
     omega[0] = v_omega0;
     omega[1] = v_omega1;
     omega[2] = v_omega2;
+    negL = v_b;
+    posL = v_a;
 }
 
 /**
@@ -80,7 +85,8 @@ std::string ModelParams::write() {
   std::string output =    std::to_string(mu) +"\t" + std::to_string(sigma) +"\t" + 
     std::to_string(lambda) + "\t" + std::to_string(pi) +"\t" + std::to_string(footprint) 
     +"\t" + std::to_string(omega[0]) + "\t" + std::to_string(omega[1])
-    + "\t" + std::to_string(omega[2]) + "\n";
+    + "\t" + std::to_string(omega[2]) + "\t" + std::to_string(negL)
+    + "\t" + std::to_string(posL) + "\n";
    return output;
 }
 
@@ -89,7 +95,7 @@ std::string ModelParams::write() {
  * the write() function's output as its input.
  * 
  * @param single  Tab delimited list of parameters, 
- * in order: mu, sigma, lambda, pi, footprint, and omegas.
+ * in order: mu, sigma, lambda, pi, footprint, omegas (3), negL, posL.
  */
 void ModelParams::read(std::string single) {
    vector<std::string> split_tab = split_by_tab(single);
@@ -102,6 +108,8 @@ void ModelParams::read(std::string single) {
    omega[0] = std::stod(split_tab[5]);
    omega[1] = std::stod(split_tab[6]);
    omega[2] = std::stod(split_tab[7]);
+   negL = std::stod(split_tab[8]);
+   posL = std::stod(split_tab[9]);
 
    // Should we check that we don't have more parameters?
 }
@@ -132,8 +140,9 @@ double ModelParams::getBedEnd() {
  * @return std::vector<std::string> 
  */
 std::vector<std::string> ModelParams::fetch_as_strings() {
-   std::vector<std::string> asStrings(8);
+   std::vector<std::string> asStrings(10);
    // cout << std::to_string(mu) << std::endl;
+
    asStrings[0] = std::to_string(mu);
    asStrings[1] = std::to_string(sigma);
    asStrings[2] = std::to_string(lambda);
@@ -142,6 +151,8 @@ std::vector<std::string> ModelParams::fetch_as_strings() {
    asStrings[5] = std::to_string(omega[0]);
    asStrings[6] = std::to_string(omega[1]);
    asStrings[7] = std::to_string(omega[2]);
+   asStrings[8] = std::to_string(negL);
+   asStrings[9] = std::to_string(posL);
 
    return asStrings;
 }
@@ -221,6 +232,62 @@ ModelParamSet::~ModelParamSet() {
  * @return std::string 
  */
 std::string ModelParamSet::write() {
+   std::string asString;
+   asString = "toWrite!";
+  return asString;
+}
+
+/**
+ * @brief Convert a string of K model output into a Set_EMGparameters 
+ * 
+ */
+void ModelParamSet::readFromKmodels(std::string line) {
+   std::string data = line.substr(1, line.size() - 1); // removes the ~ first character
+   std::vector<std::string> tab_split = split_by_tab(data);
+
+   // These are values for the entire set (size and loglikelihood).
+   std::vector<std::string> comma_split = split_by_comma(tab_split[0], "");
+   K = stoi(comma_split[0]);
+   log_likelihood = stod(comma_split[1]);
+
+   // Now we need to build all the EMGparameter sets, of which there are K.
+   // Recall the string is formatted:
+   // mus+"\t"+sigmas+"\t"+lambdas+"\t" + pis+"\t" + fps + "\t" + ws + "\t" + bs + "\t" + as
+   std::vector<std::vector<double>> par_as_double(11, std::vector<double>(K)); // [params][model]
+   for (int i = 1; i < 6; i++) { // mu to footprint
+      std::vector<std::string> temp = split_by_comma(tab_split[i], "");
+      for (int j = 0; j < K; j++) { // each of the K models
+         par_as_double[i][j] = stod(temp[j]);
+      }
+   }
+   // omega is tab_split[6] but it's got a bar in it so has to have
+   // separate parsing.  But should go into par_as_double[6-8].
+   // w, fw, rw|w, fw, rw| ...
+   std::vector<std::string> temp = split_by_bar(tab_split[6], "");
+   // Note that temp.size should eq K.
+   for (int i = 0; i < K; i++) {
+      std::vector<std::string> wset = split_by_comma(temp[i], "");
+      par_as_double[6][i] = stod(wset[0]);   // omega[0]
+      par_as_double[7][i] = stod(wset[1]);   // omega[1]
+      par_as_double[8][i] = stod(wset[2]);   // omega[2]
+   }
+
+   for (int i = 7; i < 9; i++) { // the last two fields 
+     std::vector<std::string> temp = split_by_comma(tab_split[i], "");
+     for (int j = 0; j < K; j++) { // each of the K models
+       par_as_double[i+2][j] = stod(temp[j]);
+     }
+   }
+
+   for (int i = 0; i < K; i++) {
+      collection.push_back(new ModelParams(par_as_double[1][i], par_as_double[2][i],
+               par_as_double[3][i], par_as_double[4][i], par_as_double[5][i],
+               par_as_double[6][i], par_as_double[7][i], par_as_double[8][i],
+               par_as_double[9][i], par_as_double[10][i]));
+   }
+}
+
+std::string ModelParamSet::writeAsKmodels() {
   std::string asString = "~" + to_string(K) + "," + to_string(log_likelihood);
 
   // Note that output is currently all K values of mu (et. al.) 
@@ -233,12 +300,28 @@ std::string ModelParamSet::write() {
       params[i] = collection[i]->fetch_as_strings();
       // cout << params[i][0] << std::endl;
     } else {   // This model is null
-      params[i] = std::vector<std::string>(8,""); // Set to empty strings
+      params[i] = std::vector<std::string>(11,""); // Set to empty strings
     }
   }
 
-  for (int j = 0; j < 8; j++) { // each of the parameters
-     std::string temp = params[0][j];
+  std::string temp;
+  for (int j = 0; j < 5; j++) { // each of the parameters
+     temp = params[0][j];
+     // cout << temp << std::endl;
+     for (int i = 1; i < K; i++) {
+       temp = temp + "," + params[i][j];
+     }
+     asString = asString + "\t" + temp;
+  }
+  // Now the omegas
+  temp = params[0][5] + "," + params[0][6] + "," + params[0][7];
+  for (int i = 1; i < K; i++) {
+     temp = temp + "|" + params[i][5] + "," + params[i][6] + "," + params[i][7];
+  }
+  asString = asString + "\t" + temp;
+
+  for (int j = 8; j < 10; j++) {
+     temp = params[0][j];
      // cout << temp << std::endl;
      for (int i = 1; i < K; i++) {
        temp = temp + "," + params[i][j];
@@ -246,59 +329,6 @@ std::string ModelParamSet::write() {
      asString = asString + "\t" + temp;
   }
   return asString;
-}
-
-/**
- * @brief Convert a string of K model output into a Set_EMGparameters 
- * 
- */
-void ModelParamSet::read_from_K_models(std::string line) {
-   std::string data = line.substr(1, line.size() - 1); // removes the ~ first character
-   std::vector<std::string> tab_split = split_by_tab(data);
-
-   // These are values for the entire set (size and loglikelihood).
-   std::vector<std::string> comma_split = split_by_comma(tab_split[0], "");
-   K = stoi(comma_split[0]);
-   log_likelihood = stod(comma_split[1]);
-
-   // Now we need to build all the EMGparameter sets, of which there are K.
-   // Recall the string is formatted:
-   // mus+"\t"+sigmas+"\t"+lambdas+"\t" + pis+"\t" + fps + "\t" + ws
-   std::vector<std::vector<double>> par_as_double(9, std::vector<double>(K)); // [params][model]
-   for (int i = 1; i < 6; i++) { // mu to footprint
-      std::vector<std::string> temp = split_by_comma(tab_split[i], "");
-      for (int j = 0; j < K; j++) { // each of the K models
-         par_as_double[i][j] = stod(temp[j]);
-      }
-   }
-
-   // omega is tab_split[6] but it's got a bar in it so has to have
-   // separate parsing.  But should go into par_as_double[6].
-   // w, fw, rw|w, fw, rw| ...
-   std::vector<std::string> temp = split_by_bar(tab_split[6], "");
-   // Note that temp.size should eq K.
-   for (int i = 0; i < K; i++) {
-      std::vector<std::string> wset = split_by_comma(temp[i], "");
-      par_as_double[6][i] = stod(wset[0]);   // omega[0]
-      par_as_double[7][i] = stod(wset[1]);   // omega[1]
-      par_as_double[8][i] = stod(wset[2]);   // omega[2]
-   }
-
-   for (int i = 0; i < K; i++) {
-      collection.push_back(new ModelParams(par_as_double[1][i], par_as_double[2][i],
-               par_as_double[3][i], par_as_double[4][i], par_as_double[5][i],
-               par_as_double[6][i], par_as_double[7][i], par_as_double[8][i]));
-   }
-}
-
-std::string ModelParamSet::writeAsKmodels() {
-   std::string output;
-   // replaces write but now has the other weights
-   return output;
-}
-
-void ModelParamSet::readFromKmodels() {
-   // replaces read_from_K_models(std::string line)
 }
 
 std::string ModelParamSet::writeJSON() {

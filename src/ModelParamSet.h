@@ -44,7 +44,7 @@ public:
 
   // Constructors & Destructors
   ModelParams();
-  ModelParams(double,double,double,double,double,double,double,double);
+  ModelParams(double,double,double,double,double,double,double,double,double,double);
 
     // Getters and Setters
   void SetfromBidirectional(Bidirectional model);
@@ -76,10 +76,11 @@ class ModelParamSet {
   ~ModelParamSet();
 
   // Functions
-  std::string write();
-  void read_from_K_models(std::string);  // This will parse/read in a K_models string
+  std::string write();  // debugging only
+
   std::string writeAsKmodels();
-  void readFromKmodels();
+  void readFromKmodels(std::string);  // This will parse/read in a K_models string
+
   std::string writeJSON();
   void readJSON();
   
