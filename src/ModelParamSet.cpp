@@ -226,14 +226,14 @@ std::string ModelParamSet::write() {
   // Note that output is currently all K values of mu (et. al.) 
   // But storage is in K EMGparameters -- this leads to a indexing
   // issues in the read/write functions.
-  // std::vector<std::vector<std::string>> params(K, std::vector<std::string>(7)); // [models][parameter]
+  // std::vector<std::vector<std::string>> params(K, std::vector<std::string>(9)); // [models][parameter]
   std::vector<std::vector<std::string>> params(K);
   for (int i = 0; i < K; i++) { // each of the K models
     if (collection[i]) {
       params[i] = collection[i]->fetch_as_strings();
       // cout << params[i][0] << std::endl;
     } else {   // This model is null
-      params[i] = std::vector<std::string>(6,""); // Set to empty strings
+      params[i] = std::vector<std::string>(8,""); // Set to empty strings
     }
   }
 
