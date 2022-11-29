@@ -44,6 +44,7 @@ public:
 
   // Constructors & Destructors
   ModelParams();
+  // This is awful but allows for quick in tests.
   ModelParams(double,double,double,double,double,double,double,double,double,double);
 
     // Getters and Setters
