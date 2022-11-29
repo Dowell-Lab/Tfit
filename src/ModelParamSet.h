@@ -83,7 +83,7 @@ class ModelParamSet {
   void readFromKmodels(std::string);  // This will parse/read in a K_models string
 
   std::string writeJSON();
-  void readJSON();
+  void readJSON(std::string entry);
   
   private:
   int K;    // Number of models

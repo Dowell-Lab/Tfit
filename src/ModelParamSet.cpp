@@ -166,8 +166,8 @@ std::string ModelParams::writeAsJSON() {
   output += "\"fp\":" + tfit::prettyDecimal(footprint,2) + ",";
   output += "\"weights\":{";
   output +=  "\"bidir\":" + tfit::prettyDecimal(omega[0], 2) + 
-         ",\"forward\":" + tfit::prettyDecimal(omega[1], 2) +
-         ",\"reverse\":" + tfit::prettyDecimal(omega[2], 2) + "},";
+         ", \"forward\":" + tfit::prettyDecimal(omega[1], 2) +
+         ", \"reverse\":" + tfit::prettyDecimal(omega[2], 2) + "},";
   output += "\"length_forward\":" + tfit::prettyDecimal(posL,-1) + ",";
   output += "\"length_reverse\":" + tfit::prettyDecimal(negL,-1) + "}";
   return output;
@@ -181,11 +181,11 @@ void ModelParams::readFromJSON(std::string entry) {
    lambda = input.value("lambda", 0.);
    pi = input.value("pi", 0.);
    footprint = input.value("fp", 0.);
+   omega[0] = input["weights"].value("bidir", 0.);
+   omega[1] = input["weights"].value("forward", 0.);
+   omega[2] = input["weights"].value("reverse", 0.);
    posL = input.value("length_forward", 0.);
    negL = input.value("length_reverse", 0.);
-   omega[0] = input["weights"]["bidir"];
-   omega[1] = input["weights"]["forward"];
-   omega[2] = input["weights"]["reverse"];
 }
 
 
@@ -212,13 +212,14 @@ ModelParamSet::ModelParamSet(int k) {
     log_likelihood = 0;
   // cout << K << "," << log_likelihood << std::endl;
 }
+
 /**
  * @brief Destroy the ModelParamSet
  * 
  */
 ModelParamSet::~ModelParamSet() {
    for (int i = 0; i < K; i++) {
-      free(collection[i]);
+      delete(collection[i]);
    }
 }
 
@@ -242,6 +243,8 @@ std::string ModelParamSet::write() {
  * 
  */
 void ModelParamSet::readFromKmodels(std::string line) {
+   // if K > 0 then there is already data here!
+
    std::string data = line.substr(1, line.size() - 1); // removes the ~ first character
    std::vector<std::string> tab_split = split_by_tab(data);
 
@@ -252,7 +255,8 @@ void ModelParamSet::readFromKmodels(std::string line) {
 
    // Now we need to build all the EMGparameter sets, of which there are K.
    // Recall the string is formatted:
-   // mus+"\t"+sigmas+"\t"+lambdas+"\t" + pis+"\t" + fps + "\t" + ws + "\t" + bs + "\t" + as
+   // mus+"\t"+sigmas+"\t"+lambdas+"\t" + pis+"\t" + fps + "\t" + ws 
+   //    + "\t" + bs + "\t" + as
    std::vector<std::vector<double>> par_as_double(11, std::vector<double>(K)); // [params][model]
    for (int i = 1; i < 6; i++) { // mu to footprint
       std::vector<std::string> temp = split_by_comma(tab_split[i], "");
@@ -293,7 +297,6 @@ std::string ModelParamSet::writeAsKmodels() {
   // Note that output is currently all K values of mu (et. al.) 
   // But storage is in K EMGparameters -- this leads to a indexing
   // issues in the read/write functions.
-  // std::vector<std::vector<std::string>> params(K, std::vector<std::string>(9)); // [models][parameter]
   std::vector<std::vector<std::string>> params(K);
   for (int i = 0; i < K; i++) { // each of the K models
     if (collection[i]) {
@@ -333,10 +336,28 @@ std::string ModelParamSet::writeAsKmodels() {
 
 std::string ModelParamSet::writeJSON() {
    std::string output;
-   //  Write the JSON for the whole set.
+   output = "{\"num_models\":" + tfit::prettyDecimal(K,-1);
+   output += ", \"log-likelihood\":" + tfit::prettyDecimal(log_likelihood,2) + ", ";
+   output += "\"model_params\": [";
+   if (K > 1) {
+     output += collection[0]->writeAsJSON();
+     for (int i = 1; i < K; i++) {
+       output += "," + collection[i]->writeAsJSON();
+     }
+   }
+   output += "]}";
    return output;
 }
 
-void ModelParamSet::readJSON() {
-   // Read from the JSON
+void ModelParamSet::readJSON(std::string entry) {
+   // if K > 0 then this already has data!
+   nlohmann::json input;
+   input = nlohmann::json::parse(entry);
+   K = input.value("num_models", 0.);
+   log_likelihood = input.value("log-likelihood", 0.);
+   for (int i = 0; i < K; i++) {
+      collection.push_back(new ModelParams());
+      // std::cout << input["model_params"][i].dump() << std::endl;
+      collection[i]->readFromJSON(input["model_params"][i].dump());
+   }
 }

@@ -44,7 +44,7 @@ TEST(ModelParams, ReadWriteJSON)
     input.readFromJSON(outString);
 
     // Assert
-    EXPECT_EQ(sut.mu, (double)35000.0); // Checks basic I/O
+    EXPECT_EQ((double)sut.mu, (double)35000.0); // Checks basic I/O
     EXPECT_EQ(sut.mu,input.mu);  
     EXPECT_EQ(sut.sigma,input.sigma);  
     EXPECT_EQ(sut.lambda,input.lambda);  
@@ -116,7 +116,7 @@ TEST(ModelParamSet, Set_read_from_K_models)
     // Teardown
 }
 
-TEST(ModelParamSet, Set_write)
+TEST(ModelParamSet, Set_write_Kmodels)
 {
     // Arrange
     ModelParamSet sut(2);
@@ -125,7 +125,7 @@ TEST(ModelParamSet, Set_write)
 
     // Act
     std::string Toutput = sut.writeAsKmodels();
-    std::cout << Toutput << std::endl;
+    // std::cout << Toutput << std::endl;
     std::string output;
 
 
@@ -138,4 +138,24 @@ TEST(ModelParamSet, Set_write)
     EXPECT_TRUE(Toutput == output);
 
     // Teardown
+}
+
+TEST(ModelParamSet, Set_readWrite_JSON)
+{
+    // Arrange
+    ModelParamSet sut(2);
+    sut.collection[0] = new ModelParams(45333,65,44,0.345,32,0.5, 0.2, 0.1, 44000, 48000);
+    sut.collection[1] = new ModelParams(11111,35,22,0.081,11,0.3, 0.2, 0.1, 10000, 14000);
+
+    // Act
+    std::string Toutput = sut.writeJSON();
+    // std::cout << Toutput << std::endl;
+    ModelParamSet readIn;
+    readIn.readJSON(Toutput);
+
+    // Assert
+    EXPECT_EQ(sut.log_likelihood,readIn.log_likelihood);  
+    EXPECT_EQ(sut.collection[0]->mu,readIn.collection[0]->mu);  
+    EXPECT_EQ(sut.collection[0]->omega[1],readIn.collection[0]->omega[1]);  
+
 }
