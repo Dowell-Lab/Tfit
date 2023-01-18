@@ -152,6 +152,7 @@ std::string SeedManager::write_out() {
   return output;
 }
 
+/*
 void SeedManager::setupDataLink(dInterval *v_data) {
    belongsTo = v_data;
    if (belongsTo->raw != NULL) {
@@ -177,6 +178,7 @@ void SeedManager::setupDataLink(dInterval *v_data) {
       setSeeds = new Seeds;
    }
 }
+*/
 
 void SeedManager::shuffleSeeds() {
   auto rng = numgen.fetchProbability();

@@ -70,7 +70,7 @@ std::string EMalg::write_out() {
 
 void EMalg::setupDataLink(dInterval *v_data) {
 	data = v_data;    // Set pointer to current data set
-   seeds.setupDataLink(v_data);
+   // seeds.setupDataLink(v_data);
 }
 
 /**

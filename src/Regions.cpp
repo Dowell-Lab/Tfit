@@ -35,9 +35,6 @@ SetROI::~SetROI() {
       searchable[i]->destroyTree();
     }
     for (auto& it : regions[i]) {
-      if (it->data != NULL) {
-        delete it->data;
-      }
       delete it;
     }
   }
@@ -197,11 +194,13 @@ void SetROI::ConditionDataSet(int v_delta, int v_scale) {
   for (mit = regions.begin(); mit != regions.end(); mit++) {
     // For every index, lets go through the vector of gIntervals.
     for (it = mit->second.begin(); it != mit->second.end(); it++) {
+      /*
       if ((*it)->data != NULL) {
         (*it)->data->cdata = new dInterval((*it)->data, v_delta, v_scale);
       } else {
         // Throw an error?!?
       }
+      */
     }
   }
 }

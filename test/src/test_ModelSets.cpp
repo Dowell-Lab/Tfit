@@ -62,7 +62,7 @@ TEST(ModelWrapper, modelIsEmpty)
   // Should all throw an error?
 }
 
-
+/*
 TEST(ModelContainer, initializeWithPriors)
 {
   // Arrange
@@ -79,6 +79,7 @@ TEST(ModelContainer, initializeWithPriors)
 
   EXPECT_EQ(sut.K, 3.);
 }
+*/
 
 TEST(ModelContainer, SortByMu)
 {

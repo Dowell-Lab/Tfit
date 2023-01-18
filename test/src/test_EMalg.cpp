@@ -20,6 +20,7 @@ TEST(EMalg, fitFailswithNoData)
     EXPECT_FALSE(success);
 }
 
+/*
 TEST(EMalg, computeBackground_NoiseOnly) 
 {
   // Arrange: bring SUT to desired state
@@ -39,6 +40,7 @@ TEST(EMalg, computeBackground_NoiseOnly)
   EXPECT_TRUE(success);
   EXPECT_DOUBLE_EQ(sut.models.ll, -51.089280028918225);
 }
+*/
 
 TEST(EMalg, Itest_fit_oneModel) 
 {

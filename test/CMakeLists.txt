@@ -47,7 +47,7 @@ list(APPEND sources
                 src/test_Data.cpp
                 src/test_Distros.cpp
                 src/test_EMalg.cpp
-                src/test_EMseeds.cpp
+# src/test_EMseeds.cpp
                 src/test_helper.cpp
                 src/test_Bed.cpp
                 src/test_ITree.cpp

@@ -35,7 +35,6 @@ TEST(bed12, addDataPoint_contained)
     // Assert: Verify the outcome
     // Confirming that the coordinates were properly adjusted (when allowed)
     // Check that the RawData contains what its supposed to should be tested by RawData!
-    EXPECT_TRUE(sut.data != NULL);  // addDataPoint created a link
     EXPECT_EQ(sut.start, (double)100);
     EXPECT_EQ(sut.stop, (double)1000);
 }

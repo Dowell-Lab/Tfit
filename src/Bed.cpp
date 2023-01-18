@@ -22,13 +22,14 @@
 #include "split.h"
 #include "Regions.h"
 #include "EMseeds.h"
+#include "gInterval.h"
 
 bed4::bed4() {
   chromosome = "NA";
   identifier = "empty";
   start = 0;
   stop = 0;
-  data = NULL;
+  segment = NULL;
 }
 
 /**
@@ -49,7 +50,7 @@ bed4::bed4(std::string v_chromosome, double v_start, double v_stop, std::string 
   // Should we check that start < stop?  Throw an error when it doesn't?
   identifier = v_identifier;
 
-  data = NULL;
+  segment = NULL;
 }
 
 
@@ -328,9 +329,13 @@ void bed12::setfromLastSix(std::string v_lastsix) {
  */
 void bed12::addDataPoint(double v_start, double v_stop, double cov, bool expand) {
   // If pointer to segment doesn't exist, create it.
-  if (data == NULL) {
-    data = new RawData(this);
-  }   
+  if (segment == NULL) {
+    segment = new gInterval();
+  }
+  // If segment has no RawData, create it.
+  if (segment->raw == NULL) {
+    segment->raw = new RawData(segment);
+  }
   // Adjust for edge cases, expanding the region if permissible.
   if (expand && (v_start < start)) {
     start = v_start;   // Adjust the bed4
@@ -339,7 +344,7 @@ void bed12::addDataPoint(double v_start, double v_stop, double cov, bool expand)
     stop = v_stop;  // Adjust the bed4
   }
   // Adding these data points to the set
-  data->addDataPoints(v_start, v_stop, cov);
+  segment->raw->addDataPoints(v_start, v_stop, cov);
 }
 
 

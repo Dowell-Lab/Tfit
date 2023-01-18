@@ -8,8 +8,7 @@
  * dIntervals contain data (two strands) per an interval but do so in zero
  * based coordinates.  
  * 
- * A segment links a bed4 to RawData and dIntervals.  It can also translate 
- * coordinates among these representations. 
+ * A gInterval container links a bed to a dInterval.  
  * 
  * @version 0.1
  */
@@ -19,9 +18,8 @@
 #include <string>
 #include <vector>
 
-class bed4;   // Forward declaration
 class bed12;   // Forward declaration
-class dInterval;
+class gInterval;
 
 /**
  * @brief Coverage per genomic coordinate
@@ -41,7 +39,6 @@ class PointCov {
 
   static bool sortOnCoordComp(const PointCov pt1, const PointCov pt2);
   static bool sortOnCovComp(const PointCov pt1, const PointCov pt2);
-
 };
 
 /**
@@ -60,12 +57,11 @@ class RawData {
   double minX; //!< This is the minimum value of the interval
   double maxX;   //!< This is the maximum value of the interval 
 
-  bed12 *belongsTo;  // The coordinates associated with this data
-  dInterval *cdata;   // The conditioned data.
+  gInterval *parent;
 
   //Constructors
   RawData();
-  RawData(bed12 *);
+  RawData(gInterval *);
   //Destructor
   ~RawData();
 
@@ -84,13 +80,17 @@ class RawData {
 /**
  * @brief dInterval 
  * 
- * Data interval class which contains two strands of data
- * over an interval. 
- *
- * The data is always in zero based coordinates.  
+ * Data interval class which contains two strands of data over an interval. 
  * 
  * The data may, or may not, be scaled and binned relative 
  * to genomic coordinates.
+ * 
+ * X[0] is data coordinate
+ * X[1] is forward coverage
+ * X[2] is reverse coverage
+ * 
+ * The coordinate here is zero based X[0][0] = 0, with step size delta
+ * (e.g. X[0][i] = i*delta), where i is the current index.
  * 
  * This is the format of data expected by the EM algorithm.
  * 
@@ -103,11 +103,12 @@ public:
   int delta;  //!< step size (nts per bin)
   int scale;  //!< all positions are divided by this factor e.g. 1 -> 1/scale
 
-  RawData *raw;  // The raw data from which this was built.
+  gInterval *seg;
 
   // Constructors
   dInterval();
-  dInterval(RawData *, int, int); // Convert RawData into binned/scaled data 
+  dInterval(int, int);
+  // dInterval(RawData *, int, int); // Convert RawData into binned/scaled data 
   ~dInterval();   // Destructor
 
   /* FUCTIONS: */
@@ -128,19 +129,17 @@ public:
   double sumInterval(int, int, char);  // on single strand
   double sumAlldata();  // both strands
 
-  //Convert between index, data and genomic coordinates 
-  int getIndexfromGenomic(double);   // given genomic coordinate, give index 
+  // Convert data position to index and index to data position
   int getIndexfromData(double);  // given data coordinate, get closest index
-  double getGenomeCoordfromIndex(int);  // given an index to the dInterval, what is the genomic Coord
-  double getGenomefromData(double); // given data coordinate, get genomic Coord
   double getDataCoordfromIndex(int);  // given index, what is data coordinate
-  double getDataCoordfromGenomeCoord(double); /// given genomic coords, what is data coords?
-
   double getMinGenomeCoord();
   double getMaxGenomeCoord();
 
+  
+
   // Functions for doing the conditioning
-  void initializeData(int length);  // Sets up the internal matrix
+  void setBinNum(double length);
+  void initializeData(int startCoord);  // Sets up the internal matrix
   void BinStrands(RawData *data);
   void ScaleDown(int);    // Convert to zero based coords
   void CompressZeros();   // Remove positions that are zero on both strands
@@ -149,6 +148,6 @@ public:
   // int getWithinRangeofPosition(double position, double dist);
   void DeallocateX();   // Deallocates X, leaves other variables intact.
 
-	};
+};
 
 #endif

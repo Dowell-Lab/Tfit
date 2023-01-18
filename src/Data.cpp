@@ -28,6 +28,7 @@
 #include "split.h"
 #include "helper.h"
 #include "Bed.h"
+#include "gInterval.h"
 
 /**********  PointCov ****************/
 
@@ -60,14 +61,12 @@ bool PointCov::sortOnCovComp(const PointCov pt1, const PointCov pt2) {
 /**********************  RawData ********************/
 RawData::RawData() {
   minX = maxX = 0;
-  belongsTo = NULL; 
-  cdata = NULL;
+  parent = NULL; 
 }
 
-RawData::RawData(bed12 *v_ginterval) {
+RawData::RawData(gInterval *v_ginterval) {
   minX = maxX = 0;
-  belongsTo = v_ginterval; 
-  cdata = NULL;
+  parent = v_ginterval; 
 }
 
 
@@ -95,9 +94,6 @@ void RawData::freeDataMemory () {
  * namely zero based, half open coordinates and the sign of the 
  * coverage indicates strand.  A range of points is input as 
  * each individual point within the set.
- * 
- * @bug Should this check to see if the point is in the range of
- * belongsTo?
  * 
  * @param st  start (this point is included)
  * @param sp   stop (with half open, this is strickly less than!)
@@ -165,8 +161,13 @@ void RawData::RemoveDuplicates() {
  */
 std::string RawData::write_out() {
   std::string ID;
-  if (belongsTo != NULL ) { ID = belongsTo->identifier; }
-  else { ID = "NO bed4!"; }
+  if (parent != NULL ) { 
+    if (parent->interval != NULL) {
+      ID = parent->interval->identifier; 
+    } else {
+      ID = "No bed info!";
+    }
+  } else { ID = "NO parent/bed info!"; }
 
   std::string output = ID + ":min:";
   output += tfit::prettyDecimal(minX,2) + ":max:" + tfit::prettyDecimal(maxX,2);
@@ -199,10 +200,6 @@ std::string RawData::data_dump() {
  */
 RawData::~RawData() {
   freeDataMemory();
-  // What about belongsTo and cdata?
-  if (cdata != NULL) {
-    delete(cdata);
-  }
 }
 
 /****************** dInterval *********************/
@@ -218,39 +215,30 @@ dInterval::dInterval() {
   delta = 1;
   scale = 1;
   bins = -1;  // illegal value since we dont know this yet.
-  raw = NULL;
+
+  seg = NULL;
 }
 
-/**
- * @brief Construct a new dInterval::dInterval object
- * 
- * @param data      The rawdata
- * @param v_delta   The binning size (nts per bin)
- * @param v_scale   The scaling factor
- */
-dInterval::dInterval(RawData *data, int v_delta, int v_scale) {
-  raw = data;
-  raw->RemoveDuplicates();      // Is this necessary?  It's potentially time consuming!
-  delta = v_delta;  scale = v_scale; 
-  if (scale <= 0) { scale = 1;}
+dInterval::dInterval(int v_delta, int v_scale) {
+  X = NULL;
+  delta = v_delta;
+  scale = v_scale;
+  bins = -1;  // illegal value since we dont know this yet.
 
-  // Establish num of bins
-  bins =  raw->Length()/delta;
-  if (bins < 1) { // Min value
-    bins = 1; 
-  } else {
-    if (delta*bins < raw->Length()) {
+  seg = NULL;
+}
+
+void dInterval::setBinNum(double length){
+   bins =  length/delta;
+   if (bins < 0) { // Min value
+     bins = 0; 
+   } else {
+     if (delta*bins < length) {
       bins += 1;    // The end stuff which isn't of length delta!
-    }
-  } 
-
-  initializeData(raw->minX);
-  BinStrands(raw);
-  ScaleDown(raw->minX);
-  // std::cout << data_dump() << std::endl;
-  CompressZeros();
-  //std::cout << "AFTER: " + to_string(bins) << std::endl;
+     }
+   } 
 }
+
 
 /**
  * @brief Cleanup function to avoid memory leaks!
@@ -266,9 +254,6 @@ dInterval::~dInterval() {
  */
 std::string dInterval::write_out() {
   std::string output;
-  if (raw != NULL) {
-    output = raw->write_out();
-  }
   output += "\tParams bins:" + tfit::prettyDecimal(bins,0) + ", delta:" 
       + tfit::prettyDecimal(delta,4) + ", scale:" + tfit::prettyDecimal(scale,3);
   return output;
@@ -348,13 +333,15 @@ double dInterval::position(int x) {
  * @return double  Length of this region/segment.
  */
 double dInterval::getLength() {
-  if (raw == NULL) {
-    if (X == NULL) {
-      return 0;     // No data
+  if (seg != NULL) {
+    if (seg->raw != NULL) {
+       seg->raw->Length();
     }
-    return position(bins-1);    // conditioned data, no raw
   }
-  return (raw->Length());   //Genome coords length
+  if (X == NULL) {
+    return 0;
+  }
+  return position(bins-1);
 }
 
 /**
@@ -413,118 +400,22 @@ double dInterval::sumInterval(int start, int stop, char strand) {
   return sum;
 }
 
-/*****Convert between coordinate systems *****/
-
-/**
- * @brief Convert genomic coordinate into the correct index
- * 
- * @param genomicCoord   genomic coordinate 
- * @return int    correct index into X[]
- */
-int dInterval::getIndexfromGenomic(double genomicCoord) {
-  return int((genomicCoord - raw->minX)/scale);
-}
-
-/**
- * @brief Get the Index from a data coordinate 
- * Uses a binary search approach.  Returns the index with 
- * the closest data coordinate.
- * 
- * @param dataCoord  Scaled/binned data coordinate
- * @return * int  correct index into X[]
- */
-int dInterval::getIndexfromData(double dataCoord) {
-  int indexMin = 0;
-  int indexMax = bins-1;
-  int indexCenter;
-  bool found = false;
-
-  while (!found) {
-    if ((indexMax - indexMin) < 2) {
-      found = true;
-      // Take closest
-      int distmin = abs(dataCoord - position(indexMin));
-      int distmax = abs(dataCoord - position(indexMax));
-      if(distmin < distmax) {
-        return indexMin;         
-      } else {
-        return indexMax;         
-      }
-    } else if (dataCoord == position(indexMin)) {
-      found = true;
-      return indexMin;
-    } else if (dataCoord == position(indexMax)) {
-      found = true;
-      return indexMax;
+double dInterval::getMinGenomeCoord() {
+  if (seg != NULL) {
+    if (seg->interval != NULL) {
+       return seg->interval->start;
     }
-    indexCenter = (int)(indexMax -indexMin)/2;
-
-    if ((dataCoord > position(indexMin)) && (dataCoord < position(indexCenter))) {
-      indexMax = indexCenter;
-    } else { 
-      // Edge case
-      if (indexCenter == indexMin) { indexMin += 1;}
-      else {indexMin = indexCenter;}
-    }
-    if (indexMax < indexMin) { found = true;}
   }
-  std::cerr << "Error!! Unreachable in getIndexfromData." << std::endl;
   return -1;
 }
 
-/**
- * @brief Convert index to genomic coordinate
- * Note that because of binning these will always be on 
- * minX + delta intervals.
- * 
- * @param index  position index into X[]
- * @return double   genomic Coordinate cooresponding
- */
-double dInterval::getGenomeCoordfromIndex(int index) {
-  double coord = ((index * scale) + raw->minX);
-  // Necessary to account for the last bin being uneven sized.
-  if (coord > raw->maxX) { return raw->maxX; }
-  else { return coord; }
-}
-
-/**
- * @brief Convert data coordinates to genomic coordinates
- * 
- * @param dataCoord  Scaled/binned data coordinate
- * @return double genomic coordinates corresponding
- */
-double dInterval::getGenomefromData(double dataCoord) {
-   int index = getIndexfromData(dataCoord);
-   return getGenomeCoordfromIndex(index);
-}
-
-/**
- * @brief given an index, what is the data coordinate?
- * 
- * @param index  position index into X[]
- * @return double Scaled/binned data coordinate
- */
-double dInterval::getDataCoordfromIndex(int index) {
-  return X[0][index];
-}
-
-/**
- * @brief Given Genomic coordinates, what are data coordinates?
- * 
- * @param genomicCoord   genomic coordinate 
- * @return double Scaled/binned data coordinate
- */
-double dInterval::getDataCoordfromGenomeCoord(double Gcoord) {
-  int index = getIndexfromGenomic(Gcoord);
-  return getDataCoordfromIndex(index);
-}
-
-double dInterval::getMinGenomeCoord() {
- return getGenomeCoordfromIndex(0);
-}
-
 double dInterval::getMaxGenomeCoord() {
- return getGenomeCoordfromIndex(bins-1);
+  if (seg != NULL) {
+    if (seg->interval != NULL) {
+       return seg->interval->stop;
+    }
+  }
+  return -1;
 }
 
 /***** Conditioning / Scaling / Binning Data *****/
@@ -631,33 +522,6 @@ void dInterval::CompressZeros() {
 }
 
 /**
- * @brief  This is currently a rewrite of Joey's get_nearest_position
- * into this data structure.
- * 
- * @param position  Typically a mu, in transformed coordinates
- *  -- should this instead be in genomic coordinates?  Or is that an
- *  alternative function?
- * @param dist    Typically s(1/lambda)
- * @return int    index of the position closest to position + dist (signed dist)
-int dInterval::getWithinRangeofPosition(double qspot, double dist) {
-	int i;
-
-	if (dist < 0 ){   // negative strand
-		i=0;
-		while (i < (bins-1) and (position(i)-qspot) < dist){
-			i++;
-		}
-	}else{
-		i=bins-1;
-		while (i >0 and (position(i)-qspot) > dist){
-			i--;
-		}
-	}
-	return i;
-}
- */
-
-/**
  * @brief Cleans up existing X matrix (memory clearing)
  * 
  */
@@ -668,4 +532,61 @@ void dInterval::DeallocateX() {
   }
   delete [] X;
   X = NULL;
+}
+
+/**
+ * @brief given an index, what is the data coordinate?
+ * 
+ * @param index  position index into X[]
+ * @return double Scaled/binned data coordinate
+ */
+double dInterval::getDataCoordfromIndex(int index) {
+  return X[0][index];
+}
+
+/**
+ * @brief Get the Index from a data coordinate 
+ * Uses a binary search approach.  Returns the index with 
+ * the closest data coordinate.
+ * 
+ * @param dataCoord  Scaled/binned data coordinate
+ * @return * int  correct index into X[]
+ */
+int dInterval::getIndexfromData(double dataCoord) {
+  int indexMin = 0;
+  int indexMax = bins-1;
+  int indexCenter;
+  bool found = false;
+
+  while (!found) {
+    if ((indexMax - indexMin) < 2) {
+      found = true;
+      // Take closest
+      int distmin = abs(dataCoord - position(indexMin));
+      int distmax = abs(dataCoord - position(indexMax));
+      if(distmin < distmax) {
+        return indexMin;         
+      } else {
+        return indexMax;         
+      }
+    } else if (dataCoord == position(indexMin)) {
+      found = true;
+      return indexMin;
+    } else if (dataCoord == position(indexMax)) {
+      found = true;
+      return indexMax;
+    }
+    indexCenter = (int)(indexMax -indexMin)/2;
+
+    if ((dataCoord > position(indexMin)) && (dataCoord < position(indexCenter))) {
+      indexMax = indexCenter;
+    } else { 
+      // Edge case
+      if (indexCenter == indexMin) { indexMin += 1;}
+      else {indexMin = indexCenter;}
+    }
+    if (indexMax < indexMin) { found = true;}
+  }
+  std::cerr << "Error!! Unreachable in getIndexfromData." << std::endl;
+  return -1;
 }

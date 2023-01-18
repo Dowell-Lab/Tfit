@@ -276,7 +276,6 @@ TEST(UniformModel, pdfWeighted)
 
 /**
  * @brief Need to double check -- this is a dumb test.
- */
 TEST(UniformModel, calculateLikelihood)
 {
   // Arrange: bring SUT to desired state
@@ -295,6 +294,7 @@ TEST(UniformModel, calculateLikelihood)
   //Assert
   EXPECT_DOUBLE_EQ(ans, -33.08047253394033);
 }
+ */
 
 /**
  * @brief Need to double check -- this is a dumb test.

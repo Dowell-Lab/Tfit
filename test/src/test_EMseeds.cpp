@@ -246,8 +246,10 @@ class SeedManagerWithInterval: public :: testing::Test {
     data.addDataPoints(14, 23, 3);
     data.addDataPoints(4, 14, -2);   
     data.addDataPoints(14, 23, -6);
+    /*
     temp.data = &data;
     data.belongsTo = &temp;
+    */
   }
   RawData data;
   bed12 temp = bed12("TestName", 100, 1000, "chrTest", 30, ".", 
