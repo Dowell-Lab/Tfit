@@ -12,13 +12,13 @@
 #include <vector>
 
 #include "helper.h"   // Bimap
-#include "Intervals.h"   // bed12
+#include "Bed.h"   // bed12
 #include "Data.h"   // RawData, Segment 
 #include "ITree.h"    // CITree
 
 /**
  * @brief This is the genomic contents of regions.
- * With no pre-defined ROI, this ends up being one gInterval
+ * With no pre-defined ROI, this ends up being one bed4
  * per chromosome/contig. 
  * 
  * If created from a bed file, then ROI are read directly from the file.

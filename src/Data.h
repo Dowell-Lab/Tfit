@@ -8,7 +8,7 @@
  * dIntervals contain data (two strands) per an interval but do so in zero
  * based coordinates.  
  * 
- * A segment links a gInterval to RawData and dIntervals.  It can also translate 
+ * A segment links a bed4 to RawData and dIntervals.  It can also translate 
  * coordinates among these representations. 
  * 
  * @version 0.1
@@ -19,7 +19,7 @@
 #include <string>
 #include <vector>
 
-class gInterval;   // Forward declaration
+class bed4;   // Forward declaration
 class bed12;   // Forward declaration
 class dInterval;
 

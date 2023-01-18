@@ -21,7 +21,7 @@ OBJ = load.o split.o model.o across_segments.o template_matching.o \
       read_in_parameters.o model_selection.o error_stdo_logging.o\
       MPI_comm.o density_profiler.o bootstrap.o bidir_main.o model_main.o \
       select_main.o FDR.o BIC.o ModelParamSet.o helper.o Bedfile.o \
-			Intervals.o Regions.o Data.o ITree.o Distro.o Models.o ModelSets.o \
+			Bed.o Regions.o Data.o ITree.o Distro.o Models.o ModelSets.o \
 			EMseeds.o EMalg.o ModelSupport.o
 SRC = $(OBJ:.o=.cpp)
 

@@ -8,7 +8,7 @@
  */
 #include "gmock/gmock.h"
 #include "ITree.h"
-#include "Intervals.h"
+#include "Bed.h"
 
 class ITreeTest: public :: testing::Test {
     protected:

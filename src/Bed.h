@@ -1,7 +1,7 @@
 /**
- * @file Intervals.h
+ * @file Bed.h
  * @author Robin Dowell
- * @brief Header file for genomic interval class (gInterval and bed6)
+ * @brief Header file for genomic interval class (bed4 and bed6)
  *
  * gIntervals maintain genomic coordinates and are the fundamental datatype
  * within the Interval trees (see ITree.cpp).  These are all obtained from 
@@ -12,8 +12,8 @@
  * 
  * @version 0.1
  */
-#ifndef Intervals_H 
-#define Intervals_H 
+#ifndef Bed_H 
+#define Bed_H 
 
 #include <string>
 #include <vector>
@@ -22,7 +22,7 @@ class RawData;    // Forward declaration
 class Seeds;    // Forward delcaration
 
 /**
- * @brief gInterval
+ * @brief bed4
  * 
  * Basic genomic interval.  Equivalent to basic information stored in bed4 file.
  * This is also the fundamental unit maintained in interval trees.
@@ -30,7 +30,7 @@ class Seeds;    // Forward delcaration
  * BED4 is 0-based, half open coordinate scheme.
  * 
  */
-class gInterval {
+class bed4 {
 
 public:
   std::string identifier; // field 4 in BED
@@ -40,8 +40,8 @@ public:
   RawData *data;  // pointer to data if this interval has it.
 
   // Constructors
-  gInterval();  // default
-  gInterval(std::string, double, double, std::string);  // input is BED4
+  bed4();  // default
+  bed4(std::string, double, double, std::string);  // input is BED4
 
   /* FUCTIONS: */
   // Reporting out 
@@ -53,13 +53,13 @@ public:
   void setBEDfromStrings(std::vector<std::string> lineArray); // helper for setfromBedLine
 
   // Comparison of points/intervals
-  bool Overlap(gInterval *);    // Does your interval of interest overlap this one?
+  bool Overlap(bed4 *);    // Does your interval of interest overlap this one?
   bool Contains(double point);  // Is a coordinate in this region?
 
 };
 
 /**
- * @brief a gInterval that also includes score and strand information
+ * @brief a bed4 that also includes score and strand information
  * 
  * Follows the BED6 format.
  *
@@ -67,7 +67,7 @@ public:
  * In BED6 score is between 0 and 1000 and used in heatmap generation.
  * In BED6 strand is "." (no strand), "+" (positive) or "-" (negative).
  */
-class bed6: public gInterval {
+class bed6: public bed4 {
 public:
   char strand;
   int score;

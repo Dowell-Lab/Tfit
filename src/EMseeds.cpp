@@ -15,7 +15,7 @@
 
 #include "split.h"
 #include "helper.h" // Random
-#include "Intervals.h"   // gInterval
+#include "Bed.h"   // gInterval
 
 
 Seeds::Seeds(): mu_seeds() {
@@ -167,11 +167,11 @@ void SeedManager::setupDataLink(dInterval *v_data) {
      } else {
       // RawData does not link to a genomic interval
       // Allocate seeds here, but do NOT link back
-      std::cerr << "No gInterval associated with this RawData!\n" << std::endl;
+      std::cerr << "No bed4 associated with this RawData!\n" << std::endl;
       setSeeds = new Seeds;
      }
    } else {
-     // There is no raw data associated with this data (or gInterval)
+     // There is no raw data associated with this data (or bed4)
       // Allocate seeds here, but do NOT link back
       std::cerr << "No RawData associated with this dInterval!\n" << std::endl;
       setSeeds = new Seeds;

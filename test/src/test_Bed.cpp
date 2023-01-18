@@ -1,21 +1,21 @@
 /**
- * @file test_Intervals.cpp 
+ * @file test_Bed.cpp 
  * @author Robin Dowell
- * @brief Testing the data interval classes: \ref gInterval \ref bed6
+ * @brief Testing the data interval classes: \ref bed4 \ref bed6
  * @date 2022-01-27
  * 
  */
 #include "gmock/gmock.h"
-#include "Intervals.h"
+#include "Bed.h"
 #include "EMseeds.h"
 
-TEST(gInterval, writeBedEQreadBed)
+TEST(bed4, writeBedEQreadBed)
 {
     // Arrange: bring SUT to desired state
-    gInterval temp("TestName", 100, 1000, "chrTest"); 
+    bed4 temp("TestName", 100, 1000, "chrTest"); 
     std::string name = temp.write_asBEDline();  // Writes as bed4
 
-    gInterval sut = gInterval();
+    bed4 sut = bed4();
 
     // Act: call methods on SUT, capture output
     sut.setfromBedLine(name);       // Reads as bed4
@@ -116,9 +116,9 @@ TEST(bed6, overlapTestingEdge)
     bed6 sut("TestChr", 50, 300, "R2", 30, "."); 
 
     // Assert: Verify the outcome
-    EXPECT_TRUE(sut.Overlap((gInterval *)&OR1));
-    EXPECT_TRUE(sut.Overlap((gInterval *)&ER1));
-    EXPECT_FALSE(sut.Overlap((gInterval *)&NR1));
+    EXPECT_TRUE(sut.Overlap((bed4 *)&OR1));
+    EXPECT_TRUE(sut.Overlap((bed4 *)&ER1));
+    EXPECT_FALSE(sut.Overlap((bed4 *)&NR1));
 }
 
 TEST(bed6, writeBedEQreadBed)

@@ -13,7 +13,7 @@
 #include <iostream>
 #include <algorithm>
 
-#include "Intervals.h"
+#include "Bed.h"
 
 /**
  * @brief Construct a new Inode:: Inode object
@@ -171,12 +171,12 @@ std::string CITree::write_Root() {
 }
 
 /**
- * @brief Constructor from a set of gInterval 
+ * @brief Constructor from a set of bed4 
  * Given a set of n intervals on the number line, we want to construct 
  * a data structure so that we can efficiently retrieve all intervals overlapping
  * another interval or point.
  * 
- * Assumes:  gInterval is a sorted list of intervals (first has smallest stop; last largest stop)
+ * Assumes:  bed4 is a sorted list of intervals (first has smallest stop; last largest stop)
  * @param segments
  */
 Inode *CITree::constructTreeSortedSet(std::vector<bed12 *>segments){

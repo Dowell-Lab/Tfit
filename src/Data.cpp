@@ -27,7 +27,7 @@
 
 #include "split.h"
 #include "helper.h"
-#include "Intervals.h"
+#include "Bed.h"
 
 /**********  PointCov ****************/
 
@@ -166,7 +166,7 @@ void RawData::RemoveDuplicates() {
 std::string RawData::write_out() {
   std::string ID;
   if (belongsTo != NULL ) { ID = belongsTo->identifier; }
-  else { ID = "NO gInterval!"; }
+  else { ID = "NO bed4!"; }
 
   std::string output = ID + ":min:";
   output += tfit::prettyDecimal(minX,2) + ":max:" + tfit::prettyDecimal(maxX,2);

@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-#include "Intervals.h"
+#include "Bed.h"
 
 /**
  * @brief A node within the centered interval tree.

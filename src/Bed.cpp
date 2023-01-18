@@ -1,18 +1,18 @@
 /**
- * @file Intervals.cpp
+ * @file Bed.cpp
  * @author Robin Dowell 
  * @brief Class code for genomic intervals
  * 
  * Current design: 
  * gIntervals maintain genomic coordinates and are the fundamental datatype
- * within the Interval trees (see ITree.cpp). Basic gInterval assumes BED4,
+ * within the Interval trees (see ITree.cpp). Basic bed4 assumes BED4,
  * exists a bed6 class that extends for score and strand.
  * 
  * @version 0.1
  * @date 2022-01-27
  * 
  */
-#include "Intervals.h"
+#include "Bed.h"
 
 #include <string>
 #include <vector>
@@ -22,7 +22,7 @@
 #include "Regions.h"
 #include "EMseeds.h"
 
-gInterval::gInterval() {
+bed4::bed4() {
   chromosome = "NA";
   identifier = "empty";
   start = 0;
@@ -31,7 +31,7 @@ gInterval::gInterval() {
 }
 
 /**
- * @brief Construct a new gInterval::gInterval object
+ * @brief Construct a new bed4::bed4 object
  * 
  * Representation is as in BED files:
  *  thus expects 0-based half open coordinates
@@ -41,7 +41,7 @@ gInterval::gInterval() {
  * @param v_stop         Stop position (field 3 of BED)
  * @param v_identifier   Identifier (field 4 of BED)
  */
-gInterval::gInterval(std::string v_chromosome, double v_start, double v_stop, std::string v_identifier) {
+bed4::bed4(std::string v_chromosome, double v_start, double v_stop, std::string v_identifier) {
   chromosome = v_chromosome;
   start = v_start;
   stop = v_stop;
@@ -58,7 +58,7 @@ gInterval::gInterval(std::string v_chromosome, double v_start, double v_stop, st
  * 
  * @return std::string 
  */
-std::string gInterval::write_out() {
+std::string bed4::write_out() {
   // Note: prettyDecimal with -1 sigfigs removes the decimal!
   std::string text = ("#" + chromosome + ":" + tfit::prettyDecimal(start,-1) + "-" 
 		+ tfit::prettyDecimal(stop,-1) + "," + identifier);
@@ -71,29 +71,29 @@ std::string gInterval::write_out() {
  * 
  * @return std::string 
  */
-std::string gInterval::write_asBEDline() {
+std::string bed4::write_asBEDline() {
   std::string text = (chromosome + "\t" + tfit::prettyDecimal(start,-1) + "\t" 
 		+ tfit::prettyDecimal(stop,-1) + "\t" + identifier);
   return text;
 }
 
 /**
- * @brief Set this gInterval based on a single line from a BED4 file.
+ * @brief Set this bed4 based on a single line from a BED4 file.
  * 
  * @param line expects a single line of a BED file 
  */
-void gInterval::setfromBedLine(std::string line) {
+void bed4::setfromBedLine(std::string line) {
   std::vector<std::string> lineArray; // Contents of line, split on tab (\t) 
   lineArray=string_split(line, '\t');
   setBEDfromStrings(lineArray);
 }
 
-bool gInterval::Overlap(gInterval *i2) {
+bool bed4::Overlap(bed4 *i2) {
   // Because coordinates are half open, these are strickly less than.
   return ((start < i2->stop) && (i2->start < stop));
 }
 
-bool gInterval::Contains(double point) {
+bool bed4::Contains(double point) {
   // Note that stop is half open (e.g. strickly less than)
   return ((point < stop) && (point >= start));
 }
@@ -103,7 +103,7 @@ bool gInterval::Contains(double point) {
  * 
  * @param lineArray expects: chromosome start stop ID in lineArray and ignores rest.
  */
-void gInterval::setBEDfromStrings(std::vector<std::string> lineArray) {
+void bed4::setBEDfromStrings(std::vector<std::string> lineArray) {
   if (lineArray.size() < 3) {  // accept BED3 or BED4
     // Should this throw an exception?
     cout << "ERROR: Invalid BED file\n" << std::endl;
@@ -126,7 +126,7 @@ void gInterval::setBEDfromStrings(std::vector<std::string> lineArray) {
 
 /********************  BED6 ***********************/
 
-bed6::bed6():gInterval() {
+bed6::bed6():bed4() {
   score = -1;
   strand = '.';
 }
@@ -146,7 +146,7 @@ bed6::bed6():gInterval() {
  */
 bed6::bed6(std::string v_chromosome, double v_start, double v_stop, 
     std::string v_identifier, int v_score, std::string v_strand) 
-    : gInterval(v_chromosome, v_start, v_stop, v_identifier) {
+    : bed4(v_chromosome, v_start, v_stop, v_identifier) {
   score = v_score;  // Technically constrained to be between 0 and 1000 -- enforce?
   if (v_strand.compare(0,1,"+") == 0) {
     strand = '+';
@@ -164,7 +164,7 @@ bed6::bed6(std::string v_chromosome, double v_start, double v_stop,
  * @return std::string 
  */
 std::string bed6::write_out() {
-  std::string text = gInterval::write_out();
+  std::string text = bed4::write_out();
   text += "," + tfit::prettyDecimal(score,4) + "," + strand;
   return text;
 }
@@ -176,7 +176,7 @@ std::string bed6::write_out() {
  * @return std::string 
  */
 std::string bed6::write_asBEDline() {
-  std::string text = gInterval::write_asBEDline();
+  std::string text = bed4::write_asBEDline();
   if (score >= 0) {
     text += "\t" + tfit::prettyDecimal(score, 4) + "\t" + strand;
   }
@@ -195,7 +195,7 @@ void bed6::setfromBedLine(std::string line) {
 }
 
 void bed6::setBEDfromStrings(std::vector<std::string> lineArray) {
-  gInterval::setBEDfromStrings(lineArray);  // setup basic BED3/4 contents.
+  bed4::setBEDfromStrings(lineArray);  // setup basic BED3/4 contents.
 
   if (lineArray.size() >= 6) {  // At least a BED6, so score and strand are present.
     score = stod(lineArray[4]);
@@ -332,10 +332,10 @@ void bed12::addDataPoint(double v_start, double v_stop, double cov, bool expand)
   }   
   // Adjust for edge cases, expanding the region if permissible.
   if (expand && (v_start < start)) {
-    start = v_start;   // Adjust the gInterval
+    start = v_start;   // Adjust the bed4
   }
   if (expand && (v_stop > stop)) {
-    stop = v_stop;  // Adjust the gInterval
+    stop = v_stop;  // Adjust the bed4
   }
   // Adding these data points to the set
   data->addDataPoints(v_start, v_stop, cov);

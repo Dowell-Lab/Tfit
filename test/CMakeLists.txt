@@ -49,7 +49,7 @@ list(APPEND sources
                 src/test_EMalg.cpp
                 src/test_EMseeds.cpp
                 src/test_helper.cpp
-                src/test_Intervals.cpp
+                src/test_Bed.cpp
                 src/test_ITree.cpp
                 src/test_ModelParamSet.cpp
                 src/test_Models.cpp

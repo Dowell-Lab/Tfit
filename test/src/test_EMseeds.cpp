@@ -232,7 +232,7 @@ TEST_F(SeedManagerNoInterval, setupDataLink_NogInterval)
 
   std::string output = manager.write_out();
   std::string correctout = 
-   "\nData: NO gInterval!:min:4.00:max:23.00\tFS: 19.00\tRS: 10.00\tParams bins:10., delta:2.0000, scale:1.000\nSeeds: None";
+   "\nData: NO bed4!:min:4.00:max:23.00\tFS: 19.00\tRS: 10.00\tParams bins:10., delta:2.0000, scale:1.000\nSeeds: None";
 
   // Assert
   EXPECT_EQ(output, correctout);

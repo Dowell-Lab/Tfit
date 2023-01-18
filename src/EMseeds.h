@@ -10,15 +10,15 @@
 
 #include <string>
 #include "helper.h"   //Random
-#include "Intervals.h"  // gInterval
+#include "Bed.h"  // gInterval
 #include "Data.h"  // gInterval
 
 /**
  * @brief Collection of seeds (may have arisen by several possibilities)
  * 
- * Seeds are associated with a gInterval, use coordinates relative
- * to the gInterval (e.g. gInterval->start is position zero).
- * Seeds are constrained to reside within the gInterval.
+ * Seeds are associated with a bed4, use coordinates relative
+ * to the bed4 (e.g. bed4->start is position zero).
+ * Seeds are constrained to reside within the bed4.
  * 
  * Can read/write to files in Bed12 format using the "exon starts" as
  * seed locations (size = 1) and "exon widths" as seed weights.

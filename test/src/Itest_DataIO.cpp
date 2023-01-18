@@ -8,7 +8,7 @@
  */
 #include "gmock/gmock.h"
 
-#include "Intervals.h"
+#include "Bed.h"
 #include "ITree.h"
 #include "Bedfile.h"
 

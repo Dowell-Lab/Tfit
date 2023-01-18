@@ -29,8 +29,8 @@ int main(int argc, char* argv[]) {
   bg.load_file(data_file, 0);
 
   // Grab first interval for testing
-  std::vector<gInterval*> roi = bg.setRegions.regions[0];
-  gInterval *testregion = roi[0];
+  std::vector<bed4*> roi = bg.setRegions.regions[0];
+  bed4 *testregion = roi[0];
 
   /* Attempt to fit a single model (K=1) */
 }

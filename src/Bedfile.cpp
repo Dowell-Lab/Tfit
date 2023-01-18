@@ -16,7 +16,7 @@
 #include <string>
 #include <vector>
 
-#include "Intervals.h"    // gInterval, bed6
+#include "Bed.h"    // bed4, bed6, bed12
 #include "Data.h"     // RawData, dInterval 
 #include "Regions.h"    // SetROI, Segment
 #include "ITree.h"
