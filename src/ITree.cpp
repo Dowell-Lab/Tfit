@@ -1,7 +1,7 @@
 /**
  * @file ITree.cpp
  * @author Robin Dowell 
- * @brief Interval trees on gIntervals
+ * @brief Interval trees on bed intervals 
  * @version 0.1
  * @date 2022-03-17
  * 

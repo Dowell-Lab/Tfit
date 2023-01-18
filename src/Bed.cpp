@@ -4,9 +4,10 @@
  * @brief Class code for genomic intervals
  * 
  * Current design: 
- * gIntervals maintain genomic coordinates and are the fundamental datatype
+ * Intervals maintain genomic coordinates and are the fundamental datatype
  * within the Interval trees (see ITree.cpp). Basic bed4 assumes BED4,
- * exists a bed6 class that extends for score and strand.
+ * exists a bed6 class that extends for score and strand.  bed12 extends on
+ * bed6 and assumes "exon" info is actually seed info.
  * 
  * @version 0.1
  * @date 2022-01-27

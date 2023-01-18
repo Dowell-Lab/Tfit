@@ -3,7 +3,7 @@
  * @author Robin Dowell
  * @brief Header file for genomic interval class (bed4 and bed6)
  *
- * gIntervals maintain genomic coordinates and are the fundamental datatype
+ * Intervals maintain genomic coordinates and are the fundamental datatype
  * within the Interval trees (see ITree.cpp).  These are all obtained from 
  * bed files (bed3, bed4, bed6, bed9, bed12).  
  * 
