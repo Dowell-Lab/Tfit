@@ -61,41 +61,62 @@ Some rough initial thoughts on which programs are available:
 
 \includegraphics[width=\textwidth]{figs/ProgramsNotes.jpg}
 
+\textbf{Expect:} 
+\begin{enumerate}
+\item Fit model to data by reading bedGraph (dInterval) -- this either
+  produces a bed12 (if only bedGraph) or is only read within ROI (if bed given).  
+  This is then used to fit model producing model\_fits for each gInterval.
+\item Generate data by reading in model\_fits from which data is generated
+    into a dInterval which is then converted into a gInterval for reporting.
+\item Scoring involves reading in both a dInterval (bedGraph) and a model\_fit
+  from which we can score the data and calculate residuals.
+\item Template matching reads in the bedGraph and from this calculates seeds.
+\end{enumerate}
+
 Some rough initial thoughts on the convention/hierarchy in running a program:
 
 \includegraphics[width=0.7\textwidth]{figs/RunNotes.jpg}
 
-
 \section{Data Handling Design}
 Tfit uses signed bedGraphs as data input.  A bedGraph has the basic format of: 
-chromosome /\t start /\t stop /\t coverage.  Tfit assumes all coordinates are
+chromosome start stop coverage (tab delimited).  Tfit assumes all coordinates are
 reported as zero based half open coordinates, as described in the bedGraph 
 standard.  
+
 The coverage value is expected to be signed according to strand (e.g. positive 
 numbers refer to the positive strand whereas negative numbers refer to the 
 negative strand).  Thus each position in the genome may be represented in a 
 signed bedGraph twice, once per sign/strand.
 
-\includegraphics{datahandling1.mps}
+%\includegraphics{datahandling1.mps}  OLD DESIGN
+\includegraphics{datahandling21.mps}
+
+\textbf{March 2023:} The Model design was altered to create a container 
+(now called gInterval) that holds the RawData, dInterval and bed12 contents. 
+With this change, the RawData no longer is an intermediary between the dInterval
+and the old gInterval (now renamed bed4).  
 
 Tfit attempts to fit one or more instances of the RNA polymerase model to a 
 region of interest.  If the only input is the signed bedGraph, the regions of 
 interest are inferred directly from the bedGraph (chromosome identifiers 
-and coordinates).  Alternatively (and the preferred method), the user can 
-provide a bed file (bed3, bed4, bed6, or bed12) to specify the regions of 
-interest.  Each line of a bed file is stored as the corresponding gInterval.
+and coordinates). In this scenario the bedGraph is read into RawData which 
+builds the bed12 segments.
 
+Alternatively (and the preferred method), the user can provide a bed 
+file (bed3, bed4, bed6, or bed12) to specify the regions of interest.  Each 
+line of a bed file is stored as the corresponding portion of the bed12 object.
 When a user provides a ROI bed file, Tfit will *only* consider data within 
-these regions (e.g. gIntervals correspond to bed entries and data outside these 
-regions is ignored).  Generally, bedGraphs are read in as PointCov (position, 
-coverage) in a strand specific fashion within the RawData object.  Notably,
-the bed12 format is adapted here to provide Tfit with seed information.  [See
-the Seeds object and information (Section \ref{seeds}) for more details.]
+these regions (e.g. bed12 correspond to bed entries and data outside these 
+regions is ignored).  In this scenario the bed is read into the bed12 and for 
+each bed12 the bedGraph is read via the PointCov/RawData. 
 
-Seeds: It is worth noting that bed12 data is interpreted in a very specific way
-in the Tfit framework.   Exon lengths are weights and exon starts are 
-positions for possible seeds to the EM algorithm (see EM algorithm 
-section for more information).
+Generally, bedGraphs are read in as PointCov (position, coverage) in a strand 
+specific fashion within the RawData object.  Notably, the bed12 format is 
+adapted here to provide Tfit with seed information.  [See the Seeds object and 
+information (Section \ref{seeds}) for more details.] Seeds: It is worth noting 
+that bed12 data is interpreted in a very specific way in the Tfit framework.   
+Exon lengths are weights and exon starts are positions for possible seeds 
+to the EM algorithm (see EM algorithm section for more information).
 
 As most genomes contain multiple ROI (or multiple chromosomes), the contents
 are stored within an indexed collection called SetROI.  Each chromosome name 
@@ -115,7 +136,6 @@ process coordinate transformations (between data coordinates, genomic
 coordinates, and indexed values).  It is also the fundamental data unit 
 used by the EM algorithm for each interval.
 
-\clearpage
 \section{Models Design}
 The details of the model were originally published in Azofeifa 2017 (core EM
     algoritm) and Azofeifa 2018 (adds footprint parameter and template matching).  

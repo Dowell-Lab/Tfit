@@ -66,12 +66,11 @@ class RawData {
   ~RawData();
 
   std::string write_out();  // Debugging
+  std::string data_dump();  // debugging
 
   double Length();    // length of region with data (maxX-minX)   
   void freeDataMemory();    //!< Deallocates the forward and reverse vectors;
   void addDataPoints(double st, double sp, double cov);
-
-  std::string data_dump();  //!< a debugging function
 
   void Sort();    //!< Sorts both forward and reverse by coordinate
   void RemoveDuplicates();  //!< Removes any coordinate with zero reads on both strands
@@ -116,6 +115,9 @@ public:
   std::string write_out();  // debugging
   std::string data_dump();  // debugging
 
+  // Create a dInterval from a RawData object
+  void createFromRaw(RawData *raw);  // given RawData object construct dInterval
+
   // Accessors, makes code far more readable and can be used for iteration.
   double num_elements();  // equivalent to bins
   double forward(int);    // equivalent to X[0][i]
@@ -134,8 +136,6 @@ public:
   double getDataCoordfromIndex(int);  // given index, what is data coordinate
   double getMinGenomeCoord();
   double getMaxGenomeCoord();
-
-  
 
   // Functions for doing the conditioning
   void setBinNum(double length);

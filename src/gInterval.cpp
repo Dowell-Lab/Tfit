@@ -58,17 +58,7 @@ void gInterval::raw2dInterval() {
    if (tdf == NULL) {
       return; // No dInterval set, should throw error or allocate?
    }
-   raw->RemoveDuplicates();      // Is this necessary?  It's potentially time consuming!
-   if (tdf->scale <= 0) { tdf->scale = 1;}
-
-   // Establish num of bins
-   tdf->setBinNum(raw->Length());
-   tdf->initializeData(raw->minX);
-   tdf->BinStrands(raw);
-   tdf->ScaleDown(raw->minX);
-   // std::cout << data_dump() << std::endl;
-   tdf->CompressZeros();
-   //std::cout << "AFTER: " + to_string(bins) << std::endl;
+   tdf->createFromRaw(raw);
 }
 
 /*****Convert between coordinate systems *****/

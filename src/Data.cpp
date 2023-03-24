@@ -275,6 +275,26 @@ std::string dInterval::data_dump() {
   
 }
 
+void dInterval::createFromRaw(RawData * raw)
+{
+  if (raw == NULL) {
+      return; // No raw data, should throw error
+   }
+   raw->RemoveDuplicates();      // Is this necessary?  It's potentially time consuming!
+   if (scale <= 0) scale = 1;   // Force it to behave.
+
+   // What do we do if this dInterval already has data in it?
+
+   // Establish num of bins
+   setBinNum(raw->Length());
+   initializeData(raw->minX);
+   BinStrands(raw);
+   ScaleDown(raw->minX);
+   // std::cout << data_dump() << std::endl;
+   CompressZeros();
+   //std::cout << "AFTER: " + to_string(bins) << std::endl;
+}
+
 /**
  * @brief The number of data points in the interval.  
  * This could be nucleotides (smallest unit) to bins (groups of nts)

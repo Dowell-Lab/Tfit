@@ -46,7 +46,6 @@ public:
   double getGenomeCoordfromIndex(int);  // given an index to the dInterval, what is the genomic Coord
   double getGenomefromData(double); // given data coordinate, get genomic Coord
   double getDataCoordfromGenomeCoord(double); /// given genomic coords, what is data coords?
-
 };
 
 #endif

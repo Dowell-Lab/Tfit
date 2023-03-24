@@ -10,12 +10,9 @@
 #include "Data.h"
 
 /* Currently PointCov is a dumb container, no logic
-TEST(PointCov, ) 
-{
-}
+TEST(PointCov, ) { }
 */
 
-  // void addDataPoints(double st, double sp, double cov);
 TEST(RawData, addDataPoints)
 {
     // Arrange: bring SUT to desired state
@@ -34,7 +31,6 @@ TEST(RawData, addDataPoints)
     EXPECT_EQ(sut.reverse.size(), 2);
 }
 
-//   void RemoveDuplicates();  //!< Removes any coordinate with zero reads on both strands
 TEST(RawData, removeDup)
 {
     // Arrange: bring SUT to desired state
@@ -54,7 +50,6 @@ TEST(RawData, removeDup)
     EXPECT_EQ(sut.reverse.size(), 2);
 }
 
-  // double Length();    
 TEST(RawData, LengthCorrect_NoRepeats)
 {
     // Arrange: bring SUT to desired state
@@ -99,13 +94,10 @@ TEST(RawData, CorrectlySorted)
       }
     }
     EXPECT_FALSE(outoforder);
-
-
-
 }
 
 /********* Test dInterval: ********/
-// double getLength();
+
 TEST (dInterval, LengthCorrectNoData)
 {
     // Arrange: bring SUT to desired state
@@ -147,8 +139,6 @@ TEST (dInterval, LengthCorrectNoRaw)
 */
 
 
-// As written this test relies on gInterval -- I should rewrite to remove
-// this dependency.
 class dIntervalSumTests: public :: testing::Test {
   protected:
   void SetUp() override {
@@ -156,11 +146,8 @@ class dIntervalSumTests: public :: testing::Test {
     data.addDataPoints(14, 23, 3);
     data.addDataPoints(4, 14, -2);   
     data.addDataPoints(14, 23, -6);
-
-    segment.raw = &data;
   }
   RawData data;
-  gInterval segment;
 };
 
 // double sumForward();
@@ -168,8 +155,7 @@ TEST_F(dIntervalSumTests, sumForward)
 {  
   // Arrange: bring SUT to desired state
   dInterval sut(2,1);
-  segment.tdf = &sut;
-  segment.raw2dInterval();
+  sut.createFromRaw(&data);
 
   // Assert: Verify the outcome
   EXPECT_EQ(sut.sumForward(), 67);  // 10*4 + 9*3
@@ -180,8 +166,8 @@ TEST_F(dIntervalSumTests, sumReverse)
 {
   // Arrange: bring SUT to desired state
   dInterval sut(2,1);
-  segment.tdf = &sut;
-  segment.raw2dInterval();
+  sut.createFromRaw(&data);
+
     // Assert: Verify the outcome
     EXPECT_EQ(sut.sumReverse(), 74); 
 }
@@ -191,8 +177,7 @@ TEST_F(dIntervalSumTests, sumIntervalPosStrand)
 {
   // Arrange: bring SUT to desired state
   dInterval sut(2,1);
-  segment.tdf = &sut;
-  segment.raw2dInterval();
+  sut.createFromRaw(&data);
 
   // Note these are indexes into dinterval, not genomic positions
   double sum = sut.sumInterval(2, 4, '+');
@@ -205,8 +190,7 @@ TEST_F (dIntervalSumTests, sumIntervalNegStrand)
 {
   // Arrange: bring SUT to desired state
   dInterval sut(2,1);
-  segment.tdf = &sut;
-  segment.raw2dInterval();
+  sut.createFromRaw(&data);
 
   // Note these are indexes into dinterval, not genomic positions
   double sum = sut.sumInterval(2, 4, '-');
@@ -220,8 +204,7 @@ TEST_F (dIntervalSumTests, sumAlldata)
 {
   // Arrange: bring SUT to desired state
   dInterval sut(2,1);
-  segment.tdf = &sut;
-  segment.raw2dInterval();
+  sut.createFromRaw(&data);
 
   // Note these are indexes into dinterval, not genomic positions
   double sum = sut.sumAlldata();
